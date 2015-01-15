@@ -1,0 +1,37 @@
+{
+    "address": "1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr", 
+    "description": "This site", 
+    "files": {
+        "css/all.css": {
+            "sha1": "83582a0a69bc0839bd61edd66198311115b9054c", 
+            "size": 76797
+        }, 
+        "favicon.ico": {
+            "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
+            "size": 1150
+        }, 
+        "img/loading.gif": {
+            "sha1": "a669dbd8a577f6957656fc88ba4960b93fcd23d9", 
+            "size": 723
+        }, 
+        "index.html": {
+            "sha1": "c22ea526875374d09ecca5b1da4c5c629aef6a89", 
+            "size": 1595
+        }, 
+        "js/all.js": {
+            "sha1": "c7a3c998661d304b137775b0beaae147b469e283", 
+            "size": 109378
+        }, 
+        "security_test.html": {
+            "sha1": "cea2073e7969af3ca30cfed3c195bf0115e9e1a4", 
+            "size": 1013
+        }
+    }, 
+    "ignore": "((js|css)/(?!all.(js|css))|(font/.*))", 
+    "modified": 1421284159.779, 
+    "sign": [
+        102133795291496657277425503668313478386307208008791859441712699715059542004955, 
+        108949387556438584814529450883596699350465661090653465700495168031655577517925
+    ], 
+    "title": "ZeroHello"
+}

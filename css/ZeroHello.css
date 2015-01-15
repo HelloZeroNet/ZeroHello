@@ -1,0 +1,107 @@
+body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif }/*#AF3FBB*/
+h1, h2, h3, h4 { font-family: 'Roboto', sans-serif; font-weight: normal; font-size: 100px; margin: 0px; padding: 0px }
+h1 { font-family: 'Text Me One', sans-serif;; padding-bottom: 30px; line-height: 100px }
+h2 { font-size: 35px }
+h3 { font-size: 23px }
+h4 { display: block; font-size: 11px; text-transform: uppercase; margin-bottom: 19px }
+
+ul, li { margin: 0px; padding: 0px; list-style-type: none }
+
+.template { display: none !important }
+.block { padding: 25px; margin: 10px; display: block; float: left; box-sizing: border-box }
+.loading { opacity: 0 }
+
+.bottom { bottom: 0px; position: absolute; }
+.right { float: right }
+
+#peers, #sites { transition: opacity 0.3s }
+
+.head { margin-bottom: 100px }
+
+.served { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
+
+.site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px }
+
+
+/* Site */
+
+.site-container { float: left; transition: box-shadow 0.3s }
+.site-container h2 { margin: 10px; padding: 0px 25px; margin-top: -57px; height: 47px }
+.site { 
+	color: white; position: relative; cursor: pointer; background-color: #383E3F; text-decoration: none;
+	transition: all 0.2s ease-out; width: 350px; height: 250px
+}
+.site .loading { 
+	background: transparent url("../img/loading.gif") left top no-repeat; 
+	width: 0px; transition: all 0.6s cubic-bezier(0.755, 0.05, 0.855, 0.06); transition-delay: 0.15s; opacity: 0; height: 11px; float: left; margin-top: 2px
+}
+.site .loading.visible { width: 30px; opacity: 0.5 }
+.site .status { display: block; float: left; margin-top: -2px; padding: 2px 5px }
+.site .notify { 
+	margin-top: -2px; margin-left: 4px; float: left; box-sizing: border-box; padding: 2px 5px;
+	background-color: #7f8c8d; color: white; max-width: 0px; transition: all 0.3s; white-space: nowrap; opacity: 0
+}
+.site .notify.visible { max-width: 140px; opacity: 1 }
+.site .notify.success { background-color: #00B16A }
+
+.site h3 { font-size: 50px; line-height: 47px; padding-bottom: 7px; overflow: hidden; text-overflow: ellipsis }
+.site h3.long { font-size: 40px }
+.site .bottom { bottom: 8px }
+
+.site .action { right: 20px; position: absolute; bottom: 21px;  padding: 5px 10px; 
+	font-size: 11px; text-transform: uppercase; transition: all 0.2s ease-in-out; box-shadow: inset 0px 0px 0px 0px #fff85f;
+}
+
+.site-container .hamburger { 
+	margin-left: -60px; position: relative; top: 29px; z-index: 1; transition: all 0.3s; padding: 19px 28px 10px 10px;
+	text-decoration: none; color: white; font-size: 18px; opacity: 0;
+}
+.site-container .hamburger:hover { opacity: 1 !important }
+.site-container .hamburger.menu-active { opacity: 1 !important }
+
+
+/* Site events */
+
+.site:hover { box-shadow: inset 0px 0px 0px 11px #196244 }
+.site:active, .site:focus { transform: scale(0.99) }
+.site:hover .action { box-shadow: inset 120px 0px 0px 0px #fff85f; color: black }
+.site-container:hover .hamburger { opacity: 0.5 }
+
+
+/* Site-container status */
+
+.site-seeding .site { background-color: #26C281 }
+.site-seeding .status { background-color: #00B16A }
+
+.site-paused .site:hover { box-shadow: inset 0px 0px 0px 11px #282828 }
+
+.site-inactive .site:hover { box-shadow: inset 0px 0px 0px 11px #6D2C99; background-color: #AF3BFF }
+.site-inactive .action:hover { box-shadow: inset 120px 0px 0px 0px white }
+
+.site-inactive .hamburger { display: none }
+
+.site-disabled .site { opacity: 0.1; transform: scale(0.9); pointer-events: none }
+
+.site-downloading { box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) }
+.site-downloading .site { background-color: rgba(38, 194, 129, 0.85) }
+
+
+/* Menu */
+
+.menu { 
+	background-color: white; padding: 10px 0px; position: absolute; top: 0px; left: 0px; max-height: 0px; overflow: hidden; transform: translate(0px, -30px);
+	box-shadow: 0px 2px 8px rgba(0,0,0,0.3); border-radius: 2px; opacity: 0; transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out;
+}
+.menu.visible { opacity: 1; max-height: 350px; transform: translate(0px, 0px); transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s ease-in-out; }
+
+.menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s }
+.menu-item-separator { margin-top: 5px; border-top: 1px solid #eee }
+
+.menu-item:hover { background-color: #EEE }
+.menu-item:active, .menu-item:focus { background-color: #AF3BFF; color: white; transition: none }
+
+
+/* CSS icons (base on: http://one-div.com/) */
+
+.icon-profile { font-size: 6px; top: 0em; border-radius: 0.7em 0.7em 0 0; background: #FFFFFF; width: 1.5em; height: 0.5em; position: relative; display: inline-block; margin-right: 4px }
+.icon-profile::before { position: absolute; content: ""; top: -1em; left: 0.38em; width: 0.8em; height: 0.85em; border-radius: 50%; background: #FFFFFF; }
