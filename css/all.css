@@ -19,11 +19,21 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .bottom { bottom: 0px; position: absolute; }
 .right { float: right }
 
+
+/* Version info */
+.version { float: right; margin-right: 70px; margin-top: 3px; text-align: right; font-size: 12px; text-transform: uppercase; color: #A99D9B; opacity: 0; -webkit-transition: all 1s ; -moz-transition: all 1s ; -o-transition: all 1s ; -ms-transition: all 1s ; transition: all 1s  }
+.version .latest, .version .current { padding: 2px 5px }
+.version a { color: #A99D9B }
+.version .latest { display: inline-block }
+.version .latest.new { background-color: #FFF85F }
+
+
 #peers, #sites { -webkit-transition: opacity 0.3s ; -moz-transition: opacity 0.3s ; -o-transition: opacity 0.3s ; -ms-transition: opacity 0.3s ; transition: opacity 0.3s  }
 
 .head { margin-bottom: 100px }
 
 .served { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
+
 
 .site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px }
 

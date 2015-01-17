@@ -8,6 +8,7 @@ class ZeroHello extends ZeroFrame
 	onOpenWebsocket: (e) =>
 		@reloadPeers()
 		@reloadSites()
+		@reloadServerInfo()
 		@cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
 
@@ -158,12 +159,25 @@ class ZeroHello extends ZeroFrame
 			$("#sites").removeClass("loading")
 
 
+	# Reload serverinfo
+	reloadServerInfo: ->
+		@cmd "serverInfo", {}, (serverInfo) =>
+			@serverInfo = serverInfo
+			
+			# Check verion info
+			version = serverInfo.version
+			if not version then version = "Unknown, please updat" # Old version websocket api didnt had version info
+			$(".version .current a").html(version)
+			if $(".version .latest a").text() == version # No new version available
+				$(".version .latest").css "display", "none"
+			$(".version").css("opacity", 1)
+
+
 	# - Site commands -
 
 	# Update site content.json
 	siteUpdate: (address) ->
 		@cmd "siteUpdate", {"address": address}
-
 
 
 	# Pause site from seeding
@@ -174,5 +188,6 @@ class ZeroHello extends ZeroFrame
 	# Resume site seeding
 	siteResume: (address) ->
 		@cmd "siteResume", {"address": address}
+
 
 window.zero_hello = new ZeroHello()

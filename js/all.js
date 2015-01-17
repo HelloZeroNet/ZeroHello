@@ -594,6 +594,7 @@ jQuery.extend( jQuery.easing,
     ZeroHello.prototype.onOpenWebsocket = function(e) {
       this.reloadPeers();
       this.reloadSites();
+      this.reloadServerInfo();
       return this.cmd("channelJoinAllsite", {
         "channel": "siteChanged"
       });
@@ -769,6 +770,24 @@ jQuery.extend( jQuery.easing,
             $("#sites").append(elem);
           }
           return $("#sites").removeClass("loading");
+        };
+      })(this));
+    };
+
+    ZeroHello.prototype.reloadServerInfo = function() {
+      return this.cmd("serverInfo", {}, (function(_this) {
+        return function(serverInfo) {
+          var version;
+          _this.serverInfo = serverInfo;
+          version = serverInfo.version;
+          if (!version) {
+            version = "Unknown, please updat";
+          }
+          $(".version .current a").html(version);
+          if ($(".version .latest a").text() === version) {
+            $(".version .latest").css("display", "none");
+          }
+          return $(".version").css("opacity", 1);
         };
       })(this));
     };
