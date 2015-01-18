@@ -645,6 +645,12 @@ jQuery.extend( jQuery.easing,
 
     ZeroHello.prototype.applySitedata = function(elem, site) {
       var error, success, _ref, _ref1, _ref2;
+      if (typeof site.bad_files === "object") {
+        site.bad_files = site.bad_files.length;
+      }
+      if (typeof site.tasks === "object") {
+        site.tasks = site.tasks.length;
+      }
       elem.addClass("site-" + site.address);
       if (site.peers) {
         $(".peers", elem).html(site.peers);
@@ -667,15 +673,15 @@ jQuery.extend( jQuery.easing,
         $(elem).addClass("site-paused");
         $(".status", elem).text("Paused");
       }
-      if (((_ref = site.tasks) != null ? _ref.length : void 0) > 0) {
+      if (site.tasks > 0) {
         $(".loading", elem).addClass("visible");
       } else {
         $(".loading", elem).removeClass("visible");
       }
-      if (((_ref1 = site.event) != null ? _ref1[0] : void 0) === "file_done" || ((_ref2 = site.event) != null ? _ref2[0] : void 0) === "file_started") {
-        if (site.bad_files.length > 0) {
-          success = "Updating: " + site.bad_files.length + " left";
-        } else if (site.event[0] === "file_done" && site.bad_files.length === 0) {
+      if (((_ref = site.event) != null ? _ref[0] : void 0) === "file_done" || ((_ref1 = site.event) != null ? _ref1[0] : void 0) === "file_started") {
+        if (site.bad_files > 0) {
+          success = "Updating: " + site.bad_files + " left";
+        } else if (site.event[0] === "file_done" && site.bad_files === 0) {
           success = "Site updated";
         }
       }
@@ -684,6 +690,8 @@ jQuery.extend( jQuery.easing,
       }
       if (site.content_updated === false) {
         error = "Update failed";
+      } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref2 = site.event) != null ? _ref2[0] : void 0) !== "file_done") {
+        error = "" + site.bad_files + " file update failed";
       }
       if (error) {
         $(".notify", elem).text(error).removeClass("success").addClassLater("visible");

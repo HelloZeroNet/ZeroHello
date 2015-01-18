@@ -4,35 +4,41 @@
     "files": {
         "css/all.css": {
             "sha1": "cec70477a7157ae2d3de8682a2bd5e483c6be5a3", 
+            "sha512": "9854ae372971a274efff5ad049570362aee8c3a83bc20995eebb009ed5dbf280", 
             "size": 77280
         }, 
         "favicon.ico": {
             "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
+            "sha512": "4b16ceb40191f83af1286438e4b069ab613736a199d5c5cc32a44cd60051ca13", 
             "size": 1150
         }, 
         "img/loading.gif": {
             "sha1": "a669dbd8a577f6957656fc88ba4960b93fcd23d9", 
+            "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
             "size": 723
         }, 
         "index.html": {
             "sha1": "d37634de67252bef15602da4f88270d02260ab62", 
+            "sha512": "b0b9850a0171666034b9bb618838d179d966ac81757c93134f1ef0aac23a0759", 
             "size": 1930
         }, 
         "js/all.js": {
-            "sha1": "8650809dcf16a3ab89e83813be1bbe56d15d885a", 
-            "size": 110017
+            "sha1": "7b55cf1ae7ef92792b5c0ea385f8d6b70da6897f", 
+            "sha512": "5db57bf888bc75fb48221f464c3ccc981b8c23c2f36b1a6a1604520b21295748", 
+            "size": 110338
         }, 
         "security_test.html": {
             "sha1": "cea2073e7969af3ca30cfed3c195bf0115e9e1a4", 
+            "sha512": "f30ef49d57ec8c279da3474b0829b74dcd2532d889054ab82271e6e8dcd10b03", 
             "size": 1013
         }
     }, 
     "ignore": "((js|css)/(?!all.(js|css))|(font/.*))", 
-    "modified": 1421517326.818, 
+    "modified": 1421601831.468, 
     "sign": [
-        29832970167957463036073721724967186104361412030783548718018250890419377121557, 
-        13616043315771785108005437661604279790532883132286993044330260762521510572843
+        91935477288747215447943185064179079582079853309596240723436475145681280730981, 
+        64884584494399008739211095873990715911106757905614796147292069539240575484272
     ], 
     "title": "ZeroHello", 
-    "zeronet_version": "0.1.2"
+    "zeronet_version": "0.1.3"
 }

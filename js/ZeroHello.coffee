@@ -53,6 +53,11 @@ class ZeroHello extends ZeroFrame
 
 	# Apple site data to html element
 	applySitedata: (elem, site) ->
+		# Backward compatibility
+		if typeof(site.bad_files) == "object" then site.bad_files = site.bad_files.length
+		if typeof(site.tasks) == "object" then site.tasks = site.tasks.length
+
+
 		elem.addClass("site-#{site.address}")
 		if site.peers
 			$(".peers", elem).html(site.peers)
@@ -76,16 +81,16 @@ class ZeroHello extends ZeroFrame
 
 
 		# Show/hide loading
-		if site.tasks?.length > 0 # Site tasks running
+		if site.tasks > 0 # Site tasks running
 			$(".loading", elem).addClass("visible")
 		else
 			$(".loading", elem).removeClass("visible")
 
 		# Show success
 		if site.event?[0] == "file_done" or site.event?[0] == "file_started"
-			if site.bad_files.length > 0
-				success = "Updating: #{site.bad_files.length} left"
-			else if site.event[0] == "file_done" and site.bad_files.length == 0
+			if site.bad_files > 0
+				success = "Updating: #{site.bad_files} left"
+			else if site.event[0] == "file_done" and site.bad_files == 0
 				success = "Site updated"
 		if success
 			$(".notify", elem).text(success).addClass("success").addClassLater("visible")
@@ -93,6 +98,8 @@ class ZeroHello extends ZeroFrame
 		# Show error
 		if site.content_updated == false
 			error = "Update failed"
+		else if site.tasks == 0 and site.bad_files > 0 and site.event?[0] != "file_done"
+			error = "#{site.bad_files} file update failed"
 		if error
 			$(".notify", elem).text(error).removeClass("success").addClassLater("visible")
 
