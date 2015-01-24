@@ -547,6 +547,9 @@ jQuery.extend( jQuery.easing,
           return window.zero_hello.siteResume(site.content.address);
         }));
       }
+      this.addItem("Delete", (function() {
+        return window.zero_hello.siteDelete(site.content.address);
+      })).addClass("menu-item-separator");
     }
 
     return SiteMenu;
@@ -588,7 +591,7 @@ jQuery.extend( jQuery.easing,
 
     ZeroHello.prototype.init = function() {
       this.log("inited!");
-      return this.last_sitedata = {};
+      return this.sites = {};
     };
 
     ZeroHello.prototype.onOpenWebsocket = function(e) {
@@ -706,7 +709,7 @@ jQuery.extend( jQuery.easing,
         new SiteMenu(elem, site).show();
         return false;
       }));
-      this.last_sitedata[site.address] = site;
+      this.sites[site.address] = site;
       if (site.address === this.address && site.peers > 0) {
         $("#peers").text(site.peers);
       }
@@ -746,6 +749,15 @@ jQuery.extend( jQuery.easing,
               }
             }, {
               "content": {
+                "title": "ZeroBlog",
+                "description": "Blogging platform Demo"
+              },
+              "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8",
+              "settings": {
+                "serving": false
+              }
+            }, {
+              "content": {
                 "title": "ZeroMarket",
                 "description": "Simple market demo (coming soon)"
               },
@@ -777,7 +789,8 @@ jQuery.extend( jQuery.easing,
             $(".action", elem).html("Activate site &#9473;");
             $("#sites").append(elem);
           }
-          return $("#sites").removeClass("loading");
+          $("#sites").removeClass("loading");
+          return $("#sites").css("height", "auto");
         };
       })(this));
     };
@@ -816,6 +829,30 @@ jQuery.extend( jQuery.easing,
       return this.cmd("siteResume", {
         "address": address
       });
+    };
+
+    ZeroHello.prototype.siteDelete = function(address) {
+      var site, title;
+      site = this.sites[address];
+      if (site.settings.own) {
+        return this.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
+      } else {
+        title = site.content.title;
+        if (title.length > 40) {
+          title = title.substring(0, 15) + "..." + title.substring(title.length - 10);
+        }
+        return this.cmd("wrapperConfirm", ["Are you sure you sure? <b>" + title + "</b>", "Delete"], (function(_this) {
+          return function(confirmed) {
+            _this.log("Deleting " + site.address + "...", confirmed);
+            if (confirmed) {
+              $(".site-" + site.address).addClass("deleted");
+              return _this.cmd("siteDelete", {
+                "address": address
+              });
+            }
+          };
+        })(this));
+      }
     };
 
     return ZeroHello;

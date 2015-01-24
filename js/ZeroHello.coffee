@@ -1,7 +1,7 @@
 class ZeroHello extends ZeroFrame
 	init: ->
 		@log "inited!"
-		@last_sitedata = {}
+		@sites = {}
 
 
 	# Wrapper websocket connection ready
@@ -25,7 +25,6 @@ class ZeroHello extends ZeroFrame
 	actionSetSiteInfo: (message) ->
 		site = message.params
 		@applySitedata($(".site-#{site.address}"), site)
-
 
 
 	# Format time since
@@ -114,7 +113,7 @@ class ZeroHello extends ZeroFrame
 		# Add menu events
 		$(".hamburger", elem).off("click").on "click", (-> new SiteMenu(elem, site).show(); return false )
 
-		@last_sitedata[site.address] = site
+		@sites[site.address] = site
 
 		if site.address == @address and site.peers > 0 then $("#peers").text(site.peers) # Update servedby text
 
@@ -150,6 +149,7 @@ class ZeroHello extends ZeroFrame
 			# Append sample sites
 			sample_sites = [
 				{"content": {"title": "ZeroBoard", "description": "Messaging board demo"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
+				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
 				{"content": {"title": "ZeroMarket", "description": "Simple market demo (coming soon)"}, "address": "ZeroMarket", "disabled": true, "settings": {"serving": false}}
 				{"content": {"title": "ZeroBay", "description": "A safe harbour (coming soon)"}, "address": "ZeroBay", "disabled": true, "settings": {"serving": false}}
 			]
@@ -164,6 +164,7 @@ class ZeroHello extends ZeroFrame
 				$("#sites").append elem
 			# Show sites
 			$("#sites").removeClass("loading")
+			$("#sites").css("height", "auto") # Back to auto height
 
 
 	# Reload serverinfo
@@ -195,6 +196,22 @@ class ZeroHello extends ZeroFrame
 	# Resume site seeding
 	siteResume: (address) ->
 		@cmd "siteResume", {"address": address}
+
+
+	# Delete site
+	siteDelete: (address) ->
+		site = @sites[address]
+		if site.settings.own
+			@cmd "wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]
+		else
+			title = site.content.title
+			if title.length > 40
+				title = title.substring(0, 15)+"..."+title.substring(title.length-10)
+			@cmd "wrapperConfirm", ["Are you sure you sure? <b>#{title}</b>", "Delete"], (confirmed) =>
+				@log "Deleting #{site.address}...", confirmed
+				if confirmed
+					$(".site-#{site.address}").addClass("deleted")
+					@cmd "siteDelete", {"address": address}
 
 
 window.zero_hello = new ZeroHello()

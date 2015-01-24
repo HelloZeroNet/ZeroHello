@@ -24,6 +24,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 
 #peers, #sites { transition: opacity 0.3s }
+#sites { height: 10000px } /* Dont skip to pagetop after using back button hack */
 
 .head { margin-bottom: 100px }
 
@@ -69,6 +70,8 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .site-container .hamburger:hover { opacity: 1 !important }
 .site-container .hamburger.menu-active { opacity: 1 !important }
 
+.site-container.deleted { transition: all 1s ease-in-out; opacity: 0; overflow: hidden; transform: scale(0.5) }
+.site-container.deleted .site { transition: all 1s ease-in-out; opacity: 0; margin-left: 0px; margin-right: -350px; padding-left: 0px; padding-right: 0px }
 
 /* Site events */
 

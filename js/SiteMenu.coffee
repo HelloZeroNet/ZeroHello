@@ -48,7 +48,7 @@ class SiteMenu extends Menu
 			@addItem "Pause", (-> window.zero_hello.sitePause site.content.address )
 		else
 			@addItem "Resume", (-> window.zero_hello.siteResume site.content.address )
-		# @addItem("Remove", (-> console.log "Remove", site ) ).addClass("menu-item-separator")
+		@addItem("Delete", (-> window.zero_hello.siteDelete site.content.address ) ).addClass("menu-item-separator")
 
 
 window.visible_menu = null
