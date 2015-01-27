@@ -30,7 +30,8 @@
     @sort (a, b) ->
       [av, bv] = [a[key], b[key]]
       [av, bv] = [av.toLowerCase(), bv.toLowerCase()] if options.lower
-      cmp av, bv */
+      cmp av, bv
+   */
 
 }).call(this);
 
@@ -465,12 +466,12 @@ jQuery.extend( jQuery.easing,
 (function() {
   var Menu, SiteMenu,
     __slice = [].slice,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __hasProp = {}.hasOwnProperty;
 
   Menu = (function() {
-    function Menu(button) {
-      this.button = button;
+    function Menu(_at_button) {
+      this.button = _at_button;
       this.elem = $(".menu.template").clone().removeClass("template");
       this.elem.appendTo("body");
     }
@@ -578,8 +579,8 @@ jQuery.extend( jQuery.easing,
 (function() {
   var ZeroHello,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __hasProp = {}.hasOwnProperty;
 
   ZeroHello = (function(_super) {
     __extends(ZeroHello, _super);
@@ -624,11 +625,11 @@ jQuery.extend( jQuery.easing,
       if (secs < 60) {
         return "Just now";
       } else if (secs < 60 * 60) {
-        return "" + (Math.round(secs / 60)) + " minutes ago";
+        return (Math.round(secs / 60)) + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
-        return "" + (Math.round(secs / 60 / 60)) + " hours ago";
+        return (Math.round(secs / 60 / 60)) + " hours ago";
       } else {
-        return "" + (Math.round(secs / 60 / 60 / 24)) + " days ago";
+        return (Math.round(secs / 60 / 60 / 24)) + " days ago";
       }
     };
 
@@ -692,9 +693,13 @@ jQuery.extend( jQuery.easing,
         $(".notify", elem).text(success).addClass("success").addClassLater("visible");
       }
       if (site.content_updated === false) {
-        error = "Update failed";
+        if (site.settings.own) {
+          error = "No peers found";
+        } else {
+          error = "Update failed";
+        }
       } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref2 = site.event) != null ? _ref2[0] : void 0) !== "file_done") {
-        error = "" + site.bad_files + " file update failed";
+        error = site.bad_files + " file update failed";
       }
       if (error) {
         $(".notify", elem).text(error).removeClass("success").addClassLater("visible");

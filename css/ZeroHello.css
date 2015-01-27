@@ -76,7 +76,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 /* Site events */
 
 .site:hover { box-shadow: inset 0px 0px 0px 11px #196244 }
-.site:active, .site:focus { transform: scale(0.99) }
+.site:active, .site:focus { top: 2px; transition: none }
 .site:hover .action { box-shadow: inset 120px 0px 0px 0px #fff85f; color: black }
 .site-container:hover .hamburger { opacity: 0.5 }
 

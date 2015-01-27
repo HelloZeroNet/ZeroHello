@@ -96,7 +96,10 @@ class ZeroHello extends ZeroFrame
 
 		# Show error
 		if site.content_updated == false
-			error = "Update failed"
+			if site.settings.own
+				error = "No peers found"
+			else
+				error = "Update failed"
 		else if site.tasks == 0 and site.bad_files > 0 and site.event?[0] != "file_done"
 			error = "#{site.bad_files} file update failed"
 		if error
