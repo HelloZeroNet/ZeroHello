@@ -27,18 +27,32 @@ class ZeroHello extends ZeroFrame
 		@applySitedata($(".site-#{site.address}"), site)
 
 
-	# Format time since
+	# Format time since	
 	formatSince: (time) ->
 		now = +(new Date)/1000
 		secs = now - time
 		if secs < 60
-			return "Just now"
+			back = "Just now"
 		else if secs < 60*60
-			return "#{Math.round(secs/60)} minutes ago"
+			back = "#{Math.round(secs/60)} minutes ago"
 		else if secs < 60*60*24
-			return "#{Math.round(secs/60/60)} hours ago"
+			back = "#{Math.round(secs/60/60)} hours ago"
+		else if secs < 60*60*24*3
+			back = "#{Math.round(secs/60/60/24)} days ago"
 		else
-			return "#{Math.round(secs/60/60/24)} days ago"
+			back = "on "+@formatDate(time)
+		back = back.replace(/1 ([a-z]+)s/, "1 $1") # 1 days ago fix
+		return back
+
+
+	# Format timestamp to date
+	formatDate: (timestamp, format="short") ->
+		parts = (new Date(timestamp*1000)).toString().split(" ")
+		if format == "short"
+			display = parts.slice(1, 4)
+		else
+			display = parts.slice(1, 5)
+		return display.join(" ").replace(/( [0-9]{4})/, ",$1")
 
 
 	# Reload site peer number
@@ -56,7 +70,6 @@ class ZeroHello extends ZeroFrame
 		if typeof(site.bad_files) == "object" then site.bad_files = site.bad_files.length
 		if typeof(site.tasks) == "object" then site.tasks = site.tasks.length
 
-
 		elem.addClass("site-#{site.address}")
 		if site.peers
 			$(".peers", elem).html(site.peers)
@@ -67,7 +80,8 @@ class ZeroHello extends ZeroFrame
 		else
 			$(".title", elem).html(site.content.title).removeClass("long")
 		$(".description", elem).html(site.content.description)
-		$(".modified", elem).html(@formatSince(site.content.modified))
+		modified = if site.settings.modified then site.settings.modified else site.content.modified
+		$(".modified", elem).html @formatSince(modified)
 		$(".site", elem).attr("href", "/"+site.address)
 
 		$(elem).removeClass("site-seeding").removeClass("site-paused")
@@ -153,8 +167,8 @@ class ZeroHello extends ZeroFrame
 			sample_sites = [
 				{"content": {"title": "ZeroBoard", "description": "Messaging board demo"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
 				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
+				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo"}, "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ", "settings": {"serving": false}}
 				{"content": {"title": "ZeroMarket", "description": "Simple market demo (coming soon)"}, "address": "ZeroMarket", "disabled": true, "settings": {"serving": false}}
-				{"content": {"title": "ZeroBay", "description": "A safe harbour (coming soon)"}, "address": "ZeroBay", "disabled": true, "settings": {"serving": false}}
 			]
 
 			for site in sample_sites

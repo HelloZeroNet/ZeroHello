@@ -1,59 +1,61 @@
 {
-    "address": "1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr", 
-    "description": "This site", 
-    "files": {
-        "css/all.css": {
-            "sha1": "89fe23a2b25ad0d3ee7b981447553721fdff2a0d", 
-            "sha512": "a23f445c60aa0f44b558f7b3675c6e82dc66d6ef856b86986510370fe8e04cf5", 
-            "size": 78026
-        }, 
-        "favicon.ico": {
-            "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
-            "sha512": "4b16ceb40191f83af1286438e4b069ab613736a199d5c5cc32a44cd60051ca13", 
-            "size": 1150
-        }, 
-        "font/Roboto-Light.woff": {
-            "sha1": "bfd78b64b607ae5826d68748813467d03b8c35db", 
-            "sha512": "de3320e07959009e1301ef718bb0ea6761da9eac1f536245dccb1da4abf26b97", 
-            "size": 17564
-        }, 
-        "font/Roboto-Medium.woff": {
-            "sha1": "1ac836d3c3b5dd16b1754a93b143e15beed9da80", 
-            "sha512": "ddaaa5ca7e11cde24b1f0f993e6cf5f9da8de0664af4cbbba46a5f2f1a0a3b18", 
-            "size": 18140
-        }, 
-        "font/TextMeOne-Regular.woff": {
-            "sha1": "eba67a81aa6ae2cf7c6438451dd139d3cb42e552", 
-            "sha512": "3ea7911d55424dcbb3be9939cd44f5cc92a90df869b5e9df019cbc8969f4f31e", 
-            "size": 13868
-        }, 
-        "img/loading.gif": {
-            "sha1": "a669dbd8a577f6957656fc88ba4960b93fcd23d9", 
-            "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
-            "size": 723
-        }, 
-        "index.html": {
-            "sha1": "b6d83b3f734620a5061c4bb6e5df5d5e644395cd", 
-            "sha512": "9653d1723841ef6b8277ccf1c13d2b5826f716f7d6ca1ca149532715fea56b22", 
-            "size": 1931
-        }, 
-        "js/all.js": {
-            "sha1": "116f514123e3394619f827523b4a4e8027dd1373", 
-            "sha512": "9fc07979e4b8e329e34d8c57db697522e87fa8c564269874c28073746d20b38c", 
-            "size": 111853
-        }, 
-        "security_test.html": {
-            "sha1": "cea2073e7969af3ca30cfed3c195bf0115e9e1a4", 
-            "sha512": "f30ef49d57ec8c279da3474b0829b74dcd2532d889054ab82271e6e8dcd10b03", 
-            "size": 1013
-        }
+  "address": "1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr", 
+  "description": "This site", 
+  "files": {
+    "css/all.css": {
+      "sha1": "89fe23a2b25ad0d3ee7b981447553721fdff2a0d", 
+      "sha512": "a23f445c60aa0f44b558f7b3675c6e82dc66d6ef856b86986510370fe8e04cf5", 
+      "size": 78026
     }, 
-    "ignore": "(js|css)/(?!all.(js|css))", 
-    "modified": 1422383571.262, 
-    "sign": [
-        54872336908122568526694840007483949531006577628432571592050986510573140608829, 
-        56439237509240043767485419943071460404218146656531756671351706043758776047942
-    ], 
-    "title": "ZeroHello", 
-    "zeronet_version": "0.1.6"
+    "favicon.ico": {
+      "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
+      "sha512": "4b16ceb40191f83af1286438e4b069ab613736a199d5c5cc32a44cd60051ca13", 
+      "size": 1150
+    }, 
+    "font/Roboto-Light.woff": {
+      "sha1": "bfd78b64b607ae5826d68748813467d03b8c35db", 
+      "sha512": "de3320e07959009e1301ef718bb0ea6761da9eac1f536245dccb1da4abf26b97", 
+      "size": 17564
+    }, 
+    "font/Roboto-Medium.woff": {
+      "sha1": "1ac836d3c3b5dd16b1754a93b143e15beed9da80", 
+      "sha512": "ddaaa5ca7e11cde24b1f0f993e6cf5f9da8de0664af4cbbba46a5f2f1a0a3b18", 
+      "size": 18140
+    }, 
+    "font/TextMeOne-Regular.woff": {
+      "sha1": "eba67a81aa6ae2cf7c6438451dd139d3cb42e552", 
+      "sha512": "3ea7911d55424dcbb3be9939cd44f5cc92a90df869b5e9df019cbc8969f4f31e", 
+      "size": 13868
+    }, 
+    "img/loading.gif": {
+      "sha1": "a669dbd8a577f6957656fc88ba4960b93fcd23d9", 
+      "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
+      "size": 723
+    }, 
+    "index.html": {
+      "sha1": "a8b9957a97e3040fd74b13c29f23fc8dd4ab2689", 
+      "sha512": "f6962206d66541c25629cdaea7a89318a8a6714f7fc1d573048cb05fdfbd96ed", 
+      "size": 1931
+    }, 
+    "js/all.js": {
+      "sha1": "2ebf2cc579b42b3f324138a478f27322d6d1aa6d", 
+      "sha512": "9ea80e944ecc781d4af8f8fb88142826816e8298f8a2fdb716f2190b7ac12277", 
+      "size": 111844
+    }, 
+    "security_test.html": {
+      "sha1": "cea2073e7969af3ca30cfed3c195bf0115e9e1a4", 
+      "sha512": "f30ef49d57ec8c279da3474b0829b74dcd2532d889054ab82271e6e8dcd10b03", 
+      "size": 1013
+    }
+  }, 
+  "ignore": "(js|css)/(?!all.(js|css))", 
+  "modified": 1423444768.734, 
+  "sign": [
+    97378351251319918617736297613162828025740301076571992299568153182805909633721, 
+    96859621975141194548134563058735200598814958063401630899166369434114973145112
+  ], 
+  "signers_sign": null, 
+  "signs_required": 1, 
+  "title": "ZeroHello", 
+  "zeronet_version": "0.2.0"
 }

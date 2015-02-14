@@ -619,18 +619,36 @@ jQuery.extend( jQuery.easing,
     };
 
     ZeroHello.prototype.formatSince = function(time) {
-      var now, secs;
+      var back, now, secs;
       now = +(new Date) / 1000;
       secs = now - time;
       if (secs < 60) {
-        return "Just now";
+        back = "Just now";
       } else if (secs < 60 * 60) {
-        return (Math.round(secs / 60)) + " minutes ago";
+        back = (Math.round(secs / 60)) + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
-        return (Math.round(secs / 60 / 60)) + " hours ago";
+        back = (Math.round(secs / 60 / 60)) + " hours ago";
+      } else if (secs < 60 * 60 * 24 * 3) {
+        back = (Math.round(secs / 60 / 60 / 24)) + " days ago";
       } else {
-        return (Math.round(secs / 60 / 60 / 24)) + " days ago";
+        back = "on " + this.formatDate(time);
       }
+      back = back.replace(/1 ([a-z]+)s/, "1 $1");
+      return back;
+    };
+
+    ZeroHello.prototype.formatDate = function(timestamp, format) {
+      var display, parts;
+      if (format == null) {
+        format = "short";
+      }
+      parts = (new Date(timestamp * 1000)).toString().split(" ");
+      if (format === "short") {
+        display = parts.slice(1, 4);
+      } else {
+        display = parts.slice(1, 5);
+      }
+      return display.join(" ").replace(/( [0-9]{4})/, ",$1");
     };
 
     ZeroHello.prototype.reloadPeers = function() {
@@ -648,7 +666,7 @@ jQuery.extend( jQuery.easing,
     };
 
     ZeroHello.prototype.applySitedata = function(elem, site) {
-      var error, success, _ref, _ref1, _ref2;
+      var error, modified, success, _ref, _ref1, _ref2;
       if (typeof site.bad_files === "object") {
         site.bad_files = site.bad_files.length;
       }
@@ -667,7 +685,8 @@ jQuery.extend( jQuery.easing,
         $(".title", elem).html(site.content.title).removeClass("long");
       }
       $(".description", elem).html(site.content.description);
-      $(".modified", elem).html(this.formatSince(site.content.modified));
+      modified = site.settings.modified ? site.settings.modified : site.content.modified;
+      $(".modified", elem).html(this.formatSince(modified));
       $(".site", elem).attr("href", "/" + site.address);
       $(elem).removeClass("site-seeding").removeClass("site-paused");
       if (site.settings.serving && site.address) {
@@ -763,20 +782,19 @@ jQuery.extend( jQuery.easing,
               }
             }, {
               "content": {
-                "title": "ZeroMarket",
-                "description": "Simple market demo (coming soon)"
+                "title": "ZeroTalk",
+                "description": "Decentralized forum demo"
               },
-              "address": "ZeroMarket",
-              "disabled": true,
+              "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ",
               "settings": {
                 "serving": false
               }
             }, {
               "content": {
-                "title": "ZeroBay",
-                "description": "A safe harbour (coming soon)"
+                "title": "ZeroMarket",
+                "description": "Simple market demo (coming soon)"
               },
-              "address": "ZeroBay",
+              "address": "ZeroMarket",
               "disabled": true,
               "settings": {
                 "serving": false
