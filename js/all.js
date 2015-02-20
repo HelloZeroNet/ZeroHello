@@ -592,13 +592,20 @@ jQuery.extend( jQuery.easing,
 
     ZeroHello.prototype.init = function() {
       this.log("inited!");
-      return this.sites = {};
+      this.sites = {};
+      return $(".button-update").on("click", (function(_this) {
+        return function() {
+          $(".button-update").addClass("loading");
+          return _this.cmd("serverUpdate", {});
+        };
+      })(this));
     };
 
     ZeroHello.prototype.onOpenWebsocket = function(e) {
       this.reloadPeers();
       this.reloadSites();
       this.reloadServerInfo();
+      $(".button-update").removeClass("loading");
       return this.cmd("channelJoinAllsite", {
         "channel": "siteChanged"
       });
@@ -660,7 +667,7 @@ jQuery.extend( jQuery.easing,
           if (peers === 0) {
             peers = "n/a";
           }
-          return $("#peers").removeClass("loading").text(peers);
+          return $("#peers").removeClass("updating").text(peers);
         };
       })(this));
     };
@@ -697,9 +704,9 @@ jQuery.extend( jQuery.easing,
         $(".status", elem).text("Paused");
       }
       if (site.tasks > 0) {
-        $(".loading", elem).addClass("visible");
+        $(".anim-updating", elem).addClass("visible");
       } else {
-        $(".loading", elem).removeClass("visible");
+        $(".anim-updating", elem).removeClass("visible");
       }
       if (((_ref = site.event) != null ? _ref[0] : void 0) === "file_done" || ((_ref1 = site.event) != null ? _ref1[0] : void 0) === "file_started") {
         if (site.bad_files > 0) {
@@ -812,7 +819,7 @@ jQuery.extend( jQuery.easing,
             $(".action", elem).html("Activate site &#9473;");
             $("#sites").append(elem);
           }
-          $("#sites").removeClass("loading");
+          $("#sites").removeClass("updating");
           return $("#sites").css("height", "auto");
         };
       })(this));
@@ -825,11 +832,17 @@ jQuery.extend( jQuery.easing,
           _this.serverInfo = serverInfo;
           version = serverInfo.version;
           if (!version) {
-            version = "Unknown, please updat";
+            version = "Unknown, please update";
           }
           $(".version .current a").html(version);
           if ($(".version .latest a").text() === version) {
             $(".version .latest").css("display", "none");
+            $(".button-update").css("display", "none");
+          } else {
+            $(".version .latest").css("display", "inline-block");
+            if (parseInt(version.replace(/[^0-9]/g, "0")) >= 202) {
+              $(".button-update").css("display", "inline-block");
+            }
           }
           return $(".version").css("opacity", 1);
         };

@@ -2,6 +2,9 @@ class ZeroHello extends ZeroFrame
 	init: ->
 		@log "inited!"
 		@sites = {}
+		$(".button-update").on "click", =>
+			$(".button-update").addClass("loading")
+			@cmd "serverUpdate", {}
 
 
 	# Wrapper websocket connection ready
@@ -9,6 +12,7 @@ class ZeroHello extends ZeroFrame
 		@reloadPeers()
 		@reloadSites()
 		@reloadServerInfo()
+		$(".button-update").removeClass("loading")
 		@cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
 
@@ -61,7 +65,7 @@ class ZeroHello extends ZeroFrame
 			@address = site_info.addres
 			peers = site_info["peers"]
 			if peers == 0 then peers = "n/a"
-			$("#peers").removeClass("loading").text(peers)
+			$("#peers").removeClass("updating").text(peers)
 
 
 	# Apple site data to html element
@@ -95,9 +99,9 @@ class ZeroHello extends ZeroFrame
 
 		# Show/hide loading
 		if site.tasks > 0 # Site tasks running
-			$(".loading", elem).addClass("visible")
+			$(".anim-updating", elem).addClass("visible")
 		else
-			$(".loading", elem).removeClass("visible")
+			$(".anim-updating", elem).removeClass("visible")
 
 		# Show success
 		if site.event?[0] == "file_done" or site.event?[0] == "file_started"
@@ -180,7 +184,7 @@ class ZeroHello extends ZeroFrame
 
 				$("#sites").append elem
 			# Show sites
-			$("#sites").removeClass("loading")
+			$("#sites").removeClass("updating")
 			$("#sites").css("height", "auto") # Back to auto height
 
 
@@ -191,10 +195,14 @@ class ZeroHello extends ZeroFrame
 			
 			# Check verion info
 			version = serverInfo.version
-			if not version then version = "Unknown, please updat" # Old version websocket api didnt had version info
+			if not version then version = "Unknown, please update" # Old version websocket api didnt had version info
 			$(".version .current a").html(version)
 			if $(".version .latest a").text() == version # No new version available
 				$(".version .latest").css "display", "none"
+				$(".button-update").css "display", "none"
+			else
+				$(".version .latest").css "display", "inline-block"
+				if parseInt(version.replace(/[^0-9]/g, "0")) >= 202 then $(".button-update").css "display", "inline-block" # Auto update supported from 0.2.3
 			$(".version").css("opacity", 1)
 
 

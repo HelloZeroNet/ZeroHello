@@ -9,10 +9,33 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 .template { display: none !important }
 .block { padding: 25px; margin: 10px; display: block; float: left; box-sizing: border-box }
-.loading { opacity: 0 }
+.updating { opacity: 0 }
 
 .bottom { bottom: 0px; position: absolute; }
 .right { float: right }
+
+
+/* Button */
+
+.button { 
+	padding: 5px 10px; background-color: #DDE0E0; border-bottom: 2px solid #999998; background-position: left center; 
+	border-radius: 2px ; text-decoration: none; transition: all 0.5s ease-out ; color: #333; display: inline-block
+}
+.button:hover { background-color: #FFF400; border-color: white; border-bottom: 2px solid #4D4D4C; transition: none ; color: inherit }
+.button:active { position: relative; top: 1px }
+
+/*.button-delete { background-color: #e74c3c; border-bottom-color: #A83F34; color: white }*/
+.button-outline { background-color: white; color: #DDD; border: 1px solid #eee }
+
+.button-delete:hover { background-color: #FF5442; border: 1px solid #FF5442; color: white } 
+.button-ok:hover { background-color: #27AE60; border: 1px solid #27AE60; color: white } 
+.button-submit { background-color: #FFF85F;border-bottom: 2px solid #CDBD1E;  padding: 5px 15px; font-size: 15px; line-height: 30px }
+.button-small { padding: 5px 10px; font-size: 12px; line-height: 16px }
+
+.button.loading { 
+	color: rgba(0,0,0,0) !important; background: #999 url(../img/loading.gif) no-repeat center center; 
+	transition: all 0.5s ease-out ; pointer-events: none; border-bottom: 2px solid #666
+}  
 
 
 /* Version info */
@@ -20,8 +43,9 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .version .latest, .version .current { padding: 2px 5px }
 .version a { color: #A99D9B }
 .version .latest { display: inline-block }
-.version .latest.new { background-color: #FFF85F }
+.version .latest.new { background-color: #FFF85F; margin-right: -3px; display: none }
 
+.version .button-update { margin-top: 10px; color: black; display: none }
 
 #peers, #sites { transition: opacity 0.3s }
 #sites { height: 10000px } /* Dont skip to pagetop after using back button hack */
@@ -42,11 +66,11 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 	color: white; position: relative; cursor: pointer; background-color: #383E3F; text-decoration: none;
 	transition: all 0.2s ease-out; width: 350px; height: 250px
 }
-.site .loading { 
+.site .anim-updating { 
 	background: transparent url("../img/loading.gif") left top no-repeat; 
 	width: 0px; transition: all 0.6s cubic-bezier(0.755, 0.05, 0.855, 0.06); transition-delay: 0.15s; opacity: 0; height: 11px; float: left; margin-top: 2px
 }
-.site .loading.visible { width: 30px; opacity: 0.5 }
+.site .anim-updating.visible { width: 30px; opacity: 0.5 }
 .site .status { display: block; float: left; margin-top: -2px; padding: 2px 5px }
 .site .notify { 
 	margin-top: -2px; margin-left: 4px; float: left; box-sizing: border-box; padding: 2px 5px;
