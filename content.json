@@ -3,9 +3,9 @@
   "description": "This site", 
   "files": {
     "css/all.css": {
-      "sha1": "89fe23a2b25ad0d3ee7b981447553721fdff2a0d", 
-      "sha512": "a23f445c60aa0f44b558f7b3675c6e82dc66d6ef856b86986510370fe8e04cf5", 
-      "size": 78026
+      "sha1": "4b38d826e7f3fc585b0d41694aa34ff94fe5045a", 
+      "sha512": "073c54253c6869edbbf79282b6ed7256f739ba6a8233913ee54612c719e5dc5f", 
+      "size": 79861
     }, 
     "favicon.ico": {
       "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
@@ -33,29 +33,44 @@
       "size": 723
     }, 
     "index.html": {
-      "sha1": "fd8918a18530432117de917d6d46f3bbf265ea5e", 
-      "sha512": "d5813375b13ed4bedb44d16c1870d99af423016d2ab07de71d215a27964b672f", 
-      "size": 1931
+      "sha1": "190bee1df4bedfe782528dcc0b079ea5309ba5fd", 
+      "sha512": "70d28366a38f15293663b2af755d1598b35ade9051a2d5470a3cc0f4884696a2", 
+      "size": 2031
     }, 
     "js/all.js": {
-      "sha1": "6072d4037e1af0bd4773c95cd93d7386b886ce5e", 
-      "sha512": "a24cb7a9e3317ff6083b6a31b0f696e6d2336b9e25094311d29cc882b4594f00", 
-      "size": 112516
+      "sha1": "ca9dc3a998238d9af10fb58cf4db753bfeaf2c2e", 
+      "sha512": "16c1502c4d02808aa061dcbdbed4003b3ec7400052677784d24f75d4f5a643f8", 
+      "size": 113082
     }, 
-    "security_test.html": {
-      "sha1": "cea2073e7969af3ca30cfed3c195bf0115e9e1a4", 
-      "sha512": "f30ef49d57ec8c279da3474b0829b74dcd2532d889054ab82271e6e8dcd10b03", 
-      "size": 1013
+    "test/jquery.min.js": {
+      "sha1": "41b4bfbaa96be6d1440db6e78004ade1c134e276", 
+      "sha512": "eda31b5c7d371d4b3acced51fa92f27a417515317cf437aae09a47c3acc8a36b", 
+      "size": 84320
+    }, 
+    "test/render.html": {
+      "sha1": "1991d232fec0c5c8aad80b63d699aad72df19b81", 
+      "sha512": "5dd8cd2ee481c133ba0a74c90055a9d5397a826af61fc5ba38d7450c7fb3dac3", 
+      "size": 2248
+    }, 
+    "test/security.html": {
+      "sha1": "fd1de950eeca9b815d77c0c319e92b438205f2d1", 
+      "sha512": "a641685276ad0757bcffc0850ca2b98a900df9849f786b4d751a166241e9e858", 
+      "size": 1016
+    }, 
+    "test/stats.js": {
+      "sha1": "60daa096ccae1d152b9c5c7c8772c8e63a39e4db", 
+      "sha512": "a304ab798b9bbd1581f8aac90ea0b3b12a6ae2e9c7dd64846cd40ce0bbd099b3", 
+      "size": 3560
     }
   }, 
   "ignore": "(js|css)/(?!all.(js|css))", 
-  "modified": 1424134953.775, 
+  "modified": 1424911921.612, 
   "sign": [
-    92004391360957801887453226944233217712777983585066968762775187715112318294322, 
-    15505611144473653823727200503497733043747697321294243557190737690813265487369
+    14573406038632774985377573274450434106483923327906721152422012047237196228199, 
+    11029545816064143594090651992417814987806701800396300803768727758252266107415
   ], 
   "signers_sign": null, 
   "signs_required": 1, 
   "title": "ZeroHello", 
-  "zeronet_version": "0.2.2"
+  "zeronet_version": "0.2.5"
 }

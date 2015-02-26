@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+ <title>Render test</title>
+ <meta charset="utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+ <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+ <link rel="stylesheet" href="../css/all.css" />
+</head>
+<body>
+
+<script src="stats.js"></script> 
+<script src="jquery.min.js"></script> 
+
+<style>
+#stats { 
+	position: fixed;
+	z-index: 999;
+}
+.site-container { pointer-events: none; }
+</style>
+
+<script>
+
+var stats = new Stats();
+document.body.appendChild( stats.domElement );
+
+var update = function () {
+
+	stats.begin();
+
+	// monitored code goes here
+
+	stats.end();
+
+	requestAnimationFrame( update );
+
+};
+update()
+
+function scrollAnim() {
+	$('html, body').animate({
+		scrollTop: $("body").height()-$(window).height()
+	}, 2000).animate({
+		scrollTop: 0
+	}, 2000);
+}
+
+$( document ).ready(function() {
+	for (i=0;i<100;i++) {
+		$(".site-container:first").clone().appendTo("#sites");
+	}
+	scrollAnim()
+	setInterval(scrollAnim, 4000)
+})
+</script> 
+
+<a href="/1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ/?Topic:7@2/Slow+rendering+in+Chrome" target="_top" style="position: fixed; right: 50px; bottom: 10px; background-color: white; padding: 10px; z-index: 999; display: block">Please post your results to ZeroTalk</a>
+
+<!-- Sites -->
+<div id="sites" style="height: initial">
+
+ <!-- Template: site-category -->
+ <div class="site-category template">
+  <h2 class='title'>Connected sites:</h2>
+ </div>
+ <!-- EOF Template: site-category -->
+
+ <!-- Template: site-container -->
+ <div class="site-container site-seeding">
+  <a href="#" class='hamburger'>&#9776;</a>
+  <a href="/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr" target="_top" class="site block">
+   <h4>
+	<div class="anim-updating" title='Updating...'></div>
+	<div class="status">Seeding</div>
+	<div class="notify"></div>
+	<div class='right'></div>
+   </h4>
+   <h3 class='title'>ZeroHello</h3>
+   <h4 class='description'></h4>
+   <div class="bottom">
+	<h4><div class='icon-profile'></div>× <span class='peers'>n/a</span> &#9473; Changed: <span class='modified'>n/a</span></h4>
+   </div>
+   <div class='action'>Visit site &#9473;</div>
+  </a>
+ </div>
+ <!-- EOF Template: site-container -->
+</div>
+
+<div style="clear: both"></div>
+
+
+</body>
+</html>

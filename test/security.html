@@ -1,0 +1,34 @@
+<html>
+<body>
+<h1>Security tests</h1>
+<script type="text/javascript" src="../js/all.js" asyc></script>
+
+<h2>Load other site wrapper using ajax get</h2>
+<script>
+$.get("/13ReyhCsjhpuCVahn1DHdf6eMqqEVev162", function (res) {
+	console.log("Load other site wrapper using ajax get", res)
+})
+</script>
+
+
+<h2>Load other site wrapper using iframe</h2>
+<iframe src="/13ReyhCsjhpuCVahn1DHdf6eMqqEVev162" id="iframe1"></iframe>
+
+<h2>Changing url</h2>
+<script>
+console.log("Changing url...")
+top.window.history.pushState('13ReyhCsjhpuCVahn1DHdf6eMqqEVev162', '13ReyhCsjhpuCVahn1DHdf6eMqqEVev162', '/media/13ReyhCsjhpuCVahn1DHdf6eMqqEVev162/index.html');
+</script>
+
+<h2>Load other site resource using ajax get</h2>
+<script>
+$.get("/media/13ReyhCsjhpuCVahn1DHdf6eMqqEVev162/index.html", function (res) {
+	console.log("Load other site resource using ajax get", res)
+})
+</script>
+
+<h2>Load other site resource using iframe</h2>
+<iframe src="/media/13ReyhCsjhpuCVahn1DHdf6eMqqEVev162/test.jpg" id="iframe2"></iframe>
+
+</body>
+</html>
