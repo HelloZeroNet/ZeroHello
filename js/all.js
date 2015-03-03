@@ -593,6 +593,15 @@ jQuery.extend( jQuery.easing,
     ZeroHello.prototype.init = function() {
       this.log("inited!");
       this.sites = {};
+      this.local_storage = null;
+      this.cmd("wrapperGetLocalStorage", [], (function(_this) {
+        return function(res) {
+          if (res == null) {
+            res = {};
+          }
+          return _this.local_storage = res;
+        };
+      })(this));
       return $(".button-update").on("click", (function(_this) {
         return function() {
           $(".button-update").addClass("loading");
@@ -640,7 +649,7 @@ jQuery.extend( jQuery.easing,
       } else {
         back = "on " + this.formatDate(time);
       }
-      back = back.replace(/1 ([a-z]+)s/, "1 $1");
+      back = back.replace(/^1 ([a-z]+)s/, "1 $1");
       return back;
     };
 
@@ -693,7 +702,7 @@ jQuery.extend( jQuery.easing,
       }
       $(".description", elem).html(site.content.description);
       modified = site.settings.modified ? site.settings.modified : site.content.modified;
-      $(".modified", elem).html(this.formatSince(modified));
+      $(".modified-date", elem).html(this.formatSince(modified));
       $(".site", elem).attr("href", "/" + site.address);
       $(elem).removeClass("site-seeding").removeClass("site-paused");
       if (site.settings.serving && site.address) {
@@ -740,6 +749,9 @@ jQuery.extend( jQuery.easing,
         new SiteMenu(elem, site).show();
         return false;
       }));
+      if ((+(new Date)) / 1000 - modified < 60 * 60 * 24) {
+        $(".site", elem).addClass("modified");
+      }
       this.sites[site.address] = site;
       if (site.address === this.address && site.peers > 0) {
         $("#peers").text(site.peers);
@@ -758,6 +770,9 @@ jQuery.extend( jQuery.easing,
           sites.sort(function(a, b) {
             return cmp(b["peers"], a["peers"]);
           });
+          if (sites.length > 6) {
+            $(".site-container.template").addClass("site-small");
+          }
           for (_i = 0, _len = sites.length; _i < _len; _i++) {
             site = sites[_i];
             elem = $(".site-container.template").clone().removeClass("template");

@@ -2,6 +2,11 @@ class ZeroHello extends ZeroFrame
 	init: ->
 		@log "inited!"
 		@sites = {}
+		@local_storage = null
+		@cmd "wrapperGetLocalStorage", [], (res) =>
+			res ?= {}
+			@local_storage = res
+
 		$(".button-update").on "click", =>
 			$(".button-update").addClass("loading")
 			@cmd "serverUpdate", {}
@@ -45,7 +50,7 @@ class ZeroHello extends ZeroFrame
 			back = "#{Math.round(secs/60/60/24)} days ago"
 		else
 			back = "on "+@formatDate(time)
-		back = back.replace(/1 ([a-z]+)s/, "1 $1") # 1 days ago fix
+		back = back.replace(/^1 ([a-z]+)s/, "1 $1") # 1 days ago fix
 		return back
 
 
@@ -85,7 +90,7 @@ class ZeroHello extends ZeroFrame
 			$(".title", elem).html(site.content.title).removeClass("long")
 		$(".description", elem).html(site.content.description)
 		modified = if site.settings.modified then site.settings.modified else site.content.modified
-		$(".modified", elem).html @formatSince(modified)
+		$(".modified-date", elem).html @formatSince(modified)
 		$(".site", elem).attr("href", "/"+site.address)
 
 		$(elem).removeClass("site-seeding").removeClass("site-paused")
@@ -134,6 +139,11 @@ class ZeroHello extends ZeroFrame
 		# Add menu events
 		$(".hamburger", elem).off("click").on "click", (-> new SiteMenu(elem, site).show(); return false )
 
+
+		if (+ new Date)/1000 - modified < 60*60*24 # Updated in less than 24h
+			$(".site", elem).addClass("modified")
+
+
 		@sites[site.address] = site
 
 		if site.address == @address and site.peers > 0 then $("#peers").text(site.peers) # Update servedby text
@@ -153,6 +163,8 @@ class ZeroHello extends ZeroFrame
 
 			sites.sort (a,b) ->
 				return cmp b["peers"], a["peers"]
+
+			if sites.length > 6 then $(".site-container.template").addClass("site-small") # Smaller tiles if more than 6 sites
 
 			# Append active sites
 			for site in sites

@@ -3,9 +3,9 @@
   "description": "This site", 
   "files": {
     "css/all.css": {
-      "sha1": "4b38d826e7f3fc585b0d41694aa34ff94fe5045a", 
-      "sha512": "073c54253c6869edbbf79282b6ed7256f739ba6a8233913ee54612c719e5dc5f", 
-      "size": 79861
+      "sha1": "f4d155b566d9bacc337fcbda2f2daf59b585cfab", 
+      "sha512": "77385ec5069e6113f25b382c229ce33061d03309fad059a9f207989bac5f5379", 
+      "size": 81007
     }, 
     "favicon.ico": {
       "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
@@ -33,14 +33,14 @@
       "size": 723
     }, 
     "index.html": {
-      "sha1": "190bee1df4bedfe782528dcc0b079ea5309ba5fd", 
-      "sha512": "70d28366a38f15293663b2af755d1598b35ade9051a2d5470a3cc0f4884696a2", 
-      "size": 2031
+      "sha1": "3122c60f6a3a5a34e47c5bf80bdbcced35910a96", 
+      "sha512": "0a3b0bdff3eb218114997df48b897e397a3f0aa1f0e61b6dd6eabf5f625ee1d0", 
+      "size": 2082
     }, 
     "js/all.js": {
-      "sha1": "ca9dc3a998238d9af10fb58cf4db753bfeaf2c2e", 
-      "sha512": "16c1502c4d02808aa061dcbdbed4003b3ec7400052677784d24f75d4f5a643f8", 
-      "size": 113082
+      "sha1": "d8a2b4a5e2e4fc48afd63ec0406bc445376202bd", 
+      "sha512": "514b7c6437daea0dffb223395bb9f11099f67692d7d7716ebcd44c42491214dc", 
+      "size": 113578
     }, 
     "test/jquery.min.js": {
       "sha1": "41b4bfbaa96be6d1440db6e78004ade1c134e276", 
@@ -64,10 +64,10 @@
     }
   }, 
   "ignore": "(js|css)/(?!all.(js|css))", 
-  "modified": 1424911921.612, 
+  "modified": 1425344149.365, 
   "sign": [
-    14573406038632774985377573274450434106483923327906721152422012047237196228199, 
-    11029545816064143594090651992417814987806701800396300803768727758252266107415
+    76364771191048359655330371522993701844460895388572881469443527724873084487532, 
+    72370727097452716838177711021231240388728333710495826354491653061266389305340
   ], 
   "signers_sign": null, 
   "signs_required": 1, 

@@ -1,4 +1,4 @@
-body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif }/*#AF3FBB*/
+body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif; padding-bottom: 50px }/*#AF3FBB*/
 h1, h2, h3, h4 { font-family: 'Roboto', sans-serif; font-weight: normal; font-size: 100px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif;; padding-bottom: 30px; line-height: 100px }
 h2 { font-size: 35px }
@@ -66,6 +66,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 	color: white; position: relative; cursor: pointer; background-color: #383E3F; text-decoration: none;
 	transition: all 0.2s ease-out; width: 350px; height: 250px
 }
+.site.modified { box-shadow: inset 0px 0px 0px 3px #FFF }
 .site .anim-updating { 
 	background: transparent url("../img/loading.gif") left top no-repeat; 
 	width: 0px; transition: all 0.6s cubic-bezier(0.755, 0.05, 0.855, 0.06); transition-delay: 0.15s; opacity: 0; height: 11px; float: left; margin-top: 2px
@@ -96,6 +97,17 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 .site-container.deleted { transition: all 1s ease-in-out; opacity: 0; overflow: hidden; transform: scale(0.5) }
 .site-container.deleted .site { transition: all 1s ease-in-out; opacity: 0; margin-left: 0px; margin-right: -350px; padding-left: 0px; padding-right: 0px }
+
+
+/* Site small */
+
+.site-small .site { width: 290px; height: 200px; padding: 20px; margin: 7px }
+.site-small .title { font-size: 39px; line-height: 39px; padding-top: 6px }
+.site-small .title.long { font-size: 30px }
+.site-small .action { bottom: 15px; right: 15px }
+.site-small .bottom { bottom: 4px }
+.site-small .hamburger { margin-left: -55px; top: 22px; padding: 14px 23px 10px 10px }
+
 
 /* Site events */
 
@@ -142,3 +154,8 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 .icon-profile { font-size: 6px; top: 0em; border-radius: 0.7em 0.7em 0 0; background: #FFFFFF; width: 1.5em; height: 0.5em; position: relative; display: inline-block; margin-right: 4px }
 .icon-profile::before { position: absolute; content: ""; top: -1em; left: 0.38em; width: 0.8em; height: 0.85em; border-radius: 50%; background: #FFFFFF; }
+
+.icon-clock { 
+	display: inline-block; width: 10px; height: 12px; vertical-align: -2px; margin-left: 5px; margin-right: 4px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==); 
+}
