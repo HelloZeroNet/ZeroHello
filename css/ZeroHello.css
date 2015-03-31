@@ -31,6 +31,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .button-ok:hover { background-color: #27AE60; border: 1px solid #27AE60; color: white } 
 .button-submit { background-color: #FFF85F;border-bottom: 2px solid #CDBD1E;  padding: 5px 15px; font-size: 15px; line-height: 30px }
 .button-small { padding: 5px 10px; font-size: 12px; line-height: 16px }
+.button-disabled { color: #666 !important; pointer-events: none; border-bottom: 2px solid #666; background-color: #999; opacity: 0.5 }
 
 .button.loading { 
 	color: rgba(0,0,0,0) !important; background: #999 url(../img/loading.gif) no-repeat center center; 
@@ -39,13 +40,19 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 
 /* Version info */
-.version { float: right; margin-right: 70px; margin-top: 3px; text-align: right; font-size: 12px; text-transform: uppercase; color: #A99D9B; opacity: 0; transition: all 1s }
-.version .latest, .version .current { padding: 2px 5px }
+.topright { float: right; margin-right: 80px; margin-top: 2px; text-align: right; font-size: 12px; text-transform: uppercase; color: #A99D9B; opacity: 0; transition: all 1s }
+.version.latest, .version.current { padding: 2px 5px }
 .version a { color: #A99D9B }
-.version .latest { display: inline-block }
-.version .latest.new { background-color: #FFF85F; margin-right: -3px; display: none }
+.version.latest { display: inline-block }
+.version.latest.new { background-color: #FFF85F; margin-right: -3px; display: none }
 
-.version .button-update { margin-top: 10px; color: black; display: none }
+.user { display: none }
+.identicon { width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-bottom: 2px; margin-right: 10px; margin-left: 5px; border: 1px solid #F0F0F0 }
+.button-logout { margin-top: -2px }
+.button-logout:hover { color: black }
+.button-update { margin-top: 10px; color: black; display: none }
+.broken-autoupdate { display: inline-block; padding-top: 5px; color: #666; display: none }
+.broken-autoupdate a { color: black }
 
 #peers, #sites { transition: opacity 0.3s }
 #sites { height: 10000px } /* Dont skip to pagetop after using back button hack */

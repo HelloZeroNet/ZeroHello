@@ -36,7 +36,6 @@
 }).call(this);
 
 
-
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/ZeroFrame.coffee ---- */
 
 
@@ -151,6 +150,102 @@
 }).call(this);
 
 
+/* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/identicon.js ---- */
+
+
+/**
+ * Identicon.js v1.0
+ * http://github.com/stewartlord/identicon.js
+ *
+ * Requires PNGLib
+ * http://www.xarg.org/download/pnglib.js
+ *
+ * Copyright 2013, Stewart Lord
+ * Released under the BSD license
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
+
+(function() {
+    Identicon = function(hash, size, margin){
+        this.hash   = hash;
+        this.size   = size   || 64;
+        this.margin = margin || .08;
+    }
+
+    Identicon.prototype = {
+        hash:   null,
+        size:   null,
+        margin: null,
+
+        render: function(){
+            var hash    = this.hash,
+                size    = this.size,
+                margin  = Math.floor(size * this.margin),
+                cell    = Math.floor((size - (margin * 2)) / 5),
+                image   = new PNGlib(size, size, 256);
+
+            // light-grey background
+            var bg      = image.color(240, 240, 240);
+
+            // foreground is last 7 chars as hue at 50% saturation, 70% brightness
+            var rgb     = this.hsl2rgb(parseInt(hash.substr(-7), 16) / 0xfffffff, .5, .7),
+                fg      = image.color(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255);
+
+            // the first 15 characters of the hash control the pixels (even/odd)
+            // they are drawn down the middle first, then mirrored outwards
+            var i, color;
+            for (i = 0; i < 15; i++) {
+                color = parseInt(hash.charAt(i), 16) % 2 ? bg : fg;
+                if (i < 5) {
+                    this.rectangle(2 * cell + margin, i * cell + margin, cell, cell, color, image);
+                } else if (i < 10) {
+                    this.rectangle(1 * cell + margin, (i - 5) * cell + margin, cell, cell, color, image);
+                    this.rectangle(3 * cell + margin, (i - 5) * cell + margin, cell, cell, color, image);
+                } else if (i < 15) {
+                    this.rectangle(0 * cell + margin, (i - 10) * cell + margin, cell, cell, color, image);
+                    this.rectangle(4 * cell + margin, (i - 10) * cell + margin, cell, cell, color, image);
+                }
+            }
+
+            return image;
+        },
+
+        rectangle: function(x, y, w, h, color, image) {
+            var i, j;
+            for (i = x; i < x + w; i++) {
+                for (j = y; j < y + h; j++) {
+                    image.buffer[image.index(i, j)] = color;
+                }
+            }
+        },
+
+        // adapted from: https://gist.github.com/aemkei/1325937
+        hsl2rgb: function(h, s, b){
+            h *= 6;
+            s = [
+                b += s *= b < .5 ? b : 1 - b,
+                b - h % 1 * s * 2,
+                b -= s *= 2,
+                b,
+                b + h % 1 * s,
+                b + s
+            ];
+
+            return[
+                s[ ~~h    % 6 ],  // red
+                s[ (h|16) % 6 ],  // green
+                s[ (h|8)  % 6 ]   // blue
+            ];
+        },
+
+        toString: function(){
+            return this.render().getBase64();
+        }
+    }
+
+    window.Identicon = Identicon;
+})();
+
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/jquery.cssanim.js ---- */
 
@@ -247,7 +342,6 @@ jQuery.fx.step.scale = function(fx) {
   };
 
 }).call(this);
-
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/jquery.easing.1.3.js ---- */
@@ -460,6 +554,219 @@ jQuery.extend( jQuery.easing,
  */
 
 
+/* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/pnglib.js ---- */
+
+
+/**
+* A handy class to calculate color values.
+*
+* @version 1.0
+* @author Robert Eisele <robert@xarg.org>
+* @copyright Copyright (c) 2010, Robert Eisele
+* @link http://www.xarg.org/2010/03/generate-client-side-png-files-using-javascript/
+* @license http://www.opensource.org/licenses/bsd-license.php BSD License
+*
+*/
+
+(function() {
+
+	// helper functions for that ctx
+	function write(buffer, offs) {
+		for (var i = 2; i < arguments.length; i++) {
+			for (var j = 0; j < arguments[i].length; j++) {
+				buffer[offs++] = arguments[i].charAt(j);
+			}
+		}
+	}
+
+	function byte2(w) {
+		return String.fromCharCode((w >> 8) & 255, w & 255);
+	}
+
+	function byte4(w) {
+		return String.fromCharCode((w >> 24) & 255, (w >> 16) & 255, (w >> 8) & 255, w & 255);
+	}
+
+	function byte2lsb(w) {
+		return String.fromCharCode(w & 255, (w >> 8) & 255);
+	}
+
+	window.PNGlib = function(width,height,depth) {
+
+		this.width   = width;
+		this.height  = height;
+		this.depth   = depth;
+
+		// pixel data and row filter identifier size
+		this.pix_size = height * (width + 1);
+
+		// deflate header, pix_size, block headers, adler32 checksum
+		this.data_size = 2 + this.pix_size + 5 * Math.floor((0xfffe + this.pix_size) / 0xffff) + 4;
+
+		// offsets and sizes of Png chunks
+		this.ihdr_offs = 0;									// IHDR offset and size
+		this.ihdr_size = 4 + 4 + 13 + 4;
+		this.plte_offs = this.ihdr_offs + this.ihdr_size;	// PLTE offset and size
+		this.plte_size = 4 + 4 + 3 * depth + 4;
+		this.trns_offs = this.plte_offs + this.plte_size;	// tRNS offset and size
+		this.trns_size = 4 + 4 + depth + 4;
+		this.idat_offs = this.trns_offs + this.trns_size;	// IDAT offset and size
+		this.idat_size = 4 + 4 + this.data_size + 4;
+		this.iend_offs = this.idat_offs + this.idat_size;	// IEND offset and size
+		this.iend_size = 4 + 4 + 4;
+		this.buffer_size  = this.iend_offs + this.iend_size;	// total PNG size
+
+		this.buffer  = new Array();
+		this.palette = new Object();
+		this.pindex  = 0;
+
+		var _crc32 = new Array();
+
+		// initialize buffer with zero bytes
+		for (var i = 0; i < this.buffer_size; i++) {
+			this.buffer[i] = "\x00";
+		}
+
+		// initialize non-zero elements
+		write(this.buffer, this.ihdr_offs, byte4(this.ihdr_size - 12), 'IHDR', byte4(width), byte4(height), "\x08\x03");
+		write(this.buffer, this.plte_offs, byte4(this.plte_size - 12), 'PLTE');
+		write(this.buffer, this.trns_offs, byte4(this.trns_size - 12), 'tRNS');
+		write(this.buffer, this.idat_offs, byte4(this.idat_size - 12), 'IDAT');
+		write(this.buffer, this.iend_offs, byte4(this.iend_size - 12), 'IEND');
+
+		// initialize deflate header
+		var header = ((8 + (7 << 4)) << 8) | (3 << 6);
+		header+= 31 - (header % 31);
+
+		write(this.buffer, this.idat_offs + 8, byte2(header));
+
+		// initialize deflate block headers
+		for (var i = 0; (i << 16) - 1 < this.pix_size; i++) {
+			var size, bits;
+			if (i + 0xffff < this.pix_size) {
+				size = 0xffff;
+				bits = "\x00";
+			} else {
+				size = this.pix_size - (i << 16) - i;
+				bits = "\x01";
+			}
+			write(this.buffer, this.idat_offs + 8 + 2 + (i << 16) + (i << 2), bits, byte2lsb(size), byte2lsb(~size));
+		}
+
+		/* Create crc32 lookup table */
+		for (var i = 0; i < 256; i++) {
+			var c = i;
+			for (var j = 0; j < 8; j++) {
+				if (c & 1) {
+					c = -306674912 ^ ((c >> 1) & 0x7fffffff);
+				} else {
+					c = (c >> 1) & 0x7fffffff;
+				}
+			}
+			_crc32[i] = c;
+		}
+
+		// compute the index into a png for a given pixel
+		this.index = function(x,y) {
+			var i = y * (this.width + 1) + x + 1;
+			var j = this.idat_offs + 8 + 2 + 5 * Math.floor((i / 0xffff) + 1) + i;
+			return j;
+		}
+
+		// convert a color and build up the palette
+		this.color = function(red, green, blue, alpha) {
+
+			alpha = alpha >= 0 ? alpha : 255;
+			var color = (((((alpha << 8) | red) << 8) | green) << 8) | blue;
+
+			if (typeof this.palette[color] == "undefined") {
+				if (this.pindex == this.depth) return "\x00";
+
+				var ndx = this.plte_offs + 8 + 3 * this.pindex;
+
+				this.buffer[ndx + 0] = String.fromCharCode(red);
+				this.buffer[ndx + 1] = String.fromCharCode(green);
+				this.buffer[ndx + 2] = String.fromCharCode(blue);
+				this.buffer[this.trns_offs+8+this.pindex] = String.fromCharCode(alpha);
+
+				this.palette[color] = String.fromCharCode(this.pindex++);
+			}
+			return this.palette[color];
+		}
+
+		// output a PNG string, Base64 encoded
+		this.getBase64 = function() {
+
+			var s = this.getDump();
+
+			var ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+			var c1, c2, c3, e1, e2, e3, e4;
+			var l = s.length;
+			var i = 0;
+			var r = "";
+
+			do {
+				c1 = s.charCodeAt(i);
+				e1 = c1 >> 2;
+				c2 = s.charCodeAt(i+1);
+				e2 = ((c1 & 3) << 4) | (c2 >> 4);
+				c3 = s.charCodeAt(i+2);
+				if (l < i+2) { e3 = 64; } else { e3 = ((c2 & 0xf) << 2) | (c3 >> 6); }
+				if (l < i+3) { e4 = 64; } else { e4 = c3 & 0x3f; }
+				r+= ch.charAt(e1) + ch.charAt(e2) + ch.charAt(e3) + ch.charAt(e4);
+			} while ((i+= 3) < l);
+			return r;
+		}
+
+		// output a PNG string
+		this.getDump = function() {
+
+			// compute adler32 of output pixels + row filter bytes
+			var BASE = 65521; /* largest prime smaller than 65536 */
+			var NMAX = 5552;  /* NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1 */
+			var s1 = 1;
+			var s2 = 0;
+			var n = NMAX;
+
+			for (var y = 0; y < this.height; y++) {
+				for (var x = -1; x < this.width; x++) {
+					s1+= this.buffer[this.index(x, y)].charCodeAt(0);
+					s2+= s1;
+					if ((n-= 1) == 0) {
+						s1%= BASE;
+						s2%= BASE;
+						n = NMAX;
+					}
+				}
+			}
+			s1%= BASE;
+			s2%= BASE;
+			write(this.buffer, this.idat_offs + this.idat_size - 8, byte4((s2 << 16) | s1));
+
+			// compute crc32 of the PNG chunks
+			function crc32(png, offs, size) {
+				var crc = -1;
+				for (var i = 4; i < size-4; i += 1) {
+					crc = _crc32[(crc ^ png[offs+i].charCodeAt(0)) & 0xff] ^ ((crc >> 8) & 0x00ffffff);
+				}
+				write(png, offs+size-4, byte4(crc ^ -1));
+			}
+
+			crc32(this.buffer, this.ihdr_offs, this.ihdr_size);
+			crc32(this.buffer, this.plte_offs, this.plte_size);
+			crc32(this.buffer, this.trns_offs, this.trns_size);
+			crc32(this.buffer, this.idat_offs, this.idat_size);
+			crc32(this.buffer, this.iend_offs, this.iend_size);
+
+			// convert PNG to string
+			return "\211PNG\r\n\032\n"+this.buffer.join('');
+		}
+	}
+
+})();
+
+
+
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/SiteMenu.coffee ---- */
 
 
@@ -572,7 +879,6 @@ jQuery.extend( jQuery.easing,
 }).call(this);
 
 
-
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/ZeroHello.coffee ---- */
 
 
@@ -580,7 +886,8 @@ jQuery.extend( jQuery.easing,
   var ZeroHello,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty;
+    __hasProp = {}.hasOwnProperty,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   ZeroHello = (function(_super) {
     __extends(ZeroHello, _super);
@@ -612,8 +919,8 @@ jQuery.extend( jQuery.easing,
 
     ZeroHello.prototype.onOpenWebsocket = function(e) {
       this.reloadPeers();
-      this.reloadSites();
       this.reloadServerInfo();
+      this.reloadSites();
       $(".button-update").removeClass("loading");
       return this.cmd("channelJoinAllsite", {
         "channel": "siteChanged"
@@ -672,6 +979,7 @@ jQuery.extend( jQuery.easing,
         return function(site_info) {
           var peers;
           _this.address = site_info.addres;
+          _this.site_info = site_info;
           peers = site_info["peers"];
           if (peers === 0) {
             peers = "n/a";
@@ -682,7 +990,7 @@ jQuery.extend( jQuery.easing,
     };
 
     ZeroHello.prototype.applySitedata = function(elem, site) {
-      var error, modified, success, _ref, _ref1, _ref2;
+      var error, modified, success, _ref, _ref1, _ref2, _ref3;
       if (typeof site.bad_files === "object") {
         site.bad_files = site.bad_files.length;
       }
@@ -703,7 +1011,11 @@ jQuery.extend( jQuery.easing,
       $(".description", elem).html(site.content.description);
       modified = site.settings.modified ? site.settings.modified : site.content.modified;
       $(".modified-date", elem).html(this.formatSince(modified));
-      $(".site", elem).attr("href", "/" + site.address);
+      if ((this.server_info.plugins != null) && (__indexOf.call(this.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(this.server_info.plugins, "Dnschain") >= 0) && ((_ref = site.content) != null ? _ref.domain : void 0)) {
+        $(".site", elem).attr("href", "/" + site.content.domain);
+      } else {
+        $(".site", elem).attr("href", "/" + site.address);
+      }
       $(elem).removeClass("site-seeding").removeClass("site-paused");
       if (site.settings.serving && site.address) {
         $(elem).addClass("site-seeding");
@@ -717,7 +1029,7 @@ jQuery.extend( jQuery.easing,
       } else {
         $(".anim-updating", elem).removeClass("visible");
       }
-      if (((_ref = site.event) != null ? _ref[0] : void 0) === "file_done" || ((_ref1 = site.event) != null ? _ref1[0] : void 0) === "file_started") {
+      if (((_ref1 = site.event) != null ? _ref1[0] : void 0) === "file_done" || ((_ref2 = site.event) != null ? _ref2[0] : void 0) === "file_started") {
         if (site.bad_files > 0) {
           success = "Updating: " + site.bad_files + " left";
         } else if (site.event[0] === "file_done" && site.bad_files === 0) {
@@ -733,7 +1045,7 @@ jQuery.extend( jQuery.easing,
         } else {
           error = "Update failed";
         }
-      } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref2 = site.event) != null ? _ref2[0] : void 0) !== "file_done") {
+      } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref3 = site.event) != null ? _ref3[0] : void 0) !== "file_done") {
         error = site.bad_files + " file update failed";
       }
       if (error) {
@@ -787,7 +1099,8 @@ jQuery.extend( jQuery.easing,
             {
               "content": {
                 "title": "ZeroBoard",
-                "description": "Messaging board demo"
+                "description": "Messaging board demo",
+                "domain": "Board.ZeroNetwork.bit"
               },
               "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
               "settings": {
@@ -796,7 +1109,8 @@ jQuery.extend( jQuery.easing,
             }, {
               "content": {
                 "title": "ZeroBlog",
-                "description": "Blogging platform Demo"
+                "description": "Blogging platform Demo",
+                "domain": "Blog.ZeroNetwork.bit"
               },
               "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8",
               "settings": {
@@ -805,7 +1119,8 @@ jQuery.extend( jQuery.easing,
             }, {
               "content": {
                 "title": "ZeroTalk",
-                "description": "Decentralized forum demo"
+                "description": "Decentralized forum demo",
+                "domain": "Talk.ZeroNetwork.bit"
               },
               "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ",
               "settings": {
@@ -835,31 +1150,49 @@ jQuery.extend( jQuery.easing,
             $("#sites").append(elem);
           }
           $("#sites").removeClass("updating");
-          return $("#sites").css("height", "auto");
+          $("#sites").css("height", "auto");
+          if ($(document).height() <= $(window).height()) {
+            return $(".topright").css("margin-right", "90px");
+          }
         };
       })(this));
     };
 
     ZeroHello.prototype.reloadServerInfo = function() {
       return this.cmd("serverInfo", {}, (function(_this) {
-        return function(serverInfo) {
-          var version;
-          _this.serverInfo = serverInfo;
-          version = serverInfo.version;
+        return function(server_info) {
+          var imagedata, version;
+          _this.server_info = server_info;
+          version = server_info.version;
           if (!version) {
             version = "Unknown, please update";
           }
-          $(".version .current a").html(version);
-          if ($(".version .latest a").text() === version) {
-            $(".version .latest").css("display", "none");
+          $(".version.current a").html(version);
+          if ($(".version.latest a").text() === version) {
+            $(".version.latest").css("display", "none");
             $(".button-update").css("display", "none");
+            $(".broken-autoupdate").css("display", "none");
           } else {
-            $(".version .latest").css("display", "inline-block");
+            $(".version.latest").css("display", "inline-block");
+            $(".broken-autoupdate").css("display", "inline-block");
             if (parseInt(version.replace(/[^0-9]/g, "0")) >= 202) {
               $(".button-update").css("display", "inline-block");
             }
           }
-          return $(".version").css("opacity", 1);
+          $(".topright").css("opacity", 1);
+          if (server_info.multiuser) {
+            $(".user").css("display", "block");
+            imagedata = new Identicon(server_info["master_address"], 25).toString();
+            $("body").append("<style>.identicon { background-image: url(data:image/png;base64," + imagedata + ") }</style>");
+            $(".identicon").on("click", function() {
+              _this.cmd("userShowMasterSeed", []);
+              return false;
+            });
+            return $(".button-logout").on("click", function() {
+              _this.cmd("userLogout", []);
+              return false;
+            });
+          }
         };
       })(this));
     };

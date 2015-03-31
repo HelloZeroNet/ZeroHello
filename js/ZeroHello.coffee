@@ -15,8 +15,8 @@ class ZeroHello extends ZeroFrame
 	# Wrapper websocket connection ready
 	onOpenWebsocket: (e) =>
 		@reloadPeers()
-		@reloadSites()
 		@reloadServerInfo()
+		@reloadSites()
 		$(".button-update").removeClass("loading")
 		@cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
@@ -68,6 +68,7 @@ class ZeroHello extends ZeroFrame
 	reloadPeers: ->
 		@cmd "siteInfo", {}, (site_info) =>
 			@address = site_info.addres
+			@site_info = site_info
 			peers = site_info["peers"]
 			if peers == 0 then peers = "n/a"
 			$("#peers").removeClass("updating").text(peers)
@@ -91,7 +92,12 @@ class ZeroHello extends ZeroFrame
 		$(".description", elem).html(site.content.description)
 		modified = if site.settings.modified then site.settings.modified else site.content.modified
 		$(".modified-date", elem).html @formatSince(modified)
-		$(".site", elem).attr("href", "/"+site.address)
+
+		# Add href
+		if @server_info.plugins? and ("Zeroname" in @server_info.plugins or "Dnschain" in @server_info.plugins) and site.content?.domain # Domain
+			$(".site", elem).attr("href", "/"+site.content.domain)
+		else # Address
+			$(".site", elem).attr("href", "/"+site.address)
 
 		$(elem).removeClass("site-seeding").removeClass("site-paused")
 		if site.settings.serving and site.address # Seeding
@@ -181,9 +187,9 @@ class ZeroHello extends ZeroFrame
 
 			# Append sample sites
 			sample_sites = [
-				{"content": {"title": "ZeroBoard", "description": "Messaging board demo"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
-				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
-				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo"}, "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ", "settings": {"serving": false}}
+				{"content": {"title": "ZeroBoard", "description": "Messaging board demo", "domain": "Board.ZeroNetwork.bit"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
+				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo", "domain": "Blog.ZeroNetwork.bit"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
+				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo", "domain": "Talk.ZeroNetwork.bit"}, "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ", "settings": {"serving": false}}
 				{"content": {"title": "ZeroMarket", "description": "Simple market demo (coming soon)"}, "address": "ZeroMarket", "disabled": true, "settings": {"serving": false}}
 			]
 
@@ -198,24 +204,45 @@ class ZeroHello extends ZeroFrame
 			# Show sites
 			$("#sites").removeClass("updating")
 			$("#sites").css("height", "auto") # Back to auto height
+			if $(document).height() <= $(window).height() # doesnt has scrollbar
+				$(".topright").css("margin-right", "90px")
 
 
 	# Reload serverinfo
 	reloadServerInfo: ->
-		@cmd "serverInfo", {}, (serverInfo) =>
-			@serverInfo = serverInfo
+		@cmd "serverInfo", {}, (server_info) =>
+			@server_info = server_info
 			
 			# Check verion info
-			version = serverInfo.version
+			version = server_info.version
 			if not version then version = "Unknown, please update" # Old version websocket api didnt had version info
-			$(".version .current a").html(version)
-			if $(".version .latest a").text() == version # No new version available
-				$(".version .latest").css "display", "none"
+			$(".version.current a").html(version)
+			if $(".version.latest a").text() == version # No new version available
+				$(".version.latest").css "display", "none"
 				$(".button-update").css "display", "none"
+				$(".broken-autoupdate").css "display", "none"
 			else
-				$(".version .latest").css "display", "inline-block"
+				$(".version.latest").css "display", "inline-block"
+				$(".broken-autoupdate").css "display", "inline-block"
 				if parseInt(version.replace(/[^0-9]/g, "0")) >= 202 then $(".button-update").css "display", "inline-block" # Auto update supported from 0.2.3
-			$(".version").css("opacity", 1)
+			$(".topright").css("opacity", 1)
+
+			# Multiuser info
+			if server_info.multiuser
+				$(".user").css("display", "block")
+				imagedata = new Identicon(server_info["master_address"], 25).toString();
+				$("body").append("<style>.identicon { background-image: url(data:image/png;base64,#{imagedata}) }</style>")
+				# Show masterseed
+				$(".identicon").on "click", =>
+					@cmd "userShowMasterSeed", []
+					return false
+
+				# Logout
+				$(".button-logout").on "click", =>
+					@cmd "userLogout", []
+					return false
+
+
 
 
 	# - Site commands -

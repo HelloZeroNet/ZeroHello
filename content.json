@@ -1,11 +1,12 @@
 {
   "address": "1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr", 
   "description": "This site", 
+  "domain": "ZeroNetwork.bit", 
   "files": {
     "css/all.css": {
-      "sha1": "f4d155b566d9bacc337fcbda2f2daf59b585cfab", 
-      "sha512": "77385ec5069e6113f25b382c229ce33061d03309fad059a9f207989bac5f5379", 
-      "size": 81007
+      "sha1": "35db2805dfddd29824703e3305d51e298e40ebcd", 
+      "sha512": "7a08a5a333e86a1a2abbe88fd0a0d0122cf29f0d7a85f6d2374e10c1b843fd59", 
+      "size": 81530
     }, 
     "favicon.ico": {
       "sha1": "cad8bea56c32b24fafd1d095a65407dd7e88dc86", 
@@ -33,14 +34,14 @@
       "size": 723
     }, 
     "index.html": {
-      "sha1": "3122c60f6a3a5a34e47c5bf80bdbcced35910a96", 
-      "sha512": "0a3b0bdff3eb218114997df48b897e397a3f0aa1f0e61b6dd6eabf5f625ee1d0", 
-      "size": 2082
+      "sha1": "e0af0d192206cc058094d0a637112995ef510f52", 
+      "sha512": "fe372396f3ad5a963eae104eee15919f69482c416c8f3e48d62f621905c4600b", 
+      "size": 2629
     }, 
     "js/all.js": {
-      "sha1": "d8a2b4a5e2e4fc48afd63ec0406bc445376202bd", 
-      "sha512": "514b7c6437daea0dffb223395bb9f11099f67692d7d7716ebcd44c42491214dc", 
-      "size": 113578
+      "sha1": "696b59fa4fc337bb0d3db414154c10184e279393", 
+      "sha512": "f4d990efd25822ddc5f5f8c8aa5817b8f602af3b6684877fde074b9f9b02362c", 
+      "size": 124592
     }, 
     "test/jquery.min.js": {
       "sha1": "41b4bfbaa96be6d1440db6e78004ade1c134e276", 
@@ -64,13 +65,13 @@
     }
   }, 
   "ignore": "(js|css)/(?!all.(js|css))", 
-  "modified": 1425344149.365, 
+  "modified": 1427755038.457, 
   "sign": [
-    76364771191048359655330371522993701844460895388572881469443527724873084487532, 
-    72370727097452716838177711021231240388728333710495826354491653061266389305340
+    93137679403170415386898911890941676344644849900231502258567679364321833377757, 
+    109922661316557071301604854682195237082062550382810971449795191700931584576188
   ], 
   "signers_sign": null, 
   "signs_required": 1, 
   "title": "ZeroHello", 
-  "zeronet_version": "0.2.5"
+  "zeronet_version": "0.2.8"
 }
