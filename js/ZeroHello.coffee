@@ -216,15 +216,21 @@ class ZeroHello extends ZeroFrame
 			# Check verion info
 			version = server_info.version
 			if not version then version = "Unknown, please update" # Old version websocket api didnt had version info
-			$(".version.current a").html(version)
+			if server_info.rev then rev = " (r#{server_info.rev})" else rev = ""
+			$(".version.current a").html("#{version}#{rev}")
 			if $(".version.latest a").text() == version # No new version available
 				$(".version.latest").css "display", "none"
 				$(".button-update").css "display", "none"
-				$(".broken-autoupdate").css "display", "none"
 			else
 				$(".version.latest").css "display", "inline-block"
-				$(".broken-autoupdate").css "display", "inline-block"
-				if parseInt(version.replace(/[^0-9]/g, "0")) >= 202 then $(".button-update").css "display", "inline-block" # Auto update supported from 0.2.3
+				$(".button-update").css "display", "inline-block"
+				if parseInt(version.replace(/[^0-9]/g, "0")) == 207 # Auto update broken
+					$(".button-update").addClass "button-disabled"
+					$(".broken-autoupdate").css "display", "block"
+				else if parseInt(version.replace(/[^0-9]/g, "0")) == 208 # Auto update doesnt restart
+					$(".broken-autoupdate").css "display", "block"
+					$(".broken-autoupdate").html "It's possible that ZeroNet will not comes back automatically<br>after the update process. In this case please start it manually."
+
 			$(".topright").css("opacity", 1)
 
 			# Multiuser info

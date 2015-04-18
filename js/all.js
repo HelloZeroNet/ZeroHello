@@ -1161,22 +1161,30 @@ jQuery.extend( jQuery.easing,
     ZeroHello.prototype.reloadServerInfo = function() {
       return this.cmd("serverInfo", {}, (function(_this) {
         return function(server_info) {
-          var imagedata, version;
+          var imagedata, rev, version;
           _this.server_info = server_info;
           version = server_info.version;
           if (!version) {
             version = "Unknown, please update";
           }
-          $(".version.current a").html(version);
+          if (server_info.rev) {
+            rev = " (r" + server_info.rev + ")";
+          } else {
+            rev = "";
+          }
+          $(".version.current a").html("" + version + rev);
           if ($(".version.latest a").text() === version) {
             $(".version.latest").css("display", "none");
             $(".button-update").css("display", "none");
-            $(".broken-autoupdate").css("display", "none");
           } else {
             $(".version.latest").css("display", "inline-block");
-            $(".broken-autoupdate").css("display", "inline-block");
-            if (parseInt(version.replace(/[^0-9]/g, "0")) >= 202) {
-              $(".button-update").css("display", "inline-block");
+            $(".button-update").css("display", "inline-block");
+            if (parseInt(version.replace(/[^0-9]/g, "0")) === 207) {
+              $(".button-update").addClass("button-disabled");
+              $(".broken-autoupdate").css("display", "block");
+            } else if (parseInt(version.replace(/[^0-9]/g, "0")) === 208) {
+              $(".broken-autoupdate").css("display", "block");
+              $(".broken-autoupdate").html("It's possible that ZeroNet will not comes back automatically<br>after the update process. In this case please start it manually.");
             }
           }
           $(".topright").css("opacity", 1);
