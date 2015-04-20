@@ -43,12 +43,12 @@ class SiteMenu extends Menu
 	constructor: (elem, site) ->
 		super($(".hamburger", elem))
 		@elem.addClass("menu-site")
-		@addItem "Update", (-> window.zero_hello.siteUpdate site.content.address )
+		@addItem "Update", (-> window.zero_hello.siteUpdate site.address )
 		if site.settings.serving
-			@addItem "Pause", (-> window.zero_hello.sitePause site.content.address )
+			@addItem "Pause", (-> window.zero_hello.sitePause site.address )
 		else
-			@addItem "Resume", (-> window.zero_hello.siteResume site.content.address )
-		@addItem("Delete", (-> window.zero_hello.siteDelete site.content.address ) ).addClass("menu-item-separator")
+			@addItem "Resume", (-> window.zero_hello.siteResume site.address )
+		@addItem("Delete", (-> window.zero_hello.siteDelete site.address ) ).addClass("menu-item-separator")
 
 
 window.visible_menu = null

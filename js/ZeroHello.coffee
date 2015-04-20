@@ -3,6 +3,7 @@ class ZeroHello extends ZeroFrame
 		@log "inited!"
 		@sites = {}
 		@local_storage = null
+		@is_proxy_request = document.location.host == "zero" or document.location.pathname == "/" # Using Chrome extension
 		@cmd "wrapperGetLocalStorage", [], (res) =>
 			res ?= {}
 			@local_storage = res
@@ -95,9 +96,19 @@ class ZeroHello extends ZeroFrame
 
 		# Add href
 		if @server_info.plugins? and ("Zeroname" in @server_info.plugins or "Dnschain" in @server_info.plugins) and site.content?.domain # Domain
-			$(".site", elem).attr("href", "/"+site.content.domain)
+			if @is_proxy_request
+				href = "http://"+site.content.domain
+			else
+				href = "/"+site.content.domain
 		else # Address
-			$(".site", elem).attr("href", "/"+site.address)
+			if @is_proxy_request
+				href = "http://zero/"+site.address
+			else
+				href = "/"+site.address
+
+		$(".site", elem).attr("href", href)
+
+
 
 		$(elem).removeClass("site-seeding").removeClass("site-paused")
 		if site.settings.serving and site.address # Seeding

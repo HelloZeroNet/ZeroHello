@@ -844,19 +844,19 @@ jQuery.extend( jQuery.easing,
       SiteMenu.__super__.constructor.call(this, $(".hamburger", elem));
       this.elem.addClass("menu-site");
       this.addItem("Update", (function() {
-        return window.zero_hello.siteUpdate(site.content.address);
+        return window.zero_hello.siteUpdate(site.address);
       }));
       if (site.settings.serving) {
         this.addItem("Pause", (function() {
-          return window.zero_hello.sitePause(site.content.address);
+          return window.zero_hello.sitePause(site.address);
         }));
       } else {
         this.addItem("Resume", (function() {
-          return window.zero_hello.siteResume(site.content.address);
+          return window.zero_hello.siteResume(site.address);
         }));
       }
       this.addItem("Delete", (function() {
-        return window.zero_hello.siteDelete(site.content.address);
+        return window.zero_hello.siteDelete(site.address);
       })).addClass("menu-item-separator");
     }
 
@@ -901,6 +901,7 @@ jQuery.extend( jQuery.easing,
       this.log("inited!");
       this.sites = {};
       this.local_storage = null;
+      this.is_proxy_request = document.location.host === "zero" || document.location.pathname === "/";
       this.cmd("wrapperGetLocalStorage", [], (function(_this) {
         return function(res) {
           if (res == null) {
@@ -990,7 +991,7 @@ jQuery.extend( jQuery.easing,
     };
 
     ZeroHello.prototype.applySitedata = function(elem, site) {
-      var error, modified, success, _ref, _ref1, _ref2, _ref3;
+      var error, href, modified, success, _ref, _ref1, _ref2, _ref3;
       if (typeof site.bad_files === "object") {
         site.bad_files = site.bad_files.length;
       }
@@ -1012,10 +1013,19 @@ jQuery.extend( jQuery.easing,
       modified = site.settings.modified ? site.settings.modified : site.content.modified;
       $(".modified-date", elem).html(this.formatSince(modified));
       if ((this.server_info.plugins != null) && (__indexOf.call(this.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(this.server_info.plugins, "Dnschain") >= 0) && ((_ref = site.content) != null ? _ref.domain : void 0)) {
-        $(".site", elem).attr("href", "/" + site.content.domain);
+        if (this.is_proxy_request) {
+          href = "http://" + site.content.domain;
+        } else {
+          href = "/" + site.content.domain;
+        }
       } else {
-        $(".site", elem).attr("href", "/" + site.address);
+        if (this.is_proxy_request) {
+          href = "http://zero/" + site.address;
+        } else {
+          href = "/" + site.address;
+        }
       }
+      $(".site", elem).attr("href", href);
       $(elem).removeClass("site-seeding").removeClass("site-paused");
       if (site.settings.serving && site.address) {
         $(elem).addClass("site-seeding");
