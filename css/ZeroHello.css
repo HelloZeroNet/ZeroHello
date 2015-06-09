@@ -153,7 +153,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s }
 .menu-item-separator { margin-top: 5px; border-top: 1px solid #eee }
 
-.menu-item:hover { background-color: #EEE }
+.menu-item:hover { background-color: #F6F6F6; transition: none }
 .menu-item:active, .menu-item:focus { background-color: #AF3BFF; color: white; transition: none }
 
 

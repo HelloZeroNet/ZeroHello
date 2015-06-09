@@ -10,6 +10,7 @@ class ZeroHello extends ZeroFrame
 
 		$(".button-update").on "click", =>
 			$(".button-update").addClass("loading")
+			$(".broken-autoupdate").css("display", "block").html "Please run update.py manually<br>if ZeroNet doesn't comes back within 1 minute."
 			@cmd "serverUpdate", {}
 
 
@@ -120,17 +121,19 @@ class ZeroHello extends ZeroFrame
 
 
 		# Show/hide loading
-		if site.tasks > 0 # Site tasks running
+		if site.tasks > 0 or site.event?[0] == "updating" # Site tasks running
 			$(".anim-updating", elem).addClass("visible")
 		else
 			$(".anim-updating", elem).removeClass("visible")
 
 		# Show success
-		if site.event?[0] == "file_done" or site.event?[0] == "file_started"
+		if site.event?[0] in ["file_done", "file_started", "updating", "updated"]
 			if site.bad_files > 0
 				success = "Updating: #{site.bad_files} left"
-			else if site.event[0] == "file_done" and site.bad_files == 0
+			else if site.event[0] in ["file_done", "updated"] and site.bad_files == 0
 				success = "Site updated"
+			else
+				success = "Site updating..."
 		if success
 			$(".notify", elem).text(success).addClass("success").addClassLater("visible")
 
@@ -201,6 +204,7 @@ class ZeroHello extends ZeroFrame
 				{"content": {"title": "ZeroBoard", "description": "Messaging board demo", "domain": "Board.ZeroNetwork.bit"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
 				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo", "domain": "Blog.ZeroNetwork.bit"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
 				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo", "domain": "Talk.ZeroNetwork.bit"}, "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ", "settings": {"serving": false}}
+				{"content": {"title": "ZeroID", "description": "Sample trusted authorization provider", "domain": "ZeroID.bit"}, "address": "1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz", "settings": {"serving": false}}
 				{"content": {"title": "ZeroMarket", "description": "Simple market demo (coming soon)"}, "address": "ZeroMarket", "disabled": true, "settings": {"serving": false}}
 			]
 
@@ -277,6 +281,11 @@ class ZeroHello extends ZeroFrame
 	# Resume site seeding
 	siteResume: (address) ->
 		@cmd "siteResume", {"address": address}
+
+
+	# Create new site from this
+	siteClone: (address) ->
+		@cmd "siteClone", {"address": address}
 
 
 	# Delete site

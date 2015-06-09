@@ -48,6 +48,12 @@ class SiteMenu extends Menu
 			@addItem "Pause", (-> window.zero_hello.sitePause site.address )
 		else
 			@addItem "Resume", (-> window.zero_hello.siteResume site.address )
+		if site.content?.cloneable
+			if zero_hello.server_info.rev < 200
+				@addItem "Clone", (-> window.zero_hello.cmd "wrapperNotification", ["info", "Please update to version 0.3.1 to use the site clone feature!"] )
+			else
+				@addItem "Clone", (-> window.zero_hello.siteClone site.address )
+
 		@addItem("Delete", (-> window.zero_hello.siteDelete site.address ) ).addClass("menu-item-separator")
 
 

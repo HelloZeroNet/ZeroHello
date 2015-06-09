@@ -841,6 +841,7 @@ jQuery.extend( jQuery.easing,
     __extends(SiteMenu, _super);
 
     function SiteMenu(elem, site) {
+      var _ref;
       SiteMenu.__super__.constructor.call(this, $(".hamburger", elem));
       this.elem.addClass("menu-site");
       this.addItem("Update", (function() {
@@ -854,6 +855,17 @@ jQuery.extend( jQuery.easing,
         this.addItem("Resume", (function() {
           return window.zero_hello.siteResume(site.address);
         }));
+      }
+      if ((_ref = site.content) != null ? _ref.cloneable : void 0) {
+        if (zero_hello.server_info.rev < 200) {
+          this.addItem("Clone", (function() {
+            return window.zero_hello.cmd("wrapperNotification", ["info", "Please update to version 0.3.1 to use the site clone feature!"]);
+          }));
+        } else {
+          this.addItem("Clone", (function() {
+            return window.zero_hello.siteClone(site.address);
+          }));
+        }
       }
       this.addItem("Delete", (function() {
         return window.zero_hello.siteDelete(site.address);
@@ -877,6 +889,7 @@ jQuery.extend( jQuery.easing,
   });
 
 }).call(this);
+
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/ZeroHello.coffee ---- */
@@ -913,6 +926,7 @@ jQuery.extend( jQuery.easing,
       return $(".button-update").on("click", (function(_this) {
         return function() {
           $(".button-update").addClass("loading");
+          $(".broken-autoupdate").css("display", "block").html("Please run update.py manually<br>if ZeroNet doesn't comes back within 1 minute.");
           return _this.cmd("serverUpdate", {});
         };
       })(this));
@@ -991,7 +1005,7 @@ jQuery.extend( jQuery.easing,
     };
 
     ZeroHello.prototype.applySitedata = function(elem, site) {
-      var error, href, modified, success, _ref, _ref1, _ref2, _ref3;
+      var error, href, modified, success, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
       if (typeof site.bad_files === "object") {
         site.bad_files = site.bad_files.length;
       }
@@ -1034,16 +1048,18 @@ jQuery.extend( jQuery.easing,
         $(elem).addClass("site-paused");
         $(".status", elem).text("Paused");
       }
-      if (site.tasks > 0) {
+      if (site.tasks > 0 || ((_ref1 = site.event) != null ? _ref1[0] : void 0) === "updating") {
         $(".anim-updating", elem).addClass("visible");
       } else {
         $(".anim-updating", elem).removeClass("visible");
       }
-      if (((_ref1 = site.event) != null ? _ref1[0] : void 0) === "file_done" || ((_ref2 = site.event) != null ? _ref2[0] : void 0) === "file_started") {
+      if ((_ref2 = (_ref3 = site.event) != null ? _ref3[0] : void 0) === "file_done" || _ref2 === "file_started" || _ref2 === "updating" || _ref2 === "updated") {
         if (site.bad_files > 0) {
           success = "Updating: " + site.bad_files + " left";
-        } else if (site.event[0] === "file_done" && site.bad_files === 0) {
+        } else if (((_ref4 = site.event[0]) === "file_done" || _ref4 === "updated") && site.bad_files === 0) {
           success = "Site updated";
+        } else {
+          success = "Site updating...";
         }
       }
       if (success) {
@@ -1055,7 +1071,7 @@ jQuery.extend( jQuery.easing,
         } else {
           error = "Update failed";
         }
-      } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref3 = site.event) != null ? _ref3[0] : void 0) !== "file_done") {
+      } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref5 = site.event) != null ? _ref5[0] : void 0) !== "file_done") {
         error = site.bad_files + " file update failed";
       }
       if (error) {
@@ -1133,6 +1149,16 @@ jQuery.extend( jQuery.easing,
                 "domain": "Talk.ZeroNetwork.bit"
               },
               "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ",
+              "settings": {
+                "serving": false
+              }
+            }, {
+              "content": {
+                "title": "ZeroID",
+                "description": "Sample trusted authorization provider",
+                "domain": "ZeroID.bit"
+              },
+              "address": "1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz",
               "settings": {
                 "serving": false
               }
@@ -1229,6 +1255,12 @@ jQuery.extend( jQuery.easing,
 
     ZeroHello.prototype.siteResume = function(address) {
       return this.cmd("siteResume", {
+        "address": address
+      });
+    };
+
+    ZeroHello.prototype.siteClone = function(address) {
+      return this.cmd("siteClone", {
         "address": address
       });
     };
