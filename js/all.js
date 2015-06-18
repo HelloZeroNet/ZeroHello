@@ -891,7 +891,6 @@ jQuery.extend( jQuery.easing,
 }).call(this);
 
 
-
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/ZeroHello.coffee ---- */
 
 
@@ -1026,7 +1025,7 @@ jQuery.extend( jQuery.easing,
       $(".description", elem).html(site.content.description);
       modified = site.settings.modified ? site.settings.modified : site.content.modified;
       $(".modified-date", elem).html(this.formatSince(modified));
-      if ((this.server_info.plugins != null) && (__indexOf.call(this.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(this.server_info.plugins, "Dnschain") >= 0) && ((_ref = site.content) != null ? _ref.domain : void 0)) {
+      if ((this.server_info.plugins != null) && (__indexOf.call(this.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(this.server_info.plugins, "Dnschain") >= 0 || __indexOf.call(this.server_info.plugins, "Zeroname-local") >= 0) && ((_ref = site.content) != null ? _ref.domain : void 0)) {
         if (this.is_proxy_request) {
           href = "http://" + site.content.domain;
         } else {

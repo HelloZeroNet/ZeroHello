@@ -96,7 +96,7 @@ class ZeroHello extends ZeroFrame
 		$(".modified-date", elem).html @formatSince(modified)
 
 		# Add href
-		if @server_info.plugins? and ("Zeroname" in @server_info.plugins or "Dnschain" in @server_info.plugins) and site.content?.domain # Domain
+		if @server_info.plugins? and ("Zeroname" in @server_info.plugins or "Dnschain" in @server_info.plugins or "Zeroname-local" in @server_info.plugins) and site.content?.domain # Domain
 			if @is_proxy_request
 				href = "http://"+site.content.domain
 			else
