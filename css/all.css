@@ -146,6 +146,9 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .site-downloading { -webkit-box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) ; -moz-box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) ; -o-box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) ; -ms-box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) ; box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1)  }
 .site-downloading .site { background-color: rgba(38, 194, 129, 0.85) }
 
+.site.error { background-color: #C0392B }
+.site.error {-webkit-box-shadow: inset 0px 0px 0px 3px #E74C3C ; -moz-box-shadow: inset 0px 0px 0px 3px #E74C3C ; -o-box-shadow: inset 0px 0px 0px 3px #E74C3C ; -ms-box-shadow: inset 0px 0px 0px 3px #E74C3C ; box-shadow: inset 0px 0px 0px 3px #E74C3C  }
+.site.error .status { background: #F1C40F; color: black }
 
 /* Menu */
 

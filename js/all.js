@@ -1076,6 +1076,11 @@ jQuery.extend( jQuery.easing,
       if (error) {
         $(".notify", elem).text(error).removeClass("success").addClassLater("visible");
       }
+      if (site.settings.size > site.settings.size_limit * 1000 * 1000) {
+        $(".notify", elem).text("Check size limit");
+        $(".site", elem).addClass("error");
+        $(".status", elem).text("?");
+      }
       if (!error && !success) {
         $(".notify", elem).removeClass("visible");
       }

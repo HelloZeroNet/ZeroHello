@@ -141,6 +141,9 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .site-downloading { box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) }
 .site-downloading .site { background-color: rgba(38, 194, 129, 0.85) }
 
+.site.error { background-color: #C0392B }
+.site.error {box-shadow: inset 0px 0px 0px 3px #E74C3C }
+.site.error .status { background: #F1C40F; color: black }
 
 /* Menu */
 

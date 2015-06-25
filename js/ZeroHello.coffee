@@ -147,6 +147,12 @@ class ZeroHello extends ZeroFrame
 			error = "#{site.bad_files} file update failed"
 		if error
 			$(".notify", elem).text(error).removeClass("success").addClassLater("visible")
+			
+		# Site error
+		if site.settings.size > site.settings.size_limit*1000*1000
+			$(".notify", elem).text("Check size limit")
+			$(".site", elem).addClass("error")
+			$(".status", elem).text("?")
 
 		# Hide error/success
 		if not error and not success
