@@ -45,6 +45,14 @@ function scrollAnim() {
 	}, 2000).animate({
 		scrollTop: 0
 	}, 2000);
+	console.log($("body").css("backface-visibility"))
+	if ($("body").css("backface-visibility") == "hidden") {
+		$("body").css("backface-visibility","initial")
+		$("#backface").text("body backface-visibility: initial")
+	} else {
+		$("body").css("backface-visibility","hidden")
+		$("#backface").text("body backface-visibility: hidden")
+	}
 }
 
 $( document ).ready(function() {
@@ -56,7 +64,10 @@ $( document ).ready(function() {
 })
 </script> 
 
-<a href="/1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ/?Topic:7@2/Slow+rendering+in+Chrome" target="_top" style="position: fixed; right: 50px; bottom: 10px; background-color: white; padding: 10px; z-index: 999; display: block">Please post your results to ZeroTalk</a>
+<div style="position: fixed; right: 50px; bottom: 10px; background-color: white; padding: 10px; z-index: 999; display: block">
+ <span id="backface"></span>
+ <a href="/1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ/?Topic:7@2/Slow+rendering+in+Chrome" target="_top">Please post your results to ZeroTalk</a>
+</div>
 
 <!-- Sites -->
 <div id="sites" style="height: initial">

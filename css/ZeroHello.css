@@ -1,4 +1,4 @@
-body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif; padding-bottom: 50px }/*#AF3FBB*/
+body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif; padding-bottom: 50px; backface-visibility: hidden } /*#AF3FBB*/
 h1, h2, h3, h4 { font-family: 'Roboto', sans-serif; font-weight: normal; font-size: 100px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif;; padding-bottom: 30px; line-height: 100px }
 h2 { font-size: 35px }
