@@ -38,7 +38,7 @@ class ZeroHello extends ZeroFrame
 		@applySitedata($(".site-#{site.address}"), site)
 
 
-	# Format time since	
+	# Format time since
 	formatSince: (time) ->
 		now = +(new Date)/1000
 		secs = now - time
@@ -147,7 +147,7 @@ class ZeroHello extends ZeroFrame
 			error = "#{site.bad_files} file update failed"
 		if error
 			$(".notify", elem).text(error).removeClass("success").addClassLater("visible")
-			
+
 		# Site error
 		if site.settings.size > site.settings.size_limit*1000*1000
 			$(".notify", elem).text("Check size limit")
@@ -209,7 +209,7 @@ class ZeroHello extends ZeroFrame
 			sample_sites = [
 				{"content": {"title": "ZeroBoard", "description": "Messaging board demo", "domain": "Board.ZeroNetwork.bit"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
 				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo", "domain": "Blog.ZeroNetwork.bit"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
-				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo", "domain": "Talk.ZeroNetwork.bit"}, "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ", "settings": {"serving": false}}
+				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo", "domain": "Talk.ZeroNetwork.bit"}, "address": "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT", "settings": {"serving": false}}
 				{"content": {"title": "ZeroID", "description": "Sample trusted authorization provider", "domain": "ZeroID.bit"}, "address": "1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz", "settings": {"serving": false}}
 				{"content": {"title": "ZeroMarket", "description": "Simple market demo (coming soon)"}, "address": "ZeroMarket", "disabled": true, "settings": {"serving": false}}
 			]
@@ -233,7 +233,7 @@ class ZeroHello extends ZeroFrame
 	reloadServerInfo: ->
 		@cmd "serverInfo", {}, (server_info) =>
 			@server_info = server_info
-			
+
 			# Check verion info
 			version = server_info.version
 			if not version then version = "Unknown, please update" # Old version websocket api didnt had version info
@@ -256,18 +256,25 @@ class ZeroHello extends ZeroFrame
 
 			# Multiuser info
 			if server_info.multiuser
-				$(".user").css("display", "block")
+				$(".plugin-multiuser").css("display", "block")
 				imagedata = new Identicon(server_info["master_address"], 25).toString();
 				$("body").append("<style>.identicon { background-image: url(data:image/png;base64,#{imagedata}) }</style>")
 				# Show masterseed
-				$(".identicon").on "click", =>
+				$(".plugin-multiuser .identicon").on "click", =>
 					@cmd "userShowMasterSeed", []
 					return false
 
 				# Logout
-				$(".button-logout").on "click", =>
+				$(".plugin-multiuser .button-logout").on "click", =>
 					@cmd "userLogout", []
 					return false
+
+			# Passworded server
+			if "UiPassword" in server_info.plugins
+				$(".plugin-uipassword").css("display", "block")
+				$(".plugin-uipassword .button-logout").on "click", =>
+					@cmd "uiLogout", []
+
 
 
 

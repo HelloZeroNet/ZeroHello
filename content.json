@@ -4,8 +4,8 @@
   "domain": "ZeroNetwork.bit", 
   "files": {
     "css/all.css": {
-      "sha512": "aac2430f92c24fec777277c25419b27299eded44b5cee91fc065a2cc677a1af4", 
-      "size": 82041
+      "sha512": "c2f0e9d43f3fd5d379ad27d4c4a982f803dfc0bef6e71767ced924bd699bb794", 
+      "size": 82213
     }, 
     "favicon.ico": {
       "sha512": "4b16ceb40191f83af1286438e4b069ab613736a199d5c5cc32a44cd60051ca13", 
@@ -28,20 +28,20 @@
       "size": 723
     }, 
     "index.html": {
-      "sha512": "258e368d91b0d8641dcf80412be87824702137b6e299be3f034b9b99336cca18", 
-      "size": 2614
+      "sha512": "25838b4420f34b85f1345c0e2e6c6b4c7e04eb43da41e04a1f45fd5dd3c51c8f", 
+      "size": 2721
     }, 
     "js/all.js": {
-      "sha512": "1e1dd5a16f58ba9e96a249db8b9d13bbdce4ccbe670b1ee82024282eea4ce40e", 
-      "size": 126948
+      "sha512": "c2ce2f397edd71049dc903004d06e8a224b066bb7b4b476693913ca60dfa5f5f", 
+      "size": 127281
     }, 
     "test/jquery.min.js": {
       "sha512": "eda31b5c7d371d4b3acced51fa92f27a417515317cf437aae09a47c3acc8a36b", 
       "size": 84320
     }, 
     "test/render.html": {
-      "sha512": "5dd8cd2ee481c133ba0a74c90055a9d5397a826af61fc5ba38d7450c7fb3dac3", 
-      "size": 2248
+      "sha512": "e09686abadfee90ca4b0b95a77021271157003da95abb0933b80b627bbb3860f", 
+      "size": 2626
     }, 
     "test/security.html": {
       "sha512": "a641685276ad0757bcffc0850ca2b98a900df9849f786b4d751a166241e9e858", 
@@ -53,10 +53,10 @@
     }
   }, 
   "ignore": "(js|css)/(?!all.(js|css))", 
-  "modified": 1435255364.247, 
+  "modified": 1438340221.598, 
   "sign": [
-    23968814545139924943599664396837396157943009298343569111004846680073321449742, 
-    22926650895730676704243349969406556060621418772538790765362755272336876493247
+    20991987358288928781472656342405888760101201405479282008342268910869438205152, 
+    82268914458815954583133595366093255563736271222992953956067279905568705779077
   ], 
   "signers_sign": null, 
   "signs_required": 1, 

@@ -17,8 +17,8 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 /* Button */
 
-.button { 
-	padding: 5px 10px; background-color: #DDE0E0; border-bottom: 2px solid #999998; background-position: left center; 
+.button {
+	padding: 5px 10px; background-color: #DDE0E0; border-bottom: 2px solid #999998; background-position: left center;
 	border-radius: 2px ; text-decoration: none; transition: all 0.5s ease-out ; color: #333; display: inline-block
 }
 .button:hover { background-color: #FFF400; border-color: white; border-bottom: 2px solid #4D4D4C; transition: none ; color: inherit }
@@ -27,16 +27,16 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 /*.button-delete { background-color: #e74c3c; border-bottom-color: #A83F34; color: white }*/
 .button-outline { background-color: white; color: #DDD; border: 1px solid #eee }
 
-.button-delete:hover { background-color: #FF5442; border: 1px solid #FF5442; color: white } 
-.button-ok:hover { background-color: #27AE60; border: 1px solid #27AE60; color: white } 
+.button-delete:hover { background-color: #FF5442; border: 1px solid #FF5442; color: white }
+.button-ok:hover { background-color: #27AE60; border: 1px solid #27AE60; color: white }
 .button-submit { background-color: #FFF85F;border-bottom: 2px solid #CDBD1E;  padding: 5px 15px; font-size: 15px; line-height: 30px }
 .button-small { padding: 5px 10px; font-size: 12px; line-height: 16px }
 .button-disabled { color: #666 !important; pointer-events: none; border-bottom: 2px solid #666; background-color: #999; opacity: 0.5 }
 
-.button.loading { 
-	color: rgba(0,0,0,0) !important; background: #999 url(../img/loading.gif) no-repeat center center; 
+.button.loading {
+	color: rgba(0,0,0,0) !important; background: #999 url(../img/loading.gif) no-repeat center center;
 	transition: all 0.5s ease-out ; pointer-events: none; border-bottom: 2px solid #666
-}  
+}
 
 
 /* Version info */
@@ -46,7 +46,8 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .version.latest { display: inline-block }
 .version.latest.new { background-color: #FFF85F; margin-right: -3px; display: none }
 
-.user { display: none }
+.plugin-multiuser { display: none }
+.plugin-uipassword { display: none }
 .identicon { width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-bottom: 2px; margin-right: 10px; margin-left: 5px; border: 1px solid #F0F0F0 }
 .button-logout { margin-top: -2px }
 .button-logout:hover { color: black }
@@ -62,40 +63,41 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .served { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 
 
-.site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px }
+.site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px; width: 90% }
 
 
 /* Site */
 
 .site-container { float: left; transition: box-shadow 0.3s }
 .site-container h2 { margin: 10px; padding: 0px 25px; margin-top: -57px; height: 47px }
-.site { 
+.site {
 	color: white; position: relative; cursor: pointer; background-color: #383E3F; text-decoration: none;
 	transition: all 0.2s ease-out; width: 350px; height: 250px
 }
 .site.modified { box-shadow: inset 0px 0px 0px 3px #FFF }
-.site .anim-updating { 
-	background: transparent url("../img/loading.gif") left top no-repeat; 
+.site .anim-updating {
+	background: transparent url("../img/loading.gif") left top no-repeat;
 	width: 0px; transition: all 0.6s cubic-bezier(0.755, 0.05, 0.855, 0.06); transition-delay: 0.15s; opacity: 0; height: 11px; float: left; margin-top: 2px
 }
 .site .anim-updating.visible { width: 30px; opacity: 0.5 }
 .site .status { display: block; float: left; margin-top: -2px; padding: 2px 5px }
-.site .notify { 
+.site .notify {
 	margin-top: -2px; margin-left: 4px; float: left; box-sizing: border-box; padding: 2px 5px;
 	background-color: #7f8c8d; color: white; max-width: 0px; transition: all 0.3s; white-space: nowrap; opacity: 0
 }
 .site .notify.visible { max-width: 140px; opacity: 1 }
 .site .notify.success { background-color: #00B16A }
 
-.site h3 { font-size: 50px; line-height: 47px; padding-bottom: 7px; overflow: hidden; text-overflow: ellipsis }
+.site h3 { font-size: 50px; line-height: 47px; padding-bottom: 7px; overflow: hidden; text-overflow: ellipsis; clear: both; }
 .site h3.long { font-size: 40px }
 .site .bottom { bottom: 8px }
+.site .description { overflow: hidden; text-overflow: ellipsis; max-height: 2.5em; }
 
-.site .action { right: 20px; position: absolute; bottom: 21px;  padding: 5px 10px; 
+.site .action { right: 20px; position: absolute; bottom: 21px;  padding: 5px 10px;
 	font-size: 11px; text-transform: uppercase; transition: all 0.2s ease-in-out; box-shadow: inset 0px 0px 0px 0px #fff85f;
 }
 
-.site-container .hamburger { 
+.site-container .hamburger {
 	margin-left: -60px; position: relative; top: 30px; z-index: 1; transition: all 0.3s; padding: 14px 28px 0px 10px;
 	text-decoration: none; color: white; font-size: 29px; line-height: 18px; opacity: 0;
 }
@@ -147,7 +149,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 /* Menu */
 
-.menu { 
+.menu {
 	background-color: white; padding: 10px 0px; position: absolute; top: 0px; left: 0px; max-height: 0px; overflow: hidden; transform: translate(0px, -30px);
 	box-shadow: 0px 2px 8px rgba(0,0,0,0.3); border-radius: 2px; opacity: 0; transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out;
 }
@@ -165,7 +167,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .icon-profile { font-size: 6px; top: 0em; border-radius: 0.7em 0.7em 0 0; background: #FFFFFF; width: 1.5em; height: 0.5em; position: relative; display: inline-block; margin-right: 4px }
 .icon-profile::before { position: absolute; content: ""; top: -1em; left: 0.38em; width: 0.8em; height: 0.85em; border-radius: 50%; background: #FFFFFF; }
 
-.icon-clock { 
+.icon-clock {
 	display: inline-block; width: 10px; height: 12px; vertical-align: -2px; margin-left: 5px; margin-right: 4px;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==); 
-} 
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==);
+}

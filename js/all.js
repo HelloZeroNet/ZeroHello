@@ -1152,7 +1152,7 @@ jQuery.extend( jQuery.easing,
                 "description": "Decentralized forum demo",
                 "domain": "Talk.ZeroNetwork.bit"
               },
-              "address": "1TaLk3zM7ZRskJvrh3ZNCDVGXvkJusPKQ",
+              "address": "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT",
               "settings": {
                 "serving": false
               }
@@ -1229,16 +1229,22 @@ jQuery.extend( jQuery.easing,
           }
           $(".topright").css("opacity", 1);
           if (server_info.multiuser) {
-            $(".user").css("display", "block");
+            $(".plugin-multiuser").css("display", "block");
             imagedata = new Identicon(server_info["master_address"], 25).toString();
             $("body").append("<style>.identicon { background-image: url(data:image/png;base64," + imagedata + ") }</style>");
-            $(".identicon").on("click", function() {
+            $(".plugin-multiuser .identicon").on("click", function() {
               _this.cmd("userShowMasterSeed", []);
               return false;
             });
-            return $(".button-logout").on("click", function() {
+            $(".plugin-multiuser .button-logout").on("click", function() {
               _this.cmd("userLogout", []);
               return false;
+            });
+          }
+          if (__indexOf.call(server_info.plugins, "UiPassword") >= 0) {
+            $(".plugin-uipassword").css("display", "block");
+            return $(".plugin-uipassword .button-logout").on("click", function() {
+              return _this.cmd("uiLogout", []);
             });
           }
         };
