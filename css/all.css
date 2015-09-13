@@ -4,7 +4,7 @@
 
 
 body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif; padding-bottom: 50px; backface-visibility: hidden } /*#AF3FBB*/
-h1, h2, h3, h4 { font-family: 'Roboto', sans-serif; font-weight: normal; font-size: 100px; margin: 0px; padding: 0px }
+h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: normal; font-size: 100px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif;; padding-bottom: 30px; line-height: 100px }
 h2 { font-size: 35px }
 h3 { font-size: 23px }
@@ -68,7 +68,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .served { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 
 
-.site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px; width: 90% }
+.site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px; height: 0px }
 
 
 /* Site */

@@ -922,11 +922,16 @@ jQuery.extend( jQuery.easing,
           return _this.local_storage = res;
         };
       })(this));
-      return $(".button-update").on("click", (function(_this) {
+      $(".button-update").on("click", (function(_this) {
         return function() {
           $(".button-update").addClass("loading");
           $(".broken-autoupdate").css("display", "block").html("Please run update.py manually<br>if ZeroNet doesn't comes back within 1 minute.");
           return _this.cmd("serverUpdate", {});
+        };
+      })(this));
+      return $(".version.current").on("click", (function(_this) {
+        return function() {
+          return $(".button-update").css("display", "inline-block");
         };
       })(this));
     };
@@ -1249,6 +1254,15 @@ jQuery.extend( jQuery.easing,
           }
         };
       })(this));
+    };
+
+    ZeroHello.prototype.toColor = function(text) {
+      var hash, i, _i, _ref;
+      hash = 0;
+      for (i = _i = 0, _ref = text.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        hash += text.charCodeAt(i) * i;
+      }
+      return "hsl(" + (hash % 360) + ",30%,50%)";
     };
 
     ZeroHello.prototype.siteUpdate = function(address) {

@@ -13,6 +13,10 @@ class ZeroHello extends ZeroFrame
 			$(".broken-autoupdate").css("display", "block").html "Please run update.py manually<br>if ZeroNet doesn't comes back within 1 minute."
 			@cmd "serverUpdate", {}
 
+		$(".version.current").on "click", =>
+			#$(".version.latest").css "display", "inline-block"
+			$(".button-update").css "display", "inline-block"
+
 
 	# Wrapper websocket connection ready
 	onOpenWebsocket: (e) =>
@@ -174,6 +178,9 @@ class ZeroHello extends ZeroFrame
 
 		if site.address == @address and site.peers > 0 then $("#peers").text(site.peers) # Update servedby text
 
+		# Background color based on address
+		# elem.find(".site").css("border", "4px solid "+@toColor(site.address))
+
 		return elem
 
 
@@ -275,8 +282,11 @@ class ZeroHello extends ZeroFrame
 				$(".plugin-uipassword .button-logout").on "click", =>
 					@cmd "uiLogout", []
 
-
-
+	toColor: (text) ->
+		hash = 0
+		for i in [0..text.length-1]
+			hash += text.charCodeAt(i)*i
+		return "hsl(" + (hash % 360) + ",30%,50%)";
 
 
 	# - Site commands -
