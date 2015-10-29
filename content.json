@@ -1,65 +1,69 @@
 {
-  "address": "1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr", 
-  "description": "This site", 
-  "domain": "ZeroNetwork.bit", 
-  "files": {
-    "css/all.css": {
-      "sha512": "c2f0e9d43f3fd5d379ad27d4c4a982f803dfc0bef6e71767ced924bd699bb794", 
-      "size": 82213
-    }, 
-    "favicon.ico": {
-      "sha512": "4b16ceb40191f83af1286438e4b069ab613736a199d5c5cc32a44cd60051ca13", 
-      "size": 1150
-    }, 
-    "font/Roboto-Light.woff": {
-      "sha512": "de3320e07959009e1301ef718bb0ea6761da9eac1f536245dccb1da4abf26b97", 
-      "size": 17564
-    }, 
-    "font/Roboto-Medium.woff": {
-      "sha512": "ddaaa5ca7e11cde24b1f0f993e6cf5f9da8de0664af4cbbba46a5f2f1a0a3b18", 
-      "size": 18140
-    }, 
-    "font/TextMeOne-Regular.woff": {
-      "sha512": "3ea7911d55424dcbb3be9939cd44f5cc92a90df869b5e9df019cbc8969f4f31e", 
-      "size": 13868
-    }, 
-    "img/loading.gif": {
-      "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
-      "size": 723
-    }, 
-    "index.html": {
-      "sha512": "25838b4420f34b85f1345c0e2e6c6b4c7e04eb43da41e04a1f45fd5dd3c51c8f", 
-      "size": 2721
-    }, 
-    "js/all.js": {
-      "sha512": "c2ce2f397edd71049dc903004d06e8a224b066bb7b4b476693913ca60dfa5f5f", 
-      "size": 127281
-    }, 
-    "test/jquery.min.js": {
-      "sha512": "eda31b5c7d371d4b3acced51fa92f27a417515317cf437aae09a47c3acc8a36b", 
-      "size": 84320
-    }, 
-    "test/render.html": {
-      "sha512": "e09686abadfee90ca4b0b95a77021271157003da95abb0933b80b627bbb3860f", 
-      "size": 2626
-    }, 
-    "test/security.html": {
-      "sha512": "a641685276ad0757bcffc0850ca2b98a900df9849f786b4d751a166241e9e858", 
-      "size": 1016
-    }, 
-    "test/stats.js": {
-      "sha512": "a304ab798b9bbd1581f8aac90ea0b3b12a6ae2e9c7dd64846cd40ce0bbd099b3", 
-      "size": 3560
-    }
+ "address": "1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr", 
+ "description": "This site", 
+ "domain": "ZeroNetwork.bit", 
+ "files": {
+  "css/all.css": {
+   "sha512": "3ce05c1b154841b3c05f8793a140870eba2dfd7bc3e80fedfeec1eee279ee614", 
+   "size": 82381
   }, 
-  "ignore": "(js|css)/(?!all.(js|css))", 
-  "modified": 1438340221.598, 
-  "sign": [
-    20991987358288928781472656342405888760101201405479282008342268910869438205152, 
-    82268914458815954583133595366093255563736271222992953956067279905568705779077
-  ], 
-  "signers_sign": null, 
-  "signs_required": 1, 
-  "title": "ZeroHello", 
-  "zeronet_version": "0.3.1"
+  "favicon.ico": {
+   "sha512": "4b16ceb40191f83af1286438e4b069ab613736a199d5c5cc32a44cd60051ca13", 
+   "size": 1150
+  }, 
+  "font/Roboto-Light.woff": {
+   "sha512": "de3320e07959009e1301ef718bb0ea6761da9eac1f536245dccb1da4abf26b97", 
+   "size": 17564
+  }, 
+  "font/Roboto-Medium.woff": {
+   "sha512": "ddaaa5ca7e11cde24b1f0f993e6cf5f9da8de0664af4cbbba46a5f2f1a0a3b18", 
+   "size": 18140
+  }, 
+  "font/TextMeOne-Regular.woff": {
+   "sha512": "3ea7911d55424dcbb3be9939cd44f5cc92a90df869b5e9df019cbc8969f4f31e", 
+   "size": 13868
+  }, 
+  "img/loading.gif": {
+   "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
+   "size": 723
+  }, 
+  "index.html": {
+   "sha512": "95e530bcd77f1907bb44e4eb092a3c9e862df2667a9448669ab7a09615a5e68c", 
+   "size": 2427
+  }, 
+  "js/all.js": {
+   "sha512": "e0d361fd45962a66f9627ab7e2348459a5c549d4b831019d69d6d4d841b80578", 
+   "size": 127842
+  }, 
+  "test/jquery.min.js": {
+   "sha512": "eda31b5c7d371d4b3acced51fa92f27a417515317cf437aae09a47c3acc8a36b", 
+   "size": 84320
+  }, 
+  "test/render.html": {
+   "sha512": "e09686abadfee90ca4b0b95a77021271157003da95abb0933b80b627bbb3860f", 
+   "size": 2626
+  }, 
+  "test/security.html": {
+   "sha512": "ad0072ffad0626928b2093f2e76c3c92804e199086889b15e715078655579e5f", 
+   "size": 3322
+  }, 
+  "test/stats.js": {
+   "sha512": "a304ab798b9bbd1581f8aac90ea0b3b12a6ae2e9c7dd64846cd40ce0bbd099b3", 
+   "size": 3560
+  }, 
+  "test/worker.js": {
+   "sha512": "d6d4a1ca6da7dba9407d49696006203c1490c6950be7dae33186b232a2354737", 
+   "size": 170
+  }
+ }, 
+ "ignore": "(js|css)/(?!all.(js|css))", 
+ "modified": 1446157245.305, 
+ "sign": [
+  58598948272987971672880641261474506496946239807757113975467309956147036565622, 
+  37550783650406805114966245531828209064490731924026470826633990362051429177611
+ ], 
+ "signers_sign": null, 
+ "signs_required": 1, 
+ "title": "ZeroHello", 
+ "zeronet_version": "0.3.2"
 }

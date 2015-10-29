@@ -98,8 +98,8 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 }
 
 .site-container .hamburger {
-	margin-left: -60px; position: relative; top: 30px; z-index: 1; transition: all 0.3s; padding: 14px 28px 0px 10px;
-	text-decoration: none; color: white; font-size: 29px; line-height: 18px; opacity: 0;
+	margin-left: -60px; position: relative; top: 30px; z-index: 1; transition: all 0.3s; padding: 14px 25px 0px 10px;
+	text-decoration: none; color: white; font-size: 29px; line-height: 18px; opacity: 0; margin-right: 5px;
 }
 .site-container .hamburger:hover { opacity: 1 !important }
 .site-container .hamburger.menu-active { opacity: 1 !important }
@@ -115,7 +115,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .site-small .title.long { font-size: 30px }
 .site-small .action { bottom: 15px; right: 15px }
 .site-small .bottom { bottom: 4px }
-.site-small .hamburger { margin-left: -55px; top: 25px; padding: 14px 23px 0px 10px }
+.site-small .hamburger { margin-left: -53px; top: 25px; padding: 14px 23px 0px 10px }
 
 
 /* Site events */

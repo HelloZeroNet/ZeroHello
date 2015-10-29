@@ -30,10 +30,10 @@
     @sort (a, b) ->
       [av, bv] = [a[key], b[key]]
       [av, bv] = [av.toLowerCase(), bv.toLowerCase()] if options.lower
-      cmp av, bv
-   */
+      cmp av, bv */
 
 }).call(this);
+
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/ZeroFrame.coffee ---- */
@@ -148,6 +148,7 @@
   window.ZeroFrame = ZeroFrame;
 
 }).call(this);
+
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/identicon.js ---- */
@@ -342,6 +343,7 @@ jQuery.fx.step.scale = function(fx) {
   };
 
 }).call(this);
+
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/jquery.easing.1.3.js ---- */
@@ -773,12 +775,12 @@ jQuery.extend( jQuery.easing,
 (function() {
   var Menu, SiteMenu,
     __slice = [].slice,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty;
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Menu = (function() {
-    function Menu(_at_button) {
-      this.button = _at_button;
+    function Menu(button) {
+      this.button = button;
       this.elem = $(".menu.template").clone().removeClass("template");
       this.elem.appendTo("body");
     }
@@ -891,14 +893,15 @@ jQuery.extend( jQuery.easing,
 }).call(this);
 
 
+
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/ZeroHello.coffee ---- */
 
 
 (function() {
   var ZeroHello,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   ZeroHello = (function(_super) {
@@ -916,9 +919,11 @@ jQuery.extend( jQuery.easing,
       this.is_proxy_request = document.location.host === "zero" || document.location.pathname === "/";
       this.cmd("wrapperGetLocalStorage", [], (function(_this) {
         return function(res) {
-          if (res == null) {
+                    if (res != null) {
+            res;
+          } else {
             res = {};
-          }
+          };
           return _this.local_storage = res;
         };
       })(this));
@@ -967,11 +972,11 @@ jQuery.extend( jQuery.easing,
       if (secs < 60) {
         back = "Just now";
       } else if (secs < 60 * 60) {
-        back = (Math.round(secs / 60)) + " minutes ago";
+        back = "" + (Math.round(secs / 60)) + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
-        back = (Math.round(secs / 60 / 60)) + " hours ago";
+        back = "" + (Math.round(secs / 60 / 60)) + " hours ago";
       } else if (secs < 60 * 60 * 24 * 3) {
-        back = (Math.round(secs / 60 / 60 / 24)) + " days ago";
+        back = "" + (Math.round(secs / 60 / 60 / 24)) + " days ago";
       } else {
         back = "on " + this.formatDate(time);
       }
@@ -1076,7 +1081,7 @@ jQuery.extend( jQuery.easing,
           error = "Update failed";
         }
       } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref5 = site.event) != null ? _ref5[0] : void 0) !== "file_done") {
-        error = site.bad_files + " file update failed";
+        error = "" + site.bad_files + " file update failed";
       }
       if (error) {
         $(".notify", elem).text(error).removeClass("success").addClassLater("visible");
