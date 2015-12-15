@@ -10,6 +10,79 @@
 
 
 
+/* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/DateSince.coffee ---- */
+
+
+(function() {
+  var DateSince;
+
+  DateSince = (function() {
+    function DateSince(_at_elem, _at_time) {
+      this.elem = _at_elem;
+      this.time = _at_time;
+      this.render();
+      date_since_db.push(this);
+    }
+
+    DateSince.prototype.formatSince = function(time) {
+      var back, now, secs;
+      now = +(new Date) / 1000;
+      secs = now - time;
+      if (secs < 60) {
+        back = "Just now";
+      } else if (secs < 60 * 60) {
+        back = (Math.round(secs / 60)) + " minutes ago";
+      } else if (secs < 60 * 60 * 24) {
+        back = (Math.round(secs / 60 / 60)) + " hours ago";
+      } else if (secs < 60 * 60 * 24 * 3) {
+        back = (Math.round(secs / 60 / 60 / 24)) + " days ago";
+      } else {
+        back = "on " + this.formatDate(time);
+      }
+      back = back.replace(/^1 ([a-z]+)s/, "1 $1");
+      return back;
+    };
+
+    DateSince.prototype.formatDate = function(timestamp, format) {
+      var display, parts;
+      if (format == null) {
+        format = "short";
+      }
+      parts = (new Date(timestamp * 1000)).toString().split(" ");
+      if (format === "short") {
+        display = parts.slice(1, 4);
+      } else {
+        display = parts.slice(1, 5);
+      }
+      return display.join(" ").replace(/( [0-9]{4})/, ",$1");
+    };
+
+    DateSince.prototype.render = function() {
+      return this.elem.textContent = this.formatSince(this.time);
+    };
+
+    return DateSince;
+
+  })();
+
+  window.date_since_db = [];
+
+  setInterval((function() {
+    var date_since, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = date_since_db.length; _i < _len; _i++) {
+      date_since = date_since_db[_i];
+      _results.push(date_since.render());
+    }
+    return _results;
+  }), 1000);
+
+  window.DateSince = DateSince;
+
+}).call(this);
+
+
+
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/Utils.coffee ---- */
 
 
@@ -33,7 +106,6 @@
       cmp av, bv */
 
 }).call(this);
-
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/ZeroFrame.coffee ---- */
@@ -148,7 +220,6 @@
   window.ZeroFrame = ZeroFrame;
 
 }).call(this);
-
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/identicon.js ---- */
@@ -343,7 +414,6 @@ jQuery.fx.step.scale = function(fx) {
   };
 
 }).call(this);
-
 
 
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/jquery.easing.1.3.js ---- */
@@ -893,15 +963,14 @@ jQuery.extend( jQuery.easing,
 }).call(this);
 
 
-
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/ZeroHello.coffee ---- */
 
 
 (function() {
   var ZeroHello,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __hasProp = {}.hasOwnProperty,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   ZeroHello = (function(_super) {
@@ -919,11 +988,9 @@ jQuery.extend( jQuery.easing,
       this.is_proxy_request = document.location.host === "zero" || document.location.pathname === "/";
       this.cmd("wrapperGetLocalStorage", [], (function(_this) {
         return function(res) {
-                    if (res != null) {
-            res;
-          } else {
+          if (res == null) {
             res = {};
-          };
+          }
           return _this.local_storage = res;
         };
       })(this));
@@ -972,11 +1039,11 @@ jQuery.extend( jQuery.easing,
       if (secs < 60) {
         back = "Just now";
       } else if (secs < 60 * 60) {
-        back = "" + (Math.round(secs / 60)) + " minutes ago";
+        back = (Math.round(secs / 60)) + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
-        back = "" + (Math.round(secs / 60 / 60)) + " hours ago";
+        back = (Math.round(secs / 60 / 60)) + " hours ago";
       } else if (secs < 60 * 60 * 24 * 3) {
-        back = "" + (Math.round(secs / 60 / 60 / 24)) + " days ago";
+        back = (Math.round(secs / 60 / 60 / 24)) + " days ago";
       } else {
         back = "on " + this.formatDate(time);
       }
@@ -1034,7 +1101,7 @@ jQuery.extend( jQuery.easing,
       }
       $(".description", elem).html(site.content.description);
       modified = site.settings.modified ? site.settings.modified : site.content.modified;
-      $(".modified-date", elem).html(this.formatSince(modified));
+      new DateSince($(".modified-date", elem)[0], modified);
       if ((this.server_info.plugins != null) && (__indexOf.call(this.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(this.server_info.plugins, "Dnschain") >= 0 || __indexOf.call(this.server_info.plugins, "Zeroname-local") >= 0) && ((_ref = site.content) != null ? _ref.domain : void 0)) {
         if (this.is_proxy_request) {
           href = "http://" + site.content.domain;
@@ -1081,7 +1148,7 @@ jQuery.extend( jQuery.easing,
           error = "Update failed";
         }
       } else if (site.tasks === 0 && site.bad_files > 0 && ((_ref5 = site.event) != null ? _ref5[0] : void 0) !== "file_done") {
-        error = "" + site.bad_files + " file update failed";
+        error = site.bad_files + " file update failed";
       }
       if (error) {
         $(".notify", elem).text(error).removeClass("success").addClassLater("visible");
@@ -1138,16 +1205,6 @@ jQuery.extend( jQuery.easing,
           sample_sites = [
             {
               "content": {
-                "title": "ZeroBoard",
-                "description": "Messaging board demo",
-                "domain": "Board.ZeroNetwork.bit"
-              },
-              "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
-              "settings": {
-                "serving": false
-              }
-            }, {
-              "content": {
                 "title": "ZeroBlog",
                 "description": "Blogging platform Demo",
                 "domain": "Blog.ZeroNetwork.bit"
@@ -1163,6 +1220,26 @@ jQuery.extend( jQuery.easing,
                 "domain": "Talk.ZeroNetwork.bit"
               },
               "address": "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT",
+              "settings": {
+                "serving": false
+              }
+            }, {
+              "content": {
+                "title": "ZeroMail",
+                "description": "End-to-end encrypted messaging",
+                "domain": "Mail.ZeroNetwork.bit"
+              },
+              "address": "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27",
+              "settings": {
+                "serving": false
+              }
+            }, {
+              "content": {
+                "title": "ZeroBoard",
+                "description": "Messaging board demo",
+                "domain": "Board.ZeroNetwork.bit"
+              },
+              "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
               "settings": {
                 "serving": false
               }
@@ -1238,6 +1315,24 @@ jQuery.extend( jQuery.easing,
             }
           }
           $(".topright").css("opacity", 1);
+          if (server_info.ip_external) {
+            $(".port").removeClass("closed").addClass("opened");
+            $(".port a").text("opened");
+          } else {
+            $(".port").removeClass("opened").addClass("closed").css("display", "block");
+            $(".port a").text("closed");
+          }
+          $(".port a").off("click").on("click", function() {
+            $(".port").addClass("loading");
+            return _this.cmd("serverPortcheck", [], function(res) {
+              if (_this.server_info.rev < 600) {
+                _this.cmd("wrapperNotification", ["info", "Please restart your ZeroNet client to re-check opened port."]);
+              }
+              $(".port").removeClass("loading");
+              _this.log("Port open result:", res);
+              return _this.reloadServerInfo();
+            });
+          });
           if (server_info.multiuser) {
             $(".plugin-multiuser").css("display", "block");
             imagedata = new Identicon(server_info["master_address"], 25).toString();

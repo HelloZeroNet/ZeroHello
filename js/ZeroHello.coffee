@@ -97,7 +97,7 @@ class ZeroHello extends ZeroFrame
 			$(".title", elem).html(site.content.title).removeClass("long")
 		$(".description", elem).html(site.content.description)
 		modified = if site.settings.modified then site.settings.modified else site.content.modified
-		$(".modified-date", elem).html @formatSince(modified)
+		new DateSince($(".modified-date", elem)[0], modified)
 
 		# Add href
 		if @server_info.plugins? and ("Zeroname" in @server_info.plugins or "Dnschain" in @server_info.plugins or "Zeroname-local" in @server_info.plugins) and site.content?.domain # Domain
@@ -214,9 +214,10 @@ class ZeroHello extends ZeroFrame
 
 			# Append sample sites
 			sample_sites = [
-				{"content": {"title": "ZeroBoard", "description": "Messaging board demo", "domain": "Board.ZeroNetwork.bit"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
 				{"content": {"title": "ZeroBlog", "description": "Blogging platform Demo", "domain": "Blog.ZeroNetwork.bit"}, "address": "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", "settings": {"serving": false}}
 				{"content": {"title": "ZeroTalk", "description": "Decentralized forum demo", "domain": "Talk.ZeroNetwork.bit"}, "address": "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT", "settings": {"serving": false}}
+				{"content": {"title": "ZeroMail", "description": "End-to-end encrypted messaging", "domain": "Mail.ZeroNetwork.bit"}, "address": "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27", "settings": {"serving": false}}
+				{"content": {"title": "ZeroBoard", "description": "Messaging board demo", "domain": "Board.ZeroNetwork.bit"}, "address": "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp", "settings": {"serving": false}}
 				{"content": {"title": "ZeroID", "description": "Sample trusted authorization provider", "domain": "ZeroID.bit"}, "address": "1iD5ZQJMNXu43w1qLB8sfdHVKppVMduGz", "settings": {"serving": false}}
 				{"content": {"title": "ZeroMarket", "description": "Simple market demo (coming soon)"}, "address": "ZeroMarket", "disabled": true, "settings": {"serving": false}}
 			]
@@ -260,6 +261,22 @@ class ZeroHello extends ZeroFrame
 					$(".broken-autoupdate").html "It's possible that ZeroNet will not comes back automatically<br>after the update process. In this case please start it manually."
 
 			$(".topright").css("opacity", 1)
+
+			# Port info
+			if server_info.ip_external
+				$(".port").removeClass("closed").addClass("opened")
+				$(".port a").text("opened")
+			else
+				$(".port").removeClass("opened").addClass("closed").css("display", "block")
+				$(".port a").text("closed")
+			$(".port a").off("click").on "click", =>
+				$(".port").addClass("loading")
+				@cmd "serverPortcheck", [], (res) =>
+					if @server_info.rev < 600
+						@cmd "wrapperNotification", ["info", "Please restart your ZeroNet client to re-check opened port."]
+					$(".port").removeClass("loading")
+					@log "Port open result:", res
+					@reloadServerInfo()
 
 			# Multiuser info
 			if server_info.multiuser
