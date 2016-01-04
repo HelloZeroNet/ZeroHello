@@ -241,6 +241,7 @@ class ZeroHello extends ZeroFrame
 	reloadServerInfo: ->
 		@cmd "serverInfo", {}, (server_info) =>
 			@server_info = server_info
+			$(".topright").css("opacity", 0.5)
 
 			# Check verion info
 			version = server_info.version
@@ -251,6 +252,7 @@ class ZeroHello extends ZeroFrame
 				$(".version.latest").css "display", "none"
 				$(".button-update").css "display", "none"
 			else
+				$(".topright").css("opacity", 1)
 				$(".version.latest").css "display", "inline-block"
 				$(".button-update").css "display", "inline-block"
 				if parseInt(version.replace(/[^0-9]/g, "0")) == 207 # Auto update broken
@@ -260,15 +262,14 @@ class ZeroHello extends ZeroFrame
 					$(".broken-autoupdate").css "display", "block"
 					$(".broken-autoupdate").html "It's possible that ZeroNet will not comes back automatically<br>after the update process. In this case please start it manually."
 
-			$(".topright").css("opacity", 1)
 
 			# Port info
 			if server_info.ip_external
 				$(".port").removeClass("closed").addClass("opened")
 				$(".port a").text("opened")
 			else
-				$(".port").removeClass("opened").addClass("closed").css("display", "block")
-				$(".port a").text("closed")
+				$(".port").removeClass("opened").addClass("closed").css("display", "initial")
+				$(".port a").text("closed").attr("title", "(Re-check port #{server_info.fileserver_port})")
 			$(".port a").off("click").on "click", =>
 				$(".port").addClass("loading")
 				@cmd "serverPortcheck", [], (res) =>
@@ -277,6 +278,12 @@ class ZeroHello extends ZeroFrame
 					$(".port").removeClass("loading")
 					@log "Port open result:", res
 					@reloadServerInfo()
+
+			# Tor status
+			if server_info.tor_status
+				$(".tor").css("display", "initial")
+				title = server_info.tor_status.replace(/.*\((.*)\)/, "$1")
+				$(".tor span").html server_info.tor_status.replace(/\(.*\)/, "").replace("OK", "<span class='ok' title='#{title}'>OK</span>")
 
 			# Multiuser info
 			if server_info.multiuser

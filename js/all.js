@@ -82,7 +82,6 @@
 }).call(this);
 
 
-
 /* ---- data/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr/js/lib/Utils.coffee ---- */
 
 
@@ -1288,8 +1287,9 @@ jQuery.extend( jQuery.easing,
     ZeroHello.prototype.reloadServerInfo = function() {
       return this.cmd("serverInfo", {}, (function(_this) {
         return function(server_info) {
-          var imagedata, rev, version;
+          var imagedata, rev, title, version;
           _this.server_info = server_info;
+          $(".topright").css("opacity", 0.5);
           version = server_info.version;
           if (!version) {
             version = "Unknown, please update";
@@ -1304,6 +1304,7 @@ jQuery.extend( jQuery.easing,
             $(".version.latest").css("display", "none");
             $(".button-update").css("display", "none");
           } else {
+            $(".topright").css("opacity", 1);
             $(".version.latest").css("display", "inline-block");
             $(".button-update").css("display", "inline-block");
             if (parseInt(version.replace(/[^0-9]/g, "0")) === 207) {
@@ -1314,13 +1315,12 @@ jQuery.extend( jQuery.easing,
               $(".broken-autoupdate").html("It's possible that ZeroNet will not comes back automatically<br>after the update process. In this case please start it manually.");
             }
           }
-          $(".topright").css("opacity", 1);
           if (server_info.ip_external) {
             $(".port").removeClass("closed").addClass("opened");
             $(".port a").text("opened");
           } else {
-            $(".port").removeClass("opened").addClass("closed").css("display", "block");
-            $(".port a").text("closed");
+            $(".port").removeClass("opened").addClass("closed").css("display", "initial");
+            $(".port a").text("closed").attr("title", "(Re-check port " + server_info.fileserver_port + ")");
           }
           $(".port a").off("click").on("click", function() {
             $(".port").addClass("loading");
@@ -1333,6 +1333,11 @@ jQuery.extend( jQuery.easing,
               return _this.reloadServerInfo();
             });
           });
+          if (server_info.tor_status) {
+            $(".tor").css("display", "initial");
+            title = server_info.tor_status.replace(/.*\((.*)\)/, "$1");
+            $(".tor span").html(server_info.tor_status.replace(/\(.*\)/, "").replace("OK", "<span class='ok' title='" + title + "'>OK</span>"));
+          }
           if (server_info.multiuser) {
             $(".plugin-multiuser").css("display", "block");
             imagedata = new Identicon(server_info["master_address"], 25).toString();

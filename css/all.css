@@ -45,20 +45,22 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 
 
 /* Version info */
-.topright { float: right; margin-right: 80px; margin-top: 2px; text-align: right; font-size: 12px; text-transform: uppercase; color: #A99D9B; opacity: 0; -webkit-transition: all 1s ; -moz-transition: all 1s ; -o-transition: all 1s ; -ms-transition: all 1s ; transition: all 1s  }
+.topright { float: right; margin-right: 80px; margin-top: 2px; text-align: right; font-size: 12px; text-transform: uppercase; color: #6F6B6B; opacity: 0; -webkit-transition: all 1s ; -moz-transition: all 1s ; -o-transition: all 1s ; -ms-transition: all 1s ; transition: all 1s  }
+.topright:hover { opacity: 1 !important }
+.topright a { color: #6F6B6B; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 .version.latest, .version.current { padding: 2px 5px }
-.version a { color: #A99D9B; text-transform: none }
+.version a { color: #6F6B6B; text-transform: none }
 .version.latest { display: inline-block }
 .version.latest.new { background-color: #FFF85F; margin-right: -3px; display: none }
 
-.port { padding: 5px }
+.status { padding: 5px }
+
 .port a { -webkit-transition: all 1s; -moz-transition: all 1s; -o-transition: all 1s; -ms-transition: all 1s; transition: all 1s ; background-position: -20px center }
-.port.closed a { color: #C58276 }
-.port.opened a { color: #24A26E }
+.port.closed a { color: #DC4F36 }
+.port.opened a, .status .ok { color: #00B16A }
 .port.loading a { color: rgba(0,0,0,0); background: transparent url(../img/loading.gif) no-repeat center center }
 
 .donate { padding: 5px; }
-.donate a { color: #A99D9B }
 .donate .heart { color: #DA3D32; font-family: Tahoma, Arial }
 
 .plugin-multiuser { display: none }
@@ -66,7 +68,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .identicon { width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-bottom: 2px; margin-right: 10px; margin-left: 5px; border: 1px solid #F0F0F0 }
 .button-logout { margin-top: -2px }
 .button-logout:hover { color: black }
-.button-update { margin-top: 10px; color: black; display: none }
+.button-update { margin-top: 10px; color: black !important; display: none }
 .broken-autoupdate { display: inline-block; padding-top: 5px; color: #666; display: none }
 .broken-autoupdate a { color: black }
 
@@ -104,7 +106,7 @@ ul, li { margin: 0px; padding: 0px; list-style-type: none }
 .site .notify.success { background-color: #00B16A }
 
 .site h3 { font-size: 50px; line-height: 47px; padding-bottom: 7px; overflow: hidden; text-overflow: ellipsis; clear: both; }
-.site h3.long { font-size: 40px }
+.site h3.long { font-size: 24px; line-height: 29px }
 .site .bottom { bottom: 8px }
 .site .description { overflow: hidden; text-overflow: ellipsis; max-height: 2.5em; }
 
