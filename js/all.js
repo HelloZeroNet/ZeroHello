@@ -2276,7 +2276,7 @@
 
     Head.prototype.handleSettingsClick = function() {
       this.menu_settings.items = [];
-      this.menu_settings.items.push(["Update all site", this.handleUpdateAllClick]);
+      this.menu_settings.items.push(["Update all sites", this.handleUpdateAllClick]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
