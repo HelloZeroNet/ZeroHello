@@ -11,7 +11,7 @@ class Head extends Class
 
 	handleSettingsClick: =>
 		@menu_settings.items = []
-		@menu_settings.items.push ["Update all site", @handleUpdateAllClick]
+		@menu_settings.items.push ["Update all sites", @handleUpdateAllClick]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
