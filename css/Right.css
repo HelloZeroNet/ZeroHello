@@ -1,0 +1,84 @@
+.right {
+	position: relative; border-left: 400px solid #322641; padding-right: 0px; background-color: white;
+	width: 100%; box-sizing: border-box; min-height: 100%; border-top: 94px solid #EDF2F5;
+}
+
+#Dashboard { position: absolute; right: 80px; top: -83px; }
+#Dashboard .dashboard-item {
+	text-decoration: none; margin: 5px; padding: 10px 20px; border-radius: 40px; display: inline-block;
+	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: bold; background-color: white;
+}
+#Dashboard .dashboard-item .status-ok { color: #2ecc71; }
+#Dashboard .dashboard-item .status-warning { color: #E7A43C; }
+#Dashboard .dashboard-item .status-bad { color: #e74c3c; }
+#Dashboard .dashboard-item .status { transition: all 0.3s }
+#Dashboard .dashboard-item.multiuser .status { text-transform: none }
+#Dashboard .menu { top: 47px }
+#Dashboard .menu-tor .menu-item { white-space: nowrap; }
+#Dashboard .menu-port .menu-item { white-space: nowrap; }
+/*#Dash .port_checking .status:after {
+	background: transparent url(../img/loading-circle.gif) no-repeat center center; backface-visibility: hidden; content: "";
+	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; border-radius: 60px; position: absolute; margin-left: -32px; margin-top: -2px;
+}*/
+
+
+.feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px }
+.FeedList { margin-top: 50px; position: relative; max-width: 820px; overflow: hidden }
+.FeedList .feed { display: block; padding: 15px; margin-bottom: 40px; padding-left: 200px }
+.FeedList .feed a { text-decoration: none }
+.FeedList .feed a:hover { text-decoration: underline }
+.FeedList .feed .type { color: #999 }
+.FeedList .feed .more {
+	text-align: center; font-size: 80%; color: #26c281; background: linear-gradient(#EFEFEF 0%, #FFF 10%);
+	border-top: 1px solid #E4E4E4; display: block; padding: 10px; margin-top: 10px;
+}
+.FeedList .feed .details { position: absolute; font-size: 110%; left: 0px; width: 150px; text-align: right }
+.FeedList .feed .circle {
+	width: 9px; height: 9px; border: 2px solid #af3bff; position: absolute; pointer-events: none;
+	margin-left: -32px; border-radius: 15px; margin-top: 5px; background-color: white;
+}
+.FeedList .feed .title { font-size: 110%; color: #222; }
+.FeedList .feed .added { font-size: 80%; color: #AAA; margin-top: 9px; }
+.FeedList .feed .site { font-weight: bold; color: #555 }
+.FeedList .feed .body {
+	color: #8A8A8A; line-height: 24px; font-size: 15px;
+	margin-top: 9px; white-space: pre-line; max-height: 3em; text-overflow: ellipsis; overflow: hidden; position: relative;
+	-webkit-line-clamp: 2; -webkit-box-orient: vertical; display: -webkit-box;
+}
+.FeedList .feed .body b { color: #666 }
+/*.FeedList .feed .body:before { content:''; width: 100%; height: 100%; position: absolute; left: 0; top: 0; background: linear-gradient(transparent 46px, transparent 0px, white 94%) }*/
+
+
+.welcome { text-align: center; margin-top: 50px; max-width: 1170px }
+.welcome h1 {
+	font-size: 400%; color: #7C7DBC; margin-top: 20px;
+	background: -webkit-linear-gradient(left, #64E6E3, #965FF9 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+/*.welcome h1 .zeronet {  color: #9B63D0; }*/
+.welcome h2 { font-size: 20px; margin: 8px; text-transform: uppercase; opacity: 0.7; }
+.welcome h3 { color: #333; padding-left: 20px; }
+.welcome .served {
+	background-color: #AF3BFF; display: inline-block; padding: 10px; color: white; margin-top: 10px;
+	background: linear-gradient(45deg, #8041F1, #B149F7); font-weight: lighter; font-size: 18px; line-height: 24px;
+}
+.welcome .sites { padding: 40px 20px; margin-top: 50px; text-align: left }
+.welcome .site {
+	width: 32.3%; background-color: #eee; height: 229px; text-align: left; padding: 30px; box-sizing: border-box; font-size: 47px; position: relative;
+    color: white; font-weight: 300; border-radius: 2px; box-shadow: 0px 4px 21px -9px #666; display: inline-block; text-decoration: none; margin: 0.5%;
+    transition: all 0.4s ease-in; box-shadow: 0px 4px 21px -9px #666, inset 0px 0px 0px 0px rgba(255,255,255,0); transform: translateY(0px)
+}
+.welcome .site:hover { box-shadow: 0px 3px 21px -4px #888, inset 0px 0px 0px 9px rgba(255,255,255,0); transform: translateY(-3px); transition: all 0.2s ease-out; }
+.welcome .site:hover .visit { background-color: rgba(255, 255, 255, 0.33); transition: none }
+.welcome .description { font-size: 14px; text-transform: uppercase; opacity: 0.8; font-weight: normal; margin-top: 6px; letter-spacing: 0.5px; position: absolute; width: 85%; }
+.welcome .visit {
+	position: absolute; bottom: 17px; right: 20px; font-size: 13px; text-transform: uppercase; transition: all 0.3s;
+	background-color: rgba(255, 255, 255, 0.16); padding: 8px 16px; border-radius: 20px; font-weight: bold;
+}
+.welcome .site-zeroboard { background: radial-gradient(circle at 2.00% -2.01%, hsla(152,31%,51%,1), transparent 100%),radial-gradient(circle at 98.00% 50.04%, hsla(188,44%,51%,1), transparent 100%); }
+.welcome .site-zeroblog { background: linear-gradient(-45deg, #358AC7, #A176B6); }
+.welcome .site-zerotalk { background: linear-gradient(-45deg, #FFB78C, #E66690); }
+.welcome .site-zeromail { background: linear-gradient(-25deg, #C04848 -40%, #4A569D) }
+
+@media only screen and (max-width: 1250px) {
+	.welcome .site { width: 49%; }
+}

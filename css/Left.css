@@ -1,0 +1,56 @@
+.left {
+	width: 400px; position: absolute; box-sizing: border-box; min-height: 100%; padding-top: 0px; z-index: 1; backface-visibility: hidden;
+	color: white; background-color: #232A31; background-image: linear-gradient(352deg, #322641, #2A333C); /* linear-gradient(352deg, #232A31, #2A333C);*/
+}
+.left h2 { text-transform: uppercase; font-size: 13px; font-weight: 500; padding: 10px; padding-left: 45px; opacity: 0.4; letter-spacing: 1px; margin-top: 40px; }
+.left .logo { background-color: #1E2429; padding: 20px; margin-bottom: 40px; display: block; text-decoration: none; color: white;}
+.left .logo span { vertical-align: 39%; font-size: 27px; font-family: 'Text Me One'; }
+
+.left #Head { height: 92px; }
+.left #Head .settings { position: absolute; color: #8A91A2; right: 0px; font-size: 35px; text-decoration: none; padding: 24px; transition: all 0.3s }
+.left #Head .settings:hover { color: #FFF; transition: none }
+.left #Head .menu { left: 98%; top: 72px; white-space: nowrap; }
+
+.SiteList { margin-bottom: 40px; }
+.SiteList .site { border-bottom: 1px solid #3D444B; position: relative }
+.SiteList .site.disabled:hover { background-color: rgba(173,136,183,0.04); }
+.SiteList .site.disabled .circle { opacity: 0.3 }
+.SiteList .site.disabled .inner { color: white; opacity: 0.3 }
+.SiteList .site:last-child { border-bottom: none }
+.SiteList .site .circle { pointer-events: none; position: absolute; margin-top: 17px; margin-left: 27px; font-size: 12px; font-family: Verdana; }
+.SiteList .site .inner { color: #C2CBDB; text-decoration: none; display: block; padding: 15px 25px; padding-left: 45px; transition: all 0.3s }
+.SiteList .site .inner:hover { background-color: rgba(173,136,183,0.08); transition: none; color: white }
+.SiteList .site .inner:active, .SiteList .site .inner:focus { background-color: rgba(173,136,183,0.2); transition: none; color: white }
+.SiteList .site .inner .title { max-width: 157px; overflow: hidden; display: inline-block; white-space: nowrap; text-overflow: ellipsis; margin-bottom: -4px }
+.SiteList .site .inner .details {
+	float: right; display: inline; font-size: 11px; text-transform: uppercase; line-height: 23px;
+	opacity: 0.8; background-color: #17161F; padding: 2px 10px; margin-top: -4px; border-radius: 16px;
+}
+.SiteList .site .inner .details .modified { opacity: 0.6 }
+.SiteList .site.modified-lastday .inner .details .modified { opacity: 1 }
+.SiteList .site .settings {
+	position: absolute; padding: 12px; right: 0px; top: -1px; color: white; text-decoration: none; opacity: 0; transition: all 0.3s; font-size: 22px
+}
+.SiteList .site .message {
+	border-radius: 20px; position: absolute; top: 13px; font-size: 11px; opacity: 0; transition: all 0.3s ease-in-out; white-space: nowrap;
+	text-transform: uppercase; padding: 5px 0px; background-color: #7DA1BF; color: white; max-width: 0px; overflow: hidden; height: 23px; box-sizing: border-box; /* af3bff */
+	display: inline-block; margin-left: 5px; z-index: 99;
+}
+/*.SiteList .site .message.error:before { content: "🔔"; display: block; width: 32px; height: 32px }*/
+
+.SiteList .site.working { background: transparent url(../img/loading-circle.gif) no-repeat 22px; backface-visibility: hidden; }
+.SiteList .site .message.done { background-color: #26c281 }
+.SiteList .site .message.error { background-color: #3C364F; color: #D5D4D9; }
+.SiteList .site .message.visible { padding: 5px 10px; opacity: 1; max-width: 140px; box-shadow: 7px 0px 15px #2F2A3F; }
+.SiteList .site:not(:hover) .message.collapsed { background-color: transparent; color: transparent; max-width: 15px; box-shadow: none }
+.SiteList .site .message.collapsed:before { content: "\01F514"; display: block; color: #99A0AF; margin-top: -2px; margin-left: -3px; position: absolute; transition: all 0.3s ease-in; font-family: Arial, Helvetica, 'Segoe UI Symbol'; }
+.SiteList .site:hover .message.collapsed:before { opacity: 0; transform: scale(2); }
+
+.SiteList .site:hover .settings { opacity: 0.5; transition: none }
+.SiteList .site .settings:hover { opacity: 1; transition: none }
+.SiteList .menu { left: 99%; top: auto }
+.SiteList .menu-item { font-weight: lighter }
+
+.SiteList.more .site .settings { display: none }
+.SiteList.more .site .details { display: none }
+.SiteList.more .site .details.demo { display: inline; background-color: #8041f1; color: white; }

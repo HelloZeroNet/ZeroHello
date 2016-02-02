@@ -1,12 +1,9 @@
-class DateSince
-	constructor: (@elem, @time) ->
-		@render()
-		date_since_db.push(@)
-
-	# Format time since
-	formatSince: (time) ->
+class Time
+	since: (timestamp) ->
 		now = +(new Date)/1000
-		secs = now - time
+		if timestamp > 1000000000000  # In ms
+			timestamp = timestamp/1000
+		secs = now - timestamp
 		if secs < 60
 			back = "Just now"
 		else if secs < 60*60
@@ -16,12 +13,14 @@ class DateSince
 		else if secs < 60*60*24*3
 			back = "#{Math.round(secs/60/60/24)} days ago"
 		else
-			back = "on "+@formatDate(time)
-		back = back.replace(/^1 ([a-z]+)s/, "1 $1") # 1 days ago fix
+			back = "on "+@date(timestamp)
+		back = back.replace(/1 ([a-z]+)s/, "1 $1") # 1 days ago fix
 		return back
 
-	# Format timestamp to date
-	formatDate: (timestamp, format="short") ->
+
+	date: (timestamp, format="short") ->
+		if timestamp > 1000000000000  # In ms
+			timestamp = timestamp/1000
 		parts = (new Date(timestamp*1000)).toString().split(" ")
 		if format == "short"
 			display = parts.slice(1, 4)
@@ -29,13 +28,12 @@ class DateSince
 			display = parts.slice(1, 5)
 		return display.join(" ").replace(/( [0-9]{4})/, ",$1")
 
-	render: ->
-		@elem.textContent = @formatSince(@time)
 
-window.date_since_db = []
-setInterval ( ->
-	for date_since in date_since_db
-		date_since.render()
-), 1000
+	timestamp: (date="") ->
+		if date == "now" or date == ""
+			return parseInt(+(new Date)/1000)
+		else
+			return parseInt(Date.parse(date)/1000)
 
-window.DateSince = DateSince
+
+window.Time = new Time

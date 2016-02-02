@@ -1,0 +1,68 @@
+class Menu
+	constructor: ->
+		@visible = false
+		@items = []
+		@node = null
+
+	show: =>
+		window.visible_menu?.hide()
+		@visible = true
+		window.visible_menu = @
+
+	hide: =>
+		@visible = false
+
+	toggle: =>
+		if @visible
+			@hide()
+		else
+			@show()
+
+
+	addItem: (title, cb) ->
+		@items.push([title, cb])
+
+
+	storeNode: (node) =>
+		@node = node
+		# Animate visible
+		node.className = node.className.replace("visible", "")
+		setTimeout (->
+			node.className += " visible"
+		), 10
+
+	handleClick: (e) =>
+		keep_menu = false
+		for [title, cb] in @items
+			if title == e.target.textContent
+				keep_menu = cb()
+		if keep_menu != true
+			@hide()
+		return false
+
+	renderItem: (item) =>
+		[title, cb] = item
+		if title == "---"
+			h("div.menu-item-separator")
+		else
+			if typeof(cb) == "string"
+				href = cb
+				onclick = true
+			else
+				href = "#"+title
+				onclick = @handleClick
+			h("a.menu-item", {href: href, onclick: onclick, target: "_blank", key: title}, [title])
+
+	render: (class_name="") =>
+		if @visible or @node
+			h("div.menu#{class_name}", {classes: {"visible": @visible}, afterCreate: @storeNode}, @items.map(@renderItem))
+
+window.Menu = Menu
+
+# Hide menu on outside click
+document.body.addEventListener "mouseup", (e) ->
+	if not window.visible_menu or not window.visible_menu.node
+		return false
+	if e.target.parentNode != window.visible_menu.node.parentNode and e.target.parentNode != window.visible_menu.node and e.target.parentNode.parentNode != window.visible_menu.node.parentNode
+		window.visible_menu.hide()
+		Page.projector.scheduleRender()

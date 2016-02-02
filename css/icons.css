@@ -1,0 +1,9 @@
+/* CSS icons (base on: http://one-div.com/) */
+
+.icon-profile { font-size: 6px; top: 0em; border-radius: 0.7em 0.7em 0 0; background: #FFFFFF; width: 1.4em; height: 0.5em; position: relative; display: inline-block; margin-right: 4px; margin-left: 5px; }
+.icon-profile::before { position: absolute; content: ""; top: -1em; left: 0.31em; width: 0.8em; height: 0.85em; border-radius: 50%; background: #FFFFFF; }
+
+.icon-clock {
+	display: inline-block; width: 10px; height: 12px; vertical-align: -2px; margin-right: 4px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==);
+}

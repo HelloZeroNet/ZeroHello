@@ -1,4 +1,4 @@
-class ZeroFrame
+class ZeroFrame extends Class
 	constructor: (url) ->
 		@url = url
 		@waiting_cb = {}
@@ -13,7 +13,7 @@ class ZeroFrame
 
 	connect: ->
 		@target = window.parent
-		window.addEventListener("message", @onMessage, false) 
+		window.addEventListener("message", @onMessage, false)
 		@cmd("innerReady")
 
 
@@ -34,11 +34,11 @@ class ZeroFrame
 		else if cmd == "wrapperClosedWebsocket"
 			@onCloseWebsocket()
 		else
-			@route cmd, message
+			@onRequest cmd, message.params
 
 
-	route: (cmd, message) =>
-		@log "Unknown command", message
+	onRequest: (cmd, message) =>
+		@log "Unknown request", message
 
 
 	response: (to, result) ->
@@ -55,10 +55,6 @@ class ZeroFrame
 		@target.postMessage(message, "*")
 		if cb
 			@waiting_cb[message.id] = cb
-
-
-	log: (args...) ->
-		console.log "[ZeroFrame]", args...
 
 
 	onOpenWebsocket: =>

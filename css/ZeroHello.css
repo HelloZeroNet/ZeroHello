@@ -1,185 +1,19 @@
-body { background-color: #D2CECD; color: #393837; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif; padding-bottom: 50px; backface-visibility: hidden } /*#AF3FBB*/
-h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: normal; font-size: 100px; margin: 0px; padding: 0px }
-h1 { font-family: 'Text Me One', sans-serif;; padding-bottom: 30px; line-height: 100px }
-h2 { font-size: 35px }
-h3 { font-size: 23px }
-h4 { display: block; font-size: 11px; text-transform: uppercase; margin-bottom: 19px }
+body { background-color: #EDF2F5; font-family: Roboto; margin: 0px; padding: 0px; backface-visibility: hidden; height: 100%; position: absolute; width: 100%; overflow-x: hidden }
+h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
+h1 { font-family: 'Text Me One', sans-serif }
 
-ul, li { margin: 0px; padding: 0px; list-style-type: none }
-
-.template { display: none !important }
-.block { padding: 25px; margin: 10px; display: block; float: left; box-sizing: border-box }
-.updating { opacity: 0 }
-
-.bottom { bottom: 0px; position: absolute; }
-.right { float: right }
+.servedby { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
+.head, .topright { display: none }
 
 
-/* Button */
+/* Bottom */
 
-.button {
-	padding: 5px 10px; background-color: #DDE0E0; border-bottom: 2px solid #999998; background-position: left center;
-	border-radius: 2px ; text-decoration: none; transition: all 0.5s ease-out ; color: #333; display: inline-block
+.bottom {
+	position: relative; z-index: 2; bottom: 0px; color: #C2CBDB; padding: 25px; margin-top: -65px; height: 65px; box-sizing: border-box;
+	font-size: 11px; text-transform: uppercase; opacity: 0.6; font-family: monospace; overflow: hidden; transition: 0.3s all;
 }
-.button:hover { background-color: #FFF400; border-color: white; border-bottom: 2px solid #4D4D4C; transition: none ; color: inherit }
-.button:active { position: relative; top: 1px }
+.bottom:hover { opacity: 0.9 }
+.bottom a { color: #C2CBDB; transition: 0.3s all; padding: 5px; margin: 2px }
+.bottom a:hover { background-color: #413254; transition: none; color: white }
 
-/*.button-delete { background-color: #e74c3c; border-bottom-color: #A83F34; color: white }*/
-.button-outline { background-color: white; color: #DDD; border: 1px solid #eee }
-
-.button-delete:hover { background-color: #FF5442; border: 1px solid #FF5442; color: white }
-.button-ok:hover { background-color: #27AE60; border: 1px solid #27AE60; color: white }
-.button-submit { background-color: #FFF85F;border-bottom: 2px solid #CDBD1E;  padding: 5px 15px; font-size: 15px; line-height: 30px }
-.button-small { padding: 5px 10px; font-size: 12px; line-height: 16px }
-.button-disabled { color: #666 !important; pointer-events: none; border-bottom: 2px solid #666; background-color: #999; opacity: 0.5 }
-
-.button.loading {
-	color: rgba(0,0,0,0) !important; background: #999 url(../img/loading.gif) no-repeat center center;
-	transition: all 0.5s ease-out ; pointer-events: none; border-bottom: 2px solid #666
-}
-
-
-/* Version info */
-.topright { float: right; margin-right: 80px; margin-top: 2px; text-align: right; font-size: 12px; text-transform: uppercase; color: #6F6B6B; opacity: 0; transition: all 1s }
-.topright:hover { opacity: 1 !important }
-.topright a { color: #6F6B6B; transition: all 0.3s }
-.version.latest, .version.current { padding: 2px 5px }
-.version a { color: #6F6B6B; text-transform: none }
-.version.latest { display: inline-block }
-.version.latest.new { background-color: #FFF85F; margin-right: -3px; display: none }
-
-.status { padding: 5px }
-
-.port a { transition: all 1s; background-position: -20px center }
-.port.closed a { color: #DC4F36 }
-.port.opened a, .status .ok { color: #00B16A }
-.port.loading a { color: rgba(0,0,0,0); background: transparent url(../img/loading.gif) no-repeat center center }
-
-.donate { padding: 5px; }
-.donate .heart { color: #DA3D32; font-family: Tahoma, Arial }
-
-.plugin-multiuser { display: none }
-.plugin-uipassword { display: none }
-.identicon { width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-bottom: 2px; margin-right: 10px; margin-left: 5px; border: 1px solid #F0F0F0 }
-.button-logout { margin-top: -2px }
-.button-logout:hover { color: black }
-.button-update { margin-top: 10px; color: black !important; display: none }
-.broken-autoupdate { display: inline-block; padding-top: 5px; color: #666; display: none }
-.broken-autoupdate a { color: black }
-
-#peers, #sites { transition: opacity 0.3s }
-#sites { height: 10000px } /* Dont skip to pagetop after using back button hack */
-
-.head { margin-bottom: 100px }
-
-.served { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
-
-
-.site-category { margin-top: -54px; float: left; padding-left: 20px; width: 370px; height: 0px }
-
-
-/* Site */
-
-.site-container { float: left; transition: box-shadow 0.3s }
-.site-container h2 { margin: 10px; padding: 0px 25px; margin-top: -57px; height: 47px }
-.site {
-	color: white; position: relative; cursor: pointer; background-color: #383E3F; text-decoration: none;
-	transition: all 0.2s ease-out; width: 350px; height: 250px
-}
-.site.modified { box-shadow: inset 0px 0px 0px 3px #FFF }
-.site .anim-updating {
-	background: transparent url("../img/loading.gif") left top no-repeat;
-	width: 0px; transition: all 0.6s cubic-bezier(0.755, 0.05, 0.855, 0.06); transition-delay: 0.15s; opacity: 0; height: 11px; float: left; margin-top: 2px
-}
-.site .anim-updating.visible { width: 30px; opacity: 0.5 }
-.site .status { display: block; float: left; margin-top: -2px; padding: 2px 5px }
-.site .notify {
-	margin-top: -2px; margin-left: 4px; float: left; box-sizing: border-box; padding: 2px 5px;
-	background-color: #7f8c8d; color: white; max-width: 0px; transition: all 0.3s; white-space: nowrap; opacity: 0
-}
-.site .notify.visible { max-width: 140px; opacity: 1 }
-.site .notify.success { background-color: #00B16A }
-
-.site h3 { font-size: 50px; line-height: 47px; padding-bottom: 7px; overflow: hidden; text-overflow: ellipsis; clear: both; }
-.site h3.long { font-size: 24px; line-height: 29px }
-.site .bottom { bottom: 8px }
-.site .description { overflow: hidden; text-overflow: ellipsis; max-height: 2.5em; }
-
-.site .action { right: 20px; position: absolute; bottom: 21px;  padding: 5px 10px;
-	font-size: 11px; text-transform: uppercase; transition: all 0.2s ease-in-out; box-shadow: inset 0px 0px 0px 0px #fff85f;
-}
-
-.site-container .hamburger {
-	margin-left: -60px; position: relative; top: 30px; z-index: 1; transition: all 0.3s; padding: 14px 25px 0px 10px;
-	text-decoration: none; color: white; font-size: 29px; line-height: 18px; opacity: 0; margin-right: 8px;
-}
-.site-container .hamburger:hover { opacity: 1 !important }
-.site-container .hamburger.menu-active { opacity: 1 !important }
-
-.site-container.deleted { transition: all 1s ease-in-out; opacity: 0; overflow: hidden; transform: scale(0.5) }
-.site-container.deleted .site { transition: all 1s ease-in-out; opacity: 0; margin-left: 0px; margin-right: -350px; padding-left: 0px; padding-right: 0px }
-
-
-/* Site small */
-
-.site-small .site { width: 290px; height: 200px; padding: 20px; margin: 7px }
-.site-small .title { font-size: 39px; line-height: 39px; padding-top: 6px }
-.site-small .title.long { font-size: 30px }
-.site-small .action { bottom: 15px; right: 15px }
-.site-small .bottom { bottom: 4px }
-.site-small .hamburger { margin-left: -53px; top: 25px; padding: 14px 23px 0px 10px; margin-right: 5px; }
-
-
-/* Site events */
-
-.site:hover { box-shadow: inset 0px 0px 0px 11px #196244 }
-.site:active, .site:focus { top: 2px; transition: none }
-.site:hover .action { box-shadow: inset 120px 0px 0px 0px #fff85f; color: black }
-.site-container:hover .hamburger { opacity: 0.5 }
-
-
-/* Site-container status */
-
-.site-seeding .site { background-color: #26C281 }
-.site-seeding .status { background-color: #00B16A }
-
-.site-paused .site:hover { box-shadow: inset 0px 0px 0px 11px #282828 }
-
-.site-inactive .site:hover { box-shadow: inset 0px 0px 0px 11px #6D2C99; background-color: #AF3BFF }
-.site-inactive .action:hover { box-shadow: inset 120px 0px 0px 0px white }
-
-.site-inactive .hamburger { display: none }
-
-.site-disabled .site { opacity: 0.1; transform: scale(0.9); pointer-events: none }
-
-.site-downloading { box-shadow: inset 0px -100px 0px -1px rgba(45, 192, 129, 1) }
-.site-downloading .site { background-color: rgba(38, 194, 129, 0.85) }
-
-.site.error { background-color: #C0392B }
-.site.error {box-shadow: inset 0px 0px 0px 3px #E74C3C }
-.site.error .status { background: #F1C40F; color: black }
-
-/* Menu */
-
-.menu {
-	background-color: white; padding: 10px 0px; position: absolute; top: 0px; left: 0px; max-height: 0px; overflow: hidden; transform: translate(0px, -30px);
-	box-shadow: 0px 2px 8px rgba(0,0,0,0.3); border-radius: 2px; opacity: 0; transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out;
-}
-.menu.visible { opacity: 1; max-height: 350px; transform: translate(0px, 0px); transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s ease-in-out; }
-
-.menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s }
-.menu-item-separator { margin-top: 5px; border-top: 1px solid #eee }
-
-.menu-item:hover { background-color: #F6F6F6; transition: none }
-.menu-item:active, .menu-item:focus { background-color: #AF3BFF; color: white; transition: none }
-
-
-/* CSS icons (base on: http://one-div.com/) */
-
-.icon-profile { font-size: 6px; top: 0em; border-radius: 0.7em 0.7em 0 0; background: #FFFFFF; width: 1.5em; height: 0.5em; position: relative; display: inline-block; margin-right: 4px }
-.icon-profile::before { position: absolute; content: ""; top: -1em; left: 0.38em; width: 0.8em; height: 0.85em; border-radius: 50%; background: #FFFFFF; }
-
-.icon-clock {
-	display: inline-block; width: 10px; height: 12px; vertical-align: -2px; margin-left: 5px; margin-right: 4px;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==);
-}
+.heart { color: #af3bff; font-family: Verdana; }

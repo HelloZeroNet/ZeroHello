@@ -6,75 +6,35 @@
  <meta charset="utf-8">
  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
  <link rel="stylesheet" href="css/all.css" />
+ <base href="" target="_top" id="base">
+ <script>base.href = document.location.href.replace("/media", "").replace("index.html", "").replace(/[&?]wrapper=False/, "").replace(/[&?]wrapper_nonce=[A-Za-z0-9]+/, "")</script>
 </head>
 <body>
 
+<!-- Left -->
 
-<!-- Topright -->
-<div class="topright">
+<div class="left">
+ <div id="Head"></div>
 
- <div class="plugin-multiuser">Current user: <a class='identicon' href='#Show+Private+key' title='Show private key'></a><a href="#Logout" class="button button-logout">Logout</a></div>
- <div class="plugin-uipassword"><a href="#Logout" class="button button-logout">Logout</a></div>
- <div class="donate"><span class='heart'>♥</span> <a href="http://zeronet.readthedocs.org/en/latest/help_zeronet/donate/" target="_blank">Help to keep this project alive</a></div>
- <div class='status'>
-  <span class="port closed" style="display: none">Port: <a href="#Re+check" title='Re-check'>Closed</a></span>
-  <span class="tor disabled" style="display: none">Tor: <span>Disabled</span></span>
- </div>
- <div class="version current">Version: <a href="https://github.com/HelloZeroNet/ZeroNet" target="_top">Unknown</a></div>
- <div class="version latest new" title="New update available">Latest: <a href="https://github.com/HelloZeroNet/ZeroNet" target="_top">0.3.5</a></div>
- <br><a href="#Update" class="button button-update button-submit">Update to new version</a>
- <br><span class='broken-autoupdate'></span>
-</div>
-
-
-<!-- Head -->
-<div class="block head">
- <h1>Hello<br>ZeroNet_</h1>
- <h3 class="served">This site currently served by <b><span id='peers' class='updating'>0</span> peers</b> without any central server.</h3>
-</div>
-
-<div style="clear: both"></div>
-
-
-<!-- Sites -->
-<div id="sites" class="updating">
-
- <!-- Template: site-category -->
- <div class="site-category template">
-  <h2 class='title'>Connected sites:</h2>
- </div>
- <!-- EOF Template: site-category -->
-
- <!-- Template: site-container -->
- <div class="site-container site-seeding template">
-  <a href="#" class='hamburger'>&#x2261;</a>
-  <a href="/1EU1tbG9oC1A8jz2ouVwGZyQ5asrNsE4Vr" target="_top" class="site block">
-   <h4>
-    <div class="anim-updating" title='Updating...'></div>
-    <div class="status">Seeding</div>
-    <div class="notify"></div>
-    <div class='right'></div>
-   </h4>
-   <h3 class='title'>ZeroHello</h3>
-   <h4 class='description'></h4>
-   <div class="bottom">
-    <h4><div class='icon-profile'></div>× <span class='peers'>n/a</span> <div class="icon-clock"></div> <span class='modified-date'>n/a</span></h4>
-   </div>
-   <div class='action'>Visit site &#9473;</div>
-  </a>
- </div>
- <!-- EOF Template: site-container -->
+ <h2>Connected sites:</h2>
+ <div class="SiteList" id="SiteList"></div>
 
 </div>
 
 
-<!-- Template: menu -->
-<div class="menu template">
- <a href="#" class="menu-item template">Template</a>
-</div>
-<!-- EOF Template: menu -->
+<!-- Right -->
 
-<div style="clear: both"></div>
+<div class="right">
+ <div id="Dashboard"></div>
+ <div class="FeedList" id="FeedList"></div>
+</div>
+
+<!--
+<div class="bottom">
+ <span class="donate"><span class='heart'>♥</span><a href="#">Help to keep this project alive</a></span>|
+ <span class="version">Version:<a href="#">0.3.6</a>(r860)</span>
+</div>
+-->
 
 <script type="text/javascript" src="js/all.js" asyc></script>
 
