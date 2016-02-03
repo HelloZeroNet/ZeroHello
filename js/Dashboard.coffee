@@ -27,7 +27,7 @@ class Dashboard extends Class
 
 	handleEnableAlwaysTorClick: =>
 		Page.cmd "configSet", ["tor", "always"], (res) =>
-			Page.cmd "wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>To ensure your privacy you should switch to Tor browser."]
+			Page.cmd "wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]
 
 	handleDisableAlwaysTorClick: =>
 		Page.cmd "configSet", ["tor", null], (res) =>

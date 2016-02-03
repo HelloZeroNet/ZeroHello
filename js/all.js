@@ -1962,7 +1962,7 @@
     Dashboard.prototype.handleEnableAlwaysTorClick = function() {
       return Page.cmd("configSet", ["tor", "always"], (function(_this) {
         return function(res) {
-          return Page.cmd("wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>To ensure your privacy you should switch to Tor browser."]);
+          return Page.cmd("wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]);
         };
       })(this));
     };
