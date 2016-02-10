@@ -19,8 +19,8 @@ class Menu
 			@show()
 
 
-	addItem: (title, cb) ->
-		@items.push([title, cb])
+	addItem: (title, cb, selected=false) ->
+		@items.push([title, cb, selected])
 
 
 	storeNode: (node) =>
@@ -41,17 +41,17 @@ class Menu
 		return false
 
 	renderItem: (item) =>
-		[title, cb] = item
+		[title, cb, selected] = item
 		if title == "---"
 			h("div.menu-item-separator")
 		else
-			if typeof(cb) == "string"
+			if typeof(cb) == "string"  # Url
 				href = cb
 				onclick = true
-			else
+			else  # Callback
 				href = "#"+title
 				onclick = @handleClick
-			h("a.menu-item", {href: href, onclick: onclick, target: "_blank", key: title}, [title])
+			h("a.menu-item", {href: href, onclick: onclick, target: "_blank", key: title, classes: {"selected": selected}}, [title])
 
 	render: (class_name="") =>
 		if @visible or @node

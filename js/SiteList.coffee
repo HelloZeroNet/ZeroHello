@@ -9,11 +9,17 @@ class SiteList extends Class
 			@update()
 			Page.cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
+	reorder: =>
+		@update()
 
 	update: ->
 		Page.cmd "siteList", {}, (site_rows) =>
-			site_rows.sort (a, b) ->
-				return Math.max(b.peers, b.settings.peers) - Math.max(a.peers, a.settings.peers)
+			if Page.local_storage.sites_orderby == "modified"
+				site_rows.sort (a, b) ->
+					return b.settings.modified - a.settings.modified
+			else
+				site_rows.sort (a, b) ->
+					return Math.max(b.peers, b.settings.peers) - Math.max(a.peers, a.settings.peers)
 
 			@item_list.sync(site_rows)
 			if @inactive_demo_sites == null

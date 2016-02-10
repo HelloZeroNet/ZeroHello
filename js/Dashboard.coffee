@@ -15,6 +15,8 @@ class Dashboard extends Class
 	handleTorClick: =>
 		@menu_tor.items = []
 		@menu_tor.items.push ["Status: #{Page.server_info?.tor_status}", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]
+		if @getTorTitle() != "OK"
+			@menu_tor.items.push ["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]
 		if @getTorTitle() == "OK"
 			@menu_tor.items.push ["---"]
 			if @isTorAlways()
@@ -92,8 +94,10 @@ class Dashboard extends Class
 				h("a.port.dashboard-item.port", {href: "#Port", classes: {bounce: @port_checking}, onmousedown: @handlePortClick, onclick: Page.returnFalse}, [
 					h("span", "Port: "),
 					if @port_checking
-						h("span.status", "Check...")
-					else if Page.server_info.ip_external
+						h("span.status", "Checking")
+					else if Page.server_info.ip_external == null
+						h("span.status", "Checking")
+					else if Page.server_info.ip_external == true
 						h("span.status.status-ok", "Opened")
 					else if @isTorAlways
 						h("span.status.status-ok", "Closed")

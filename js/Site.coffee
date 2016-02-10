@@ -35,6 +35,7 @@ class Site extends Class
 			@message_collapsed = false
 
 		@row = row
+		@key = @row.address
 
 	setMessage: (message, @message_class="") ->
 		# Set message
@@ -112,7 +113,7 @@ class Site extends Class
 	render: =>
 		now = Date.now()/1000
 		h("div.site", {
-			key: @row.address, exitAnimation: Animation.slideUp,
+			key: @key, exitAnimation: Animation.slideUp,
 			classes: {
 				"modified-lastday": now - @row.settings.modified < 60*60*24,
 				"disabled": not @row.settings.serving and not @row.demo,
@@ -120,7 +121,7 @@ class Site extends Class
 			}
 		},
 			h("div.circle", {style: "color: #{Text.toColor(@row.address, 40, 50)}"}, ["\u2022"]),
-			h("a.inner", {href: @getHref(), title: @row.content.title if @row.content.title.length > 30}, [
+			h("a.inner", {href: @getHref(), title: @row.content.title if @row.content.title.length > 20}, [
 				h("span.title", [@row.content.title]),
 				h("div.details", [
 					h("span.modified", [

@@ -12,5 +12,5 @@
 .menu-item:active, .menu-item:focus { background-color: #AF3BFF; color: white; transition: none }
 .menu-item.selected:before {
 	content: "L"; display: inline-block; transform: rotateZ(45deg) scaleX(-1);
-	font-weight: bold; position: absolute; margin-left: -17px; font-size: 12px; margin-top: 2px;
+	font-weight: bold; position: absolute; margin-left: -14px; font-size: 12px; margin-top: 2px;
 }

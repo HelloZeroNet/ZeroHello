@@ -28,6 +28,7 @@ class ZeroHello extends ZeroFrame
 		@projector.replace($("#FeedList"), @feed_list.render)
 		@projector.replace($("#Head"), @head.render)
 		@projector.replace($("#Dashboard"), @dashboard.render)
+		@loadLocalStorage()
 
 		# Update every minute to keep time since fields up-to date
 		setInterval ( ->
@@ -58,7 +59,7 @@ class ZeroHello extends ZeroFrame
 		return "?"+Text.encodeQuery(params)
 
 
-	getLocalStorage: ->
+	loadLocalStorage: ->
 		@on_site_info.then =>
 			@cmd "wrapperGetLocalStorage", [], (@local_storage) =>
 				@local_storage ?= {}

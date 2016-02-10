@@ -1397,8 +1397,11 @@
       }
     };
 
-    Menu.prototype.addItem = function(title, cb) {
-      return this.items.push([title, cb]);
+    Menu.prototype.addItem = function(title, cb, selected) {
+      if (selected == null) {
+        selected = false;
+      }
+      return this.items.push([title, cb, selected]);
     };
 
     Menu.prototype.storeNode = function(node) {
@@ -1426,8 +1429,8 @@
     };
 
     Menu.prototype.renderItem = function(item) {
-      var cb, href, onclick, title;
-      title = item[0], cb = item[1];
+      var cb, href, onclick, selected, title;
+      title = item[0], cb = item[1], selected = item[2];
       if (title === "---") {
         return h("div.menu-item-separator");
       } else {
@@ -1442,7 +1445,10 @@
           href: href,
           onclick: onclick,
           target: "_blank",
-          key: title
+          key: title,
+          classes: {
+            "selected": selected
+          }
         }, [title]);
       }
     };
@@ -1815,6 +1821,7 @@
       this.onMessage = __bind(this.onMessage, this);
       this.url = url;
       this.waiting_cb = {};
+      this.wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1");
       this.connect();
       this.next_message_id = 1;
       this.init();
@@ -1882,6 +1889,7 @@
       if (cb == null) {
         cb = null;
       }
+      message.wrapper_nonce = this.wrapper_nonce;
       message.id = this.next_message_id;
       this.next_message_id += 1;
       this.target.postMessage(message, "*");
@@ -1947,6 +1955,9 @@
       var _ref;
       this.menu_tor.items = [];
       this.menu_tor.items.push(["Status: " + ((_ref = Page.server_info) != null ? _ref.tor_status : void 0), "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
+      if (this.getTorTitle() !== "OK") {
+        this.menu_tor.items.push(["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
+      }
       if (this.getTorTitle() === "OK") {
         this.menu_tor.items.push(["---"]);
         if (this.isTorAlways()) {
@@ -2045,7 +2056,7 @@
           },
           onmousedown: this.handlePortClick,
           onclick: Page.returnFalse
-        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Check...") : Page.server_info.ip_external ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.tor.dashboard-item.tor", {
+        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.tor.dashboard-item.tor", {
           href: "#Tor",
           onmousedown: this.handleTorClick,
           onclick: Page.returnFalse
@@ -2259,6 +2270,8 @@
       this.handleShutdownZeronetClick = __bind(this.handleShutdownZeronetClick, this);
       this.handleUpdateZeronetClick = __bind(this.handleUpdateZeronetClick, this);
       this.handleTorClick = __bind(this.handleTorClick, this);
+      this.handleOrderbyModified = __bind(this.handleOrderbyModified, this);
+      this.handleOrderbyPeers = __bind(this.handleOrderbyPeers, this);
       this.handleUpdateAllClick = __bind(this.handleUpdateAllClick, this);
       this.handleSettingsClick = __bind(this.handleSettingsClick, this);
       this.menu_settings = new Menu();
@@ -2275,8 +2288,16 @@
     };
 
     Head.prototype.handleSettingsClick = function() {
+      var orderby, _base;
+      if ((_base = Page.local_storage).sites_orderby == null) {
+        _base.sites_orderby = "peers";
+      }
+      orderby = Page.local_storage.sites_orderby;
       this.menu_settings.items = [];
       this.menu_settings.items.push(["Update all sites", this.handleUpdateAllClick]);
+      this.menu_settings.items.push(["---"]);
+      this.menu_settings.items.push(["Order sites by peers", this.handleOrderbyPeers, orderby === "peers"]);
+      this.menu_settings.items.push(["Order sites by update time", this.handleOrderbyModified, orderby === "modified"]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
@@ -2304,6 +2325,18 @@
         }
       }
       return _results;
+    };
+
+    Head.prototype.handleOrderbyPeers = function() {
+      Page.local_storage.sites_orderby = "peers";
+      Page.site_list.reorder();
+      return Page.saveLocalStorage();
+    };
+
+    Head.prototype.handleOrderbyModified = function() {
+      Page.local_storage.sites_orderby = "modified";
+      Page.site_list.reorder();
+      return Page.saveLocalStorage();
     };
 
     Head.prototype.handleTorClick = function() {
@@ -2408,7 +2441,8 @@
       } else {
         this.message_collapsed = false;
       }
-      return this.row = row;
+      this.row = row;
+      return this.key = this.row.address;
     };
 
     Site.prototype.setMessage = function(message, _at_message_class) {
@@ -2516,7 +2550,7 @@
       var now;
       now = Date.now() / 1000;
       return h("div.site", {
-        key: this.row.address,
+        key: this.key,
         exitAnimation: Animation.slideUp,
         classes: {
           "modified-lastday": now - this.row.settings.modified < 60 * 60 * 24,
@@ -2527,7 +2561,7 @@
         style: "color: " + (Text.toColor(this.row.address, 40, 50))
       }, ["\u2022"]), h("a.inner", {
         href: this.getHref(),
-        title: this.row.content.title.length > 30 ? this.row.content.title : void 0
+        title: this.row.content.title.length > 20 ? this.row.content.title : void 0
       }, [
         h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, h("div.message", {
           classes: {
@@ -2568,6 +2602,7 @@
     function SiteList() {
       this.onSiteInfo = __bind(this.onSiteInfo, this);
       this.render = __bind(this.render, this);
+      this.reorder = __bind(this.reorder, this);
       this.item_list = new ItemList(Site, "address");
       this.sites = this.item_list.items;
       this.sites_byaddress = this.item_list.items_bykey;
@@ -2582,12 +2617,22 @@
       })(this));
     }
 
+    SiteList.prototype.reorder = function() {
+      return this.update();
+    };
+
     SiteList.prototype.update = function() {
       Page.cmd("siteList", {}, (function(_this) {
         return function(site_rows) {
-          site_rows.sort(function(a, b) {
-            return Math.max(b.peers, b.settings.peers) - Math.max(a.peers, a.settings.peers);
-          });
+          if (Page.local_storage.sites_orderby === "modified") {
+            site_rows.sort(function(a, b) {
+              return b.settings.modified - a.settings.modified;
+            });
+          } else {
+            site_rows.sort(function(a, b) {
+              return Math.max(b.peers, b.settings.peers) - Math.max(a.peers, a.settings.peers);
+            });
+          }
           _this.item_list.sync(site_rows);
           if (_this.inactive_demo_sites === null) {
             _this.updateInactiveDemoSites();
@@ -2723,6 +2768,7 @@
       this.projector.replace($("#FeedList"), this.feed_list.render);
       this.projector.replace($("#Head"), this.head.render);
       this.projector.replace($("#Dashboard"), this.dashboard.render);
+      this.loadLocalStorage();
       return setInterval((function() {
         return Page.projector.scheduleRender();
       }), 60 * 1000);
@@ -2759,7 +2805,7 @@
       return "?" + Text.encodeQuery(params);
     };
 
-    ZeroHello.prototype.getLocalStorage = function() {
+    ZeroHello.prototype.loadLocalStorage = function() {
       return this.on_site_info.then((function(_this) {
         return function() {
           return _this.cmd("wrapperGetLocalStorage", [], function(_at_local_storage) {

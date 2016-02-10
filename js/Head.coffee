@@ -10,8 +10,14 @@ class Head extends Class
 			return "Up to date!"
 
 	handleSettingsClick: =>
+		Page.local_storage.sites_orderby ?= "peers"
+		orderby = Page.local_storage.sites_orderby
+
 		@menu_settings.items = []
 		@menu_settings.items.push ["Update all sites", @handleUpdateAllClick]
+		@menu_settings.items.push ["---"]
+		@menu_settings.items.push ["Order sites by peers", @handleOrderbyPeers, (orderby == "peers")]
+		@menu_settings.items.push ["Order sites by update time", @handleOrderbyModified, (orderby == "modified")]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
@@ -27,6 +33,16 @@ class Head extends Class
 		for site in Page.site_list.sites
 			if site.row.settings.serving
 				Page.cmd "siteUpdate", {"address": site.row.address}
+
+	handleOrderbyPeers: =>
+		Page.local_storage.sites_orderby = "peers"
+		Page.site_list.reorder()
+		Page.saveLocalStorage()
+
+	handleOrderbyModified: =>
+		Page.local_storage.sites_orderby = "modified"
+		Page.site_list.reorder()
+		Page.saveLocalStorage()
 
 	handleTorClick: =>
 		return true

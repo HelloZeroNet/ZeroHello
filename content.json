@@ -1,44 +1,45 @@
 {
- "address": "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D", 
- "background-color": "#F2F4F6", 
- "description": "New ZeroHello", 
+ "address": "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D",
+ "background-color": "#F2F4F6",
+ "description": "New ZeroHello",
  "files": {
   "css/all.css": {
-   "sha512": "ef1df93f8f2450c848b47c8c96c5a675964c01b305f490945c59ef79d008b936", 
-   "size": 174117
-  }, 
+   "sha512": "03826807bb8d8d6ecf21deddcd9d670d5534f78b19cb24d5aa1bb4edfdce33d5",
+   "size": 174036
+  },
   "img/loading-circle.gif": {
-   "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929", 
+   "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
    "size": 2346
-  }, 
+  },
   "img/logo.png": {
-   "sha512": "d9041b19e27b103013db09b2006081720daa859c0627c39fdc9f56c8e70fcce7", 
+   "sha512": "d9041b19e27b103013db09b2006081720daa859c0627c39fdc9f56c8e70fcce7",
    "size": 1700
-  }, 
+  },
   "img/logo_big.png": {
-   "sha512": "81884a41736056c54274a7332f233b872fdf9e298b6dda91d655cc7105221682", 
+   "sha512": "81884a41736056c54274a7332f233b872fdf9e298b6dda91d655cc7105221682",
    "size": 11379
-  }, 
+  },
   "index.html": {
-   "sha512": "88028d1e9f50543098383180d7576b5d47e7351657b235e40eae4cde8ee78e56", 
+   "sha512": "88028d1e9f50543098383180d7576b5d47e7351657b235e40eae4cde8ee78e56",
    "size": 989
-  }, 
+  },
   "js/all.js": {
-   "sha512": "a684db17c864d7893d9db1bc3b0b0a7e444a18fadaf7d476d08bd1247fe01bcb", 
-   "size": 104786
+   "sha512": "2fad50c0475d03fe424739ae378ecc6c2c978e47b320c8dbbbd036717049b7bc",
+   "size": 106848
   }
- }, 
- "ignore": "(js|css)/(?!all.(js|css))", 
- "modified": 1454447133.197, 
+ },
+ "ignore": "(js|css)/(?!all.(js|css))",
+ "postmessage_nonce_security": true,
+ "modified": 1455052070.472,
  "sign": [
-  8383518952831003755944513919930528572550326801751511930112354983434329809998, 
-  37776677877178907601540097135710186922014798366091215851309101865010338509255
- ], 
- "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=", 
+  83065171881867237808487163357105002274307790772455263604897056461397333746560,
+  45131616897944428716419472042614304440510789151933089046923668201484973579687
+ ],
+ "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HKfreKwM50XJbBw3L0I/geTFFMDfZj0ppKyBC5ulEKogA2azATyZueLXOIwEQbkJP9HcAUKJ15jSomjhYiXh0Nc="
- }, 
- "signs_required": 1, 
- "title": "New ZeroHello", 
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G/O0kTU/Ma4HTjx1yBPmYACv3Bnf8jh1UhvYZhQn1yNB0796R8Lz6M59x46lHtriUgBqn300mGMpw6wDwj9s2PI="
+ },
+ "signs_required": 1,
+ "title": "New ZeroHello",
  "zeronet_version": "0.3.6"
 }
