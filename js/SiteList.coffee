@@ -4,8 +4,9 @@ class SiteList extends Class
 		@sites = @item_list.items
 		@sites_byaddress = @item_list.items_bykey
 		@inactive_demo_sites = null
+		@loaded = false
 
-		Page.on_site_info.then =>
+		Page.on_local_storage.then =>
 			@update()
 			Page.cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
@@ -25,6 +26,7 @@ class SiteList extends Class
 			if @inactive_demo_sites == null
 				@updateInactiveDemoSites()
 			Page.projector.scheduleRender()
+			@loaded = true
 		@
 
 	updateInactiveDemoSites: ->
@@ -33,6 +35,8 @@ class SiteList extends Class
 			{address: "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT", demo: true, content: {title: "ZeroTalk", domain: "Talk.ZeroNetwork.bit"}, settings: {}}
 			{address: "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", demo: true, content: {title: "ZeroBlog", domain: "Blog.ZeroNetwork.bit"}, settings: {}}
 			{address: "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27", demo: true, content: {title: "ZeroMail", domain: "Mail.ZeroNetwork.bit"}, settings: {}}
+			{address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h", demo: true, content: {title: "GIF Time"}, settings: {}}
+			{address: "186THqMWuptrZxq1rxzpguAivK3Bs6z84o", demo: true, content: {title: "More sites @ 0list", domain: "0list.bit"}, settings: {}}
 		]
 		@inactive_demo_sites = []
 		for site_row in demo_site_rows
@@ -40,6 +44,8 @@ class SiteList extends Class
 				@inactive_demo_sites.push(new Site(site_row))
 
 	render: =>
+		if not @loaded
+			return h("div")
 		h("div", [
 			h("div.SiteList.connected", @sites.map (item) ->
 				item.render()

@@ -24,11 +24,12 @@ class ZeroHello extends ZeroFrame
 		else
 			@route(base.href.replace(/.*?\?/, ""))
 
-		@projector.replace($("#SiteList"), @site_list.render)
-		@projector.replace($("#FeedList"), @feed_list.render)
-		@projector.replace($("#Head"), @head.render)
-		@projector.replace($("#Dashboard"), @dashboard.render)
 		@loadLocalStorage()
+		@on_site_info.then =>
+			@projector.replace($("#SiteList"), @site_list.render)
+			@projector.replace($("#FeedList"), @feed_list.render)
+			@projector.replace($("#Head"), @head.render)
+			@projector.replace($("#Dashboard"), @dashboard.render)
 
 		# Update every minute to keep time since fields up-to date
 		setInterval ( ->
@@ -61,8 +62,11 @@ class ZeroHello extends ZeroFrame
 
 	loadLocalStorage: ->
 		@on_site_info.then =>
+			@log "Loading localstorage"
 			@cmd "wrapperGetLocalStorage", [], (@local_storage) =>
+				@log "Loaded localstorage"
 				@local_storage ?= {}
+				@local_storage.sites_orderby ?= "peers"
 				@on_local_storage.resolve(@local_storage)
 
 	saveLocalStorage: (cb) ->

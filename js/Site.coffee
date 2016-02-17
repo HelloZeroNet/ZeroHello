@@ -90,7 +90,8 @@ class Site extends Class
 			@menu.items.push ["Pause", @handlePauseClick]
 		else
 			@menu.items.push ["Resume", @handleResumeClick]
-		@menu.items.push ["Clone", @handleCloneClick]
+		if @row.content.cloneable == true
+			@menu.items.push ["Clone", @handleCloneClick]
 		@menu.items.push ["---"]
 		@menu.items.push ["Delete", @handleDeleteClick]
 
@@ -102,7 +103,7 @@ class Site extends Class
 
 
 	getHref: ->
-		has_plugin = Page.server_info.plugins? and ("Zeroname" in Page.server_info.plugins or "Dnschain" in Page.server_info.plugins or "Zeroname-local" in Page.server_info.plugins)
+		has_plugin = Page.server_info?.plugins? and ("Zeroname" in Page.server_info.plugins or "Dnschain" in Page.server_info.plugins or "Zeroname-local" in Page.server_info.plugins)
 		if has_plugin and @row.content?.domain # Domain
 			href = Text.getSiteUrl(@row.content.domain)
 		else # Address

@@ -2075,7 +2075,6 @@
 }).call(this);
 
 
-
 /* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
 
 
@@ -2152,8 +2151,8 @@
       body = body.replace(/[\n\r]+/, "\n");
       if (type === "comment" || type === "mention") {
         username = body.match(/(.*?)@/)[1] + " › ";
-        body = body.replace(/> \[(.*?)\]/g, "$1: > ");
-        body = body.replace(/>.*/g, "");
+        body = body.replace(/> \[(.*?)\].*/g, "$1: ");
+        body = body.replace(/^[ ]*>.*/gm, "");
         body = body.replace(/.*?@.*?:/, "");
         body = body.replace(/\n/g, " ");
         body = body.trim();
@@ -2179,7 +2178,6 @@
         site = Page.site_list.item_list.items_bykey[feed.site];
         return h("div.feed." + feed.type, {
           key: feed.site + feed.type + feed.title + feed.feed_id,
-          id: feed.site + feed.type + feed.title + feed.feed_id,
           enterAnimation: Animation.slideDown,
           exitAnimation: Animation.slideUp
         }, [
@@ -2234,7 +2232,7 @@
     };
 
     FeedList.prototype.render = function() {
-      return h("div", this.feeds === null ? h("div.loading") : this.feeds.length > 0 ? [h("div.feeds-line"), h("div.FeedList", this.feeds.slice(0, 31).map(this.renderFeed))] : this.renderWelcome());
+      return h("div", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 ? [h("div.feeds-line"), h("div.FeedList", this.feeds.slice(0, 31).map(this.renderFeed))] : this.renderWelcome());
     };
 
     FeedList.prototype.onSiteInfo = function(site_info) {
@@ -2524,7 +2522,9 @@
       } else {
         this.menu.items.push(["Resume", this.handleResumeClick]);
       }
-      this.menu.items.push(["Clone", this.handleCloneClick]);
+      if (this.row.content.cloneable === true) {
+        this.menu.items.push(["Clone", this.handleCloneClick]);
+      }
       this.menu.items.push(["---"]);
       this.menu.items.push(["Delete", this.handleDeleteClick]);
       if (this.menu.visible) {
@@ -2536,9 +2536,9 @@
     };
 
     Site.prototype.getHref = function() {
-      var has_plugin, href, _ref;
-      has_plugin = (Page.server_info.plugins != null) && (__indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || __indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
-      if (has_plugin && ((_ref = this.row.content) != null ? _ref.domain : void 0)) {
+      var has_plugin, href, _ref, _ref1;
+      has_plugin = (((_ref = Page.server_info) != null ? _ref.plugins : void 0) != null) && (__indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || __indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
+      if (has_plugin && ((_ref1 = this.row.content) != null ? _ref1.domain : void 0)) {
         href = Text.getSiteUrl(this.row.content.domain);
       } else {
         href = Text.getSiteUrl(this.row.address);
@@ -2587,6 +2587,7 @@
 }).call(this);
 
 
+
 /* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
@@ -2607,7 +2608,8 @@
       this.sites = this.item_list.items;
       this.sites_byaddress = this.item_list.items_bykey;
       this.inactive_demo_sites = null;
-      Page.on_site_info.then((function(_this) {
+      this.loaded = false;
+      Page.on_local_storage.then((function(_this) {
         return function() {
           _this.update();
           return Page.cmd("channelJoinAllsite", {
@@ -2637,7 +2639,8 @@
           if (_this.inactive_demo_sites === null) {
             _this.updateInactiveDemoSites();
           }
-          return Page.projector.scheduleRender();
+          Page.projector.scheduleRender();
+          return _this.loaded = true;
         };
       })(this));
       return this;
@@ -2678,6 +2681,21 @@
             domain: "Mail.ZeroNetwork.bit"
           },
           settings: {}
+        }, {
+          address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h",
+          demo: true,
+          content: {
+            title: "GIF Time"
+          },
+          settings: {}
+        }, {
+          address: "186THqMWuptrZxq1rxzpguAivK3Bs6z84o",
+          demo: true,
+          content: {
+            title: "More sites @ 0list",
+            domain: "0list.bit"
+          },
+          settings: {}
         }
       ];
       this.inactive_demo_sites = [];
@@ -2694,6 +2712,9 @@
     };
 
     SiteList.prototype.render = function() {
+      if (!this.loaded) {
+        return h("div");
+      }
       return h("div", [
         h("div.SiteList.connected", this.sites.map(function(item) {
           return item.render();
@@ -2764,11 +2785,15 @@
       } else {
         this.route(base.href.replace(/.*?\?/, ""));
       }
-      this.projector.replace($("#SiteList"), this.site_list.render);
-      this.projector.replace($("#FeedList"), this.feed_list.render);
-      this.projector.replace($("#Head"), this.head.render);
-      this.projector.replace($("#Dashboard"), this.dashboard.render);
       this.loadLocalStorage();
+      this.on_site_info.then((function(_this) {
+        return function() {
+          _this.projector.replace($("#SiteList"), _this.site_list.render);
+          _this.projector.replace($("#FeedList"), _this.feed_list.render);
+          _this.projector.replace($("#Head"), _this.head.render);
+          return _this.projector.replace($("#Dashboard"), _this.dashboard.render);
+        };
+      })(this));
       return setInterval((function() {
         return Page.projector.scheduleRender();
       }), 60 * 1000);
@@ -2808,10 +2833,16 @@
     ZeroHello.prototype.loadLocalStorage = function() {
       return this.on_site_info.then((function(_this) {
         return function() {
+          _this.log("Loading localstorage");
           return _this.cmd("wrapperGetLocalStorage", [], function(_at_local_storage) {
+            var _base;
             _this.local_storage = _at_local_storage;
+            _this.log("Loaded localstorage");
             if (_this.local_storage == null) {
               _this.local_storage = {};
+            }
+            if ((_base = _this.local_storage).sites_orderby == null) {
+              _base.sites_orderby = "peers";
             }
             return _this.on_local_storage.resolve(_this.local_storage);
           });

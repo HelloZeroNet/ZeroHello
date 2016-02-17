@@ -40,8 +40,8 @@ class FeedList extends Class
 		body = body.replace(/[\n\r]+/, "\n")  # Remove empty lines
 		if type == "comment" or type == "mention"
 			username = body.match(/(.*?)@/)[1] + " › "  # Extract commenter's username
-			body = body.replace(/> \[(.*?)\]/g, "$1: > ")  # Replace original message quote
-			body = body.replace(/>.*/g, "")  # Remove quotes
+			body = body.replace(/> \[(.*?)\].*/g, "$1: ")  # Replace original message quote
+			body = body.replace(/^[ ]*>.*/gm, "")  # Remove quotes
 			body = body.replace(/.*?@.*?:/, "")  # Remove commenter from body
 			body = body.replace(/\n/g, " ")
 			body = body.trim()
@@ -61,7 +61,7 @@ class FeedList extends Class
 	renderFeed: (feed) =>
 		try
 			site = Page.site_list.item_list.items_bykey[feed.site]
-			return h("div.feed."+feed.type, {key: feed.site+feed.type+feed.title+feed.feed_id, id: feed.site+feed.type+feed.title+feed.feed_id, enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [
+			return h("div.feed."+feed.type, {key: feed.site+feed.type+feed.title+feed.feed_id, enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [
 				h("div.details", {}, [
 					h("a.site", {href: site.getHref()}, [site.row.content.title]),
 					h("div.added", [Time.since(feed.date_added)])
@@ -113,7 +113,7 @@ class FeedList extends Class
 
 	render: =>
 		h("div",
-			if @feeds == null
+			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0
 				[
