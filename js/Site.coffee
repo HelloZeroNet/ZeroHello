@@ -1,6 +1,7 @@
 class Site extends Class
 	constructor: (row, @item_list) ->
 		@deleted = false
+		@show_errors = false
 		@message_visible = false
 		@message = null
 		@message_class = ""
@@ -27,13 +28,6 @@ class Site extends Class
 		else if row.tasks == 0 and @row?.tasks > 0
 			@setMessage "Updated!", "done"
 
-
-		# Collapsed
-		if not @row and @message_class == "error"  # First update
-			@message_collapsed = true
-		else
-			@message_collapsed = false
-
 		@row = row
 		@key = @row.address
 
@@ -42,6 +36,11 @@ class Site extends Class
 		if message
 			@message = message
 			@message_visible = true
+			if @message_class == "error" and not @show_errors
+				@message_collapsed = true
+			else
+				@message_collapsed = false
+
 		else
 			@message_visible = false
 
@@ -58,6 +57,7 @@ class Site extends Class
 
 	handleUpdateClick: =>
 		Page.cmd "siteUpdate", {"address": @row.address}
+		@show_errors = true
 		return false
 
 	handleResumeClick: =>

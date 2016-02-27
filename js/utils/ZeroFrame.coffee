@@ -5,6 +5,7 @@ class ZeroFrame extends Class
 		@wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1")
 		@connect()
 		@next_message_id = 1
+		@history_state = {}
 		@init()
 
 
@@ -16,6 +17,19 @@ class ZeroFrame extends Class
 		@target = window.parent
 		window.addEventListener("message", @onMessage, false)
 		@cmd("innerReady")
+
+		# Save scrollTop
+		window.addEventListener "beforeunload", (e) =>
+			@log "save scrollTop", window.pageYOffset
+			@history_state["scrollTop"] = window.pageYOffset
+			@cmd "wrapperReplaceState", [@history_state, null]
+
+		# Restore scrollTop
+		@cmd "wrapperGetState", [], (state) =>
+			@history_state = state if state?
+			@log "restore scrollTop", state, window.pageYOffset
+			if window.pageYOffset == 0 and state
+				window.scroll(window.pageXOffset, state.scrollTop)
 
 
 	onMessage: (e) =>

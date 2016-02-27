@@ -1,7 +1,7 @@
 class FeedList extends Class
 	constructor: ->
 		@feeds = null
-		Page.on_site_info.then =>
+		Page.on_local_storage.then =>
 			@update()
 		@
 
@@ -13,7 +13,7 @@ class FeedList extends Class
 				return false
 
 			rows.sort (a, b) ->
-				return a.date_added + (if a.type == "mention" then 1 else 0) - b.date_added + (if b.type == "mention" then 1 else 0)
+				return a.date_added + (if a.type == "mention" then 1 else 0) - b.date_added + (if b.type == "mention" then 1 else 0)  # Prefer mention
 
 			last_row = {}
 			rows.reverse()
@@ -31,7 +31,7 @@ class FeedList extends Class
 				else
 					row.feed_id ?= row.date_added
 					@feeds.push(row)
-					last_row = row
+				last_row = row
 
 			Page.projector.scheduleRender()
 
@@ -112,6 +112,9 @@ class FeedList extends Class
 		])
 
 	render: =>
+		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
+			document.body.className = "loaded"
+
 		h("div",
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")

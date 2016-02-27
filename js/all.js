@@ -1824,6 +1824,7 @@
       this.wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1");
       this.connect();
       this.next_message_id = 1;
+      this.history_state = {};
       this.init();
     }
 
@@ -1834,7 +1835,25 @@
     ZeroFrame.prototype.connect = function() {
       this.target = window.parent;
       window.addEventListener("message", this.onMessage, false);
-      return this.cmd("innerReady");
+      this.cmd("innerReady");
+      window.addEventListener("beforeunload", (function(_this) {
+        return function(e) {
+          _this.log("save scrollTop", window.pageYOffset);
+          _this.history_state["scrollTop"] = window.pageYOffset;
+          return _this.cmd("wrapperReplaceState", [_this.history_state, null]);
+        };
+      })(this));
+      return this.cmd("wrapperGetState", [], (function(_this) {
+        return function(state) {
+          if (state != null) {
+            _this.history_state = state;
+          }
+          _this.log("restore scrollTop", state, window.pageYOffset);
+          if (window.pageYOffset === 0 && state) {
+            return window.scroll(window.pageXOffset, state.scrollTop);
+          }
+        };
+      })(this));
     };
 
     ZeroFrame.prototype.onMessage = function(e) {
@@ -2094,7 +2113,7 @@
       this.renderFeed = __bind(this.renderFeed, this);
       this.update = __bind(this.update, this);
       this.feeds = null;
-      Page.on_site_info.then((function(_this) {
+      Page.on_local_storage.then((function(_this) {
         return function() {
           return _this.update();
         };
@@ -2138,8 +2157,8 @@
                 row.feed_id = row.date_added;
               }
               _this.feeds.push(row);
-              last_row = row;
             }
+            last_row = row;
           }
           return Page.projector.scheduleRender();
         };
@@ -2232,6 +2251,9 @@
     };
 
     FeedList.prototype.render = function() {
+      if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded") {
+        document.body.className = "loaded";
+      }
       return h("div", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 ? [h("div.feeds-line"), h("div.FeedList", this.feeds.slice(0, 31).map(this.renderFeed))] : this.renderWelcome());
     };
 
@@ -2249,6 +2271,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
@@ -2406,6 +2429,7 @@
       this.handleResumeClick = __bind(this.handleResumeClick, this);
       this.handleUpdateClick = __bind(this.handleUpdateClick, this);
       this.deleted = false;
+      this.show_errors = false;
       this.message_visible = false;
       this.message = null;
       this.message_class = "";
@@ -2434,11 +2458,6 @@
       } else if (row.tasks === 0 && ((_ref2 = this.row) != null ? _ref2.tasks : void 0) > 0) {
         this.setMessage("Updated!", "done");
       }
-      if (!this.row && this.message_class === "error") {
-        this.message_collapsed = true;
-      } else {
-        this.message_collapsed = false;
-      }
       this.row = row;
       return this.key = this.row.address;
     };
@@ -2448,6 +2467,11 @@
       if (message) {
         this.message = message;
         this.message_visible = true;
+        if (this.message_class === "error" && !this.show_errors) {
+          this.message_collapsed = true;
+        } else {
+          this.message_collapsed = false;
+        }
       } else {
         this.message_visible = false;
       }
@@ -2471,6 +2495,7 @@
       Page.cmd("siteUpdate", {
         "address": this.row.address
       });
+      this.show_errors = true;
       return false;
     };
 
@@ -2585,7 +2610,6 @@
   window.Site = Site;
 
 }).call(this);
-
 
 
 /* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
