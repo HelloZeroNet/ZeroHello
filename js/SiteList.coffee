@@ -15,6 +15,7 @@ class SiteList extends Class
 
 	update: ->
 		Page.cmd "siteList", {}, (site_rows) =>
+			favorite_sites = Page.local_storage.favorite_sites
 			if Page.local_storage.sites_orderby == "modified"
 				site_rows.sort (a, b) ->
 					return b.settings.modified - a.settings.modified
@@ -46,13 +47,20 @@ class SiteList extends Class
 	render: =>
 		if not @loaded
 			return h("div")
+		@sites_favorited = (site for site in @sites when site.favorite)
+		@sites_connected = (site for site in @sites when not site.favorite)
 		h("div", [
-			h("div.SiteList.connected", @sites.map (item) ->
+			if @sites_favorited.length > 0 then h("h2.favorited", "Favorited sites:"),
+			h("div.SiteList.favorited", @sites_favorited.map (item) ->
+				item.render()
+			),
+			h("h2.connected", "Connected sites:"),
+			h("div.SiteList.connected", @sites_connected.map (item) ->
 				item.render()
 			),
 			if @inactive_demo_sites != null and @inactive_demo_sites.length > 0
 				[
-					h("h2", "More sites:"),
+					h("h2.more", "More sites:"),
 					h("div.SiteList.more", @inactive_demo_sites.map (item) ->
 						item.render()
 					)

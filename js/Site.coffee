@@ -7,6 +7,8 @@ class Site extends Class
 		@message_class = ""
 		@message_collapsed = false
 		@message_timer = null
+		@favorite = Page.local_storage.favorite_sites[row.address]
+		@key = row.address
 		@setRow(row)
 		@menu = new Menu()
 
@@ -29,7 +31,6 @@ class Site extends Class
 			@setMessage "Updated!", "done"
 
 		@row = row
-		@key = @row.address
 
 	setMessage: (message, @message_class="") ->
 		# Set message
@@ -54,6 +55,23 @@ class Site extends Class
 
 	isWorking: ->
 		@row.tasks > 0 or @row.event?[0] == "updating"
+
+
+	handleFavoriteClick: =>
+		@favorite = true
+		@menu = new Menu()
+		Page.local_storage.favorite_sites[@row.address] = true
+		Page.saveLocalStorage()
+		Page.site_list.reorder()
+		return false
+
+	handleUnfavoriteClick: =>
+		@favorite = false
+		@menu = new Menu()
+		delete Page.local_storage.favorite_sites[@row.address]
+		Page.saveLocalStorage()
+		Page.site_list.reorder()
+		return false
 
 	handleUpdateClick: =>
 		Page.cmd "siteUpdate", {"address": @row.address}
@@ -85,6 +103,10 @@ class Site extends Class
 
 	handleSettingsClick: (e) =>
 		@menu.items = []
+		if @favorite
+			@menu.items.push ["Unfavorite", @handleUnfavoriteClick]
+		else
+			@menu.items.push ["Favorite", @handleFavoriteClick]
 		@menu.items.push ["Update", @handleUpdateClick]
 		if @row.settings.serving
 			@menu.items.push ["Pause", @handlePauseClick]
@@ -114,7 +136,7 @@ class Site extends Class
 	render: =>
 		now = Date.now()/1000
 		h("div.site", {
-			key: @key, exitAnimation: Animation.slideUp,
+			key: @key, "data-key": @key,
 			classes: {
 				"modified-lastday": now - @row.settings.modified < 60*60*24,
 				"disabled": not @row.settings.serving and not @row.demo,

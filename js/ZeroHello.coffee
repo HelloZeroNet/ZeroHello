@@ -67,6 +67,7 @@ class ZeroHello extends ZeroFrame
 				@log "Loaded localstorage"
 				@local_storage ?= {}
 				@local_storage.sites_orderby ?= "peers"
+				@local_storage.favorite_sites ?= {}
 				@on_local_storage.resolve(@local_storage)
 
 	saveLocalStorage: (cb) ->
