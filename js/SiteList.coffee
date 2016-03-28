@@ -5,13 +5,30 @@ class SiteList extends Class
 		@sites_byaddress = @item_list.items_bykey
 		@inactive_demo_sites = null
 		@loaded = false
+		@schedule_reorder = false
+		setInterval(@reorderTimer, 10000)
 
 		Page.on_local_storage.then =>
 			@update()
 			Page.cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
+	reorderTimer: =>
+		if not @schedule_reorder
+			return
+
+		# Don't reorder if user if over site list or any of the sites are updating
+		if not document.querySelector('.left:hover') and not document.querySelector(".working")
+			@reorder()
+			@schedule_reorder = false
+
 	reorder: =>
-		@update()
+		if Page.local_storage.sites_orderby == "modified"
+			@item_list.items.sort (a, b) ->
+				return b.row.settings.modified - a.row.settings.modified
+		else
+			@item_list.items.sort (a, b) ->
+				return Math.max(b.row.peers, b.row.settings.peers) - Math.max(a.row.peers, a.row.settings.peers)
+		Page.projector.scheduleRender()
 
 	update: ->
 		Page.cmd "siteList", {}, (site_rows) =>
@@ -70,6 +87,7 @@ class SiteList extends Class
 
 	onSiteInfo: (site_info) =>
 		@item_list.items_bykey[site_info.address]?.setRow(site_info)
+		@schedule_reorder = true
 		Page.projector.scheduleRender()
 
 
