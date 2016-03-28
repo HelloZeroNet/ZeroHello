@@ -18,6 +18,7 @@ class Dashboard extends Class
 		@menu_tor.items.push ["Status: #{Page.server_info?.tor_status}", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]
 		if @getTorTitle() != "OK"
 			@menu_tor.items.push ["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]
+		@menu_tor.items.push ["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]
 		if @getTorTitle() == "OK"
 			@menu_tor.items.push ["---"]
 			if @isTorAlways()
