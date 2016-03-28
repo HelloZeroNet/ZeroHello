@@ -15,24 +15,28 @@ class FeedList extends Class
 			rows.sort (a, b) ->
 				return a.date_added + (if a.type == "mention" then 1 else 0) - b.date_added + (if b.type == "mention" then 1 else 0)  # Prefer mention
 
+			row_group = {}
 			last_row = {}
 			rows.reverse()
 			for row in rows
-				if last_row.title == row.title and last_row.body == row.body and last_row.date_added == row.date_added
+				if last_row.body == row.body and last_row.date_added == row.date_added
 					continue  # Duplicate (eg. also signed up for comments and mentions)
-				if last_row.title == row.title and last_row.type == row.type
-					last_row.more ?= 0
-					last_row.body_more ?= []
-					if last_row.body_more.length < 3
-						last_row.body_more.push(row.body)
+
+				if row_group.title == row.title and row_group.type == row.type
+					if not row_group.body_more?
+						row_group.body_more = []
+						row_group.body_more.push(row.body)
+					else if row_group.body_more.length < 3
+						row_group.body_more.push(row.body)
 					else
-						last_row.more += 1
-					last_row.feed_id = row.date_added
+						row_group.more ?= 0
+						row_group.more += 1
+					row_group.feed_id = row.date_added
 				else
 					row.feed_id ?= row.date_added
 					@feeds.push(row)
+					row_group = row
 				last_row = row
-
 			Page.projector.scheduleRender()
 
 
