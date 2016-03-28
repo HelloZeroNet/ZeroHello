@@ -49,6 +49,7 @@ class Head extends Class
 
 	handleUpdateZeronetClick: =>
 		Page.cmd "wrapperConfirm", ["Update to latest development version?", "Update ZeroNet"], =>
+			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes."]
 			Page.cmd "serverUpdate"
 			@log "Updating..."
 
