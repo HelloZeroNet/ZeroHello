@@ -1,6 +1,6 @@
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Promise.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Promise.coffee ---- */
 
 
 (function() {
@@ -104,7 +104,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Property.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Property.coffee ---- */
 
 
 (function() {
@@ -115,7 +115,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/maquette.js ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/maquette.js ---- */
 
 
 (function (global) {
@@ -1117,7 +1117,7 @@
 
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Animation.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Animation.coffee ---- */
 
 
 (function() {
@@ -1232,7 +1232,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Class.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Class.coffee ---- */
 
 
 (function() {
@@ -1289,7 +1289,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Dollar.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Dollar.coffee ---- */
 
 
 (function() {
@@ -1302,7 +1302,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ItemList.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ItemList.coffee ---- */
 
 
 (function() {
@@ -1355,7 +1355,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Menu.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Menu.coffee ---- */
 
 
 (function() {
@@ -1486,7 +1486,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
 
 
 (function() {
@@ -1513,7 +1513,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
 
 
 (function() {
@@ -1542,7 +1542,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Text.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Text.coffee ---- */
 
 
 (function() {
@@ -1610,12 +1610,12 @@
     Text.prototype.getSiteUrl = function(address) {
       if (window.is_proxy) {
         if (__indexOf.call(address, ".") >= 0) {
-          return "http://" + address;
+          return "http://" + address + "/";
         } else {
-          return "http://zero/" + address;
+          return "http://zero/" + address + "/";
         }
       } else {
-        return "/" + address;
+        return "/" + address + "/";
       }
     };
 
@@ -1734,7 +1734,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Time.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Time.coffee ---- */
 
 
 (function() {
@@ -1802,7 +1802,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
 
 
 (function() {
@@ -1934,7 +1934,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
 
 
 (function() {
@@ -1950,6 +1950,7 @@
     function Dashboard() {
       this.render = __bind(this.render, this);
       this.handleLogoutClick = __bind(this.handleLogoutClick, this);
+      this.handleDonateClick = __bind(this.handleDonateClick, this);
       this.handleMultiuserClick = __bind(this.handleMultiuserClick, this);
       this.handlePortRecheckClick = __bind(this.handlePortRecheckClick, this);
       this.handlePortClick = __bind(this.handlePortClick, this);
@@ -1959,6 +1960,7 @@
       this.menu_tor = new Menu();
       this.menu_port = new Menu();
       this.menu_multiuser = new Menu();
+      this.menu_donate = new Menu();
       this.port_checking = false;
     }
 
@@ -1977,6 +1979,7 @@
       if (this.getTorTitle() !== "OK") {
         this.menu_tor.items.push(["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
       }
+      this.menu_tor.items.push(["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
       if (this.getTorTitle() === "OK") {
         this.menu_tor.items.push(["---"]);
         if (this.isTorAlways()) {
@@ -2048,6 +2051,13 @@
       return false;
     };
 
+    Dashboard.prototype.handleDonateClick = function() {
+      this.menu_donate.items = [];
+      this.menu_donate.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
+      this.menu_donate.toggle();
+      return false;
+    };
+
     Dashboard.prototype.handleLogoutClick = function() {
       return Page.cmd("uiLogout");
     };
@@ -2056,7 +2066,11 @@
       var tor_title;
       if (Page.server_info) {
         tor_title = this.getTorTitle();
-        return h("div#Dashboard", Page.server_info.multiuser ? h("a.port.dashboard-item.multiuser", {
+        return h("div#Dashboard", h("a.port.dashboard-item.donate", {
+          "href": "#Donate",
+          onmousedown: this.handleDonateClick,
+          onclick: Page.returnFalse
+        }, [h("div.icon-heart")]), this.menu_donate.render(".menu-donate"), Page.server_info.multiuser ? h("a.port.dashboard-item.multiuser", {
           href: "#Multiuser",
           onmousedown: this.handleMultiuserClick,
           onclick: Page.returnFalse
@@ -2094,7 +2108,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
 
 
 (function() {
@@ -2124,7 +2138,7 @@
     FeedList.prototype.update = function() {
       return Page.cmd("feedQuery", [], (function(_this) {
         return function(rows) {
-          var last_row, row, _i, _len;
+          var last_row, row, row_group, _i, _len;
           _this.feeds = [];
           if (!rows) {
             return false;
@@ -2132,31 +2146,33 @@
           rows.sort(function(a, b) {
             return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added + (b.type === "mention" ? 1 : 0);
           });
+          row_group = {};
           last_row = {};
           rows.reverse();
           for (_i = 0, _len = rows.length; _i < _len; _i++) {
             row = rows[_i];
-            if (last_row.title === row.title && last_row.body === row.body && last_row.date_added === row.date_added) {
+            if (last_row.body === row.body && last_row.date_added === row.date_added) {
               continue;
             }
-            if (last_row.title === row.title && last_row.type === row.type) {
-              if (last_row.more == null) {
-                last_row.more = 0;
-              }
-              if (last_row.body_more == null) {
-                last_row.body_more = [];
-              }
-              if (last_row.body_more.length < 3) {
-                last_row.body_more.push(row.body);
+            if (row_group.title === row.title && row_group.type === row.type) {
+              if (row_group.body_more == null) {
+                row_group.body_more = [];
+                row_group.body_more.push(row.body);
+              } else if (row_group.body_more.length < 3) {
+                row_group.body_more.push(row.body);
               } else {
-                last_row.more += 1;
+                if (row_group.more == null) {
+                  row_group.more = 0;
+                }
+                row_group.more += 1;
               }
-              last_row.feed_id = row.date_added;
+              row_group.feed_id = row.date_added;
             } else {
               if (row.feed_id == null) {
                 row.feed_id = row.date_added;
               }
               _this.feeds.push(row);
+              row_group = row;
             }
             last_row = row;
           }
@@ -2207,7 +2223,7 @@
           ]), h("div.circle", {
             style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
           }), h("span.type", [this.formatType(feed.type)]), h("a.title", {
-            href: site.getHref() + "/" + feed.url
+            href: site.getHref() + feed.url
           }, [feed.title]), h("div.body", {
             key: feed.body,
             enterAnimation: Animation.slideDown,
@@ -2273,7 +2289,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
 
 
 (function() {
@@ -2319,7 +2335,6 @@
       this.menu_settings.items.push(["Order sites by peers", this.handleOrderbyPeers, orderby === "peers"]);
       this.menu_settings.items.push(["Order sites by update time", this.handleOrderbyModified, orderby === "modified"]);
       this.menu_settings.items.push(["---"]);
-      this.menu_settings.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
       if (this.menu_settings.visible) {
@@ -2366,6 +2381,7 @@
     Head.prototype.handleUpdateZeronetClick = function() {
       return Page.cmd("wrapperConfirm", ["Update to latest development version?", "Update ZeroNet"], (function(_this) {
         return function() {
+          Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes."]);
           Page.cmd("serverUpdate");
           return _this.log("Updating...");
         };
@@ -2405,7 +2421,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
 
 
 (function() {
@@ -2544,7 +2560,7 @@
       if (this.row.settings.own) {
         Page.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
       } else {
-        Page.cmd("wrapperConfirm", ["Are you sure you sure? <b>" + this.row.content.title + "</b>", "Delete"], (function(_this) {
+        Page.cmd("wrapperConfirm", ["Are you sure? <b>" + this.row.content.title + "</b>", "Delete"], (function(_this) {
           return function(confirmed) {
             if (confirmed) {
               Page.cmd("siteDelete", {
@@ -2637,7 +2653,7 @@
 }).call(this);
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
 (function() {
@@ -2653,11 +2669,14 @@
       this.onSiteInfo = __bind(this.onSiteInfo, this);
       this.render = __bind(this.render, this);
       this.reorder = __bind(this.reorder, this);
+      this.reorderTimer = __bind(this.reorderTimer, this);
       this.item_list = new ItemList(Site, "address");
       this.sites = this.item_list.items;
       this.sites_byaddress = this.item_list.items_bykey;
       this.inactive_demo_sites = null;
       this.loaded = false;
+      this.schedule_reorder = false;
+      setInterval(this.reorderTimer, 10000);
       Page.on_local_storage.then((function(_this) {
         return function() {
           _this.update();
@@ -2668,8 +2687,27 @@
       })(this));
     }
 
+    SiteList.prototype.reorderTimer = function() {
+      if (!this.schedule_reorder) {
+        return;
+      }
+      if (!document.querySelector('.left:hover') && !document.querySelector(".working")) {
+        this.reorder();
+        return this.schedule_reorder = false;
+      }
+    };
+
     SiteList.prototype.reorder = function() {
-      return this.update();
+      if (Page.local_storage.sites_orderby === "modified") {
+        this.item_list.items.sort(function(a, b) {
+          return b.row.settings.modified - a.row.settings.modified;
+        });
+      } else {
+        this.item_list.items.sort(function(a, b) {
+          return Math.max(b.row.peers, b.row.settings.peers) - Math.max(a.row.peers, a.row.settings.peers);
+        });
+      }
+      return Page.projector.scheduleRender();
     };
 
     SiteList.prototype.update = function() {
@@ -2809,6 +2847,7 @@
       if ((_ref = this.item_list.items_bykey[site_info.address]) != null) {
         _ref.setRow(site_info);
       }
+      this.schedule_reorder = true;
       return Page.projector.scheduleRender();
     };
 
@@ -2822,7 +2861,7 @@
 
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
+/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
 
 
 (function() {

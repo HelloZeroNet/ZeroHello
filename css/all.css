@@ -154,6 +154,10 @@
 #Dashboard .menu { top: 47px }
 #Dashboard .menu-tor .menu-item { white-space: nowrap; }
 #Dashboard .menu-port .menu-item { white-space: nowrap; }
+#Dashboard .menu-donate .menu-item { white-space: nowrap; }
+#Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
+#Dashboard .dashboard-item.donate:hover .icon-heart { -webkit-transform: scale(1.2) ; -moz-transform: scale(1.2) ; -o-transform: scale(1.2) ; -ms-transform: scale(1.2) ; transform: scale(1.2)  }
+#Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; content: "";
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; -webkit-border-radius: 60px; -moz-border-radius: 60px; -o-border-radius: 60px; -ms-border-radius: 60px; border-radius: 60px ; position: absolute; margin-left: -32px; margin-top: -2px;
@@ -226,7 +230,7 @@
 
 
 body { background-color: #EDF2F5; font-family: Roboto; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px }
-body.loaded { height: auto; overflow: auto }
+body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
 
@@ -312,3 +316,10 @@ h1 { font-family: 'Text Me One', sans-serif }
 	display: inline-block; width: 10px; height: 12px; vertical-align: -2px; margin-right: 4px;
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==);
 }
+
+.icon-heart { position: absolute; width: 17px; height: 13px; margin-top: 5px; margin-left: -8px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+.icon-heart:before, .icon-heart:after {
+	position: absolute; content: ""; left: 8px; top: 0; width: 8px; height: 13px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ;
+	background: #D1D3D5; /*#FA6C8D;*/ /*border-radius: 25px 25px 0 0;*/ -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -o-transform: rotate(-45deg); -ms-transform: rotate(-45deg); transform: rotate(-45deg) ; transform-origin: 0 100%
+}
+.icon-heart:after { left: 0; -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg) ; transform-origin :100% 100% }
