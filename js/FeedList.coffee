@@ -68,7 +68,7 @@ class FeedList extends Class
 				]),
 				h("div.circle", {style: "border-color: #{Text.toColor(feed.type+site.row.address, 60, 60)}"}),
 				h("span.type", [@formatType(feed.type)]),
-				h("a.title", {href: site.getHref()+"/"+feed.url}, [feed.title]),
+				h("a.title", {href: site.getHref()+feed.url}, [feed.title]),
 				h("div.body", {key: feed.body, enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [@formatBody(feed.body, feed.type)])
 				if feed.body_more  # Display comments
 					feed.body_more.map (body_more) =>

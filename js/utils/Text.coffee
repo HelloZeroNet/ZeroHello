@@ -40,11 +40,11 @@ class Text
 	getSiteUrl: (address) ->
 		if window.is_proxy
 			if "." in address # Domain
-				return "http://"+address
+				return "http://"+address+"/"
 			else
-				return "http://zero/"+address
+				return "http://zero/"+address+"/"
 		else
-			return "/"+address
+			return "/"+address+"/"
 
 
 	fixReply: (text) ->
