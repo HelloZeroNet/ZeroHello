@@ -26,10 +26,11 @@ class Menu
 	storeNode: (node) =>
 		@node = node
 		# Animate visible
-		node.className = node.className.replace("visible", "")
-		setTimeout (->
-			node.className += " visible"
-		), 10
+		if @visible
+			node.className = node.className.replace("visible", "")
+			setTimeout (->
+				node.className += " visible"
+			), 10
 
 	handleClick: (e) =>
 		keep_menu = false

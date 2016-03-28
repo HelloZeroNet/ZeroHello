@@ -1406,10 +1406,12 @@
 
     Menu.prototype.storeNode = function(node) {
       this.node = node;
-      node.className = node.className.replace("visible", "");
-      return setTimeout((function() {
-        return node.className += " visible";
-      }), 10);
+      if (this.visible) {
+        node.className = node.className.replace("visible", "");
+        return setTimeout((function() {
+          return node.className += " visible";
+        }), 10);
+      }
     };
 
     Menu.prototype.handleClick = function(e) {
@@ -1484,6 +1486,7 @@
   });
 
 }).call(this);
+
 
 
 /* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
@@ -2653,6 +2656,7 @@
 }).call(this);
 
 
+
 /* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
@@ -2858,7 +2862,6 @@
   window.SiteList = SiteList;
 
 }).call(this);
-
 
 
 /* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
