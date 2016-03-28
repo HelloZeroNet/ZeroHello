@@ -3,6 +3,7 @@ class Dashboard extends Class
 		@menu_tor = new Menu()
 		@menu_port = new Menu()
 		@menu_multiuser = new Menu()
+		@menu_donate = new Menu()
 		@port_checking = false
 
 	isTorAlways: ->
@@ -66,6 +67,13 @@ class Dashboard extends Class
 		@menu_multiuser.toggle()
 		return false
 
+	handleDonateClick: =>
+		@menu_donate.items = []
+		@menu_donate.items.push ["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
+
+		@menu_donate.toggle()
+		return false
+
 	handleLogoutClick: =>
 		Page.cmd "uiLogout"
 
@@ -73,6 +81,10 @@ class Dashboard extends Class
 		if Page.server_info
 			tor_title = @getTorTitle()
 			h("div#Dashboard",
+				# Donate
+				h("a.port.dashboard-item.donate", {"href": "#Donate", onmousedown: @handleDonateClick, onclick: Page.returnFalse}, [h("div.icon-heart")]),
+				@menu_donate.render(".menu-donate")
+
 				# Multiuser
 				if Page.server_info.multiuser
 					h("a.port.dashboard-item.multiuser", {href: "#Multiuser", onmousedown: @handleMultiuserClick, onclick: Page.returnFalse}, [

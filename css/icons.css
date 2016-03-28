@@ -7,3 +7,10 @@
 	display: inline-block; width: 10px; height: 12px; vertical-align: -2px; margin-right: 4px;
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAMAAABstdySAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMADAIb8DMPt2MI6dTLx76nnREnEhipAAAATElEQVQI1yXLyREAMQgDQYHvvVf5B2sZz4cuKKD+Uhwru6maNDJNOx5Ao4GQP7B6MBF0BI37SMYWO+FZdqt8YZmhvF5PqmtAeek9aU7IwwMHq3GJrQAAAABJRU5ErkJggg==);
 }
+
+.icon-heart { position: absolute; width: 17px; height: 13px; margin-top: 5px; margin-left: -8px; transition: all 0.3s }
+.icon-heart:before, .icon-heart:after {
+	position: absolute; content: ""; left: 8px; top: 0; width: 8px; height: 13px; transition: all 0.3s;
+	background: #D1D3D5; /*#FA6C8D;*/ /*border-radius: 25px 25px 0 0;*/ transform: rotate(-45deg); transform-origin: 0 100%
+}
+.icon-heart:after { left: 0; transform: rotate(45deg); transform-origin :100% 100% }
