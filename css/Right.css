@@ -8,6 +8,7 @@
 	text-decoration: none; margin: 5px; padding: 10px 20px; border-radius: 40px; display: inline-block;
 	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: bold; background-color: white;
 }
+#Dashboard .dashboard-item:active { transform: translateY(1px); }
 #Dashboard .dashboard-item .status-ok { color: #2ecc71; }
 #Dashboard .dashboard-item .status-warning { color: #E7A43C; }
 #Dashboard .dashboard-item .status-bad { color: #e74c3c; }
@@ -17,6 +18,7 @@
 #Dashboard .menu-tor .menu-item { white-space: nowrap; }
 #Dashboard .menu-port .menu-item { white-space: nowrap; }
 #Dashboard .menu-donate .menu-item { white-space: nowrap; }
+#Dashboard .dashboard-item.newversion { background-color: #35CD76; color: white; }
 #Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
 #Dashboard .dashboard-item.donate:hover .icon-heart { transform: scale(1.2) }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }

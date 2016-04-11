@@ -1,6 +1,6 @@
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Animation.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Animation.css ---- */
 
 
 .animate { -webkit-transition: all 0.3s ease-out !important; -moz-transition: all 0.3s ease-out !important; -o-transition: all 0.3s ease-out !important; -ms-transition: all 0.3s ease-out !important; transition: all 0.3s ease-out !important ; }
@@ -47,7 +47,7 @@
 
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Left.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Left.css ---- */
 
 
 .left {
@@ -112,7 +112,7 @@
 
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Menu.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Menu.css ---- */
 
 
 .menu {
@@ -133,7 +133,7 @@
 }
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Right.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Right.css ---- */
 
 
 .right {
@@ -146,6 +146,7 @@
 	text-decoration: none; margin: 5px; padding: 10px 20px; -webkit-border-radius: 40px; -moz-border-radius: 40px; -o-border-radius: 40px; -ms-border-radius: 40px; border-radius: 40px ; display: inline-block;
 	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: bold; background-color: white;
 }
+#Dashboard .dashboard-item:active { -webkit-transform: translateY(1px); -moz-transform: translateY(1px); -o-transform: translateY(1px); -ms-transform: translateY(1px); transform: translateY(1px) ; }
 #Dashboard .dashboard-item .status-ok { color: #2ecc71; }
 #Dashboard .dashboard-item .status-warning { color: #E7A43C; }
 #Dashboard .dashboard-item .status-bad { color: #e74c3c; }
@@ -155,6 +156,7 @@
 #Dashboard .menu-tor .menu-item { white-space: nowrap; }
 #Dashboard .menu-port .menu-item { white-space: nowrap; }
 #Dashboard .menu-donate .menu-item { white-space: nowrap; }
+#Dashboard .dashboard-item.newversion { background-color: #35CD76; color: white; }
 #Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
 #Dashboard .dashboard-item.donate:hover .icon-heart { -webkit-transform: scale(1.2) ; -moz-transform: scale(1.2) ; -o-transform: scale(1.2) ; -ms-transform: scale(1.2) ; transform: scale(1.2)  }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
@@ -226,7 +228,7 @@
 }
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/ZeroHello.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/ZeroHello.css ---- */
 
 
 body { background-color: #EDF2F5; font-family: Roboto; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px }
@@ -251,7 +253,7 @@ h1 { font-family: 'Text Me One', sans-serif }
 .heart { color: #af3bff; font-family: Verdana; }
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/fonts.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/fonts.css ---- */
 
 
 /* Base64 encoder: http://www.motobit.com/util/base64-decoder-encoder.asp */
@@ -304,7 +306,7 @@ h1 { font-family: 'Text Me One', sans-serif }
 }
 
 
-/* ---- data/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/icons.css ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/icons.css ---- */
 
 
 /* CSS icons (base on: http://one-div.com/) */

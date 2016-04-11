@@ -1,6 +1,6 @@
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Promise.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Promise.coffee ---- */
 
 
 (function() {
@@ -104,7 +104,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Property.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Property.coffee ---- */
 
 
 (function() {
@@ -115,7 +115,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/maquette.js ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/maquette.js ---- */
 
 
 (function (global) {
@@ -1117,7 +1117,7 @@
 
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Animation.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Animation.coffee ---- */
 
 
 (function() {
@@ -1232,7 +1232,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Class.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Class.coffee ---- */
 
 
 (function() {
@@ -1289,7 +1289,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Dollar.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Dollar.coffee ---- */
 
 
 (function() {
@@ -1302,7 +1302,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ItemList.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ItemList.coffee ---- */
 
 
 (function() {
@@ -1355,7 +1355,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Menu.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Menu.coffee ---- */
 
 
 (function() {
@@ -1488,8 +1488,7 @@
 }).call(this);
 
 
-
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
 
 
 (function() {
@@ -1516,7 +1515,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
 
 
 (function() {
@@ -1545,7 +1544,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Text.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Text.coffee ---- */
 
 
 (function() {
@@ -1737,7 +1736,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Time.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Time.coffee ---- */
 
 
 (function() {
@@ -1805,7 +1804,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
 
 
 (function() {
@@ -1937,7 +1936,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
 
 
 (function() {
@@ -1952,6 +1951,7 @@
 
     function Dashboard() {
       this.render = __bind(this.render, this);
+      this.handleNewversionClick = __bind(this.handleNewversionClick, this);
       this.handleLogoutClick = __bind(this.handleLogoutClick, this);
       this.handleDonateClick = __bind(this.handleDonateClick, this);
       this.handleMultiuserClick = __bind(this.handleMultiuserClick, this);
@@ -1960,11 +1960,13 @@
       this.handleDisableAlwaysTorClick = __bind(this.handleDisableAlwaysTorClick, this);
       this.handleEnableAlwaysTorClick = __bind(this.handleEnableAlwaysTorClick, this);
       this.handleTorClick = __bind(this.handleTorClick, this);
+      this.menu_newversion = new Menu();
       this.menu_tor = new Menu();
       this.menu_port = new Menu();
       this.menu_multiuser = new Menu();
       this.menu_donate = new Menu();
       this.port_checking = false;
+      this.latest_version = "0.3.7";
     }
 
     Dashboard.prototype.isTorAlways = function() {
@@ -2065,11 +2067,27 @@
       return Page.cmd("uiLogout");
     };
 
+    Dashboard.prototype.handleNewversionClick = function() {
+      this.menu_newversion.items = [];
+      this.menu_newversion.items.push([
+        "Update and restart ZeroNet", (function() {
+          Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]);
+          return Page.cmd("serverUpdate");
+        })
+      ]);
+      this.menu_newversion.toggle();
+      return false;
+    };
+
     Dashboard.prototype.render = function() {
       var tor_title;
       if (Page.server_info) {
         tor_title = this.getTorTitle();
-        return h("div#Dashboard", h("a.port.dashboard-item.donate", {
+        return h("div#Dashboard", parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(this.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
+          href: "#Update",
+          onmousedown: this.handleNewversionClick,
+          onclick: Page.returnFalse
+        }, "New ZeroNet version: " + this.latest_version) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
           "href": "#Donate",
           onmousedown: this.handleDonateClick,
           onclick: Page.returnFalse
@@ -2111,7 +2129,8 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
 
 
 (function() {
@@ -2292,7 +2311,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
 
 
 (function() {
@@ -2384,7 +2403,7 @@
     Head.prototype.handleUpdateZeronetClick = function() {
       return Page.cmd("wrapperConfirm", ["Update to latest development version?", "Update ZeroNet"], (function(_this) {
         return function() {
-          Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes."]);
+          Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]);
           Page.cmd("serverUpdate");
           return _this.log("Updating...");
         };
@@ -2424,7 +2443,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
 
 
 (function() {
@@ -2656,8 +2675,7 @@
 }).call(this);
 
 
-
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
 (function() {
@@ -2864,7 +2882,7 @@
 }).call(this);
 
 
-/* ---- data-live/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
 
 
 (function() {
