@@ -1966,7 +1966,6 @@
       this.menu_multiuser = new Menu();
       this.menu_donate = new Menu();
       this.port_checking = false;
-      this.latest_version = "0.3.7";
     }
 
     Dashboard.prototype.isTorAlways = function() {
@@ -2083,11 +2082,11 @@
       var tor_title;
       if (Page.server_info) {
         tor_title = this.getTorTitle();
-        return h("div#Dashboard", parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(this.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
+        return h("div#Dashboard", parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
-        }, "New ZeroNet version: " + this.latest_version) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
+        }, "New ZeroNet version: " + Page.latest_version) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
           "href": "#Donate",
           onmousedown: this.handleDonateClick,
           onclick: Page.returnFalse
@@ -2127,7 +2126,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
@@ -2336,9 +2334,7 @@
     }
 
     Head.prototype.formatUpdateInfo = function() {
-      var version_num;
-      version_num = parseInt(Page.server_info.version.replace(/\./g, "0"));
-      if (version_num < 36) {
+      if (parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))) {
         return "New version avalible!";
       } else {
         return "Up to date!";
@@ -2401,7 +2397,7 @@
     };
 
     Head.prototype.handleUpdateZeronetClick = function() {
-      return Page.cmd("wrapperConfirm", ["Update to latest development version?", "Update ZeroNet"], (function(_this) {
+      return Page.cmd("wrapperConfirm", ["Update to latest development version?", "Update ZeroNet " + Page.latest_version], (function(_this) {
         return function() {
           Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]);
           Page.cmd("serverUpdate");
@@ -2910,7 +2906,8 @@
       this.address = null;
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
-      return this.local_storage = null;
+      this.local_storage = null;
+      return this.latest_version = "0.3.7";
     };
 
     ZeroHello.prototype.createProjector = function() {

@@ -3,8 +3,7 @@ class Head extends Class
 		@menu_settings = new Menu()
 
 	formatUpdateInfo: ->
-		version_num = parseInt(Page.server_info.version.replace /\./g, "0")
-		if version_num < 36
+		if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
 			return "New version avalible!"
 		else
 			return "Up to date!"
@@ -48,7 +47,7 @@ class Head extends Class
 		return true
 
 	handleUpdateZeronetClick: =>
-		Page.cmd "wrapperConfirm", ["Update to latest development version?", "Update ZeroNet"], =>
+		Page.cmd "wrapperConfirm", ["Update to latest development version?", "Update ZeroNet #{Page.latest_version}"], =>
 			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
 			Page.cmd "serverUpdate"
 			@log "Updating..."

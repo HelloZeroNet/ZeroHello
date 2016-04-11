@@ -7,7 +7,6 @@ class Dashboard extends Class
 		@menu_donate = new Menu()
 
 		@port_checking = false
-		@latest_version = "0.3.7"
 
 	isTorAlways: ->
 		return Page.server_info.fileserver_ip == "127.0.0.1"
@@ -96,8 +95,8 @@ class Dashboard extends Class
 			tor_title = @getTorTitle()
 			h("div#Dashboard",
 				# Update
-				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(@latest_version.replace(".", "0"))
-					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{@latest_version}")
+				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
+					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")
 				@menu_newversion.render(".menu-newversion")
 
 				# Donate
