@@ -14,3 +14,8 @@
 	background: #D1D3D5; /*#FA6C8D;*/ /*border-radius: 25px 25px 0 0;*/ transform: rotate(-45deg); transform-origin: 0 100%
 }
 .icon-heart:after { left: 0; transform: rotate(45deg); transform-origin :100% 100% }
+.icon-magnifier {
+	position: absolute; display: inline-block; background: #fff; border-radius: 30px; height: 6px; width: 6px; border: 2px solid #AAA;
+	margin-left: 14px; margin-top: 15px; pointer-events: none
+}
+.icon-magnifier:after { content: ""; height: 2px; width: 6px; background: #AAA; position: absolute; top: 7px; left: 5px; transform: rotate(45deg); }
