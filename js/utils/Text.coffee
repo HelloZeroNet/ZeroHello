@@ -120,6 +120,14 @@ class Text
 			back.push("#{encodeURIComponent(key)}=#{encodeURIComponent(val)}")
 		return back.join("&")
 
+	highlight: (text, search) ->
+		parts = text.split(RegExp(search, "i"))
+		back = []
+		for part, i in parts
+			back.push(part)
+			if i < parts.length-1
+				back.push(h("span.highlight", {key: i}, search))
+		return back
 
 window.is_proxy = (document.location.host == "zero" or window.location.pathname == "/")
 window.Text = new Text()
