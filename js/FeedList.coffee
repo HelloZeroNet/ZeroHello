@@ -1,6 +1,10 @@
 class FeedList extends Class
 	constructor: ->
 		@feeds = null
+		@searching = null
+		@searched = null
+		@searched_info = null
+		@loading = false
 		Page.on_local_storage.then =>
 			@update()
 		@
@@ -37,39 +41,53 @@ class FeedList extends Class
 			last_row = row
 		Page.projector.scheduleRender()
 
-	update: =>
+
+	update: (cb) =>
 		Page.cmd "feedQuery", [], (rows) =>
+			@displayRows(rows)
+			if cb then cb()
+
+	search: (search, cb) =>
+		if Page.server_info.rev < 1230
+			@displayRows([])
+			if cb then cb()
+			return
+		@loading = true
+		Page.cmd "feedSearch", search, (res) =>
+			@loading = false
+			@displayRows(res["rows"], search)
+			delete res["rows"]
+			@searched_info = res
+			@searched = search
+			if cb then cb()
+
+	handleSearchInput: (e) =>
+		if @searching then delay = 400 else delay = 600  # First char delay is longer
+		@searching = e.target.value
+
+		if Page.server_info.rev < 1230
 			@feeds = []
-			if not rows
-				return false
 
-			rows.sort (a, b) ->
-				return a.date_added + (if a.type == "mention" then 1 else 0) - b.date_added + (if b.type == "mention" then 1 else 0)  # Prefer mention
+		if e.target.value == ""  # No delay when returning to newsfeed
+			delay = 1
+		clearInterval @input_timer
+		setTimeout =>
+			@loading = true
 
-			row_group = {}
-			last_row = {}
-			rows.reverse()
-			for row in rows
-				if last_row.body == row.body and last_row.date_added == row.date_added
-					continue  # Duplicate (eg. also signed up for comments and mentions)
-
-				if row_group.title == row.title and row_group.type == row.type
-					if not row_group.body_more?
-						row_group.body_more = []
-						row_group.body_more.push(row.body)
-					else if row_group.body_more.length < 3
-						row_group.body_more.push(row.body)
-					else
-						row_group.more ?= 0
-						row_group.more += 1
-					row_group.feed_id = row.date_added
+		# Delay calls to reduce server load
+		@input_timer = setTimeout ( =>
+			RateLimitCb delay, (cb_done) =>
+				@loading = false
+				if @searching
+					@search @searching, =>
+						cb_done()
 				else
-					row.feed_id ?= row.date_added
-					@feeds.push(row)
-					row_group = row
-				last_row = row
-			Page.projector.scheduleRender()
-
+					@update =>
+						cb_done()
+						@searching = null
+						@searched = null
+		), delay
+		return false
 
 	formatBody: (body, type) ->
 		body = body.replace(/[\n\r]+/, "\n")  # Remove empty lines
