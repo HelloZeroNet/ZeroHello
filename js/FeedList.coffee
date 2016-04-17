@@ -89,18 +89,44 @@ class FeedList extends Class
 		), delay
 		return false
 
+	formatTitle: (title) ->
+		if @searching
+			return Text.highlight(title, @searching)
+		else
+			return title
+
 	formatBody: (body, type) ->
 		body = body.replace(/[\n\r]+/, "\n")  # Remove empty lines
 		if type == "comment" or type == "mention"
+			# Display Comment
 			username = body.match(/(.*?)@/)[1] + " › "  # Extract commenter's username
 			body = body.replace(/> \[(.*?)\].*/g, "$1: ")  # Replace original message quote
 			body = body.replace(/^[ ]*>.*/gm, "")  # Remove quotes
 			body = body.replace(/.*?@.*?:/, "")  # Remove commenter from body
 			body = body.replace(/\n/g, " ")
 			body = body.trim()
-			return [h("b", [username]), body[0..200]]
+
+			# Highligh matched search parts
+			if @searching
+				body = Text.highlight(body, @searching)
+				if body[0].length > 60 and body.length > 1
+					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
+				return [h("b", Text.highlight(username, @searching)), body]
+			else
+				body = body[0..200]
+				return [h("b", [username]), body]
 		else
-			return body[0..200]
+			# Display post
+			body = body.replace(/\n/g, " ")
+
+			# Highligh matched search parts
+			if @searching
+				body = Text.highlight(body, @searching)
+				if body[0].length > 60
+					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
+			else
+				body = body[0..200]
+			return body
 
 	formatType: (type) ->
 		if type == "comment"
@@ -205,7 +231,6 @@ class FeedList extends Class
 			else
 				@renderWelcome()
 		)
-
 
 	onSiteInfo: (site_info) =>
 		if site_info.event?[0] == "file_done" and site_info.event?[1].endsWith(".json") and not site_info.event?[1].endsWith("content.json")
