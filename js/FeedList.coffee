@@ -171,10 +171,25 @@ class FeedList extends Class
 		h("div",
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
-			else if @feeds.length > 0
+			else if @feeds.length > 0 or @searching != null
 				[
 					h("div.feeds-line"),
-					h("div.FeedList", @feeds[0..30].map(@renderFeed))
+					h("div.feeds-search", {classes: {"searching": @searching}},
+						h("div.icon-magnifier"),
+						if @loading
+							h("div.loader", {enterAnimation: Animation.show, exitAnimation: Animation.hide}, h("div.arc"))
+						h("input", {type: "text", placeholder: "Search in connected sites", value: @searching, onkeyup: @handleSearchKeyup, oninput: @handleSearchInput, afterCreate: @storeNodeSearch}),
+						if @searched and @searched_info and not @loading
+							h("div.search-info",
+								{enterAnimation: Animation.show, exitAnimation: Animation.hide},
+								"#{@searched_info.num} results from #{@searched_info.sites} sites in #{@searched_info.taken.toFixed(2)}s"
+							)
+						if Page.server_info.rev < 1230 and @searching
+							h("div.search-noresult", {enterAnimation: Animation.show}, "You need to update your ZeroNet client to use the search feature!")
+						else if @feeds.length == 0 and @searched
+							h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
+					),
+					h("div.FeedList."+(if @searching != null then "search" else "newsfeed"), {classes: {loading: @loading}}, @feeds[0..30].map(@renderFeed))
 				]
 			else
 				@renderWelcome()
