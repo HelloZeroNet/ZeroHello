@@ -61,6 +61,12 @@ class FeedList extends Class
 			@searched = search
 			if cb then cb()
 
+	# Focus on search input if key pressed an no input on focus
+	storeNodeSearch: (node) =>
+		document.body.onkeypress = =>
+			if document.activeElement?.tagName != "INPUT"
+				node.focus()
+
 	handleSearchInput: (e) =>
 		if @searching then delay = 400 else delay = 600  # First char delay is longer
 		@searching = e.target.value
