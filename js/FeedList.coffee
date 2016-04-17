@@ -209,6 +209,7 @@ class FeedList extends Class
 
 	onSiteInfo: (site_info) =>
 		if site_info.event?[0] == "file_done" and site_info.event?[1].endsWith(".json") and not site_info.event?[1].endsWith("content.json")
-			RateLimit(5000, @update)
+			if not @searching
+				RateLimitCb(5000, @update)
 
 window.FeedList = FeedList
