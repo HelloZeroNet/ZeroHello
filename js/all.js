@@ -1217,6 +1217,20 @@
       });
     };
 
+    Animation.prototype.hide = function(elem, remove_func, props) {
+      var delay, _ref;
+      delay = ((_ref = arguments[arguments.length - 2]) != null ? _ref.delay : void 0) * 1000 || 1;
+      elem.className += " animate";
+      setTimeout((function() {
+        return elem.style.opacity = 0;
+      }), delay);
+      return elem.addEventListener("transitionend", function(e) {
+        if (e.propertyName === "opacity") {
+          return remove_func();
+        }
+      });
+    };
+
     Animation.prototype.addVisibleClass = function(elem, props) {
       return setTimeout(function() {
         return elem.classList.add("visible");
@@ -1515,31 +1529,64 @@
 }).call(this);
 
 
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimitCb.coffee ---- */
 
 
 (function() {
-  var call_after_interval, limits;
+  var calling, last_time,
+    __slice = [].slice;
 
-  limits = {};
+  last_time = {};
 
-  call_after_interval = {};
+  calling = {};
 
-  window.RateLimit = function(interval, fn) {
-    if (!limits[fn]) {
-      call_after_interval[fn] = false;
-      fn();
-      return limits[fn] = setTimeout((function() {
-        if (call_after_interval[fn]) {
-          fn();
+  window.RateLimitCb = function(interval, fn, args) {
+    var cb;
+    if (args == null) {
+      args = [];
+    }
+    cb = function() {
+      var left;
+      left = interval - (Date.now() - last_time[fn]);
+      if (left <= 0) {
+        delete last_time[fn];
+        if (calling[fn]) {
+          RateLimitCb(interval, fn, calling[fn]);
         }
-        delete limits[fn];
-        return delete call_after_interval[fn];
-      }), interval);
+        return delete calling[fn];
+      } else {
+        return setTimeout((function() {
+          delete last_time[fn];
+          if (calling[fn]) {
+            RateLimitCb(interval, fn, calling[fn]);
+          }
+          return delete calling[fn];
+        }), left);
+      }
+    };
+    if (last_time[fn]) {
+      return calling[fn] = args;
     } else {
-      return call_after_interval[fn] = true;
+      last_time[fn] = Date.now();
+      return fn.apply(this, [cb].concat(__slice.call(args)));
     }
   };
+
+
+  /*
+  window.s = Date.now()
+  window.load = (done, num) ->
+    console.log "Loading #{num}...", Date.now()-window.s
+    setTimeout (-> done()), 1000
+  
+  RateLimit 500, window.load, [0] # Called instantly
+  RateLimit 500, window.load, [1]
+  setTimeout (-> RateLimit 500, window.load, [300]), 300
+  setTimeout (-> RateLimit 500, window.load, [600]), 600 # Called after 1000ms
+  setTimeout (-> RateLimit 500, window.load, [1000]), 1000
+  setTimeout (-> RateLimit 500, window.load, [1200]), 1200  # Called after 2000ms
+  setTimeout (-> RateLimit 500, window.load, [3000]), 3000  # Called after 3000ms
+   */
 
 }).call(this);
 
@@ -1723,6 +1770,22 @@
         back.push((encodeURIComponent(key)) + "=" + (encodeURIComponent(val)));
       }
       return back.join("&");
+    };
+
+    Text.prototype.highlight = function(text, search) {
+      var back, i, part, parts, _i, _len;
+      parts = text.split(RegExp(search, "i"));
+      back = [];
+      for (i = _i = 0, _len = parts.length; _i < _len; i = ++_i) {
+        part = parts[i];
+        back.push(part);
+        if (i < parts.length - 1) {
+          back.push(h("span.highlight", {
+            key: i
+          }, search));
+        }
+      }
+      return back;
     };
 
     return Text;
@@ -2145,8 +2208,19 @@
       this.render = __bind(this.render, this);
       this.renderWelcome = __bind(this.renderWelcome, this);
       this.renderFeed = __bind(this.renderFeed, this);
+      this.exitAnimation = __bind(this.exitAnimation, this);
+      this.enterAnimation = __bind(this.enterAnimation, this);
+      this.handleSearchKeyup = __bind(this.handleSearchKeyup, this);
+      this.handleSearchInput = __bind(this.handleSearchInput, this);
+      this.storeNodeSearch = __bind(this.storeNodeSearch, this);
+      this.search = __bind(this.search, this);
       this.update = __bind(this.update, this);
+      this.displayRows = __bind(this.displayRows, this);
       this.feeds = null;
+      this.searching = null;
+      this.searched = null;
+      this.searched_info = null;
+      this.loading = false;
       Page.on_local_storage.then((function(_this) {
         return function() {
           return _this.update();
@@ -2155,50 +2229,148 @@
       this;
     }
 
-    FeedList.prototype.update = function() {
+    FeedList.prototype.displayRows = function(rows, search) {
+      var last_row, row, row_group, _i, _len;
+      this.feeds = [];
+      if (!rows) {
+        return false;
+      }
+      rows.sort(function(a, b) {
+        return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added + (b.type === "mention" ? 1 : 0);
+      });
+      row_group = {};
+      last_row = {};
+      rows.reverse();
+      for (_i = 0, _len = rows.length; _i < _len; _i++) {
+        row = rows[_i];
+        if (last_row.body === row.body && last_row.date_added === row.date_added) {
+          continue;
+        }
+        if (row_group.title === row.title && row_group.type === row.type) {
+          if (row_group.body_more == null) {
+            row_group.body_more = [];
+            row_group.body_more.push(row.body);
+          } else if (row_group.body_more.length < 3) {
+            row_group.body_more.push(row.body);
+          } else {
+            if (row_group.more == null) {
+              row_group.more = 0;
+            }
+            row_group.more += 1;
+          }
+          row_group.feed_id = row.date_added;
+        } else {
+          if (row.feed_id == null) {
+            row.feed_id = row.date_added;
+          }
+          this.feeds.push(row);
+          row_group = row;
+        }
+        last_row = row;
+      }
+      return Page.projector.scheduleRender();
+    };
+
+    FeedList.prototype.update = function(cb) {
       return Page.cmd("feedQuery", [], (function(_this) {
         return function(rows) {
-          var last_row, row, row_group, _i, _len;
-          _this.feeds = [];
-          if (!rows) {
-            return false;
+          _this.displayRows(rows);
+          if (cb) {
+            return cb();
           }
-          rows.sort(function(a, b) {
-            return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added + (b.type === "mention" ? 1 : 0);
-          });
-          row_group = {};
-          last_row = {};
-          rows.reverse();
-          for (_i = 0, _len = rows.length; _i < _len; _i++) {
-            row = rows[_i];
-            if (last_row.body === row.body && last_row.date_added === row.date_added) {
-              continue;
-            }
-            if (row_group.title === row.title && row_group.type === row.type) {
-              if (row_group.body_more == null) {
-                row_group.body_more = [];
-                row_group.body_more.push(row.body);
-              } else if (row_group.body_more.length < 3) {
-                row_group.body_more.push(row.body);
-              } else {
-                if (row_group.more == null) {
-                  row_group.more = 0;
-                }
-                row_group.more += 1;
-              }
-              row_group.feed_id = row.date_added;
-            } else {
-              if (row.feed_id == null) {
-                row.feed_id = row.date_added;
-              }
-              _this.feeds.push(row);
-              row_group = row;
-            }
-            last_row = row;
-          }
-          return Page.projector.scheduleRender();
         };
       })(this));
+    };
+
+    FeedList.prototype.search = function(search, cb) {
+      if (Page.server_info.rev < 1230) {
+        this.displayRows([]);
+        if (cb) {
+          cb();
+        }
+        return;
+      }
+      this.loading = true;
+      return Page.cmd("feedSearch", search, (function(_this) {
+        return function(res) {
+          _this.loading = false;
+          _this.displayRows(res["rows"], search);
+          delete res["rows"];
+          _this.searched_info = res;
+          _this.searched = search;
+          if (cb) {
+            return cb();
+          }
+        };
+      })(this));
+    };
+
+    FeedList.prototype.storeNodeSearch = function(node) {
+      return document.body.onkeypress = (function(_this) {
+        return function() {
+          var _ref;
+          if (((_ref = document.activeElement) != null ? _ref.tagName : void 0) !== "INPUT") {
+            return node.focus();
+          }
+        };
+      })(this);
+    };
+
+    FeedList.prototype.handleSearchInput = function(e) {
+      var delay;
+      if (this.searching) {
+        delay = 400;
+      } else {
+        delay = 600;
+      }
+      this.searching = e.target.value;
+      if (Page.server_info.rev < 1230) {
+        this.feeds = [];
+      }
+      if (e.target.value === "") {
+        delay = 1;
+      }
+      clearInterval(this.input_timer);
+      setTimeout((function(_this) {
+        return function() {
+          return _this.loading = true;
+        };
+      })(this));
+      this.input_timer = setTimeout(((function(_this) {
+        return function() {
+          return RateLimitCb(delay, function(cb_done) {
+            _this.loading = false;
+            if (_this.searching) {
+              return _this.search(_this.searching, function() {
+                return cb_done();
+              });
+            } else {
+              return _this.update(function() {
+                cb_done();
+                _this.searching = null;
+                return _this.searched = null;
+              });
+            }
+          });
+        };
+      })(this)), delay);
+      return false;
+    };
+
+    FeedList.prototype.handleSearchKeyup = function(e) {
+      if (e.keyCode === 27) {
+        e.target.value = "";
+        this.handleSearchInput(e);
+      }
+      return false;
+    };
+
+    FeedList.prototype.formatTitle = function(title) {
+      if (this.searching) {
+        return Text.highlight(title, this.searching);
+      } else {
+        return title;
+      }
     };
 
     FeedList.prototype.formatBody = function(body, type) {
@@ -2211,9 +2383,27 @@
         body = body.replace(/.*?@.*?:/, "");
         body = body.replace(/\n/g, " ");
         body = body.trim();
-        return [h("b", [username]), body.slice(0, 201)];
+        if (this.searching) {
+          body = Text.highlight(body, this.searching);
+          if (body[0].length > 60 && body.length > 1) {
+            body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
+          }
+          return [h("b", Text.highlight(username, this.searching)), body];
+        } else {
+          body = body.slice(0, 201);
+          return [h("b", [username]), body];
+        }
       } else {
-        return body.slice(0, 201);
+        body = body.replace(/\n/g, " ");
+        if (this.searching) {
+          body = Text.highlight(body, this.searching);
+          if (body[0].length > 60) {
+            body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
+          }
+        } else {
+          body = body.slice(0, 201);
+        }
+        return body;
       }
     };
 
@@ -2227,16 +2417,32 @@
       }
     };
 
+    FeedList.prototype.enterAnimation = function(elem, props) {
+      if (this.searching === null) {
+        return Animation.slideDown.apply(this, arguments);
+      } else {
+        return null;
+      }
+    };
+
+    FeedList.prototype.exitAnimation = function(elem, remove_func, props) {
+      if (this.searching === null) {
+        return Animation.slideUp.apply(this, arguments);
+      } else {
+        return remove_func();
+      }
+    };
+
     FeedList.prototype.renderFeed = function(feed) {
       var err, site;
       try {
         site = Page.site_list.item_list.items_bykey[feed.site];
         return h("div.feed." + feed.type, {
           key: feed.site + feed.type + feed.title + feed.feed_id,
-          enterAnimation: Animation.slideDown,
-          exitAnimation: Animation.slideUp
+          enterAnimation: this.enterAnimation,
+          exitAnimation: this.exitAnimation
         }, [
-          h("div.details", {}, [
+          h("div.details", [
             h("a.site", {
               href: site.getHref()
             }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
@@ -2244,16 +2450,16 @@
             style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
           }), h("span.type", [this.formatType(feed.type)]), h("a.title", {
             href: site.getHref() + feed.url
-          }, [feed.title]), h("div.body", {
+          }, [this.formatTitle(feed.title)]), h("div.body", {
             key: feed.body,
-            enterAnimation: Animation.slideDown,
-            exitAnimation: Animation.slideUp
+            enterAnimation: this.enterAnimation,
+            exitAnimation: this.exitAnimation
           }, [this.formatBody(feed.body, feed.type)]), feed.body_more ? feed.body_more.map((function(_this) {
             return function(body_more) {
               return h("div.body", {
                 key: body_more,
-                enterAnimation: Animation.slideDown,
-                exitAnimation: Animation.slideUp
+                enterAnimation: _this.enterAnimation,
+                exitAnimation: _this.exitAnimation
               }, [_this.formatBody(body_more, feed.type)]);
             };
           })(this)) : void 0, feed.more > 0 ? h("a.more", {
@@ -2290,13 +2496,42 @@
       if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded") {
         document.body.className = "loaded";
       }
-      return h("div", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 ? [h("div.feeds-line"), h("div.FeedList", this.feeds.slice(0, 31).map(this.renderFeed))] : this.renderWelcome());
+      return h("div", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
+        h("div.feeds-line"), h("div.feeds-search", {
+          classes: {
+            "searching": this.searching
+          }
+        }, h("div.icon-magnifier"), this.loading ? h("div.loader", {
+          enterAnimation: Animation.show,
+          exitAnimation: Animation.hide
+        }, h("div.arc")) : void 0, h("input", {
+          type: "text",
+          placeholder: "Search in connected sites",
+          value: this.searching,
+          onkeyup: this.handleSearchKeyup,
+          oninput: this.handleSearchInput,
+          afterCreate: this.storeNodeSearch
+        }), this.searched && this.searched_info && !this.loading ? h("div.search-info", {
+          enterAnimation: Animation.show,
+          exitAnimation: Animation.hide
+        }, this.searched_info.num + " results from " + this.searched_info.sites + " sites in " + (this.searched_info.taken.toFixed(2)) + "s") : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
+          enterAnimation: Animation.show
+        }, "You need to update your ZeroNet client to use the search feature!") : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
+          enterAnimation: Animation.show
+        }, "No results for " + this.searched) : void 0), h("div.FeedList." + (this.searching !== null ? "search" : "newsfeed"), {
+          classes: {
+            loading: this.loading
+          }
+        }, this.feeds.slice(0, 31).map(this.renderFeed))
+      ] : this.renderWelcome());
     };
 
     FeedList.prototype.onSiteInfo = function(site_info) {
       var _ref, _ref1, _ref2;
       if (((_ref = site_info.event) != null ? _ref[0] : void 0) === "file_done" && ((_ref1 = site_info.event) != null ? _ref1[1].endsWith(".json") : void 0) && !((_ref2 = site_info.event) != null ? _ref2[1].endsWith("content.json") : void 0)) {
-        return RateLimit(5000, this.update);
+        if (!this.searching) {
+          return RateLimitCb(5000, this.update);
+        }
       }
     };
 
@@ -2307,6 +2542,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
