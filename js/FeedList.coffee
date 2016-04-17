@@ -110,22 +110,33 @@ class FeedList extends Class
 		else
 			return ""
 
+	enterAnimation: (elem, props) =>
+		if @searching == null
+			return Animation.slideDown.apply(this, arguments)
+		else
+			return null
+
+	exitAnimation: (elem, remove_func, props) =>
+		if @searching == null
+			return Animation.slideUp.apply(this, arguments)
+		else
+			remove_func()
 
 	renderFeed: (feed) =>
 		try
 			site = Page.site_list.item_list.items_bykey[feed.site]
-			return h("div.feed."+feed.type, {key: feed.site+feed.type+feed.title+feed.feed_id, enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [
-				h("div.details", {}, [
+			return h("div.feed."+feed.type, {key: feed.site+feed.type+feed.title+feed.feed_id, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [
+				h("div.details", [
 					h("a.site", {href: site.getHref()}, [site.row.content.title]),
 					h("div.added", [Time.since(feed.date_added)])
 				]),
 				h("div.circle", {style: "border-color: #{Text.toColor(feed.type+site.row.address, 60, 60)}"}),
 				h("span.type", [@formatType(feed.type)]),
-				h("a.title", {href: site.getHref()+feed.url}, [feed.title]),
-				h("div.body", {key: feed.body, enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [@formatBody(feed.body, feed.type)])
+				h("a.title", {href: site.getHref()+feed.url}, [@formatTitle(feed.title)]),
+				h("div.body", {key: feed.body, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [@formatBody(feed.body, feed.type)])
 				if feed.body_more  # Display comments
 					feed.body_more.map (body_more) =>
-						h("div.body", {key: body_more, enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [@formatBody(body_more, feed.type)])
+						h("div.body", {key: body_more, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [@formatBody(body_more, feed.type)])
 				if feed.more > 0  # Collapse other types
 					h("a.more", {href: site.getHref()+"/"+feed.url}, ["+#{feed.more} more"])
 			])
