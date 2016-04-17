@@ -85,6 +85,15 @@ class Animation
 			elem.classList.remove("animate")
 			elem.style.opacity = null
 
+	hide: (elem, remove_func, props) ->
+		delay = arguments[arguments.length-2]?.delay*1000 or 1
+		elem.className += " animate"
+		setTimeout (->
+			elem.style.opacity = 0
+		), delay
+		elem.addEventListener "transitionend", (e) ->
+			if e.propertyName == "opacity"
+				remove_func()
 
 	addVisibleClass: (elem, props) ->
 		setTimeout ->
