@@ -95,6 +95,12 @@ class FeedList extends Class
 		), delay
 		return false
 
+	handleSearchKeyup: (e) =>
+		if e.keyCode == 27 # Esc
+			e.target.value = ""
+			@handleSearchInput(e)
+		return false
+
 	formatTitle: (title) ->
 		if @searching
 			return Text.highlight(title, @searching)
