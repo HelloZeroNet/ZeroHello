@@ -217,7 +217,7 @@ class FeedList extends Class
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
 			document.body.className = "loaded"
 
-		h("div",
+		h("div.FeedContainer",
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null
@@ -234,7 +234,7 @@ class FeedList extends Class
 								"#{@searched_info.num} results from #{@searched_info.sites} sites in #{@searched_info.taken.toFixed(2)}s"
 							)
 						if Page.server_info.rev < 1230 and @searching
-							h("div.search-noresult", {enterAnimation: Animation.show}, "You need to update your ZeroNet client to use the search feature!")
+							h("div.search-noresult", {enterAnimation: Animation.show}, ["You need to ", h("a", {href: "#Update", onclick: Page.head.handleUpdateZeronetClick}, "update"), " your ZeroNet client to use the search feature!"])
 						else if @feeds.length == 0 and @searched
 							h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
 					),

@@ -51,6 +51,7 @@ class Head extends Class
 			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
 			Page.cmd "serverUpdate"
 			@log "Updating..."
+		return false
 
 
 	handleShutdownZeronetClick: =>

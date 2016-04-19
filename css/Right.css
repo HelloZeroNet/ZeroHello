@@ -27,11 +27,12 @@
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; border-radius: 60px; position: absolute; margin-left: -32px; margin-top: -2px;
 }*/
 
+.FeedContainer a:active { background-color: rgba(0,0,0,0.05); outline: 2px solid rgba(0,0,0,0.05) }
 .feeds-search { max-width: 820px; box-sizing: border-box; padding-left: 190px; margin-top: 30px; position: relative; margin-right: 50px }
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; transition: all 0.3s; border-radius: 30px }
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
-.search-noresult { text-align: center; margin: 100px; font-family: Roboto; font-weight: 100; font-size: 18px; }
+.search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 .search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; }
 .feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px }
 /*.loader { background: url("../img/loading-ring.gif") no-repeat; width: 28px; height: 28px; position: absolute; right: -30px; top: -30px }*/
