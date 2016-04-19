@@ -2307,8 +2307,11 @@
 
     FeedList.prototype.storeNodeSearch = function(node) {
       return document.body.onkeypress = (function(_this) {
-        return function() {
+        return function(e) {
           var _ref;
+          if ((e.charCode != null) && e.charCode === 0) {
+            return;
+          }
           if (((_ref = document.activeElement) != null ? _ref.tagName : void 0) !== "INPUT") {
             return node.focus();
           }
@@ -2496,7 +2499,7 @@
       if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded") {
         document.body.className = "loaded";
       }
-      return h("div", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
+      return h("div.FeedContainer", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
         h("div.feeds-line"), h("div.feeds-search", {
           classes: {
             "searching": this.searching
@@ -2516,7 +2519,12 @@
           exitAnimation: Animation.hide
         }, this.searched_info.num + " results from " + this.searched_info.sites + " sites in " + (this.searched_info.taken.toFixed(2)) + "s") : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
           enterAnimation: Animation.show
-        }, "You need to update your ZeroNet client to use the search feature!") : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
+        }, [
+          "You need to ", h("a", {
+            href: "#Update",
+            onclick: Page.head.handleUpdateZeronetClick
+          }, "update"), " your ZeroNet client to use the search feature!"
+        ]) : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
           enterAnimation: Animation.show
         }, "No results for " + this.searched) : void 0), h("div.FeedList." + (this.searching !== null ? "search" : "newsfeed"), {
           classes: {
@@ -2633,13 +2641,14 @@
     };
 
     Head.prototype.handleUpdateZeronetClick = function() {
-      return Page.cmd("wrapperConfirm", ["Update to latest development version?", "Update ZeroNet " + Page.latest_version], (function(_this) {
+      Page.cmd("wrapperConfirm", ["Update to latest development version?", "Update ZeroNet " + Page.latest_version], (function(_this) {
         return function() {
           Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]);
           Page.cmd("serverUpdate");
           return _this.log("Updating...");
         };
       })(this));
+      return false;
     };
 
     Head.prototype.handleShutdownZeronetClick = function() {

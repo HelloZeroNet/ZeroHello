@@ -237,11 +237,12 @@
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; -webkit-border-radius: 60px; -moz-border-radius: 60px; -o-border-radius: 60px; -ms-border-radius: 60px; border-radius: 60px ; position: absolute; margin-left: -32px; margin-top: -2px;
 }*/
 
+.FeedContainer a:active { background-color: rgba(0,0,0,0.05); outline: 2px solid rgba(0,0,0,0.05) }
 .feeds-search { max-width: 820px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; padding-left: 190px; margin-top: 30px; position: relative; margin-right: 50px }
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; -webkit-border-radius: 30px ; -moz-border-radius: 30px ; -o-border-radius: 30px ; -ms-border-radius: 30px ; border-radius: 30px  }
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
-.search-noresult { text-align: center; margin: 100px; font-family: Roboto; font-weight: 100; font-size: 18px; }
+.search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 .search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; }
 .feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px }
 /*.loader { background: url("../img/loading-ring.gif") no-repeat; width: 28px; height: 28px; position: absolute; right: -30px; top: -30px }*/
@@ -314,6 +315,8 @@ body { background-color: #EDF2F5; font-family: Roboto; margin: 0px; padding: 0px
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
+a { color: #9760F9 }
+a:hover { text-decoration: none }
 
 .servedby { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 .head, .topright { display: none }
