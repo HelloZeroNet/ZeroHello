@@ -105,7 +105,7 @@ class FeedList extends Class
 		return false
 
 	formatTitle: (title) ->
-		if @searching
+		if @searching and @searching.length > 1
 			return Text.highlight(title, @searching)
 		else
 			return title
@@ -122,7 +122,7 @@ class FeedList extends Class
 			body = body.trim()
 
 			# Highligh matched search parts
-			if @searching
+			if @searching and @searching.length > 1
 				body = Text.highlight(body, @searching)
 				if body[0].length > 60 and body.length > 1
 					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
@@ -135,7 +135,7 @@ class FeedList extends Class
 			body = body.replace(/\n/g, " ")
 
 			# Highligh matched search parts
-			if @searching
+			if @searching and @searching.length > 1
 				body = Text.highlight(body, @searching)
 				if body[0].length > 60
 					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
