@@ -14,7 +14,7 @@ class Time
 			back = "#{Math.round(secs/60/60/24)} days ago"
 		else
 			back = "on "+@date(timestamp)
-		back = back.replace(/1 ([a-z]+)s/, "1 $1") # 1 days ago fix
+		back = back.replace(/^1 ([a-z]+)s/, "1 $1") # 1 days ago fix
 		return back
 
 
