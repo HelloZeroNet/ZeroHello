@@ -71,7 +71,12 @@ class FeedList extends Class
 				node.focus()
 
 	handleSearchInput: (e) =>
-		if @searching then delay = 400 else delay = 600  # First char delay is longer
+		if @searching and @searching.length > 3
+			delay = 100
+		else if @searching
+			delay = 300
+		else
+			delay = 600
 		@searching = e.target.value
 
 		if Page.server_info.rev < 1230
@@ -93,7 +98,8 @@ class FeedList extends Class
 				else
 					@update =>
 						cb_done()
-						@searching = null
+						if not @searching
+							@searching = null
 						@searched = null
 		), delay
 		return false
