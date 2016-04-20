@@ -179,11 +179,11 @@ class FeedList extends Class
 				]),
 				h("div.circle", {style: "border-color: #{Text.toColor(feed.type+site.row.address, 60, 60)}"}),
 				h("span.type", [@formatType(feed.type)]),
-				h("a.title", {href: site.getHref()+feed.url}, [@formatTitle(feed.title)]),
-				h("div.body", {key: feed.body, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [@formatBody(feed.body, feed.type)])
+				h("a.title", {href: site.getHref()+feed.url}, @formatTitle(feed.title)),
+				h("div.body", {key: feed.body, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, @formatBody(feed.body, feed.type))
 				if feed.body_more  # Display comments
 					feed.body_more.map (body_more) =>
-						h("div.body", {key: body_more, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [@formatBody(body_more, feed.type)])
+						h("div.body", {key: body_more, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, @formatBody(body_more, feed.type))
 				if feed.more > 0  # Collapse other types
 					h("a.more", {href: site.getHref()+"/"+feed.url}, ["+#{feed.more} more"])
 			])
