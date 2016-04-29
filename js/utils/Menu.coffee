@@ -52,7 +52,7 @@ class Menu
 			else  # Callback
 				href = "#"+title
 				onclick = @handleClick
-			h("a.menu-item", {href: href, onclick: onclick, target: "_blank", key: title, classes: {"selected": selected}}, [title])
+			h("a.menu-item", {href: href, onclick: onclick, key: title, classes: {"selected": selected}}, [title])
 
 	render: (class_name="") =>
 		if @visible or @node
