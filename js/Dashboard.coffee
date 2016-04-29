@@ -5,6 +5,7 @@ class Dashboard extends Class
 		@menu_port = new Menu()
 		@menu_multiuser = new Menu()
 		@menu_donate = new Menu()
+		@menu_browserwarning = new Menu()
 
 		@port_checking = false
 
@@ -90,10 +91,22 @@ class Dashboard extends Class
 		@menu_newversion.toggle()
 		return false
 
+	handleBrowserwarningClick: =>
+		@menu_browserwarning.items = []
+		@menu_browserwarning.items.push ["Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox", "http://browsehappy.com/"]
+		@menu_browserwarning.toggle()
+		return false
+
 	render: =>
 		if Page.server_info
 			tor_title = @getTorTitle()
 			h("div#Dashboard",
+				# IE not supported
+					h("a.port.dashboard-item.browserwarning", {href: "http://browsehappy.com/", onmousedown: @handleBrowserwarningClick, onclick: Page.returnFalse}, [
+						h("span", "Unsupported browser")
+					])
+				@menu_browserwarning.render(".menu-browserwarning")
+
 				# Update
 				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")

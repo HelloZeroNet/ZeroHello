@@ -1234,7 +1234,6 @@
         return h("a.menu-item", {
           href: href,
           onclick: onclick,
-          target: "_blank",
           key: title,
           classes: {
             "selected": selected
@@ -1641,7 +1640,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
 
 
@@ -1789,6 +1787,7 @@
 
     function Dashboard() {
       this.render = __bind(this.render, this);
+      this.handleBrowserwarningClick = __bind(this.handleBrowserwarningClick, this);
       this.handleNewversionClick = __bind(this.handleNewversionClick, this);
       this.handleLogoutClick = __bind(this.handleLogoutClick, this);
       this.handleDonateClick = __bind(this.handleDonateClick, this);
@@ -1803,6 +1802,7 @@
       this.menu_port = new Menu();
       this.menu_multiuser = new Menu();
       this.menu_donate = new Menu();
+      this.menu_browserwarning = new Menu();
       this.port_checking = false;
     }
 
@@ -1916,11 +1916,21 @@
       return false;
     };
 
+    Dashboard.prototype.handleBrowserwarningClick = function() {
+      this.menu_browserwarning.items = [];
+      this.menu_browserwarning.items.push(["Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox", "http://browsehappy.com/"]);
+      this.menu_browserwarning.toggle();
+      return false;
+    };
+
     Dashboard.prototype.render = function() {
       var tor_title;
       if (Page.server_info) {
         tor_title = this.getTorTitle();
-        return h("div#Dashboard", parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
+          href: "http://browsehappy.com/",
+          onmousedown: this.handleBrowserwarningClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
@@ -1964,6 +1974,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
