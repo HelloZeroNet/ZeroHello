@@ -1817,11 +1817,11 @@
     Dashboard.prototype.handleTorClick = function() {
       var _ref;
       this.menu_tor.items = [];
-      this.menu_tor.items.push(["Status: " + ((_ref = Page.server_info) != null ? _ref.tor_status : void 0), "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
+      this.menu_tor.items.push(["Status: " + ((_ref = Page.server_info) != null ? _ref.tor_status : void 0), "https://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
       if (this.getTorTitle() !== "OK") {
-        this.menu_tor.items.push(["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
+        this.menu_tor.items.push(["How to make Tor connection work?", "https://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
       }
-      this.menu_tor.items.push(["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
+      this.menu_tor.items.push(["How to use ZeroNet in Tor Browser?", "https://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
       if (this.getTorTitle() === "OK") {
         this.menu_tor.items.push(["---"]);
         if (this.isTorAlways()) {
@@ -1853,13 +1853,13 @@
     Dashboard.prototype.handlePortClick = function() {
       this.menu_port.items = [];
       if (Page.server_info.ip_external) {
-        this.menu_port.items.push(["Nice! Your port " + Page.server_info.fileserver_port + " is opened.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+        this.menu_port.items.push(["Nice! Your port " + Page.server_info.fileserver_port + " is opened.", "https://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
       } else if (this.isTorAlways()) {
-        this.menu_port.items.push(["Good, your port is always closed when using ZeroNet in Tor always mode.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+        this.menu_port.items.push(["Good, your port is always closed when using ZeroNet in Tor always mode.", "https://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
       } else if (this.getTorTitle() === "OK") {
-        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed, but your Tor gateway is running well.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed, but your Tor gateway is running well.", "https://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
       } else {
-        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed. You are still fine, but for faster experience try open it.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed. You are still fine, but for faster experience try open it.", "https://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
       }
       this.menu_port.items.push(["---"]);
       this.menu_port.items.push(["Re-check opened port", this.handlePortRecheckClick]);
