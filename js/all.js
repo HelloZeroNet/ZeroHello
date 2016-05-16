@@ -1927,6 +1927,7 @@
       var tor_title;
       if (Page.server_info) {
         tor_title = this.getTorTitle();
+        return h("div#Dashboard", navigator.userAgent.match(/(\b(MS)?IE\s+|Trident\/7.0)/) ? h("a.port.dashboard-item.browserwarning", {
           href: "http://browsehappy.com/",
           onmousedown: this.handleBrowserwarningClick,
           onclick: Page.returnFalse

@@ -102,6 +102,7 @@ class Dashboard extends Class
 			tor_title = @getTorTitle()
 			h("div#Dashboard",
 				# IE not supported
+				if navigator.userAgent.match /(\b(MS)?IE\s+|Trident\/7.0)/
 					h("a.port.dashboard-item.browserwarning", {href: "http://browsehappy.com/", onmousedown: @handleBrowserwarningClick, onclick: Page.returnFalse}, [
 						h("span", "Unsupported browser")
 					])
