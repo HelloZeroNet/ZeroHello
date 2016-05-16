@@ -1962,7 +1962,7 @@
           href: "#Tor",
           onmousedown: this.handleTorClick,
           onclick: Page.returnFalse
-        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", tor_title) : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"));
+        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"));
       } else {
         return h("div#Dashboard");
       }

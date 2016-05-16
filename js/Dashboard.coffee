@@ -158,7 +158,7 @@ class Dashboard extends Class
 						if @isTorAlways()
 							h("span.status.status-ok", "Always")
 						else
-							h("span.status.status-ok", tor_title)
+							h("span.status.status-ok", "Available")
 					else
 						h("span.status.status-warning", tor_title)
 				]),
