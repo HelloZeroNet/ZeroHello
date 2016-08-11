@@ -57,6 +57,9 @@ class SiteList extends Class
 			{address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h", demo: true, content: {title: "GIF Time"}, settings: {}}
 			{address: "186THqMWuptrZxq1rxzpguAivK3Bs6z84o", demo: true, content: {title: "More sites @ 0list", domain: "0list.bit"}, settings: {}}
 		]
+		if Page.server_info.rev >= 1400
+			demo_site_rows.push {address: "1MeFqFfFFGQfa1J3gJyYYUvb5Lksczq7nH", demo: true, content: {title: "ZeroMe", domain: "Me.ZeroNetwork.bit"}, settings: {}}
+
 		@inactive_demo_sites = []
 		for site_row in demo_site_rows
 			if not @sites_byaddress[site_row.address]

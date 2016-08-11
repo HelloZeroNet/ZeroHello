@@ -300,8 +300,9 @@
 }
 .welcome .site-zeroboard { background: radial-gradient(circle at 2.00% -2.01%, hsla(152,31%,51%,1), transparent 100%),radial-gradient(circle at 98.00% 50.04%, hsla(188,44%,51%,1), transparent 100%); }
 .welcome .site-zeroblog { background: -webkit-linear-gradient(-45deg, #358AC7, #A176B6);background: -moz-linear-gradient(-45deg, #358AC7, #A176B6);background: -o-linear-gradient(-45deg, #358AC7, #A176B6);background: -ms-linear-gradient(-45deg, #358AC7, #A176B6);background: linear-gradient(-45deg, #358AC7, #A176B6); }
-.welcome .site-zerotalk { background: -webkit-linear-gradient(-45deg, #FFB78C, #E66690);background: -moz-linear-gradient(-45deg, #FFB78C, #E66690);background: -o-linear-gradient(-45deg, #FFB78C, #E66690);background: -ms-linear-gradient(-45deg, #FFB78C, #E66690);background: linear-gradient(-45deg, #FFB78C, #E66690); }
+.welcome .site-zerotalk { background: linear-gradient(45deg, #9F63BF, #E2556F) }
 .welcome .site-zeromail { background: linear-gradient(-25deg, #C04848 -40%, #4A569D) }
+.welcome .site-zerome { background: linear-gradient(-45deg, #F39963, #F7417D) }
 
 @media only screen and (max-width: 1250px) {
 	.welcome .site { width: 49%; }

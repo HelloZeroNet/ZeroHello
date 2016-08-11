@@ -1977,7 +1977,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
 
 
@@ -2281,7 +2280,9 @@
             href: Text.getSiteUrl("Blog.ZeroNetwork.bit")
           }, [h("div.title", ["ZeroBlog"]), h("div.description", ["Microblogging platform"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeromail", {
             href: Text.getSiteUrl("Mail.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroMail"]), h("div.description", ["End-to-end encrypted mailing"]), h("div.visit", ["Activate \u2501"])])
+          }, [h("div.title", ["ZeroMail"]), h("div.description", ["End-to-end encrypted mailing"]), h("div.visit", ["Activate \u2501"])]), Page.server_info.rev >= 1400 ? h("a.site.site-zerome", {
+            href: Text.getSiteUrl("Me.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]) : void 0
         ])
       ]);
     };
@@ -2341,6 +2342,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
@@ -2721,6 +2723,7 @@
     function SiteList() {
       this.onSiteInfo = __bind(this.onSiteInfo, this);
       this.render = __bind(this.render, this);
+      this.renderMergedSites = __bind(this.renderMergedSites, this);
       this.reorder = __bind(this.reorder, this);
       this.reorderTimer = __bind(this.reorderTimer, this);
       this.item_list = new ItemList(Site, "address");
@@ -2729,6 +2732,7 @@
       this.inactive_demo_sites = null;
       this.loaded = false;
       this.schedule_reorder = false;
+      this.merged_db = {};
       setInterval(this.reorderTimer, 10000);
       Page.on_local_storage.then((function(_this) {
         return function() {
@@ -2840,6 +2844,17 @@
           settings: {}
         }
       ];
+      if (Page.server_info.rev >= 1400) {
+        demo_site_rows.push({
+          address: "1MeFqFfFFGQfa1J3gJyYYUvb5Lksczq7nH",
+          demo: true,
+          content: {
+            title: "ZeroMe",
+            domain: "Me.ZeroNetwork.bit"
+          },
+          settings: {}
+        });
+      }
       this.inactive_demo_sites = [];
       _results = [];
       for (_i = 0, _len = demo_site_rows.length; _i < _len; _i++) {
@@ -2853,6 +2868,34 @@
       return _results;
     };
 
+    SiteList.prototype.renderMergedSites = function() {
+      var back, merged_db, merged_sites, merged_type, site, _i, _len, _name, _ref;
+      merged_db = {};
+      _ref = this.sites;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        if (!site.row.content.merged_type) {
+          continue;
+        }
+        if (merged_db[_name = site.row.content.merged_type] == null) {
+          merged_db[_name] = [];
+        }
+        merged_db[site.row.content.merged_type].push(site);
+      }
+      back = [];
+      for (merged_type in merged_db) {
+        merged_sites = merged_db[merged_type];
+        back.push([
+          h("h2.more", {
+            key: "Merged: " + merged_type
+          }, "Merged: " + merged_type), h("div.SiteList", merged_sites.map(function(item) {
+            return item.render();
+          }))
+        ]);
+      }
+      return back;
+    };
+
     SiteList.prototype.render = function() {
       var site;
       if (!this.loaded) {
@@ -2864,7 +2907,7 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           site = _ref[_i];
-          if (site.favorite) {
+          if (site.favorite && !site.row.content.merged_type) {
             _results.push(site);
           }
         }
@@ -2876,7 +2919,7 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           site = _ref[_i];
-          if (!site.favorite) {
+          if (!site.favorite && !site.row.content.merged_type) {
             _results.push(site);
           }
         }
@@ -2887,8 +2930,10 @@
           return item.render();
         })), h("h2.connected", "Connected sites:"), h("div.SiteList.connected", this.sites_connected.map(function(item) {
           return item.render();
-        })), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
-          h("h2.more", "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
+        })), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
+          h("h2.more", {
+            key: "More"
+          }, "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
             return item.render();
           }))
         ] : void 0
@@ -2942,7 +2987,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      return this.latest_version = "0.3.7";
+      return this.latest_version = "0.4.0";
     };
 
     ZeroHello.prototype.createProjector = function() {
