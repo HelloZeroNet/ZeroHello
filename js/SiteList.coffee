@@ -6,6 +6,7 @@ class SiteList extends Class
 		@inactive_demo_sites = null
 		@loaded = false
 		@schedule_reorder = false
+		@merged_db = {}
 		setInterval(@reorderTimer, 10000)
 
 		Page.on_local_storage.then =>
@@ -61,11 +62,29 @@ class SiteList extends Class
 			if not @sites_byaddress[site_row.address]
 				@inactive_demo_sites.push(new Site(site_row))
 
+	renderMergedSites: =>
+		merged_db = {}
+		for site in @sites
+			if not site.row.content.merged_type
+				continue
+			merged_db[site.row.content.merged_type] ?= []
+			merged_db[site.row.content.merged_type].push site
+
+		back = []
+		for merged_type, merged_sites of merged_db
+			back.push [
+				h("h2.more", {key: "Merged: #{merged_type}"}, "Merged: #{merged_type}"),
+				h("div.SiteList", merged_sites.map (item) ->
+					item.render()
+				)
+			]
+		return back
+
 	render: =>
 		if not @loaded
 			return h("div")
-		@sites_favorited = (site for site in @sites when site.favorite)
-		@sites_connected = (site for site in @sites when not site.favorite)
+		@sites_favorited = (site for site in @sites when site.favorite and not site.row.content.merged_type)
+		@sites_connected = (site for site in @sites when not site.favorite and not site.row.content.merged_type)
 		h("div", [
 			if @sites_favorited.length > 0 then h("h2.favorited", "Favorited sites:"),
 			h("div.SiteList.favorited", @sites_favorited.map (item) ->
@@ -75,9 +94,10 @@ class SiteList extends Class
 			h("div.SiteList.connected", @sites_connected.map (item) ->
 				item.render()
 			),
+			@renderMergedSites()
 			if @inactive_demo_sites != null and @inactive_demo_sites.length > 0
 				[
-					h("h2.more", "More sites:"),
+					h("h2.more", {key: "More"}, "More sites:"),
 					h("div.SiteList.more", @inactive_demo_sites.map (item) ->
 						item.render()
 					)
