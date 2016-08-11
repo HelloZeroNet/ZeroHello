@@ -11,7 +11,7 @@ class ZeroHello extends ZeroFrame
 		@on_local_storage = new Promise()
 		@local_storage = null
 
-		@latest_version = "0.3.7"
+		@latest_version = "0.4.0"
 
 
 	createProjector: ->
