@@ -158,11 +158,14 @@ class FeedList extends Class
 				body = body[0..200]
 			return body
 
-	formatType: (type) ->
+	formatType: (type, title) ->
 		if type == "comment"
-			return "Comment in "
+			return "Comment in"
 		else if type == "mention"
-			return "You got mentioned in "
+			if title
+				return "You got mentioned in"
+			else
+				return "You got mentioned"
 		else
 			return ""
 
@@ -181,20 +184,21 @@ class FeedList extends Class
 	renderFeed: (feed) =>
 		try
 			site = Page.site_list.item_list.items_bykey[feed.site]
+			type_formatted = @formatType(feed.type, feed.title)
 			return h("div.feed."+feed.type, {key: feed.site+feed.type+feed.title+feed.feed_id, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [
 				h("div.details", [
 					h("a.site", {href: site.getHref()}, [site.row.content.title]),
 					h("div.added", [Time.since(feed.date_added)])
 				]),
 				h("div.circle", {style: "border-color: #{Text.toColor(feed.type+site.row.address, 60, 60)}"}),
-				h("span.type", [@formatType(feed.type)]),
+				if type_formatted then h("span.type", type_formatted),
 				h("a.title", {href: site.getHref()+feed.url}, @formatTitle(feed.title)),
 				h("div.body", {key: feed.body, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, @formatBody(feed.body, feed.type))
 				if feed.body_more  # Display comments
 					feed.body_more.map (body_more) =>
 						h("div.body", {key: body_more, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, @formatBody(body_more, feed.type))
 				if feed.more > 0  # Collapse other types
-					h("a.more", {href: site.getHref()+"/"+feed.url}, ["+#{feed.more} more"])
+					h("a.more", {href: site.getHref()+feed.url}, ["+#{feed.more} more"])
 			])
 		catch err
 			@log err

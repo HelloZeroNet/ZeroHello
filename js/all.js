@@ -2022,7 +2022,7 @@
         return false;
       }
       rows.sort(function(a, b) {
-        return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added + (b.type === "mention" ? 1 : 0);
+        return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added - (b.type === "mention" ? 1 : 0);
       });
       row_group = {};
       last_row = {};
@@ -2032,7 +2032,7 @@
         if (last_row.body === row.body && last_row.date_added === row.date_added) {
           continue;
         }
-        if (row_group.title === row.title && row_group.type === row.type) {
+        if (row_group.title === row.title && row_group.type === row.type && row.url === row_group.url) {
           if (row_group.body_more == null) {
             row_group.body_more = [];
             row_group.body_more.push(row.body);
@@ -2092,17 +2092,15 @@
     };
 
     FeedList.prototype.storeNodeSearch = function(node) {
-      return document.body.onkeypress = (function(_this) {
-        return function(e) {
-          var _ref;
-          if ((e.charCode != null) && e.charCode === 0) {
-            return;
-          }
-          if (((_ref = document.activeElement) != null ? _ref.tagName : void 0) !== "INPUT") {
-            return node.focus();
-          }
-        };
-      })(this);
+
+      /*
+      		document.body.onkeypress = (e) =>
+      			if e.charCode? and e.charCode == 0
+      				 * Not a normal character
+      				return
+      			if document.activeElement?.tagName != "INPUT"
+      				node.focus()
+       */
     };
 
     FeedList.prototype.handleSearchInput = function(e) {
@@ -2167,13 +2165,22 @@
     };
 
     FeedList.prototype.formatBody = function(body, type) {
-      var username;
+      var username_formatted, username_match;
       body = body.replace(/[\n\r]+/, "\n");
       if (type === "comment" || type === "mention") {
-        username = body.match(/(.*?)@/)[1] + " › ";
-        body = body.replace(/> \[(.*?)\].*/g, "$1: ");
-        body = body.replace(/^[ ]*>.*/gm, "");
-        body = body.replace(/.*?@.*?:/, "");
+        username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
+        if (username_match) {
+          if (username_match[2]) {
+            username_formatted = username_match[2] + " › ";
+          } else {
+            username_formatted = username_match[3] + " › ";
+          }
+          body = body.replace(/> \[(.*?)\].*/g, "$1: ");
+          body = body.replace(/^[ ]*>.*/gm, "");
+          body = body.replace(username_match[0], "");
+        } else {
+          username_formatted = "";
+        }
         body = body.replace(/\n/g, " ");
         body = body.trim();
         if (this.searching && this.searching.length > 1) {
@@ -2181,10 +2188,10 @@
           if (body[0].length > 60 && body.length > 1) {
             body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
           }
-          return [h("b", Text.highlight(username, this.searching)), body];
+          return [h("b", Text.highlight(username_formatted, this.searching)), body];
         } else {
           body = body.slice(0, 201);
-          return [h("b", [username]), body];
+          return [h("b", [username_formatted]), body];
         }
       } else {
         body = body.replace(/\n/g, " ");
@@ -2200,11 +2207,15 @@
       }
     };
 
-    FeedList.prototype.formatType = function(type) {
+    FeedList.prototype.formatType = function(type, title) {
       if (type === "comment") {
-        return "Comment in ";
+        return "Comment in";
       } else if (type === "mention") {
-        return "You got mentioned in ";
+        if (title) {
+          return "You got mentioned in";
+        } else {
+          return "You got mentioned";
+        }
       } else {
         return "";
       }
@@ -2227,9 +2238,10 @@
     };
 
     FeedList.prototype.renderFeed = function(feed) {
-      var err, site;
+      var err, site, type_formatted;
       try {
         site = Page.site_list.item_list.items_bykey[feed.site];
+        type_formatted = this.formatType(feed.type, feed.title);
         return h("div.feed." + feed.type, {
           key: feed.site + feed.type + feed.title + feed.feed_id,
           enterAnimation: this.enterAnimation,
@@ -2241,7 +2253,7 @@
             }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
           ]), h("div.circle", {
             style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
-          }), h("span.type", [this.formatType(feed.type)]), h("a.title", {
+          }), type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
             href: site.getHref() + feed.url
           }, this.formatTitle(feed.title)), h("div.body", {
             key: feed.body,
@@ -2256,7 +2268,7 @@
               }, _this.formatBody(body_more, feed.type));
             };
           })(this)) : void 0, feed.more > 0 ? h("a.more", {
-            href: site.getHref() + "/" + feed.url
+            href: site.getHref() + feed.url
           }, ["+" + feed.more + " more"]) : void 0
         ]);
       } catch (_error) {
