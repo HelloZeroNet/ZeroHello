@@ -15,7 +15,7 @@ class FeedList extends Class
 			return false
 
 		rows.sort (a, b) ->
-			return a.date_added + (if a.type == "mention" then 1 else 0) - b.date_added + (if b.type == "mention" then 1 else 0)  # Prefer mention
+			return a.date_added + (if a.type == "mention" then 1 else 0) - b.date_added - (if b.type == "mention" then 1 else 0)  # Prefer mention
 
 		row_group = {}
 		last_row = {}
@@ -24,7 +24,7 @@ class FeedList extends Class
 			if last_row.body == row.body and last_row.date_added == row.date_added
 				continue  # Duplicate (eg. also signed up for comments and mentions)
 
-			if row_group.title == row.title and row_group.type == row.type
+			if row_group.title == row.title and row_group.type == row.type and row.url == row_group.url
 				if not row_group.body_more?
 					row_group.body_more = []
 					row_group.body_more.push(row.body)
