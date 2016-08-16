@@ -63,12 +63,14 @@ class FeedList extends Class
 
 	# Focus on search input if key pressed an no input on focus
 	storeNodeSearch: (node) =>
+		###
 		document.body.onkeypress = (e) =>
 			if e.charCode? and e.charCode == 0
 				# Not a normal character
 				return
 			if document.activeElement?.tagName != "INPUT"
 				node.focus()
+		###
 
 	handleSearchInput: (e) =>
 		if @searching and @searching.length > 3
