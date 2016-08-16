@@ -41,7 +41,8 @@
 .FeedList .feed { display: block; padding: 15px; margin-bottom: 40px; padding-left: 200px }
 .FeedList .feed a { text-decoration: none }
 .FeedList .feed a:hover { text-decoration: underline }
-.FeedList .feed .type { color: #999 }
+.FeedList .feed .type { color: #999; margin-right: 5px }
+.FeedList .feed.mention .type { background-color: #fffcdd; outline: 2px solid #fffcdd }
 .FeedList .feed .more {
 	text-align: center; font-size: 80%; color: #26c281; background: linear-gradient(#EFEFEF 0%, #FFF 10%);
 	border-top: 1px solid #E4E4E4; display: block; padding: 10px; margin-top: 10px;
