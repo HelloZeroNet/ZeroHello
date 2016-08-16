@@ -122,10 +122,17 @@ class FeedList extends Class
 		body = body.replace(/[\n\r]+/, "\n")  # Remove empty lines
 		if type == "comment" or type == "mention"
 			# Display Comment
-			username = body.match(/(.*?)@/)[1] + " › "  # Extract commenter's username
-			body = body.replace(/> \[(.*?)\].*/g, "$1: ")  # Replace original message quote
-			body = body.replace(/^[ ]*>.*/gm, "")  # Remove quotes
-			body = body.replace(/.*?@.*?:/, "")  # Remove commenter from body
+			username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/)
+			if username_match
+				if username_match[2]
+					username_formatted = username_match[2] + " › "
+				else
+					username_formatted = username_match[3] + " › "
+				body = body.replace(/> \[(.*?)\].*/g, "$1: ")  # Replace original message quote
+				body = body.replace(/^[ ]*>.*/gm, "")  # Remove quotes
+				body = body.replace(username_match[0], "")  # Remove commenter from body
+			else
+				username_formatted = ""
 			body = body.replace(/\n/g, " ")
 			body = body.trim()
 
@@ -134,10 +141,10 @@ class FeedList extends Class
 				body = Text.highlight(body, @searching)
 				if body[0].length > 60 and body.length > 1
 					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
-				return [h("b", Text.highlight(username, @searching)), body]
+				return [h("b", Text.highlight(username_formatted, @searching)), body]
 			else
 				body = body[0..200]
-				return [h("b", [username]), body]
+				return [h("b", [username_formatted]), body]
 		else
 			# Display post
 			body = body.replace(/\n/g, " ")
