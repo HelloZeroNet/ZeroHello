@@ -2054,6 +2054,7 @@
         }
         last_row = row;
       }
+      this.log(rows);
       return Page.projector.scheduleRender();
     };
 
@@ -2092,15 +2093,17 @@
     };
 
     FeedList.prototype.storeNodeSearch = function(node) {
-
-      /*
-      		document.body.onkeypress = (e) =>
-      			if e.charCode? and e.charCode == 0
-      				 * Not a normal character
-      				return
-      			if document.activeElement?.tagName != "INPUT"
-      				node.focus()
-       */
+      return document.body.onkeypress = (function(_this) {
+        return function(e) {
+          var _ref, _ref1;
+          if ((_ref = e.charCode) === 0 || _ref === 32) {
+            return;
+          }
+          if (((_ref1 = document.activeElement) != null ? _ref1.tagName : void 0) !== "INPUT") {
+            return node.focus();
+          }
+        };
+      })(this);
     };
 
     FeedList.prototype.handleSearchInput = function(e) {
@@ -2209,7 +2212,7 @@
 
     FeedList.prototype.formatType = function(type, title) {
       if (type === "comment") {
-        return "Comment in";
+        return "Comment on";
       } else if (type === "mention") {
         if (title) {
           return "You got mentioned in";

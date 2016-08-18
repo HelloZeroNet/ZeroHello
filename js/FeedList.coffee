@@ -63,14 +63,11 @@ class FeedList extends Class
 
 	# Focus on search input if key pressed an no input on focus
 	storeNodeSearch: (node) =>
-		###
 		document.body.onkeypress = (e) =>
-			if e.charCode? and e.charCode == 0
-				# Not a normal character
+			if e.charCode in [0, 32]  # Not a normal character or space
 				return
 			if document.activeElement?.tagName != "INPUT"
 				node.focus()
-		###
 
 	handleSearchInput: (e) =>
 		if @searching and @searching.length > 3
@@ -160,7 +157,7 @@ class FeedList extends Class
 
 	formatType: (type, title) ->
 		if type == "comment"
-			return "Comment in"
+			return "Comment on"
 		else if type == "mention"
 			if title
 				return "You got mentioned in"
