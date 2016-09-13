@@ -2054,7 +2054,6 @@
         }
         last_row = row;
       }
-      this.log(rows);
       return Page.projector.scheduleRender();
     };
 
@@ -2359,7 +2358,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
 
 
@@ -2377,8 +2375,7 @@
       this.handleShutdownZeronetClick = __bind(this.handleShutdownZeronetClick, this);
       this.handleUpdateZeronetClick = __bind(this.handleUpdateZeronetClick, this);
       this.handleTorClick = __bind(this.handleTorClick, this);
-      this.handleOrderbyModified = __bind(this.handleOrderbyModified, this);
-      this.handleOrderbyPeers = __bind(this.handleOrderbyPeers, this);
+      this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
       this.handleUpdateAllClick = __bind(this.handleUpdateAllClick, this);
       this.handleSettingsClick = __bind(this.handleSettingsClick, this);
       this.menu_settings = new Menu();
@@ -2401,8 +2398,34 @@
       this.menu_settings.items = [];
       this.menu_settings.items.push(["Update all sites", this.handleUpdateAllClick]);
       this.menu_settings.items.push(["---"]);
-      this.menu_settings.items.push(["Order sites by peers", this.handleOrderbyPeers, orderby === "peers"]);
-      this.menu_settings.items.push(["Order sites by update time", this.handleOrderbyModified, orderby === "modified"]);
+      this.menu_settings.items.push([
+        "Order sites by peers", ((function(_this) {
+          return function() {
+            return _this.handleOrderbyClick("peers");
+          };
+        })(this)), orderby === "peers"
+      ]);
+      this.menu_settings.items.push([
+        "Order sites by update time", ((function(_this) {
+          return function() {
+            return _this.handleOrderbyClick("modified");
+          };
+        })(this)), orderby === "modified"
+      ]);
+      this.menu_settings.items.push([
+        "Order sites by add time", ((function(_this) {
+          return function() {
+            return _this.handleOrderbyClick("addtime");
+          };
+        })(this)), orderby === "addtime"
+      ]);
+      this.menu_settings.items.push([
+        "Order sites by size", ((function(_this) {
+          return function() {
+            return _this.handleOrderbyClick("size");
+          };
+        })(this)), orderby === "size"
+      ]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
@@ -2431,14 +2454,8 @@
       return _results;
     };
 
-    Head.prototype.handleOrderbyPeers = function() {
-      Page.local_storage.sites_orderby = "peers";
-      Page.site_list.reorder();
-      return Page.saveLocalStorage();
-    };
-
-    Head.prototype.handleOrderbyModified = function() {
-      Page.local_storage.sites_orderby = "modified";
+    Head.prototype.handleOrderbyClick = function(orderby) {
+      Page.local_storage.sites_orderby = orderby;
       Page.site_list.reorder();
       return Page.saveLocalStorage();
     };
@@ -2535,7 +2552,7 @@
       } else if (((_ref1 = row.event) != null ? _ref1[0] : void 0) === "updating") {
         this.setMessage("Updating...");
       } else if (row.tasks > 0) {
-        this.setMessage("Updating: " + row.tasks + " left");
+        this.setMessage("Updating: " + (Math.max(row.tasks, row.bad_files)) + " left");
       } else if (row.bad_files > 0) {
         this.setMessage(row.bad_files + " file update failed", "error");
       } else if (row.content_updated === false) {
@@ -2683,7 +2700,7 @@
     };
 
     Site.prototype.render = function() {
-      var now;
+      var now, _ref;
       now = Date.now() / 1000;
       return h("div.site", {
         key: this.key,
@@ -2697,9 +2714,9 @@
         style: "color: " + (Text.toColor(this.row.address, 40, 50))
       }, ["\u2022"]), h("a.inner", {
         href: this.getHref(),
-        title: this.row.content.title.length > 20 ? this.row.content.title : void 0
+        title: ((_ref = this.row.content.title) != null ? _ref.length : void 0) > 20 ? this.row.content.title : void 0
       }, [
-        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, h("div.message", {
+        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.local_storage.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, h("div.message", {
           classes: {
             visible: this.message_visible,
             done: this.message_class === 'done',
@@ -2723,6 +2740,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
@@ -2740,6 +2758,7 @@
       this.render = __bind(this.render, this);
       this.renderMergedSites = __bind(this.renderMergedSites, this);
       this.reorder = __bind(this.reorder, this);
+      this.sortRows = __bind(this.sortRows, this);
       this.reorderTimer = __bind(this.reorderTimer, this);
       this.item_list = new ItemList(Site, "address");
       this.sites = this.item_list.items;
@@ -2769,16 +2788,29 @@
       }
     };
 
-    SiteList.prototype.reorder = function() {
+    SiteList.prototype.sortRows = function(rows) {
       if (Page.local_storage.sites_orderby === "modified") {
-        this.item_list.items.sort(function(a, b) {
+        rows.sort(function(a, b) {
           return b.row.settings.modified - a.row.settings.modified;
         });
+      } else if (Page.local_storage.sites_orderby === "addtime") {
+        rows.sort(function(a, b) {
+          return (b.row.settings.added || 0) - (a.row.settings.added || 0);
+        });
+      } else if (Page.local_storage.sites_orderby === "size") {
+        rows.sort(function(a, b) {
+          return b.row.settings.size - a.row.settings.size;
+        });
       } else {
-        this.item_list.items.sort(function(a, b) {
+        rows.sort(function(a, b) {
           return Math.max(b.row.peers, b.row.settings.peers) - Math.max(a.row.peers, a.row.settings.peers);
         });
       }
+      return rows;
+    };
+
+    SiteList.prototype.reorder = function() {
+      this.sortRows(this.item_list.items);
       return Page.projector.scheduleRender();
     };
 
@@ -2787,16 +2819,8 @@
         return function(site_rows) {
           var favorite_sites;
           favorite_sites = Page.local_storage.favorite_sites;
-          if (Page.local_storage.sites_orderby === "modified") {
-            site_rows.sort(function(a, b) {
-              return b.settings.modified - a.settings.modified;
-            });
-          } else {
-            site_rows.sort(function(a, b) {
-              return Math.max(b.peers, b.settings.peers) - Math.max(a.peers, a.settings.peers);
-            });
-          }
           _this.item_list.sync(site_rows);
+          _this.sortRows(_this.item_list.items);
           if (_this.inactive_demo_sites === null) {
             _this.updateInactiveDemoSites();
           }
@@ -2903,7 +2927,7 @@
         back.push([
           h("h2.more", {
             key: "Merged: " + merged_type
-          }, "Merged: " + merged_type), h("div.SiteList", merged_sites.map(function(item) {
+          }, "Merged: " + merged_type), h("div.SiteList.merged.merged-" + merged_type, merged_sites.map(function(item) {
             return item.render();
           }))
         ]);
@@ -3002,7 +3026,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      return this.latest_version = "0.4.0";
+      return this.latest_version = "0.4.1";
     };
 
     ZeroHello.prototype.createProjector = function() {
