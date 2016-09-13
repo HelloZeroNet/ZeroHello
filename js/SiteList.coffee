@@ -84,7 +84,7 @@ class SiteList extends Class
 		for merged_type, merged_sites of merged_db
 			back.push [
 				h("h2.more", {key: "Merged: #{merged_type}"}, "Merged: #{merged_type}"),
-				h("div.SiteList", merged_sites.map (item) ->
+				h("div.SiteList.merged.merged-#{merged_type}", merged_sites.map (item) ->
 					item.render()
 				)
 			]
