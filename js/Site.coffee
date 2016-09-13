@@ -149,7 +149,10 @@ class Site extends Class
 				h("div.details", [
 					h("span.modified", [
 						h("div.icon-clock")
-						h("span.value", [Time.since(@row.settings.modified)])
+						if Page.local_storage.sites_orderby == "size"
+							h("span.value", [(@row.settings.size/1024/1024 + @row.settings.size_optional?/1024/1024).toFixed(1), "MB"])
+						else
+							h("span.value", [Time.since(@row.settings.modified)])
 					]),
 					h("span.peers", [
 						h("div.icon-profile")
