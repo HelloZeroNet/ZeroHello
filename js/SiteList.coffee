@@ -22,26 +22,33 @@ class SiteList extends Class
 			@reorder()
 			@schedule_reorder = false
 
-	reorder: =>
+	sortRows: (rows) =>
 		if Page.local_storage.sites_orderby == "modified"
-			@item_list.items.sort (a, b) ->
+			rows.sort (a, b) ->
 				return b.row.settings.modified - a.row.settings.modified
+		else if Page.local_storage.sites_orderby == "addtime"
+			rows.sort (a, b) ->
+				return (b.row.settings.added or 0) - (a.row.settings.added or 0)
+		else if Page.local_storage.sites_orderby == "size"
+			rows.sort (a, b) ->
+				return b.row.settings.size - a.row.settings.size
 		else
-			@item_list.items.sort (a, b) ->
+			rows.sort (a, b) ->
 				return Math.max(b.row.peers, b.row.settings.peers) - Math.max(a.row.peers, a.row.settings.peers)
+		return rows
+
+	reorder: =>
+		@sortRows(@item_list.items)
 		Page.projector.scheduleRender()
 
 	update: ->
 		Page.cmd "siteList", {}, (site_rows) =>
 			favorite_sites = Page.local_storage.favorite_sites
-			if Page.local_storage.sites_orderby == "modified"
-				site_rows.sort (a, b) ->
-					return b.settings.modified - a.settings.modified
-			else
-				site_rows.sort (a, b) ->
-					return Math.max(b.peers, b.settings.peers) - Math.max(a.peers, a.settings.peers)
 
 			@item_list.sync(site_rows)
+
+			@sortRows(@item_list.items)
+
 			if @inactive_demo_sites == null
 				@updateInactiveDemoSites()
 			Page.projector.scheduleRender()

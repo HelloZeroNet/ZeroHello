@@ -15,10 +15,12 @@ class Head extends Class
 		@menu_settings.items = []
 		@menu_settings.items.push ["Update all sites", @handleUpdateAllClick]
 		@menu_settings.items.push ["---"]
-		@menu_settings.items.push ["Order sites by peers", @handleOrderbyPeers, (orderby == "peers")]
-		@menu_settings.items.push ["Order sites by update time", @handleOrderbyModified, (orderby == "modified")]
+		@menu_settings.items.push ["Order sites by peers", ( => @handleOrderbyClick("peers") ), (orderby == "peers")]
+		@menu_settings.items.push ["Order sites by update time", ( => @handleOrderbyClick("modified") ), (orderby == "modified")]
+		@menu_settings.items.push ["Order sites by add time", ( => @handleOrderbyClick("addtime") ), (orderby == "addtime")]
+		@menu_settings.items.push ["Order sites by size", ( => @handleOrderbyClick("size") ), (orderby == "size")]
 		@menu_settings.items.push ["---"]
-		# @menu_settings.items.push ["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
+		# @menu_settings.items.push ["Create new empty site", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 
@@ -33,13 +35,8 @@ class Head extends Class
 			if site.row.settings.serving
 				Page.cmd "siteUpdate", {"address": site.row.address}
 
-	handleOrderbyPeers: =>
-		Page.local_storage.sites_orderby = "peers"
-		Page.site_list.reorder()
-		Page.saveLocalStorage()
-
-	handleOrderbyModified: =>
-		Page.local_storage.sites_orderby = "modified"
+	handleOrderbyClick: (orderby) =>
+		Page.local_storage.sites_orderby = orderby
 		Page.site_list.reorder()
 		Page.saveLocalStorage()
 
