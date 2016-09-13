@@ -144,7 +144,7 @@ class Site extends Class
 			}
 		},
 			h("div.circle", {style: "color: #{Text.toColor(@row.address, 40, 50)}"}, ["\u2022"]),
-			h("a.inner", {href: @getHref(), title: @row.content.title if @row.content.title.length > 20}, [
+			h("a.inner", {href: @getHref(), title: @row.content.title if @row.content.title?.length > 20}, [
 				h("span.title", [@row.content.title]),
 				h("div.details", [
 					h("span.modified", [
