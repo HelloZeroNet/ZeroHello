@@ -3,13 +3,22 @@
 	color: white; background-color: #232A31; background-image: linear-gradient(352deg, #322641, #2A333C); /* linear-gradient(352deg, #232A31, #2A333C);*/
 }
 .left h2 { text-transform: uppercase; font-size: 13px; font-weight: 500; padding: 10px; padding-left: 45px; opacity: 0.4; letter-spacing: 1px; margin-top: 40px; }
-.left .logo { background-color: #1E2429; padding: 20px; margin-bottom: 40px; display: block; text-decoration: none; color: white;}
+.left .logo { background-color: #1E2429; padding: 20px; margin-bottom: 30px; display: block; text-decoration: none; color: white;}
 .left .logo span { vertical-align: 39%; font-size: 27px; font-family: 'Text Me One'; }
 
-.left #Head { height: 92px; }
+.left #Head { }
 .left #Head .settings { position: absolute; color: #8A91A2; right: 0px; font-size: 35px; text-decoration: none; padding: 24px; transition: all 0.3s }
 .left #Head .settings:hover { color: #FFF; transition: none }
 .left #Head .menu { left: 98%; top: 72px; white-space: nowrap; }
+.left #Head .modes { padding-left: 29px; }
+.left #Head .modes .mode {
+	padding: 5px; text-transform: uppercase; letter-spacing: 2px; margin: 10px; background-color: rgba(0,0,0,0); outline: 5px solid rgba(0,0,0,0);
+	font-size: 80%; text-decoration: none; color: white; opacity: 0.5; transition: all 0.3s
+}
+.left #Head .modes .mode:hover { opacity: 1; transition: none }
+.left #Head .modes .mode:active { background-color: rgba(133, 239, 255, 0.09); outline: 5px solid rgba(133, 239, 255, 0.09); transition: none }
+.left #Head .modes .mode:focus { transition: all 0.3s }
+.left #Head .modes .mode.active { font-size: 90%; border-bottom: 1px solid #83EFFF; color: #83EFFF; opacity: 1 }
 
 .SiteList { margin-bottom: 40px; }
 .SiteList .site { border-bottom: 1px solid #3D444B; position: relative }
@@ -51,7 +60,7 @@
 
 .SiteList .site:hover .settings { opacity: 0.5; transition: none }
 .SiteList .site .settings:hover { opacity: 1; transition: none }
-.SiteList .menu { left: 99%; top: auto }
+.SiteList .menu { left: 99%; top: auto; white-space: nowrap; }
 .SiteList .menu-item { font-weight: lighter }
 
 .SiteList.more .site .settings { display: none }
