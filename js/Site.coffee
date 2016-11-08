@@ -9,8 +9,12 @@ class Site extends Class
 		@message_timer = null
 		@favorite = Page.local_storage.favorite_sites[row.address]
 		@key = row.address
+		@optional_helps = []
+		@optional_helps_disabled = {}
 		@setRow(row)
+		@files = new SiteFiles(@)
 		@menu = new Menu()
+		@menu_helps = null
 
 	setRow: (row) ->
 		# Message
@@ -29,6 +33,11 @@ class Site extends Class
 				@setMessage "Update failed", "error"
 		else if row.tasks == 0 and @row?.tasks > 0
 			@setMessage "Updated!", "done"
+
+		if not row.body?
+			row.body = ""
+
+		@optional_helps = ([key, val] for key, val of row.settings.optional_help)
 
 		@row = row
 
@@ -78,6 +87,11 @@ class Site extends Class
 		@show_errors = true
 		return false
 
+	handleCheckfilesClick: =>
+		Page.cmd "siteUpdate", {"address": @row.address, "check_files": true}
+		@show_errors = true
+		return false
+
 	handleResumeClick: =>
 		Page.cmd "siteResume", {"address": @row.address}
 		return false
@@ -108,6 +122,7 @@ class Site extends Class
 		else
 			@menu.items.push ["Favorite", @handleFavoriteClick]
 		@menu.items.push ["Update", @handleUpdateClick]
+		@menu.items.push ["Check files", @handleCheckfilesClick]
 		if @row.settings.serving
 			@menu.items.push ["Pause", @handlePauseClick]
 		else
@@ -123,6 +138,41 @@ class Site extends Class
 			@menu.show()
 		return false
 
+	handleHelpClick: (directory, title) =>
+		if @optional_helps_disabled[directory]
+			Page.cmd "OptionalHelp", [directory, title, @row.address]
+			delete @optional_helps_disabled[directory]
+		else
+			Page.cmd "OptionalHelpRemove", [directory, @row.address]
+			@optional_helps_disabled[directory] = true
+		return true
+
+	handleHelpAllClick: =>
+		if @row.settings.autodownloadoptional == true
+			Page.cmd "OptionalHelpAll", [false, @row.address], =>
+				@row.settings.autodownloadoptional = false
+				Page.projector.scheduleRender()
+		else
+			Page.cmd "OptionalHelpAll", [true, @row.address], =>
+				@row.settings.autodownloadoptional = true
+				Page.projector.scheduleRender()
+
+	handleHelpsClick: (e) =>
+		if e.target.classList.contains("menu-item")
+			return
+		if not @menu_helps
+			@menu_helps = new Menu()
+
+		@menu_helps.items = []
+		@menu_helps.items.push ["Help distribute all new files", @handleHelpAllClick, ( => return @row.settings.autodownloadoptional)]
+		if @optional_helps.length > 0
+			@menu_helps.items.push ["---"]
+		for [directory, title] in @optional_helps
+			@menu_helps.items.push [title, ( => @handleHelpClick(directory, title) ), ( => return not @optional_helps_disabled[directory] )]
+
+		@menu_helps.toggle()
+
+		return true
 
 	getHref: ->
 		has_plugin = Page.server_info?.plugins? and ("Zeroname" in Page.server_info.plugins or "Dnschain" in Page.server_info.plugins or "Zeroname-local" in Page.server_info.plugins)
@@ -169,6 +219,56 @@ class Site extends Class
 			h("a.settings", {href: "#", onmousedown: @handleSettingsClick, onclick: Page.returnFalse}, ["\u22EE"]),
 			@menu.render()
 		)
+
+	renderCircle: (value, max) ->
+		if value < 1
+			dashoffset = 75+(1-value)*75
+		else
+			dashoffset = Math.max(0, 75-((value-1)/9)*75)
+		stroke = "hsl(#{Math.min(555, value*50)}, 100%, 61%)"
+		return h("div.circle", {title: "Upload/Download ratio", innerHTML: """
+		<svg class="circle-svg" width="30" height="30" viewPort="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  			<circle r="12" cx="15" cy="15" fill="transparent" class='circle-bg'></circle>
+  			<circle r="12" cx="15" cy="15" fill="transparent" class='circle-fg' style='stroke-dashoffset: #{dashoffset}; stroke: #{stroke}'></circle>
+		</svg>
+		"""})
+
+	renderOptionalStats: =>
+		row = @row
+		ratio = (row.settings.bytes_sent/row.settings.bytes_recv).toFixed(1)
+		if ratio >= 100
+			ratio = "\u221E"
+		else if ratio >= 10
+			ratio = (row.settings.bytes_sent/row.settings.bytes_recv).toFixed(0)
+		ratio_hue = Math.min(555, (row.settings.bytes_sent/row.settings.bytes_recv)*50)
+		h("div.site", {key: @key}, [
+			h("div.title", [
+				h("h3.name", h("a", {href: @getHref()}, row.content.title)),
+				h("div.size", {title: "Site size limit: #{Text.formatSize(row.size_limit*1024*1024)}"}, [
+					"#{Text.formatSize(row.settings.size)}",
+					h("div.bar", h("div.bar-active", {style: "width: #{100*(row.settings.size/(row.size_limit*1024*1024))}%"}))
+				]),
+				h("div.plus", "+"),
+				h("div.size.size-optional", {title: "Optional files on site: #{Text.formatSize(row.settings.size_optional)}"}, [
+					"#{Text.formatSize(row.settings.optional_downloaded)}",
+					h("span.size-title", "Optional"),
+					h("div.bar", h("div.bar-active", {style: "width: #{100*(row.settings.optional_downloaded/row.settings.size_optional)}%"}))
+				]),
+				h("a.helps", {href: "#", onmousedown: @handleHelpsClick, onclick: Page.returnFalse},
+					h("div.icon-share"),
+					if @row.settings.autodownloadoptional then "\u2661" else @optional_helps.length,
+					h("div.icon-arrow-down")
+					if @menu_helps then @menu_helps.render()
+				),
+				@renderCircle(parseFloat((row.settings.bytes_sent/row.settings.bytes_recv).toFixed(1)), 10),
+				h("div.circle-value", {classes: {negative: ratio < 1}, style: "color: hsl(#{ratio_hue}, 70%, 60%)"}, ratio),
+				h("div.transfers", [
+					h("div.up", {"title": "Uploaded"}, "\u22F0 \u00A0#{Text.formatSize(row.settings.bytes_sent)}"),
+					h("div.down", {"title": "Downloaded"}, "\u22F1 \u00A0#{Text.formatSize(row.settings.bytes_recv)}")
+				])
+			])
+			@files.render()
+		])
 
 
 window.Site = Site
