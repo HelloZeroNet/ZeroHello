@@ -12,26 +12,59 @@ class ZeroHello extends ZeroFrame
 		@local_storage = null
 
 		@latest_version = "0.4.1"
+		@mode = "Sites"
+		@change_timer = null
+		document.body.id = "Page#{@mode}"
+
+	setProjectorMode: (mode) ->
+		@log "setProjectorMode", mode
+		if mode == "Sites"
+			try
+				@projector.detach(@file_list.render)
+			catch
+				@
+			@projector.replace($("#FeedList"), @feed_list.render)
+			@projector.replace($("#SiteList"), @site_list.render)
+		else if mode == "Files"
+			try
+				@projector.detach(@feed_list.render)
+				@projector.detach(@site_list.render)
+			catch
+				@
+			@projector.replace($("#FileList"), @file_list.render)
+		if @mode != mode
+			@mode = mode
+			setTimeout ( ->
+				# Delayed to avoid loosing anmation because of dom re-creation
+				document.body.id = "Page#{mode}"
+
+				if @change_timer
+					clearInterval @change_timer
+				document.body.classList.add("changing")
+				@change_timer = setTimeout ( ->
+					document.body.classList.remove("changing")
+				), 400
+
+			), 60
 
 
 	createProjector: ->
-		@projector = maquette.createProjector()
+		@projector = maquette.createProjector()  # Dummy, will set later
+		@projectors = {}
+
 		@site_list = new SiteList()
 		@feed_list = new FeedList()
+		@file_list = new FileList()
 		@head = new Head()
 		@dashboard = new Dashboard()
 
-		if base.href.indexOf("?") == -1
-			@route("")
-		else
-			@route(base.href.replace(/.*?\?/, ""))
+		@route("")
 
 		@loadLocalStorage()
 		@on_site_info.then =>
-			@projector.replace($("#SiteList"), @site_list.render)
-			@projector.replace($("#FeedList"), @feed_list.render)
 			@projector.replace($("#Head"), @head.render)
 			@projector.replace($("#Dashboard"), @dashboard.render)
+			@setProjectorMode(@mode)
 
 		# Update every minute to keep time since fields up-to date
 		setInterval ( ->
@@ -103,6 +136,7 @@ class ZeroHello extends ZeroFrame
 			@site_info = site_info
 		@site_list.onSiteInfo(site_info)
 		@feed_list.onSiteInfo(site_info)
+		@file_list.onSiteInfo(site_info)
 		@on_site_info.resolve()
 
 	setServerInfo: (server_info) ->
