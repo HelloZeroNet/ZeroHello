@@ -5,8 +5,9 @@ class FeedList extends Class
 		@searched = null
 		@searched_info = null
 		@loading = false
+		@need_update = false
 		Page.on_local_storage.then =>
-			@update()
+			@need_update = true
 		@
 
 	displayRows: (rows, search) =>
@@ -43,6 +44,8 @@ class FeedList extends Class
 
 
 	update: (cb) =>
+		if @searching
+			return false
 		Page.cmd "feedQuery", [], (rows) =>
 			@displayRows(rows)
 			if cb then cb()
@@ -239,10 +242,13 @@ class FeedList extends Class
 		])
 
 	render: =>
+		if @need_update
+			RateLimitCb(5000, @update)
+
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
 			document.body.className = "loaded"
 
-		h("div.FeedContainer",
+		h("div#FeedList.FeedContainer",
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null
@@ -272,6 +278,6 @@ class FeedList extends Class
 	onSiteInfo: (site_info) =>
 		if site_info.event?[0] == "file_done" and site_info.event?[1].endsWith(".json") and not site_info.event?[1].endsWith("content.json")
 			if not @searching
-				RateLimitCb(5000, @update)
+				@need_update = true
 
 window.FeedList = FeedList
