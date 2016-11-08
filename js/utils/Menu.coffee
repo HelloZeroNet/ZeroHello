@@ -17,6 +17,7 @@ class Menu
 			@hide()
 		else
 			@show()
+		Page.projector.scheduleRender()
 
 
 	addItem: (title, cb, selected=false) ->
@@ -34,15 +35,19 @@ class Menu
 
 	handleClick: (e) =>
 		keep_menu = false
-		for [title, cb] in @items
+		for item in @items
+			[title, cb, selected] = item
 			if title == e.target.textContent
-				keep_menu = cb()
+				keep_menu = cb(item)
+				break
 		if keep_menu != true
 			@hide()
 		return false
 
 	renderItem: (item) =>
 		[title, cb, selected] = item
+		if typeof(selected) == "function"
+			selected = selected()
 		if title == "---"
 			h("div.menu-item-separator")
 		else
@@ -64,6 +69,6 @@ window.Menu = Menu
 document.body.addEventListener "mouseup", (e) ->
 	if not window.visible_menu or not window.visible_menu.node
 		return false
-	if e.target.parentNode != window.visible_menu.node.parentNode and e.target.parentNode != window.visible_menu.node and e.target.parentNode.parentNode != window.visible_menu.node.parentNode
+	if e.target != window.visible_menu.node.parentNode and e.target.parentNode != window.visible_menu.node and e.target.parentNode != window.visible_menu.node.parentNode and e.target.parentNode != window.visible_menu.node and e.target.parentNode.parentNode != window.visible_menu.node.parentNode
 		window.visible_menu.hide()
 		Page.projector.scheduleRender()
