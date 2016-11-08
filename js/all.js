@@ -933,7 +933,8 @@
         elem.classList.remove("animate-inout");
         elem.style.transition = elem.style.transform = elem.style.opacity = elem.style.height = null;
         elem.style.boxSizing = elem.style.marginTop = elem.style.marginBottom = null;
-        return elem.style.paddingTop = elem.style.paddingBottom = elem.style.overflow = null;
+        elem.style.paddingTop = elem.style.paddingBottom = elem.style.overflow = null;
+        return elem.removeEventListener("transitionend", arguments.callee, false);
       });
     };
 
@@ -957,7 +958,35 @@
         return elem.style.opacity = "0";
       }), 1);
       return elem.addEventListener("transitionend", function(e) {
-        if (e.propertyName === "height") {
+        if (e.propertyName === "opacity" || e.elapsedTime >= 0.6) {
+          elem.removeEventListener("transitionend", arguments.callee, false);
+          return remove_func();
+        }
+      });
+    };
+
+    Animation.prototype.slideUpInout = function(elem, remove_func, props) {
+      elem.className += " animate-inout";
+      elem.style.boxSizing = "border-box";
+      elem.style.height = elem.offsetHeight + "px";
+      elem.style.overflow = "hidden";
+      elem.style.transform = "scale(1)";
+      elem.style.opacity = "1";
+      elem.style.pointerEvents = "none";
+      setTimeout((function() {
+        elem.style.height = "0px";
+        elem.style.marginTop = "0px";
+        elem.style.marginBottom = "0px";
+        elem.style.paddingTop = "0px";
+        elem.style.paddingBottom = "0px";
+        elem.style.transform = "scale(0.8)";
+        elem.style.borderTopWidth = "0px";
+        elem.style.borderBottomWidth = "0px";
+        return elem.style.opacity = "0";
+      }), 1);
+      return elem.addEventListener("transitionend", function(e) {
+        if (e.propertyName === "opacity" || e.elapsedTime >= 0.6) {
+          elem.removeEventListener("transitionend", arguments.callee, false);
           return remove_func();
         }
       });
@@ -1179,10 +1208,11 @@
 
     Menu.prototype.toggle = function() {
       if (this.visible) {
-        return this.hide();
+        this.hide();
       } else {
-        return this.show();
+        this.show();
       }
+      return Page.projector.scheduleRender();
     };
 
     Menu.prototype.addItem = function(title, cb, selected) {
@@ -1203,13 +1233,15 @@
     };
 
     Menu.prototype.handleClick = function(e) {
-      var cb, keep_menu, title, _i, _len, _ref, _ref1;
+      var cb, item, keep_menu, selected, title, _i, _len, _ref;
       keep_menu = false;
       _ref = this.items;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        _ref1 = _ref[_i], title = _ref1[0], cb = _ref1[1];
+        item = _ref[_i];
+        title = item[0], cb = item[1], selected = item[2];
         if (title === e.target.textContent) {
-          keep_menu = cb();
+          keep_menu = cb(item);
+          break;
         }
       }
       if (keep_menu !== true) {
@@ -1221,6 +1253,9 @@
     Menu.prototype.renderItem = function(item) {
       var cb, href, onclick, selected, title;
       title = item[0], cb = item[1], selected = item[2];
+      if (typeof selected === "function") {
+        selected = selected();
+      }
       if (title === "---") {
         return h("div.menu-item-separator");
       } else {
@@ -1266,7 +1301,7 @@
     if (!window.visible_menu || !window.visible_menu.node) {
       return false;
     }
-    if (e.target.parentNode !== window.visible_menu.node.parentNode && e.target.parentNode !== window.visible_menu.node && e.target.parentNode.parentNode !== window.visible_menu.node.parentNode) {
+    if (e.target !== window.visible_menu.node.parentNode && e.target.parentNode !== window.visible_menu.node && e.target.parentNode !== window.visible_menu.node.parentNode && e.target.parentNode !== window.visible_menu.node && e.target.parentNode.parentNode !== window.visible_menu.node.parentNode) {
       window.visible_menu.hide();
       return Page.projector.scheduleRender();
     }
@@ -1306,12 +1341,16 @@
 
 
 (function() {
-  var calling, last_time,
+  var call_after_interval, calling, calling_iterval, last_time,
     __slice = [].slice;
 
   last_time = {};
 
   calling = {};
+
+  calling_iterval = {};
+
+  call_after_interval = {};
 
   window.RateLimitCb = function(interval, fn, args) {
     var cb;
@@ -1342,6 +1381,27 @@
     } else {
       last_time[fn] = Date.now();
       return fn.apply(this, [cb].concat(__slice.call(args)));
+    }
+  };
+
+  window.RateLimit = function(interval, fn) {
+    if (calling_iterval[fn] > interval) {
+      clearInterval(calling[fn]);
+      delete calling[fn];
+    }
+    if (!calling[fn]) {
+      call_after_interval[fn] = false;
+      fn();
+      calling_iterval[fn] = interval;
+      return calling[fn] = setTimeout((function() {
+        if (call_after_interval[fn]) {
+          fn();
+        }
+        delete calling[fn];
+        return delete call_after_interval[fn];
+      }), interval);
+    } else {
+      return call_after_interval[fn] = true;
     }
   };
 
@@ -1559,6 +1619,20 @@
         }
       }
       return back;
+    };
+
+    Text.prototype.formatSize = function(size) {
+      var size_mb;
+      size_mb = size / 1024 / 1024;
+      if (size_mb >= 1000) {
+        return (size_mb / 1024).toFixed(1) + " GB";
+      } else if (size_mb >= 100) {
+        return size_mb.toFixed(0) + " MB";
+      } else if (size / 1024 >= 1000) {
+        return size_mb.toFixed(2) + " MB";
+      } else {
+        return (size / 1024).toFixed(2) + " KB";
+      }
     };
 
     return Text;
@@ -2007,9 +2081,10 @@
       this.searched = null;
       this.searched_info = null;
       this.loading = false;
+      this.need_update = false;
       Page.on_local_storage.then((function(_this) {
         return function() {
-          return _this.update();
+          return _this.need_update = true;
         };
       })(this));
       this;
@@ -2058,6 +2133,9 @@
     };
 
     FeedList.prototype.update = function(cb) {
+      if (this.searching) {
+        return false;
+      }
       return Page.cmd("feedQuery", [], (function(_this) {
         return function(rows) {
           _this.displayRows(rows);
@@ -2302,10 +2380,13 @@
     };
 
     FeedList.prototype.render = function() {
+      if (this.need_update) {
+        RateLimitCb(5000, this.update);
+      }
       if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded") {
         document.body.className = "loaded";
       }
-      return h("div.FeedContainer", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
+      return h("div#FeedList.FeedContainer", this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
         h("div.feeds-line"), h("div.feeds-search", {
           classes: {
             "searching": this.searching
@@ -2344,7 +2425,7 @@
       var _ref, _ref1, _ref2;
       if (((_ref = site_info.event) != null ? _ref[0] : void 0) === "file_done" && ((_ref1 = site_info.event) != null ? _ref1[1].endsWith(".json") : void 0) && !((_ref2 = site_info.event) != null ? _ref2[1].endsWith("content.json") : void 0)) {
         if (!this.searching) {
-          return RateLimitCb(5000, this.update);
+          return this.need_update = true;
         }
       }
     };
@@ -2354,6 +2435,462 @@
   })(Class);
 
   window.FeedList = FeedList;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
+
+
+(function() {
+  var FileList,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __hasProp = {}.hasOwnProperty;
+
+  FileList = (function(_super) {
+    __extends(FileList, _super);
+
+    function FileList() {
+      this.onSiteInfo = __bind(this.onSiteInfo, this);
+      this.render = __bind(this.render, this);
+      this.updateAllFiles = __bind(this.updateAllFiles, this);
+      this.updateOptionalStats = __bind(this.updateOptionalStats, this);
+      this.renderSelectbar = __bind(this.renderSelectbar, this);
+      this.renderTotalbar = __bind(this.renderTotalbar, this);
+      this.handleLimitInput = __bind(this.handleLimitInput, this);
+      this.handleTotalbarMenu = __bind(this.handleTotalbarMenu, this);
+      this.handleLimitSetClick = __bind(this.handleLimitSetClick, this);
+      this.handleLimitCancelClick = __bind(this.handleLimitCancelClick, this);
+      this.handleEditlimitClick = __bind(this.handleEditlimitClick, this);
+      this.handleTotalbarOut = __bind(this.handleTotalbarOut, this);
+      this.handleTotalbarOver = __bind(this.handleTotalbarOver, this);
+      this.handleSelectbarDelete = __bind(this.handleSelectbarDelete, this);
+      this.handleSelectbarUnpin = __bind(this.handleSelectbarUnpin, this);
+      this.handleSelectbarPin = __bind(this.handleSelectbarPin, this);
+      this.handleSelectbarCancel = __bind(this.handleSelectbarCancel, this);
+      this.checkSelectedFiles = __bind(this.checkSelectedFiles, this);
+      this.need_update = true;
+      this.updating_files = 0;
+      this.optional_stats = {
+        limit: 0,
+        free: 0,
+        used: 0
+      };
+      this.updateOptionalStats();
+      this.hover_totalbar = false;
+      this.menu_totalbar = new Menu();
+      this.editing_limit = false;
+      this.limit = "";
+      this.selected_files_num = 0;
+      this.selected_files_size = 0;
+      this.selected_files_pinned = 0;
+      this;
+    }
+
+    FileList.prototype.checkSelectedFiles = function() {
+      var site, site_file, _i, _len, _ref, _results;
+      this.selected_files_num = 0;
+      this.selected_files_size = 0;
+      this.selected_files_pinned = 0;
+      _ref = Page.site_list.sites;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        _results.push((function() {
+          var _j, _len1, _ref1, _results1;
+          _ref1 = site.files.items;
+          _results1 = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            site_file = _ref1[_j];
+            if (!site.files.selected[site_file.inner_path]) {
+              continue;
+            }
+            this.selected_files_num += 1;
+            this.selected_files_size += site_file.size;
+            _results1.push(this.selected_files_pinned += site_file.is_pinned);
+          }
+          return _results1;
+        }).call(this));
+      }
+      return _results;
+    };
+
+    FileList.prototype.handleSelectbarCancel = function() {
+      var site, site_file, _i, _j, _len, _len1, _ref, _ref1;
+      _ref = Page.site_list.sites;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        _ref1 = site.files.items;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          site_file = _ref1[_j];
+          site.files.selected = {};
+        }
+      }
+      this.checkSelectedFiles();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    FileList.prototype.handleSelectbarPin = function() {
+      var inner_paths, site, site_file, _i, _len, _ref;
+      _ref = Page.site_list.sites;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        inner_paths = (function() {
+          var _j, _len1, _ref1, _results;
+          _ref1 = site.files.items;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            site_file = _ref1[_j];
+            if (site.files.selected[site_file.inner_path]) {
+              _results.push(site_file.inner_path);
+            }
+          }
+          return _results;
+        })();
+        if (inner_paths.length > 0) {
+          (function(site) {
+            return Page.cmd("optionalFilePin", [inner_paths, site.row.address], function() {
+              return site.files.update();
+            });
+          })(site);
+        }
+      }
+      return this.handleSelectbarCancel();
+    };
+
+    FileList.prototype.handleSelectbarUnpin = function() {
+      var inner_paths, site, site_file, _i, _len, _ref;
+      _ref = Page.site_list.sites;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        inner_paths = (function() {
+          var _j, _len1, _ref1, _results;
+          _ref1 = site.files.items;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            site_file = _ref1[_j];
+            if (site.files.selected[site_file.inner_path]) {
+              _results.push(site_file.inner_path);
+            }
+          }
+          return _results;
+        })();
+        if (inner_paths.length > 0) {
+          (function(site) {
+            return Page.cmd("optionalFileUnpin", [inner_paths, site.row.address], function() {
+              return site.files.update();
+            });
+          })(site);
+        }
+      }
+      return this.handleSelectbarCancel();
+    };
+
+    FileList.prototype.handleSelectbarDelete = function() {
+      var inner_path, inner_paths, site, site_file, _i, _j, _len, _len1, _ref;
+      _ref = Page.site_list.sites;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        inner_paths = (function() {
+          var _j, _len1, _ref1, _results;
+          _ref1 = site.files.items;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            site_file = _ref1[_j];
+            if (site.files.selected[site_file.inner_path]) {
+              _results.push(site_file.inner_path);
+            }
+          }
+          return _results;
+        })();
+        if (inner_paths.length > 0) {
+          for (_j = 0, _len1 = inner_paths.length; _j < _len1; _j++) {
+            inner_path = inner_paths[_j];
+            Page.cmd("optionalFileDelete", [inner_path, site.row.address]);
+          }
+          site.files.update();
+        }
+      }
+      Page.site_list.update();
+      return this.handleSelectbarCancel();
+    };
+
+    FileList.prototype.handleTotalbarOver = function() {
+      this.hover_totalbar = true;
+      return Page.projector.scheduleRender();
+    };
+
+    FileList.prototype.handleTotalbarOut = function() {
+      this.hover_totalbar = false;
+      return Page.projector.scheduleRender();
+    };
+
+    FileList.prototype.handleEditlimitClick = function() {
+      this.editing_limit = true;
+      return false;
+    };
+
+    FileList.prototype.handleLimitCancelClick = function() {
+      this.editing_limit = false;
+      return false;
+    };
+
+    FileList.prototype.handleLimitSetClick = function() {
+      var limit;
+      if (this.limit.indexOf("M") > 0 || this.limit.indexOf("m") > 0) {
+        limit = (parseFloat(this.limit) / 1024).toString();
+      } else if (this.limit.indexOf("%") > 0) {
+        limit = parseFloat(this.limit) + "%";
+      } else {
+        limit = parseFloat(this.limit).toString();
+      }
+      this.optional_stats.limit = limit;
+      Page.cmd("optionalLimitSet", limit);
+      this.editing_limit = false;
+      return false;
+    };
+
+    FileList.prototype.handleTotalbarMenu = function() {
+      this.menu_totalbar.items = [];
+      this.menu_totalbar.items.push(["Edit optional files limit", this.handleEditlimitClick]);
+      if (this.menu_totalbar.visible) {
+        this.menu_totalbar.hide();
+      } else {
+        this.menu_totalbar.show();
+      }
+      return false;
+    };
+
+    FileList.prototype.handleLimitInput = function(e) {
+      return this.limit = e.target.value;
+    };
+
+    FileList.prototype.renderTotalbar = function() {
+
+      /*
+      		size_optional = 0
+      		optional_downloaded = 0
+      		for site in Page.site_list.sites
+      			size_optional += site.row.settings.size_optional
+      			optional_downloaded += site.row.settings.optional_downloaded
+       */
+      var limit, percent_limit, percent_optional_downloaded, percent_optional_used, total_space_limited;
+      if (this.editing_limit && parseFloat(this.limit) > 0) {
+        if (this.limit.indexOf("M") > 0 || this.limit.indexOf("m") > 0) {
+          limit = (parseFloat(this.limit) / 1024) + "GB";
+        } else {
+          limit = this.limit;
+        }
+      } else {
+        limit = this.optional_stats.limit;
+      }
+      if (limit.endsWith("%")) {
+        limit = this.optional_stats.free * (parseFloat(limit) / 100);
+      } else {
+        limit = parseFloat(limit) * 1024 * 1024 * 1024;
+      }
+      if (this.optional_stats.free > limit * 1.8 && !this.hover_totalbar) {
+        total_space_limited = limit * 1.8;
+      } else {
+        total_space_limited = this.optional_stats.free;
+      }
+      percent_optional_downloaded = (this.optional_stats.used / limit) * 100;
+      percent_optional_used = percent_optional_downloaded * (limit / total_space_limited);
+      percent_limit = (limit / total_space_limited) * 100;
+      return h("div#FileListDashboard", {
+        classes: {
+          editing: this.editing_limit
+        }
+      }, [
+        h("div.totalbar-edit", [
+          h("span.title", "Optional files limit:"), h("input", {
+            type: "text",
+            value: this.limit,
+            oninput: this.handleLimitInput
+          }), h("a.set", {
+            href: "#",
+            onclick: this.handleLimitSetClick
+          }, "Set"), h("a.cancel", {
+            href: "#",
+            onclick: this.handleLimitCancelClick
+          }, "Cancel")
+        ]), h("a.totalbar-title", {
+          href: "#",
+          title: "Space current used by optional files",
+          onclick: this.handleTotalbarMenu
+        }, "Used: " + (Text.formatSize(this.optional_stats.used)) + " / " + (Text.formatSize(limit)) + " (" + (Math.round(percent_optional_downloaded)) + "%)", h("div.icon-arrow-down")), this.menu_totalbar.render(), h("div.totalbar", {
+          onmouseover: this.handleTotalbarOver,
+          onmouseout: this.handleTotalbarOut
+        }, h("div.totalbar-used", {
+          style: "width: " + percent_optional_used + "%"
+        }), h("div.totalbar-limitbar", {
+          style: "width: " + percent_limit + "%"
+        }), h("div.totalbar-limit", {
+          style: "margin-left: " + percent_limit + "%"
+        }, h("span", {
+          title: "Space allowed to used by optional files"
+        }, Text.formatSize(limit))), h("div.totalbar-hddfree", h("span", {
+          title: "Total free space on your storage"
+        }, [
+          Text.formatSize(this.optional_stats.free), h("div.arrow", {
+            style: this.optional_stats.free > total_space_limited ? "width: 10px" : "width: 0px"
+          }, " \u25B6")
+        ])))
+      ]);
+    };
+
+    FileList.prototype.renderSelectbar = function() {
+      return h("div.selectbar", {
+        classes: {
+          visible: this.selected_files_num > 0
+        }
+      }, [
+        "Selected:", h("span.info", [h("span.num", this.selected_files_num + " files"), h("span.size", "(" + (Text.formatSize(this.selected_files_size)) + ")")]), h("div.actions", [
+          this.selected_files_pinned > this.selected_files_num / 2 ? h("a.action.pin.unpin", {
+            href: "#",
+            onclick: this.handleSelectbarUnpin
+          }, "UnPin") : h("a.action.pin", {
+            href: "#",
+            title: "Don't delete these files automatically",
+            onclick: this.handleSelectbarPin
+          }, "Pin"), h("a.action.delete", {
+            href: "#",
+            onclick: this.handleSelectbarDelete
+          }, "Delete")
+        ]), h("a.cancel.link", {
+          href: "#",
+          onclick: this.handleSelectbarCancel
+        }, "Cancel")
+      ]);
+    };
+
+    FileList.prototype.updateOptionalStats = function() {
+      return Page.cmd("optionalLimitStats", [], (function(_this) {
+        return function(res) {
+          _this.limit = res.limit;
+          if (!_this.limit.endsWith("%")) {
+            _this.limit += " GB";
+          }
+          return _this.optional_stats = res;
+        };
+      })(this));
+    };
+
+    FileList.prototype.updateAllFiles = function() {
+      var used;
+      this.updating_files = 0;
+      used = 0;
+      Page.site_list.sites.map((function(_this) {
+        return function(site) {
+          if (!site.row.settings.size_optional) {
+            return;
+          }
+          _this.updating_files += 1;
+          used += site.row.settings.optional_downloaded;
+          return site.files.update(function() {
+            return _this.updating_files -= 1;
+          });
+        };
+      })(this));
+      if (used !== this.optional_stats.used) {
+        this.log("Used " + (Text.formatSize(this.optional_stats.used)) + " -> " + (Text.formatSize(used)));
+        return this.optional_stats.used = used;
+      }
+    };
+
+    FileList.prototype.render = function() {
+      var site, sites, sites_connected, sites_favorited;
+      if (Page.site_list.sites && !this.need_update && this.updating_files === 0 && document.body.className !== "loaded") {
+        document.body.className = "loaded";
+      }
+      if (this.need_update && Page.site_list.sites.length) {
+        this.updateAllFiles();
+        this.need_update = false;
+      }
+      sites = (function() {
+        var _i, _len, _ref, _results;
+        _ref = Page.site_list.sites;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          site = _ref[_i];
+          if (site.row.settings.size_optional) {
+            _results.push(site);
+          }
+        }
+        return _results;
+      })();
+      sites_favorited = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = sites.length; _i < _len; _i++) {
+          site = sites[_i];
+          if (site.favorite) {
+            _results.push(site);
+          }
+        }
+        return _results;
+      })();
+      sites_connected = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = sites.length; _i < _len; _i++) {
+          site = sites[_i];
+          if (!site.favorite) {
+            _results.push(site);
+          }
+        }
+        return _results;
+      })();
+      if (sites.length > 0 && sites[0].files.loaded === false) {
+        if (sites_favorited.length) {
+          sites_favorited = [sites_favorited[0]];
+          sites_connected = [];
+        } else {
+          sites_favorited = [];
+          sites_connected = [sites_connected[0]];
+        }
+      }
+      if (sites.length === 0) {
+        document.body.className = "loaded";
+        return h("div#FileList", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
+      }
+      return h("div#FileList", [
+        this.renderSelectbar(), this.renderTotalbar(), sites_favorited.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_connected.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this))
+      ]);
+    };
+
+    FileList.prototype.onSiteInfo = function(site_info) {
+      var rate_limit, _ref, _ref1;
+      if (((_ref = site_info.event) != null ? _ref[0] : void 0) === "peers_added") {
+        return false;
+      }
+      if (site_info.tasks === 0 && ((_ref1 = site_info.event) != null ? _ref1[0] : void 0) === "file_done") {
+        rate_limit = 1000;
+      } else {
+        rate_limit = 10000;
+      }
+      return RateLimit(rate_limit, (function(_this) {
+        return function() {
+          return _this.need_update = true;
+        };
+      })(this));
+    };
+
+    return FileList;
+
+  })(Class);
+
+  window.FileList = FileList;
 
 }).call(this);
 
@@ -2372,6 +2909,7 @@
 
     function Head() {
       this.render = __bind(this.render, this);
+      this.handleModeClick = __bind(this.handleModeClick, this);
       this.handleShutdownZeronetClick = __bind(this.handleShutdownZeronetClick, this);
       this.handleUpdateZeronetClick = __bind(this.handleUpdateZeronetClick, this);
       this.handleTorClick = __bind(this.handleTorClick, this);
@@ -2483,6 +3021,15 @@
       })(this));
     };
 
+    Head.prototype.handleModeClick = function(e) {
+      if (Page.server_info.rev < 1700) {
+        Page.cmd("wrapperNotification", ["info", "This feature requires ZeroNet version 0.5.0"]);
+      } else {
+        Page.setProjectorMode(e.target.hash.replace("#", ""));
+      }
+      return false;
+    };
+
     Head.prototype.render = function() {
       return h("div#Head", h("a.settings", {
         href: "#Settings",
@@ -2496,6 +3043,20 @@
           width: 50,
           height: 50
         }), h("span", ["Hello ZeroNet_"])
+      ]), h("div.modes", [
+        h("a.mode.sites", {
+          href: "#Sites",
+          classes: {
+            active: Page.mode === "Sites"
+          },
+          onclick: this.handleModeClick
+        }, "Sites"), h("a.mode.files", {
+          href: "#Files",
+          classes: {
+            active: Page.mode === "Files"
+          },
+          onclick: this.handleModeClick
+        }, "Files")
       ]));
     };
 
@@ -2506,6 +3067,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
@@ -2523,12 +3085,17 @@
 
     function Site(row, _at_item_list) {
       this.item_list = _at_item_list;
+      this.renderOptionalStats = __bind(this.renderOptionalStats, this);
       this.render = __bind(this.render, this);
+      this.handleHelpsClick = __bind(this.handleHelpsClick, this);
+      this.handleHelpAllClick = __bind(this.handleHelpAllClick, this);
+      this.handleHelpClick = __bind(this.handleHelpClick, this);
       this.handleSettingsClick = __bind(this.handleSettingsClick, this);
       this.handleDeleteClick = __bind(this.handleDeleteClick, this);
       this.handleCloneClick = __bind(this.handleCloneClick, this);
       this.handlePauseClick = __bind(this.handlePauseClick, this);
       this.handleResumeClick = __bind(this.handleResumeClick, this);
+      this.handleCheckfilesClick = __bind(this.handleCheckfilesClick, this);
       this.handleUpdateClick = __bind(this.handleUpdateClick, this);
       this.handleUnfavoriteClick = __bind(this.handleUnfavoriteClick, this);
       this.handleFavoriteClick = __bind(this.handleFavoriteClick, this);
@@ -2541,12 +3108,16 @@
       this.message_timer = null;
       this.favorite = Page.local_storage.favorite_sites[row.address];
       this.key = row.address;
+      this.optional_helps = [];
+      this.optional_helps_disabled = {};
       this.setRow(row);
+      this.files = new SiteFiles(this);
       this.menu = new Menu();
+      this.menu_helps = null;
     }
 
     Site.prototype.setRow = function(row) {
-      var _ref, _ref1, _ref2;
+      var key, val, _ref, _ref1, _ref2;
       if (((_ref = row.event) != null ? _ref[0] : void 0) === "updated" && row.content_updated !== false) {
         this.setMessage("Updated!", "done");
       } else if (((_ref1 = row.event) != null ? _ref1[0] : void 0) === "updating") {
@@ -2564,6 +3135,19 @@
       } else if (row.tasks === 0 && ((_ref2 = this.row) != null ? _ref2.tasks : void 0) > 0) {
         this.setMessage("Updated!", "done");
       }
+      if (row.body == null) {
+        row.body = "";
+      }
+      this.optional_helps = (function() {
+        var _ref3, _results;
+        _ref3 = row.settings.optional_help;
+        _results = [];
+        for (key in _ref3) {
+          val = _ref3[key];
+          _results.push([key, val]);
+        }
+        return _results;
+      })();
       return this.row = row;
     };
 
@@ -2622,6 +3206,15 @@
       return false;
     };
 
+    Site.prototype.handleCheckfilesClick = function() {
+      Page.cmd("siteUpdate", {
+        "address": this.row.address,
+        "check_files": true
+      });
+      this.show_errors = true;
+      return false;
+    };
+
     Site.prototype.handleResumeClick = function() {
       Page.cmd("siteResume", {
         "address": this.row.address
@@ -2670,6 +3263,7 @@
         this.menu.items.push(["Favorite", this.handleFavoriteClick]);
       }
       this.menu.items.push(["Update", this.handleUpdateClick]);
+      this.menu.items.push(["Check files", this.handleCheckfilesClick]);
       if (this.row.settings.serving) {
         this.menu.items.push(["Pause", this.handlePauseClick]);
       } else {
@@ -2686,6 +3280,73 @@
         this.menu.show();
       }
       return false;
+    };
+
+    Site.prototype.handleHelpClick = function(directory, title) {
+      if (this.optional_helps_disabled[directory]) {
+        Page.cmd("OptionalHelp", [directory, title, this.row.address]);
+        delete this.optional_helps_disabled[directory];
+      } else {
+        Page.cmd("OptionalHelpRemove", [directory, this.row.address]);
+        this.optional_helps_disabled[directory] = true;
+      }
+      return true;
+    };
+
+    Site.prototype.handleHelpAllClick = function() {
+      if (this.row.settings.autodownloadoptional === true) {
+        return Page.cmd("OptionalHelpAll", [false, this.row.address], (function(_this) {
+          return function() {
+            _this.row.settings.autodownloadoptional = false;
+            return Page.projector.scheduleRender();
+          };
+        })(this));
+      } else {
+        return Page.cmd("OptionalHelpAll", [true, this.row.address], (function(_this) {
+          return function() {
+            _this.row.settings.autodownloadoptional = true;
+            return Page.projector.scheduleRender();
+          };
+        })(this));
+      }
+    };
+
+    Site.prototype.handleHelpsClick = function(e) {
+      var directory, title, _i, _len, _ref, _ref1;
+      if (e.target.classList.contains("menu-item")) {
+        return;
+      }
+      if (!this.menu_helps) {
+        this.menu_helps = new Menu();
+      }
+      this.menu_helps.items = [];
+      this.menu_helps.items.push([
+        "Help distribute all new files", this.handleHelpAllClick, ((function(_this) {
+          return function() {
+            return _this.row.settings.autodownloadoptional;
+          };
+        })(this))
+      ]);
+      if (this.optional_helps.length > 0) {
+        this.menu_helps.items.push(["---"]);
+      }
+      _ref = this.optional_helps;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        _ref1 = _ref[_i], directory = _ref1[0], title = _ref1[1];
+        this.menu_helps.items.push([
+          title, ((function(_this) {
+            return function() {
+              return _this.handleHelpClick(directory, title);
+            };
+          })(this)), ((function(_this) {
+            return function() {
+              return !_this.optional_helps_disabled[directory];
+            };
+          })(this))
+        ]);
+      }
+      this.menu_helps.toggle();
+      return true;
     };
 
     Site.prototype.getHref = function() {
@@ -2731,6 +3392,68 @@
       }, ["\u22EE"]), this.menu.render());
     };
 
+    Site.prototype.renderCircle = function(value, max) {
+      var dashoffset, stroke;
+      if (value < 1) {
+        dashoffset = 75 + (1 - value) * 75;
+      } else {
+        dashoffset = Math.max(0, 75 - ((value - 1) / 9) * 75);
+      }
+      stroke = "hsl(" + (Math.min(555, value * 50)) + ", 100%, 61%)";
+      return h("div.circle", {
+        title: "Upload/Download ratio",
+        innerHTML: "<svg class=\"circle-svg\" width=\"30\" height=\"30\" viewPort=\"0 0 30 30\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n  			<circle r=\"12\" cx=\"15\" cy=\"15\" fill=\"transparent\" class='circle-bg'></circle>\n  			<circle r=\"12\" cx=\"15\" cy=\"15\" fill=\"transparent\" class='circle-fg' style='stroke-dashoffset: " + dashoffset + "; stroke: " + stroke + "'></circle>\n</svg>"
+      });
+    };
+
+    Site.prototype.renderOptionalStats = function() {
+      var ratio, ratio_hue, row;
+      row = this.row;
+      ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1);
+      if (ratio >= 100) {
+        ratio = "\u221E";
+      } else if (ratio >= 10) {
+        ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(0);
+      }
+      ratio_hue = Math.min(555, (row.settings.bytes_sent / row.settings.bytes_recv) * 50);
+      return h("div.site", {
+        key: this.key
+      }, [
+        h("div.title", [
+          h("h3.name", h("a", {
+            href: this.getHref()
+          }, row.content.title)), h("div.size", {
+            title: "Site size limit: " + (Text.formatSize(row.size_limit * 1024 * 1024))
+          }, [
+            "" + (Text.formatSize(row.settings.size)), h("div.bar", h("div.bar-active", {
+              style: "width: " + (100 * (row.settings.size / (row.size_limit * 1024 * 1024))) + "%"
+            }))
+          ]), h("div.plus", "+"), h("div.size.size-optional", {
+            title: "Optional files on site: " + (Text.formatSize(row.settings.size_optional))
+          }, [
+            "" + (Text.formatSize(row.settings.optional_downloaded)), h("span.size-title", "Optional"), h("div.bar", h("div.bar-active", {
+              style: "width: " + (100 * (row.settings.optional_downloaded / row.settings.size_optional)) + "%"
+            }))
+          ]), h("a.helps", {
+            href: "#",
+            onmousedown: this.handleHelpsClick,
+            onclick: Page.returnFalse
+          }, h("div.icon-share"), this.row.settings.autodownloadoptional ? "\u2661" : this.optional_helps.length, h("div.icon-arrow-down"), this.menu_helps ? this.menu_helps.render() : void 0), this.renderCircle(parseFloat((row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1)), 10), h("div.circle-value", {
+            classes: {
+              negative: ratio < 1
+            },
+            style: "color: hsl(" + ratio_hue + ", 70%, 60%)"
+          }, ratio), h("div.transfers", [
+            h("div.up", {
+              "title": "Uploaded"
+            }, "\u22F0 \u00A0" + (Text.formatSize(row.settings.bytes_sent))), h("div.down", {
+              "title": "Downloaded"
+            }, "\u22F1 \u00A0" + (Text.formatSize(row.settings.bytes_recv)))
+          ])
+        ]), this.files.render()
+      ]);
+    };
+
     return Site;
 
   })(Class);
@@ -2739,6 +3462,197 @@
 
 }).call(this);
 
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
+
+
+(function() {
+  var SiteFiles,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __hasProp = {}.hasOwnProperty;
+
+  SiteFiles = (function(_super) {
+    __extends(SiteFiles, _super);
+
+    function SiteFiles(_at_site) {
+      this.site = _at_site;
+      this.update = __bind(this.update, this);
+      this.render = __bind(this.render, this);
+      this.renderOrder = __bind(this.renderOrder, this);
+      this.handleMoreClick = __bind(this.handleMoreClick, this);
+      this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
+      this.handleRowMouseenter = __bind(this.handleRowMouseenter, this);
+      this.handleSelectMousedown = __bind(this.handleSelectMousedown, this);
+      this.handleSelectEnd = __bind(this.handleSelectEnd, this);
+      this.handleSelectClick = __bind(this.handleSelectClick, this);
+      this.limit = 10;
+      this.selected = {};
+      this.items = [];
+      this.loaded = false;
+      this.orderby = "time_downloaded";
+      this.orderby_desc = true;
+      this.has_more = false;
+    }
+
+    SiteFiles.prototype.handleSelectClick = function(e) {
+      return false;
+    };
+
+    SiteFiles.prototype.handleSelectEnd = function(e) {
+      document.body.removeEventListener('mouseup', this.handleSelectEnd);
+      return this.select_action = null;
+    };
+
+    SiteFiles.prototype.handleSelectMousedown = function(e) {
+      var inner_path;
+      inner_path = e.target.attributes.inner_path.value;
+      if (this.selected[inner_path]) {
+        delete this.selected[inner_path];
+        this.select_action = "deselect";
+      } else {
+        this.selected[inner_path] = true;
+        this.select_action = "select";
+      }
+      Page.file_list.checkSelectedFiles();
+      document.body.addEventListener('mouseup', this.handleSelectEnd);
+      e.stopPropagation();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    SiteFiles.prototype.handleRowMouseenter = function(e) {
+      var inner_path;
+      if (e.buttons && this.select_action) {
+        inner_path = e.target.attributes.inner_path.value;
+        if (this.select_action === "select") {
+          this.selected[inner_path] = true;
+        } else {
+          delete this.selected[inner_path];
+        }
+        Page.file_list.checkSelectedFiles();
+        Page.projector.scheduleRender();
+      }
+      return false;
+    };
+
+    SiteFiles.prototype.handleOrderbyClick = function(e) {
+      var orderby;
+      orderby = e.currentTarget.attributes.orderby.value;
+      if (this.orderby === orderby) {
+        this.orderby_desc = !this.orderby_desc;
+      }
+      this.orderby = orderby;
+      this.update();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    SiteFiles.prototype.handleMoreClick = function() {
+      this.limit += 15;
+      this.update();
+      return false;
+    };
+
+    SiteFiles.prototype.renderOrder = function(title, orderby) {
+      return h("a.title.orderby", {
+        href: "#" + orderby,
+        orderby: orderby,
+        onclick: this.handleOrderbyClick,
+        classes: {
+          selected: this.orderby === orderby,
+          desc: this.orderby_desc
+        }
+      }, [title, h("div.icon.icon-arrow-down")]);
+    };
+
+    SiteFiles.prototype.render = function() {
+      var _ref;
+      if (!((_ref = this.items) != null ? _ref.length : void 0)) {
+        return [];
+      }
+      return [
+        h("div.files", {
+          exitAnimation: Animation.slideUpInout
+        }, [
+          h("div.tr.thead", [h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), h("div.td.size", this.renderOrder("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
+            return function(file) {
+              var profile_color;
+              if (file.peer >= 10) {
+                profile_color = "#47d094";
+              } else if (file.peer > 0) {
+                profile_color = "#f5b800";
+              } else {
+                profile_color = "#d1d1d1";
+              }
+              return h("div.tr", {
+                key: file.inner_path,
+                inner_path: file.inner_path,
+                exitAnimation: Animation.slideUpInout,
+                enterAnimation: Animation.slideDown,
+                classes: {
+                  selected: _this.selected[file.inner_path]
+                },
+                onmouseenter: _this.handleRowMouseenter
+              }, [
+                h("div.td.inner_path", h("a.checkbox", {
+                  href: "#Select",
+                  onmousedown: _this.handleSelectMousedown,
+                  onclick: _this.handleSelectClick,
+                  inner_path: file.inner_path
+                }), h("a.title", {
+                  href: _this.site.getHref() + file.inner_path,
+                  target: "_top"
+                }, file.inner_path), file.is_pinned ? h("span.pinned", {
+                  exitAnimation: Animation.slideUpInout,
+                  enterAnimation: Animation.slideDown
+                }, "Pinned") : void 0), h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
+                  h("div.icon.icon-profile", {
+                    style: "color: " + profile_color
+                  }), h("span.num", file.peer)
+                ]), h("div.td.uploaded", h("div.uploaded-text", Text.formatSize(file.uploaded)), h("div.dots-container", [
+                  h("span.dots.dots-bg", {
+                    title: "Ratio: " + ((file.uploaded / file.size).toFixed(1))
+                  }, "\u2022\u2022\u2022\u2022\u2022"), h("span.dots.dots-fg", {
+                    title: "Ratio: " + ((file.uploaded / file.size).toFixed(1)),
+                    style: "width: " + (Math.min(5, file.uploaded / file.size) * 9) + "px"
+                  }, "\u2022\u2022\u2022\u2022\u2022")
+                ])), h("div.td.added", file.time_downloaded ? Time.since(file.time_downloaded) : "n/a")
+              ]);
+            };
+          })(this)))
+        ]), this.has_more ? h("div.more-container", h("a.more", {
+          href: "#More",
+          onclick: this.handleMoreClick
+        }, "More files...")) : void 0
+      ];
+    };
+
+    SiteFiles.prototype.update = function(cb) {
+      var orderby;
+      orderby = this.orderby + (this.orderby_desc ? " DESC" : "");
+      return Page.cmd("optionalFileList", {
+        address: this.site.row.address,
+        limit: this.limit + 1,
+        orderby: orderby
+      }, (function(_this) {
+        return function(res) {
+          _this.items = res.slice(0, +(_this.limit - 1) + 1 || 9e9);
+          _this.loaded = true;
+          _this.has_more = res.length > _this.limit;
+          Page.projector.scheduleRender();
+          return typeof cb === "function" ? cb() : void 0;
+        };
+      })(this));
+    };
+
+    return SiteFiles;
+
+  })(Class);
+
+  window.SiteFiles = SiteFiles;
+
+}).call(this);
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
@@ -2938,7 +3852,7 @@
     SiteList.prototype.render = function() {
       var site;
       if (!this.loaded) {
-        return h("div");
+        return h("div#SiteList");
       }
       this.sites_favorited = (function() {
         var _i, _len, _ref, _results;
@@ -2964,7 +3878,7 @@
         }
         return _results;
       }).call(this);
-      return h("div", [
+      return h("div#SiteList", [
         this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
         })), h("h2.connected", "Connected sites:"), h("div.SiteList.connected", this.sites_connected.map(function(item) {
@@ -3026,27 +3940,66 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      return this.latest_version = "0.4.1";
+      this.latest_version = "0.4.1";
+      this.mode = "Sites";
+      this.change_timer = null;
+      return document.body.id = "Page" + this.mode;
+    };
+
+    ZeroHello.prototype.setProjectorMode = function(mode) {
+      this.log("setProjectorMode", mode);
+      if (mode === "Sites") {
+        try {
+          this.projector.detach(this.file_list.render);
+        } catch (_error) {
+          this;
+        }
+        this.projector.replace($("#FeedList"), this.feed_list.render);
+        this.projector.replace($("#SiteList"), this.site_list.render);
+      } else if (mode === "Files") {
+        try {
+          this.projector.detach(this.feed_list.render);
+          this.projector.detach(this.site_list.render);
+        } catch (_error) {
+          this;
+        }
+        this.projector.replace($("#FileList"), this.file_list.render);
+      }
+      if (this.mode !== mode) {
+        this.mode = mode;
+        return setTimeout((function() {
+          document.body.id = "Page" + mode;
+          if (this.change_timer) {
+            clearInterval(this.change_timer);
+          }
+          document.body.classList.add("changing");
+          return this.change_timer = setTimeout((function() {
+            return document.body.classList.remove("changing");
+          }), 400);
+        }), 60);
+      }
     };
 
     ZeroHello.prototype.createProjector = function() {
       this.projector = maquette.createProjector();
+      this.projectors = {};
       this.site_list = new SiteList();
       this.feed_list = new FeedList();
+      this.file_list = new FileList();
       this.head = new Head();
       this.dashboard = new Dashboard();
-      if (base.href.indexOf("?") === -1) {
-        this.route("");
-      } else {
-        this.route(base.href.replace(/.*?\?/, ""));
-      }
+      this.route("");
+
+      /*if base.href.indexOf("?") == -1
+      		else
+      			@route(base.href.replace(/.*?\?/, ""))
+       */
       this.loadLocalStorage();
       this.on_site_info.then((function(_this) {
         return function() {
-          _this.projector.replace($("#SiteList"), _this.site_list.render);
-          _this.projector.replace($("#FeedList"), _this.feed_list.render);
           _this.projector.replace($("#Head"), _this.head.render);
-          return _this.projector.replace($("#Dashboard"), _this.dashboard.render);
+          _this.projector.replace($("#Dashboard"), _this.dashboard.render);
+          return _this.setProjectorMode(_this.mode);
         };
       })(this));
       return setInterval((function() {
@@ -3156,6 +4109,7 @@
       }
       this.site_list.onSiteInfo(site_info);
       this.feed_list.onSiteInfo(site_info);
+      this.file_list.onSiteInfo(site_info);
       return this.on_site_info.resolve();
     };
 
