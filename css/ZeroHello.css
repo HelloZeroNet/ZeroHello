@@ -2,8 +2,12 @@ body { background-color: #EDF2F5; font-family: Roboto; margin: 0px; padding: 0px
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
+h3 a { color: white; text-decoration: none; }
 a { color: #9760F9 }
 a:hover { text-decoration: none }
+
+.link { background-color: transparent; outline: 5px solid transparent; transition: all 0.3s }
+.link:active { background-color: #EFEFEF; outline: 5px solid #EFEFEF; transition: none }
 
 .servedby { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 .head, .topright { display: none }
@@ -20,3 +24,29 @@ a:hover { text-decoration: none }
 .bottom a:hover { background-color: #413254; transition: none; color: white }
 
 .heart { color: #af3bff; font-family: Verdana; }
+
+/* Pages */
+
+#SiteList { transition: all 0.3s; height: 100%; float: left }
+#SiteList .SiteList { width: 400px }
+#SiteList .details { transition: all 0.6s }
+#FeedList { transition: all 0.3s; height: 100%; }
+.FileList-container { width: 0px; float: left; }
+#FileList { transition: all 0.3s; opacity: 1; width: 100%; width: 100vw; transform: none; max-height: 100%; padding-right: 10px; box-sizing: border-box; padding-bottom: 50px; }
+#FileList .files { transition: all 0.3s; opacity: 1; transform: none }
+.left { transition: 0.6s all cubic-bezier(0.785, 0.135, 0.15, 0.86); overflow: hidden; }
+body.changing { overflow-y: scroll; }
+
+/* PageSites */
+#PageSites #FileList, body.changing #FileList { opacity: 0; transform: translateY(30px); pointer-events: none; overflow: hidden; }
+#PageSites #FileList { max-height: 0px }
+#PageSites #FileList .files, body.changing #FileList .files { opacity: 0; transform: translateY(30px); pointer-events: none; }
+
+/* PageFiles */
+#PageFiles #SiteList { opacity: 0; visibility: hidden; transform: translateX(-20px); height: 0px; pointer-events: none; }
+#PageFiles #SiteList .details { transform: translateX(180px); }
+#PageFiles #FeedList { visibility: hidden; height: 0px; pointer-events: none; overflow: hidden }
+#PageFiles #Head .settings { opacity: 0; visibility: hidden; overflow: hidden }
+#PageFiles .left { width: 100%; background-image: linear-gradient(220deg, #372d56 0px, #162761 2000px); }
+#PageFiles .left .logo { background-color: #162150 }
+#PageFiles .right { height: 0px }
