@@ -92,10 +92,10 @@ class SiteList extends Class
 
 	render: =>
 		if not @loaded
-			return h("div")
+			return h("div#SiteList")
 		@sites_favorited = (site for site in @sites when site.favorite and not site.row.content.merged_type)
 		@sites_connected = (site for site in @sites when not site.favorite and not site.row.content.merged_type)
-		h("div", [
+		h("div#SiteList", [
 			if @sites_favorited.length > 0 then h("h2.favorited", "Favorited sites:"),
 			h("div.SiteList.favorited", @sites_favorited.map (item) ->
 				item.render()
