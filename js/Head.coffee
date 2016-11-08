@@ -55,6 +55,12 @@ class Head extends Class
 		Page.cmd "wrapperConfirm", ["Are you sure?", "Shut down ZeroNet"], =>
 			Page.cmd "serverShutdown"
 
+	handleModeClick: (e) =>
+		if Page.server_info.rev < 1700
+			Page.cmd "wrapperNotification", ["info", "This feature requires ZeroNet version 0.5.0"]
+		else
+			Page.setProjectorMode(e.target.hash.replace("#", ""))
+		return false
 
 	render: =>
 		h("div#Head",
@@ -63,6 +69,10 @@ class Head extends Class
 			h("a.logo", {href: "?Home"}, [
 				h("img", {src: 'img/logo.png', width: 50, height: 50}),
 				h("span", ["Hello ZeroNet_"])
+			]),
+			h("div.modes", [
+				h("a.mode.sites", {href: "#Sites", classes: {active: Page.mode == "Sites"}, onclick: @handleModeClick}, "Sites")
+				h("a.mode.files", {href: "#Files", classes: {active: Page.mode == "Files"}, onclick: @handleModeClick}, "Files")
 			])
 		)
 
