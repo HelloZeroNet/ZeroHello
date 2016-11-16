@@ -27,7 +27,7 @@ a:hover { text-decoration: none }
 
 /* Pages */
 
-#SiteList { transition: all 0.3s; height: 100%; float: left }
+#SiteList { transition: all 0.3s; height: 100%; float: left; padding-bottom: 230px; }
 #SiteList .SiteList { width: 400px }
 #SiteList .details { transition: all 0.6s }
 #FeedList { transition: all 0.3s; height: 100%; }

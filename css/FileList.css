@@ -58,7 +58,6 @@
 #FileList .files .orderby:active { background-color: rgba(133, 239, 255, 0.09); outline: 5px solid rgba(133, 239, 255, 0.09); transition: none }
 #FileList .files .orderby:hover .icon-arrow-down { opacity: 0.5 }
 #FileList .files .orderby:not(.desc) .icon-arrow-down { transform: rotateZ(180deg) }
-#FileList .files .td.size .orderby .icon-arrow-down { position: absolute; margin-left: -45px; }
 
 #FileList .files .tr.selected .td { background-color: #fffbdb; border-top-color: #ece8c2 }
 
