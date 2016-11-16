@@ -182,7 +182,6 @@
 #FileList .files .orderby:active { background-color: rgba(133, 239, 255, 0.09); outline: 5px solid rgba(133, 239, 255, 0.09); -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
 #FileList .files .orderby:hover .icon-arrow-down { opacity: 0.5 }
 #FileList .files .orderby:not(.desc) .icon-arrow-down { -webkit-transform: rotateZ(180deg) ; -moz-transform: rotateZ(180deg) ; -o-transform: rotateZ(180deg) ; -ms-transform: rotateZ(180deg) ; transform: rotateZ(180deg)  }
-#FileList .files .td.size .orderby .icon-arrow-down { position: absolute; margin-left: -45px; }
 
 #FileList .files .tr.selected .td { background-color: #fffbdb; border-top-color: #ece8c2 }
 
@@ -519,7 +518,7 @@ a:hover { text-decoration: none }
 
 /* Pages */
 
-#SiteList { -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; height: 100%; float: left }
+#SiteList { -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; height: 100%; float: left; padding-bottom: 230px; }
 #SiteList .SiteList { width: 400px }
 #SiteList .details { -webkit-transition: all 0.6s ; -moz-transition: all 0.6s ; -o-transition: all 0.6s ; -ms-transition: all 0.6s ; transition: all 0.6s  }
 #FeedList { -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; height: 100%; }

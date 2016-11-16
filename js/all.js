@@ -1714,6 +1714,17 @@
 }).call(this);
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Translate.coffee ---- */
+
+
+(function() {
+  window._ = function(s) {
+    return s;
+  };
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
 
 
@@ -1885,7 +1896,14 @@
     };
 
     Dashboard.prototype.getTorTitle = function() {
-      return Page.server_info.tor_status.replace(/\((.*)\)/, "").trim();
+      var tor_title;
+      tor_title = Page.server_info.tor_status.replace(/\((.*)\)/, "").trim();
+      if (tor_title === "Disabled") {
+        tor_title = _("Disabled");
+      } else if (tor_title === "Error") {
+        tor_title = _("Error");
+      }
+      return tor_title;
     };
 
     Dashboard.prototype.handleTorClick = function() {
@@ -2363,7 +2381,7 @@
         h("img", {
           src: "img/logo_big.png",
           height: 150
-        }), h("h1", ["Welcome to ", h("span.zeronet", "ZeroNet")]), h("h2", ["Let's build a decentralized Internet together!"]), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
+        }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
           h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
             href: Text.getSiteUrl("Board.ZeroNetwork.bit")
           }, [h("div.title", ["ZeroBoard"]), h("div.description", ["Simple messaging board"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerotalk", {
@@ -3050,13 +3068,13 @@
             active: Page.mode === "Sites"
           },
           onclick: this.handleModeClick
-        }, "Sites"), h("a.mode.files", {
+        }, _("Sites")), h("a.mode.files", {
           href: "#Files",
           classes: {
             active: Page.mode === "Files"
           },
           onclick: this.handleModeClick
-        }, "Files")
+        }, _("Files"))
       ]));
     };
 
@@ -3067,7 +3085,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
@@ -3463,6 +3480,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
 
 
@@ -3479,6 +3497,7 @@
       this.site = _at_site;
       this.update = __bind(this.update, this);
       this.render = __bind(this.render, this);
+      this.renderOrderRight = __bind(this.renderOrderRight, this);
       this.renderOrder = __bind(this.renderOrder, this);
       this.handleMoreClick = __bind(this.handleMoreClick, this);
       this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
@@ -3566,6 +3585,18 @@
       }, [title, h("div.icon.icon-arrow-down")]);
     };
 
+    SiteFiles.prototype.renderOrderRight = function(title, orderby) {
+      return h("a.title.orderby", {
+        href: "#" + orderby,
+        orderby: orderby,
+        onclick: this.handleOrderbyClick,
+        classes: {
+          selected: this.orderby === orderby,
+          desc: this.orderby_desc
+        }
+      }, [h("div.icon.icon-arrow-down"), title]);
+    };
+
     SiteFiles.prototype.render = function() {
       var _ref;
       if (!((_ref = this.items) != null ? _ref.length : void 0)) {
@@ -3575,7 +3606,7 @@
         h("div.files", {
           exitAnimation: Animation.slideUpInout
         }, [
-          h("div.tr.thead", [h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), h("div.td.size", this.renderOrder("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
+          h("div.tr.thead", [h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
             return function(file) {
               var profile_color;
               if (file.peer >= 10) {
@@ -3940,7 +3971,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      this.latest_version = "0.4.1";
+      this.latest_version = "0.5.0";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;
@@ -3989,11 +4020,6 @@
       this.head = new Head();
       this.dashboard = new Dashboard();
       this.route("");
-
-      /*if base.href.indexOf("?") == -1
-      		else
-      			@route(base.href.replace(/.*?\?/, ""))
-       */
       this.loadLocalStorage();
       this.on_site_info.then((function(_this) {
         return function() {
