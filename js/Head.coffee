@@ -71,8 +71,8 @@ class Head extends Class
 				h("span", ["Hello ZeroNet_"])
 			]),
 			h("div.modes", [
-				h("a.mode.sites", {href: "#Sites", classes: {active: Page.mode == "Sites"}, onclick: @handleModeClick}, "Sites")
-				h("a.mode.files", {href: "#Files", classes: {active: Page.mode == "Files"}, onclick: @handleModeClick}, "Files")
+				h("a.mode.sites", {href: "#Sites", classes: {active: Page.mode == "Sites"}, onclick: @handleModeClick}, _("Sites"))
+				h("a.mode.files", {href: "#Files", classes: {active: Page.mode == "Files"}, onclick: @handleModeClick}, _("Files"))
 			])
 		)
 

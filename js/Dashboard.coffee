@@ -13,8 +13,10 @@ class Dashboard extends Class
 		return Page.server_info.fileserver_ip == "127.0.0.1"
 
 	getTorTitle: ->
-		return Page.server_info.tor_status.replace(/\((.*)\)/, "").trim()
-
+		tor_title = Page.server_info.tor_status.replace(/\((.*)\)/, "").trim()
+		if tor_title == "Disabled" then tor_title = _("Disabled")
+		else if tor_title == "Error" then tor_title = _("Error")
+		return tor_title
 
 	handleTorClick: =>
 		@menu_tor.items = []
