@@ -65,6 +65,17 @@ class SiteFiles extends Class
 			h("div.icon.icon-arrow-down")
 		])
 
+	renderOrderRight: (title, orderby) =>
+		h("a.title.orderby", {
+			href: "##{orderby}",
+			orderby: orderby,
+			onclick: @handleOrderbyClick,
+			classes: {selected: @orderby == orderby, desc: @orderby_desc}
+		}, [
+			h("div.icon.icon-arrow-down"),
+			title
+		])
+
 	render: =>
 		if not @items?.length
 			return []
@@ -72,7 +83,7 @@ class SiteFiles extends Class
 			h("div.files", exitAnimation: Animation.slideUpInout, [
 				h("div.tr.thead", [
 					h("div.td.inner_path", @renderOrder("Optional file", "is_pinned DESC, inner_path")),
-					h("div.td.size", @renderOrder("Size", "size")),
+					h("div.td.size", @renderOrderRight("Size", "size")),
 					h("div.td.peer", @renderOrder("Peers", "peer")),
 					h("div.td.uploaded", @renderOrder("Uploaded", "uploaded")),
 					h("div.td.added", @renderOrder("Finished", "time_downloaded"))
