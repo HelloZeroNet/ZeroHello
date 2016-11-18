@@ -8,6 +8,29 @@ class Head extends Class
 		else
 			return "Up to date!"
 
+	handleLanguageClick: (e) =>
+		if Page.server_info.rev < 1750
+			return Page.cmd "wrapperNotification", ["info", "You need ZeroNet 0.5.1 to change the interface's language"]
+		lang = e.srcElement.hash.replace("#", "")
+		Page.cmd "configSet", ["language", lang]
+		Page.server_info.language = lang
+		top.location = "?Home"
+		return false
+
+	renderMenuLanguage: =>
+		langs = ["en", "hu"]
+		if Page.server_info.language not in langs
+			langs.push Page.server_info.language
+
+		h("div.menu-radio",
+			h("span", {style: "margin-right: 5px"}, "Language: "),
+			for lang in langs
+				[
+					h("a", {href: "#"+lang, onclick: @handleLanguageClick, classes: {selected: Page.server_info.language == lang}}, lang),
+					" "
+				]
+		)
+
 	handleSettingsClick: =>
 		Page.local_storage.sites_orderby ?= "peers"
 		orderby = Page.local_storage.sites_orderby
@@ -19,6 +42,8 @@ class Head extends Class
 		@menu_settings.items.push ["Order sites by update time", ( => @handleOrderbyClick("modified") ), (orderby == "modified")]
 		@menu_settings.items.push ["Order sites by add time", ( => @handleOrderbyClick("addtime") ), (orderby == "addtime")]
 		@menu_settings.items.push ["Order sites by size", ( => @handleOrderbyClick("size") ), (orderby == "size")]
+		@menu_settings.items.push ["---"]
+		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
 		# @menu_settings.items.push ["Create new empty site", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
