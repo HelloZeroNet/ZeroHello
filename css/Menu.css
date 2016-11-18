@@ -8,9 +8,17 @@
 .menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s; border-bottom: none; font-weight: normal; }
 .menu-item-separator { margin-top: 3px; margin-bottom: 3px; border-top: 1px solid #eee }
 
-.menu-item:hover { background-color: #F6F6F6; transition: none; color: inherit; cursor: pointer; color: black }
-.menu-item:active, .menu-item:focus { background-color: #AF3BFF; color: white; transition: none }
+.menu-item.noaction { cursor: default }
+.menu-item:hover:not(.noaction) { background-color: #F6F6F6; transition: none; color: inherit; cursor: pointer; color: black }
+.menu-item:active:not(.noaction), .menu-item:focus:not(.noaction) { background-color: #AF3BFF; color: white; transition: none }
 .menu-item.selected:before {
 	content: "L"; display: inline-block; transform: rotateZ(45deg) scaleX(-1);
 	font-weight: bold; position: absolute; margin-left: -14px; font-size: 12px; margin-top: 2px;
 }
+
+.menu-radio { white-space: normal; line-height: 26px }
+.menu-radio a {
+	background-color: #EEE; width: 18.5%;; text-align: center; margin-top: 2px; margin-bottom: 2px; color: #666; font-weight: bold;
+	text-decoration: none; font-size: 13px; transition: all 0.3s; text-transform: uppercase; display: inline-block;
+}
+.menu-radio a:hover, .menu-radio a.selected { transition: none; background-color: #AF3BFF; color: white }
