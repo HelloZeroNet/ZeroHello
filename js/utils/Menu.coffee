@@ -40,7 +40,7 @@ class Menu
 			if title == e.target.textContent
 				keep_menu = cb(item)
 				break
-		if keep_menu != true
+		if keep_menu != true and cb != null
 			@hide()
 		return false
 
@@ -57,7 +57,7 @@ class Menu
 			else  # Callback
 				href = "#"+title
 				onclick = @handleClick
-			h("a.menu-item", {href: href, onclick: onclick, key: title, classes: {"selected": selected}}, [title])
+			h("a.menu-item", {href: href, onclick: onclick, key: title, classes: {"selected": selected, "noaction": (cb == null)}}, title)
 
 	render: (class_name="") =>
 		if @visible or @node
