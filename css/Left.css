@@ -54,7 +54,7 @@
 .SiteList .site:not(:hover) .message.collapsed { background-color: transparent; color: transparent; max-width: 15px; box-shadow: none }
 .SiteList .site .message.collapsed:before {
 	content: "\01F514"; display: block; color: #99A0AF; margin-top: -2px; margin-left: -3px; position: absolute;
-	transition: all 0.3s ease-in; transition-delay: 0.1s; font-family: Arial, Helvetica, 'Segoe UI Symbol';
+	transition: all 0.3s ease-in; transition-delay: 0.1s; font-family: Arial, Helvetica, 'Segoe UI Symbol', "Times", "Times New Roman", "serif", "sans-serif", "EmojiSymbols";
 }
 .SiteList .site:hover .message.collapsed:before { opacity: 0; transform: scale(2); }
 
