@@ -244,6 +244,7 @@ class FeedList extends Class
 	render: =>
 		if @need_update
 			RateLimitCb(5000, @update)
+			@need_update = false
 
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
 			document.body.className = "loaded"
