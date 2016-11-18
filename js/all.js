@@ -1244,7 +1244,7 @@
           break;
         }
       }
-      if (keep_menu !== true) {
+      if (keep_menu !== true && cb !== null) {
         this.hide();
       }
       return false;
@@ -1271,9 +1271,10 @@
           onclick: onclick,
           key: title,
           classes: {
-            "selected": selected
+            "selected": selected,
+            "noaction": cb === null
           }
-        }, [title]);
+        }, title);
       }
     };
 
@@ -2400,6 +2401,7 @@
     FeedList.prototype.render = function() {
       if (this.need_update) {
         RateLimitCb(5000, this.update);
+        this.need_update = false;
       }
       if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded") {
         document.body.className = "loaded";
@@ -2920,7 +2922,8 @@
   var Head,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty;
+    __hasProp = {}.hasOwnProperty,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Head = (function(_super) {
     __extends(Head, _super);
@@ -2934,6 +2937,8 @@
       this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
       this.handleUpdateAllClick = __bind(this.handleUpdateAllClick, this);
       this.handleSettingsClick = __bind(this.handleSettingsClick, this);
+      this.renderMenuLanguage = __bind(this.renderMenuLanguage, this);
+      this.handleLanguageClick = __bind(this.handleLanguageClick, this);
       this.menu_settings = new Menu();
     }
 
@@ -2943,6 +2948,45 @@
       } else {
         return "Up to date!";
       }
+    };
+
+    Head.prototype.handleLanguageClick = function(e) {
+      var lang;
+      if (Page.server_info.rev < 1750) {
+        return Page.cmd("wrapperNotification", ["info", "You need ZeroNet 0.5.1 to change the interface's language"]);
+      }
+      lang = e.srcElement.hash.replace("#", "");
+      Page.cmd("configSet", ["language", lang]);
+      Page.server_info.language = lang;
+      top.location = "?Home";
+      return false;
+    };
+
+    Head.prototype.renderMenuLanguage = function() {
+      var lang, langs, _ref;
+      langs = ["en", "hu"];
+      if (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0) {
+        langs.push(Page.server_info.language);
+      }
+      return h("div.menu-radio", h("span", {
+        style: "margin-right: 5px"
+      }, "Language: "), (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = langs.length; _i < _len; _i++) {
+          lang = langs[_i];
+          _results.push([
+            h("a", {
+              href: "#" + lang,
+              onclick: this.handleLanguageClick,
+              classes: {
+                selected: Page.server_info.language === lang
+              }
+            }, lang), " "
+          ]);
+        }
+        return _results;
+      }).call(this));
     };
 
     Head.prototype.handleSettingsClick = function() {
@@ -2982,6 +3026,8 @@
           };
         })(this)), orderby === "size"
       ]);
+      this.menu_settings.items.push(["---"]);
+      this.menu_settings.items.push([this.renderMenuLanguage(), null]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
@@ -3085,6 +3131,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
@@ -3257,7 +3304,7 @@
       if (this.row.settings.own) {
         Page.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
       } else {
-        Page.cmd("wrapperConfirm", ["Are you sure? <b>" + this.row.content.title + "</b>", "Delete"], (function(_this) {
+        Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), "Delete"], (function(_this) {
           return function(confirmed) {
             if (confirmed) {
               Page.cmd("siteDelete", {
@@ -3478,7 +3525,6 @@
   window.Site = Site;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
