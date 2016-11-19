@@ -24,25 +24,29 @@
    "size": 1066
   },
   "js/all.js": {
-   "sha512": "3cbf817d6d09fe7f667e15204889e04df71d69cfdb90b8ec8ef5c55b66e10356",
-   "size": 154195
+   "sha512": "025daebba89ec25d92ad677cba771c1745f2ea7e4214efc064f8f82248fe8bb3",
+   "size": 154230
   },
   "languages/hu.json": {
-   "sha512": "7bcd78c4a5982d6d2c5f45da88ec071219ca8e1f271f0f31916a267829fc39ed",
-   "size": 4344
+   "sha512": "1406b865db5021051563755051a66a00e8b71a8cafe514ef7be2b6c2c530f24a",
+   "size": 4393
+  },
+  "languages/zh.json": {
+   "sha512": "b4a7c62fc05ca144f61b49a2b1ff19a3fe1411eb38d4946b4d02273ff71b7bc9",
+   "size": 4112
   }
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1479497841.916,
+ "modified": 1479548105.106,
  "postmessage_nonce_security": true,
  "sign": [
-  106785017028168513943207327654902273682917384924558840688834251606315109550083,
-  77092481956116289965694011694210902065759620804455644991953375199424768855774
+  32535652658925492366284869627688593461995161676613064058852968279410361682788,
+  80501627379648534411604261554291218440453940043675878933674223082580542984724
  ],
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G5JaQPYQk1/IZOerSsYFKLYCM9tbkrFcymyGRCw1Yvg2dXNoHXPqBU7Uhbzhp7Jg+DzJ1AivcIvgD3tU6meNWik="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HBQ7hahkNcuJ3aDvFcRRa/0zrIE1l8kiOPm8jLU5icFHab2Sk3bgLlL4RoJp9/fwKOzJ0tuDt0BVPvWHtEPcUfA="
  },
  "signs_required": 1,
  "title": "ZeroHello",
