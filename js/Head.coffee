@@ -18,7 +18,7 @@ class Head extends Class
 		return false
 
 	renderMenuLanguage: =>
-		langs = ["en", "hu"]
+		langs = ["en", "hu", "zh"]
 		if Page.server_info.language not in langs
 			langs.push Page.server_info.language
 
