@@ -11,14 +11,14 @@ class Head extends Class
 	handleLanguageClick: (e) =>
 		if Page.server_info.rev < 1750
 			return Page.cmd "wrapperNotification", ["info", "You need ZeroNet 0.5.1 to change the interface's language"]
-		lang = e.srcElement.hash.replace("#", "")
-		Page.cmd "configSet", ["language", lang]
-		Page.server_info.language = lang
-		top.location = "?Home"
+		lang = e.target.hash.replace("#", "")
+		Page.cmd "configSet", ["language", lang], ->
+			Page.server_info.language = lang
+			top.location = "?Home"
 		return false
 
 	renderMenuLanguage: =>
-		langs = ["en", "hu"]
+		langs = ["en", "hu", "zh"]
 		if Page.server_info.language not in langs
 			langs.push Page.server_info.language
 

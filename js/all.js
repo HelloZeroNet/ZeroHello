@@ -2955,16 +2955,17 @@
       if (Page.server_info.rev < 1750) {
         return Page.cmd("wrapperNotification", ["info", "You need ZeroNet 0.5.1 to change the interface's language"]);
       }
-      lang = e.srcElement.hash.replace("#", "");
-      Page.cmd("configSet", ["language", lang]);
-      Page.server_info.language = lang;
-      top.location = "?Home";
+      lang = e.target.hash.replace("#", "");
+      Page.cmd("configSet", ["language", lang], function() {
+        Page.server_info.language = lang;
+        return top.location = "?Home";
+      });
       return false;
     };
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["en", "hu"];
+      langs = ["en", "hu", "zh"];
       if (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0) {
         langs.push(Page.server_info.language);
       }
@@ -4017,7 +4018,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      this.latest_version = "0.5.0";
+      this.latest_version = "0.5.1";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;

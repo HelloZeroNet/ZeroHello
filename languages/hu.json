@@ -3,6 +3,8 @@
 	"Closed": "Bezárva",
 	"_(Disabled)": "Kikapcsolva",
 	"_(Error)": "Hiba",
+	"Available": "Elérhető",
+	"Always": "Mindig",
 	"Status: ": "Állapot: ",
 	"Nice! Your port \" + Page.server_info.fileserver_port + \" is opened.": "Király! A \" + Page.server_info.fileserver_port + \" portod nyitva van.",
 	"Re-check opened port": "Port újraellenörzése",
