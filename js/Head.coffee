@@ -18,15 +18,15 @@ class Head extends Class
 		return false
 
 	renderMenuLanguage: =>
-		langs = ["en", "hu", "zh"]
+		langs = ["da", "de", "en", "fr", "hu", "pt", "zh", "zh-tw"]
 		if Page.server_info.language not in langs
 			langs.push Page.server_info.language
 
 		h("div.menu-radio",
-			h("span", {style: "margin-right: 5px"}, "Language: "),
+			h("div", "Language: "),
 			for lang in langs
 				[
-					h("a", {href: "#"+lang, onclick: @handleLanguageClick, classes: {selected: Page.server_info.language == lang}}, lang),
+					h("a", {href: "#"+lang, onclick: @handleLanguageClick, classes: {selected: Page.server_info.language == lang, long: lang.length > 2}}, lang),
 					" "
 				]
 		)
