@@ -1,8 +1,8 @@
 {
 	"Opened": "Ouvert",
 	"Closed": "Fermé",
-	"_(Disabled)": "_(Désactivé)",
-	"_(Error)": "_(Erreur)",
+	"_(Disabled)": "Désactivé",
+	"_(Error)": "Erreur",
 	"Available": "Disponible",
 	"Always": "Toujours",
 	"Status: ": "Statut: ",
@@ -35,11 +35,11 @@
 	"Order sites by size": "Classer par taille",
 	"Version ": "Version ",
 	"New version avalible!": "Nouvelle version disponible!",
-	"Up to date!": "Vous avez la dernière version!",
+	"Up to date!": "Dernière version!",
 	"Shut down ZeroNet": "Éteindre ZeroNet",
 
-	"_(Sites)": "_(Sites)",
-	"_(Files)": "_(Fichiers)",
+	"_(Sites)": "Sites",
+	"_(Files)": "Fichiers",
 	"Favorited sites:": "Favoris:",
 	"Connected sites:": "Connectés:",
 	"More sites:": "Suggestions:",
@@ -72,7 +72,7 @@
 
 	"Used: ": "Utilisé: ",
 	"Edit optional files limit": "Modifier la limite de fichiers optionnels",
-	"Optional files limit:": "Limite de fichiers optionnels:",
+	"Optional files limit:": "Limite:",
 	"Cancel": "Annuler",
 	"Set": "Modifier",
 
