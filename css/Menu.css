@@ -22,3 +22,4 @@
 	text-decoration: none; font-size: 13px; transition: all 0.3s; text-transform: uppercase; display: inline-block;
 }
 .menu-radio a:hover, .menu-radio a.selected { transition: none; background-color: #AF3BFF; color: white }
+.menu-radio a.long { font-size: 11px }
