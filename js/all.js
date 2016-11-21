@@ -2965,13 +2965,11 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["en", "hu", "zh"];
+      langs = ["da", "de", "en", "fr", "hu", "pt", "zh", "zh-tw"];
       if (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0) {
         langs.push(Page.server_info.language);
       }
-      return h("div.menu-radio", h("span", {
-        style: "margin-right: 5px"
-      }, "Language: "), (function() {
+      return h("div.menu-radio", h("div", "Language: "), (function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = langs.length; _i < _len; _i++) {
@@ -2981,7 +2979,8 @@
               href: "#" + lang,
               onclick: this.handleLanguageClick,
               classes: {
-                selected: Page.server_info.language === lang
+                selected: Page.server_info.language === lang,
+                long: lang.length > 2
               }
             }, lang), " "
           ]);
