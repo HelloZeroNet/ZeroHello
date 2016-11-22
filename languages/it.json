@@ -1,8 +1,8 @@
 {
 	"Opened": "Aperto",
 	"Closed": "Chiuso",
-	"_(Disabled)": "_(Disabilitato)",
-	"_(Error)": "_(Errore)",
+	"_(Disabled)": "Disabilitato",
+	"_(Error)": "Errore",
 	"Available": "Disponibile",
 	"Always": "Sempre",
 	"Status: ": "Stato: ",
@@ -38,8 +38,8 @@
 	"Up to date!": "Aggiornato!!",
 	"Shut down ZeroNet": "Spegni ZeroNet",
 
-	"_(Sites)": "_(Siti)",
-	"_(Files)": "_(File)",
+	"_(Sites)": "Siti",
+	"_(Files)": "File",
 	"Favorited sites:": "Siti preferiti:",
 	"Connected sites:": "Siti connessi:",
 	"More sites:": "Altri siti:",
