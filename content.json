@@ -4,8 +4,8 @@
  "description": "New ZeroHello",
  "files": {
   "css/all.css": {
-   "sha512": "b1ba06bccfb0912f1a26f2c34ff3dcb3aecd1a10d342c631d571d4313efe1958",
-   "size": 202772
+   "sha512": "312b48f58dc170b04888229405b88659b221c3f15a678faf7a50a03fb0a28eea",
+   "size": 202847
   },
   "img/loading-circle.gif": {
    "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
@@ -24,20 +24,28 @@
    "size": 1066
   },
   "js/all.js": {
-   "sha512": "fa9b894e11dfdc021c1d1bf0033210e1385bc6f89c2a803eade265186535428f",
-   "size": 154249
+   "sha512": "7bd6161a60be321835ba1a5da0ffa334540aaae661f327e11c6e2c80f121f2f3",
+   "size": 154273
   },
   "languages/da.json": {
-   "sha512": "60200ad8c3ec0a623e8801a30d7ce5f3e0b029352529a10dbd4d73132ceb95ce",
-   "size": 4130
+   "sha512": "aec7f0efc03710ad27013facfebdc4c2e3b938ebcf67e257fa2fb432c47b6842",
+   "size": 4113
+  },
+  "languages/fr.json": {
+   "sha512": "187cc16e7cdf8dd57b60303af41378e408410556536a9313ffa60abdc4268689",
+   "size": 4355
   },
   "languages/hu.json": {
-   "sha512": "cfb0f0198470e44ae861a7e558b35287fcc509344a8efe54fb87c5506764fd6b",
-   "size": 4494
+   "sha512": "cfd6bc4ea98cdd70fee230266cd3e7c610696115d0718e13f53215eb3ec85a54",
+   "size": 4556
+  },
+  "languages/it.json": {
+   "sha512": "604fe50e72481d3f5ccb07d4b5502ccf9d9ca7e3d9513b7b7c4396b9423c61d1",
+   "size": 4316
   },
   "languages/pt.json": {
-   "sha512": "77374743a856c327397b260a41b0a159ecc15e1332947e1fcf6139e63350317a",
-   "size": 4451
+   "sha512": "a5e03e01a2ba455e55ca71ca03ed9d81896776fd4b169a0fffd0764783f70024",
+   "size": 4415
   },
   "languages/zh-tw.json": {
    "sha512": "43de1892cde3e268dc919c687ae6c9b9f5927f95e58d40cda1141d6a8b37734e",
@@ -50,15 +58,15 @@
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1479661077.848,
+ "modified": 1479913650.163,
  "postmessage_nonce_security": true,
  "sign": [
-  99514505154210460822988808695167492124857069706518287988609675383258552022842,
-  6511099394534071418552766830330632304797673730254673007787749980255552624352
+  49906734429052210639234985658960991144172209994814187412152565218353268941750,
+  3783785811931115010728432844778684000490016949863979738157678867708048593800
  ],
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G6ZBlai8598NILag/uZDEoO0ZZqxFbh4q8+mAyEMPigCSMN83tbSF+lHpf/IGRSozh+m0eHRxZl9TpIVK3Gb8V8="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HJjfbjXGOyyszz8OHIIpYiF9UGTPNnSsVBsC0IvCjG9wYkFHNYavxTXoaIFI+cIqNyk7WbCbxyolZhDT3jOj3U4="
  },
  "signs_required": 1,
  "title": "ZeroHello",
