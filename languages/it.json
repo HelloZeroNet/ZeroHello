@@ -1,9 +1,9 @@
 {
-	"Opened": "Aperto",
-	"Closed": "Chiuso",
+	"Opened": "Aperta",
+	"Closed": "Chiusa",
 	"_(Disabled)": "Disabilitato",
 	"_(Error)": "Errore",
-	"Available": "Disponibile",
+	"Available": "Attivo",
 	"Always": "Sempre",
 	"Status: ": "Stato: ",
 	"Nice! Your port \" + Page.server_info.fileserver_port + \" is opened.": "Bene! La tua porta \" + Page.server_info.fileserver_port + \" è aperta.",
