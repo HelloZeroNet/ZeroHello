@@ -66,3 +66,5 @@
 .SiteList.more .site .settings { display: none }
 .SiteList.more .site .details { display: none }
 .SiteList.more .site .details.demo { display: inline; background-color: #8041f1; color: white; }
+
+.SiteList.needaction .site { background-color: rgba(255, 238, 59, 0.06) }
