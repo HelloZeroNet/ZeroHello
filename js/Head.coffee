@@ -18,8 +18,8 @@ class Head extends Class
 		return false
 
 	renderMenuLanguage: =>
-		langs = ["da", "de", "en", "fr", "hu", "pt", "zh", "zh-tw"]
-		if Page.server_info.language not in langs
+		langs = ["da", "de", "en", "fr", "hu", "it", "pt", "zh", "zh-tw"]
+		if Page.server_info.language and Page.server_info.language not in langs
 			langs.push Page.server_info.language
 
 		h("div.menu-radio",
