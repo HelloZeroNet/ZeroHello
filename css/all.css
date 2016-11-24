@@ -382,7 +382,7 @@
 #Dashboard { position: absolute; right: 80px; top: -83px; }
 #Dashboard .dashboard-item {
 	text-decoration: none; margin: 5px; padding: 10px 20px; -webkit-border-radius: 40px; -moz-border-radius: 40px; -o-border-radius: 40px; -ms-border-radius: 40px; border-radius: 40px ; display: inline-block;
-	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: bold; background-color: white;
+	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: 600; background-color: white;
 }
 #Dashboard .dashboard-item:active { -webkit-transform: translateY(1px); -moz-transform: translateY(1px); -o-transform: translateY(1px); -ms-transform: translateY(1px); transform: translateY(1px) ; }
 #Dashboard .dashboard-item .status-ok { color: #2ecc71; }
@@ -500,7 +500,7 @@
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/ZeroHello.css ---- */
 
 
-body { background-color: #EDF2F5; font-family: Roboto; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px }
+body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px }
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
