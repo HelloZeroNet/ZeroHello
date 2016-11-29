@@ -105,7 +105,7 @@ class SiteList extends Class
 			else if not site.row.content.merged_type
 				@sites_connected.push site
 		h("div#SiteList", [
-			if @sites_needaction.length > 0 then h("h2.needaction", "Needs your interaction:"),
+			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
 			h("div.SiteList.needaction", @sites_needaction.map (item) ->
 				item.render()
 			),
