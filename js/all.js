@@ -2965,7 +2965,7 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["da", "de", "en", "fr", "hu", "it", "pt", "ru", "uk", "zh", "zh-tw"];
+      langs = ["da", "de", "en", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"];
       if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
         langs.push(Page.server_info.language);
       }
@@ -3901,7 +3901,7 @@
     SiteList.prototype.renderMergedSites = function() {
       var back, merged_db, merged_sites, merged_type, site, _i, _len, _name, _ref;
       merged_db = {};
-      _ref = this.sites;
+      _ref = this.sites_merged;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         site = _ref[_i];
         if (!site.row.content.merged_type) {
@@ -3934,6 +3934,7 @@
       this.sites_needaction = [];
       this.sites_favorited = [];
       this.sites_connected = [];
+      this.sites_merged = [];
       _ref = this.sites;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         site = _ref[_i];
@@ -3941,12 +3942,14 @@
           this.sites_needaction.push(site);
         } else if (site.favorite) {
           this.sites_favorited.push(site);
-        } else if (!site.row.content.merged_type) {
+        } else if (site.row.content.merged_type) {
+          this.sites_merged.push(site);
+        } else {
           this.sites_connected.push(site);
         }
       }
       return h("div#SiteList", [
-        this.sites_needaction.length > 0 ? h("h2.needaction", "Needs your interaction:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+        this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
