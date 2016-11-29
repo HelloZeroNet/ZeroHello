@@ -2965,7 +2965,7 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["da", "de", "en", "fr", "hu", "it", "pt", "ru", "zh", "zh-tw"];
+      langs = ["da", "de", "en", "fr", "hu", "it", "pt", "ru", "uk", "zh", "zh-tw"];
       if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
         langs.push(Page.server_info.language);
       }
