@@ -4,8 +4,8 @@
  "description": "New ZeroHello",
  "files": {
   "css/all.css": {
-   "sha512": "590c7abe18b08a0e2b337c4e093404f466ca2db007fd2c86fc58c81c9355b200",
-   "size": 202733
+   "sha512": "312b48f58dc170b04888229405b88659b221c3f15a678faf7a50a03fb0a28eea",
+   "size": 202847
   },
   "img/loading-circle.gif": {
    "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
@@ -24,29 +24,49 @@
    "size": 1066
   },
   "js/all.js": {
-   "sha512": "025daebba89ec25d92ad677cba771c1745f2ea7e4214efc064f8f82248fe8bb3",
-   "size": 154230
+   "sha512": "7bd6161a60be321835ba1a5da0ffa334540aaae661f327e11c6e2c80f121f2f3",
+   "size": 154273
+  },
+  "languages/da.json": {
+   "sha512": "aec7f0efc03710ad27013facfebdc4c2e3b938ebcf67e257fa2fb432c47b6842",
+   "size": 4113
+  },
+  "languages/fr.json": {
+   "sha512": "187cc16e7cdf8dd57b60303af41378e408410556536a9313ffa60abdc4268689",
+   "size": 4355
   },
   "languages/hu.json": {
-   "sha512": "1406b865db5021051563755051a66a00e8b71a8cafe514ef7be2b6c2c530f24a",
-   "size": 4393
+   "sha512": "cfd6bc4ea98cdd70fee230266cd3e7c610696115d0718e13f53215eb3ec85a54",
+   "size": 4556
+  },
+  "languages/it.json": {
+   "sha512": "604fe50e72481d3f5ccb07d4b5502ccf9d9ca7e3d9513b7b7c4396b9423c61d1",
+   "size": 4316
+  },
+  "languages/pt.json": {
+   "sha512": "a5e03e01a2ba455e55ca71ca03ed9d81896776fd4b169a0fffd0764783f70024",
+   "size": 4415
+  },
+  "languages/zh-tw.json": {
+   "sha512": "43de1892cde3e268dc919c687ae6c9b9f5927f95e58d40cda1141d6a8b37734e",
+   "size": 4099
   },
   "languages/zh.json": {
-   "sha512": "b4a7c62fc05ca144f61b49a2b1ff19a3fe1411eb38d4946b4d02273ff71b7bc9",
-   "size": 4112
+   "sha512": "b09355402c4b00523b86162eb7c131045d365b4c0ae2cf9ee2cf81a46dad53b9",
+   "size": 4128
   }
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1479548105.106,
+ "modified": 1479913650.163,
  "postmessage_nonce_security": true,
  "sign": [
-  32535652658925492366284869627688593461995161676613064058852968279410361682788,
-  80501627379648534411604261554291218440453940043675878933674223082580542984724
+  49906734429052210639234985658960991144172209994814187412152565218353268941750,
+  3783785811931115010728432844778684000490016949863979738157678867708048593800
  ],
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HBQ7hahkNcuJ3aDvFcRRa/0zrIE1l8kiOPm8jLU5icFHab2Sk3bgLlL4RoJp9/fwKOzJ0tuDt0BVPvWHtEPcUfA="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HJjfbjXGOyyszz8OHIIpYiF9UGTPNnSsVBsC0IvCjG9wYkFHNYavxTXoaIFI+cIqNyk7WbCbxyolZhDT3jOj3U4="
  },
  "signs_required": 1,
  "title": "ZeroHello",

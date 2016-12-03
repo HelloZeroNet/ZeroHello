@@ -2965,13 +2965,11 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["en", "hu", "zh"];
-      if (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0) {
+      langs = ["da", "de", "en", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"];
+      if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
         langs.push(Page.server_info.language);
       }
-      return h("div.menu-radio", h("span", {
-        style: "margin-right: 5px"
-      }, "Language: "), (function() {
+      return h("div.menu-radio", h("div", "Language: "), (function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = langs.length; _i < _len; _i++) {
@@ -2981,7 +2979,8 @@
               href: "#" + lang,
               onclick: this.handleLanguageClick,
               classes: {
-                selected: Page.server_info.language === lang
+                selected: Page.server_info.language === lang,
+                long: lang.length > 2
               }
             }, lang), " "
           ]);
@@ -3902,7 +3901,7 @@
     SiteList.prototype.renderMergedSites = function() {
       var back, merged_db, merged_sites, merged_type, site, _i, _len, _name, _ref;
       merged_db = {};
-      _ref = this.sites;
+      _ref = this.sites_merged;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         site = _ref[_i];
         if (!site.row.content.merged_type) {
@@ -3928,36 +3927,31 @@
     };
 
     SiteList.prototype.render = function() {
-      var site;
+      var site, _i, _len, _ref;
       if (!this.loaded) {
         return h("div#SiteList");
       }
-      this.sites_favorited = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.sites;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          site = _ref[_i];
-          if (site.favorite && !site.row.content.merged_type) {
-            _results.push(site);
-          }
+      this.sites_needaction = [];
+      this.sites_favorited = [];
+      this.sites_connected = [];
+      this.sites_merged = [];
+      _ref = this.sites;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        site = _ref[_i];
+        if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
+          this.sites_needaction.push(site);
+        } else if (site.favorite) {
+          this.sites_favorited.push(site);
+        } else if (site.row.content.merged_type) {
+          this.sites_merged.push(site);
+        } else {
+          this.sites_connected.push(site);
         }
-        return _results;
-      }).call(this);
-      this.sites_connected = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.sites;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          site = _ref[_i];
-          if (!site.favorite && !site.row.content.merged_type) {
-            _results.push(site);
-          }
-        }
-        return _results;
-      }).call(this);
+      }
       return h("div#SiteList", [
-        this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
+        this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+          return item.render();
+        })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
         })), h("h2.connected", "Connected sites:"), h("div.SiteList.connected", this.sites_connected.map(function(item) {
           return item.render();

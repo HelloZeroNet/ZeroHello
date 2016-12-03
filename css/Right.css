@@ -6,7 +6,7 @@
 #Dashboard { position: absolute; right: 80px; top: -83px; }
 #Dashboard .dashboard-item {
 	text-decoration: none; margin: 5px; padding: 10px 20px; border-radius: 40px; display: inline-block;
-	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: bold; background-color: white;
+	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: 600; background-color: white;
 }
 #Dashboard .dashboard-item:active { transform: translateY(1px); }
 #Dashboard .dashboard-item .status-ok { color: #2ecc71; }

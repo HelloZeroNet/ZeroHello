@@ -74,7 +74,7 @@ class SiteList extends Class
 
 	renderMergedSites: =>
 		merged_db = {}
-		for site in @sites
+		for site in @sites_merged
 			if not site.row.content.merged_type
 				continue
 			merged_db[site.row.content.merged_type] ?= []
@@ -93,9 +93,25 @@ class SiteList extends Class
 	render: =>
 		if not @loaded
 			return h("div#SiteList")
-		@sites_favorited = (site for site in @sites when site.favorite and not site.row.content.merged_type)
-		@sites_connected = (site for site in @sites when not site.favorite and not site.row.content.merged_type)
+
+		@sites_needaction = []
+		@sites_favorited = []
+		@sites_connected = []
+		@sites_merged = []
+		for site in @sites
+			if site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024
+				@sites_needaction.push site
+			else if site.favorite
+				@sites_favorited.push site
+			else if site.row.content.merged_type
+				@sites_merged.push site
+			else
+				@sites_connected.push site
 		h("div#SiteList", [
+			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
+			h("div.SiteList.needaction", @sites_needaction.map (item) ->
+				item.render()
+			),
 			if @sites_favorited.length > 0 then h("h2.favorited", "Favorited sites:"),
 			h("div.SiteList.favorited", @sites_favorited.map (item) ->
 				item.render()

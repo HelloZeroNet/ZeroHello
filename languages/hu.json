@@ -40,8 +40,9 @@
 
 	"_(Sites)": "Oldalak",
 	"_(Files)": "Fájlok",
-	"Favorited sites:": "Kedvenc oldalak",
-	"Connected sites:": "Elérhető oldalak",
+	"Needs your interaction:": "Megerősítés szükséges:",
+	"Favorited sites:": "Kedvenc oldalak:",
+	"Connected sites:": "Elérhető oldalak:",
 	"More sites:": "Több oldal:",
 	" file update failed": " hiányzó fájl",
 	"No peers": "Nincs kapcsolat",
