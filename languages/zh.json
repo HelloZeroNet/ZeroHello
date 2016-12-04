@@ -7,7 +7,7 @@
 	"Nice! Your port \" + Page.server_info.fileserver_port + \" is opened.": "不错！你的 \" + Page.server_info.fileserver_port + \" 端口已经开启。",
 	"Re-check opened port": "重新检查端口开启状态",
 	"How to make Tor connection work?": "如何让 Tor 连接工作？",
-	"How to use ZeroNet in Tor Browser?": "如何在 Tor Browser 中使用 Tor？",
+	"How to use ZeroNet in Tor Browser?": "如何在 Tor Browser 中使用 ZeroNet ？",
 	"Disable always Tor mode": "总是禁用 Tor 模式",
 	"Enable Tor for every connection (slower)": "为每个连接启用 Tor （更慢）",
 	"Help to keep this project alive": "帮助保持这个项目存活",
@@ -22,7 +22,7 @@
 	"Simple messaging board": "简单的消息版",
 	"Reddit-like, decentralized forum": "类似于 Reddit 的，分布式的论坛",
 	"Activate \\u2501": "激活 \\u2501",
-	"Microblogging platform": "微博平台",
+	"Microblogging platform": "轻量化博客平台",
 	"End-to-end encrypted mailing": "端对端加密邮件",
 	"P2P social network": "P2P 社交网络",
 
