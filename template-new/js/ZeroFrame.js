@@ -1,4 +1,4 @@
-onst CMD_INNER_READY = 'innerReady'
+const CMD_INNER_READY = 'innerReady'
 const CMD_RESPONSE = 'response'
 const CMD_WRAPPER_READY = 'wrapperReady'
 const CMD_PING = 'ping'
@@ -45,12 +45,12 @@ class ZeroFrame {
         } else if (cmd === CMD_WRAPPER_CLOSE_WEBSOCKET) {
             this.onCloseWebsocket()
         } else {
-            this.route(cmd, message)
+            this.onUpdate(cmd, message)
         }
     }
 
-    route(cmd, message) {
-        this.log("Unknown command", message)
+    onRequest(cmd, message) {
+        this.log("Unknown request", message)
     }
 
     response(to, result) {
@@ -91,4 +91,3 @@ class ZeroFrame {
     }
 }
 
-export default ZeroFrame

@@ -34,7 +34,7 @@ class Page extends ZeroFrame {
 		})
 	}
 
-	route(cmd, message) {
+	onRequest(cmd, message) {
 		if (cmd == "setSiteInfo")
 			this.setSiteInfo(message.params)
 		else
