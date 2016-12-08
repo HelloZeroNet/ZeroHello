@@ -31,6 +31,11 @@ class Head extends Class
 				]
 		)
 
+	handleCreateSiteClick: =>
+		if Page.server_info.rev < 1770
+			return Page.cmd "wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]
+		Page.cmd("siteClone", [Page.site_info.address, "template-new"])
+
 	handleSettingsClick: =>
 		Page.local_storage.sites_orderby ?= "peers"
 		orderby = Page.local_storage.sites_orderby
@@ -45,7 +50,8 @@ class Head extends Class
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
-		# @menu_settings.items.push ["Create new empty site", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
+		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
+		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 
