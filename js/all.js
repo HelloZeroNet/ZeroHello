@@ -2937,6 +2937,7 @@
       this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
       this.handleUpdateAllClick = __bind(this.handleUpdateAllClick, this);
       this.handleSettingsClick = __bind(this.handleSettingsClick, this);
+      this.handleCreateSiteClick = __bind(this.handleCreateSiteClick, this);
       this.renderMenuLanguage = __bind(this.renderMenuLanguage, this);
       this.handleLanguageClick = __bind(this.handleLanguageClick, this);
       this.menu_settings = new Menu();
@@ -2989,6 +2990,13 @@
       }).call(this));
     };
 
+    Head.prototype.handleCreateSiteClick = function() {
+      if (Page.server_info.rev < 1770) {
+        return Page.cmd("wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]);
+      }
+      return Page.cmd("siteClone", [Page.site_info.address, "template-new"]);
+    };
+
     Head.prototype.handleSettingsClick = function() {
       var orderby, _base;
       if ((_base = Page.local_storage).sites_orderby == null) {
@@ -3028,6 +3036,8 @@
       ]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([this.renderMenuLanguage(), null]);
+      this.menu_settings.items.push(["---"]);
+      this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
