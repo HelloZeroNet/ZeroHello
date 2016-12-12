@@ -94,7 +94,7 @@
 
 	"More files...": "Plus de fichiers...",
 
-	" minutes ago": " minutes",
+	"\" + minutes + \" minutes ago": "il y a \" + minutes + \" minutes",
 	" hours ago": " heures",
 	" days ago": " jours",
 	"on ": "le ",

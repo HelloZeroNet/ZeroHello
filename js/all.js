@@ -1367,7 +1367,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimitCb.coffee ---- */
 
 
@@ -1687,7 +1686,7 @@
     function Time() {}
 
     Time.prototype.since = function(timestamp) {
-      var back, now, secs;
+      var back, minutes, now, secs;
       now = +(new Date) / 1000;
       if (timestamp > 1000000000000) {
         timestamp = timestamp / 1000;
@@ -1696,7 +1695,8 @@
       if (secs < 60) {
         back = "Just now";
       } else if (secs < 60 * 60) {
-        back = (Math.round(secs / 60)) + " minutes ago";
+        minutes = Math.round(secs / 60);
+        back = "" + minutes + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
         back = (Math.round(secs / 60 / 60)) + " hours ago";
       } else if (secs < 60 * 60 * 24 * 3) {
@@ -1743,6 +1743,7 @@
   window.Time = new Time;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Translate.coffee ---- */
@@ -3171,7 +3172,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
