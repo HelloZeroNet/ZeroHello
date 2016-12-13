@@ -45,7 +45,7 @@ class ZeroFrame {
         } else if (cmd === CMD_WRAPPER_CLOSE_WEBSOCKET) {
             this.onCloseWebsocket()
         } else {
-            this.onUpdate(cmd, message)
+            this.onRequest(cmd, message)
         }
     }
 

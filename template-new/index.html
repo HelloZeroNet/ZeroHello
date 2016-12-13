@@ -24,8 +24,7 @@ class Page extends ZeroFrame {
 			"Page address: " + site_info.address +
 			"<br>- Peers: " + site_info.peers +
 			"<br>- Size: " + site_info.settings.size +
-			"<br>- Modified: " + Date(site_info.content.modified)
-			"<br>- Modified: " + Date(site_info.content.modified)
+			"<br>- Modified: " + (new Date(site_info.content.modified*1000))
 	}
 
 	onOpenWebsocket() {
