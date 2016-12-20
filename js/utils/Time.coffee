@@ -7,7 +7,8 @@ class Time
 		if secs < 60
 			back = "Just now"
 		else if secs < 60*60
-			back = "#{Math.round(secs/60)} minutes ago"
+			minutes = Math.round(secs/60)
+			back = "" + minutes + " minutes ago"
 		else if secs < 60*60*24
 			back = "#{Math.round(secs/60/60)} hours ago"
 		else if secs < 60*60*24*3

@@ -1338,6 +1338,35 @@
 }).call(this);
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
+
+
+(function() {
+  var call_after_interval, limits;
+
+  limits = {};
+
+  call_after_interval = {};
+
+  window.RateLimit = function(interval, fn) {
+    if (!limits[fn]) {
+      call_after_interval[fn] = false;
+      fn();
+      return limits[fn] = setTimeout((function() {
+        if (call_after_interval[fn]) {
+          fn();
+        }
+        delete limits[fn];
+        return delete call_after_interval[fn];
+      }), interval);
+    } else {
+      return call_after_interval[fn] = true;
+    }
+  };
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimitCb.coffee ---- */
 
 
@@ -1657,7 +1686,7 @@
     function Time() {}
 
     Time.prototype.since = function(timestamp) {
-      var back, now, secs;
+      var back, minutes, now, secs;
       now = +(new Date) / 1000;
       if (timestamp > 1000000000000) {
         timestamp = timestamp / 1000;
@@ -1666,7 +1695,8 @@
       if (secs < 60) {
         back = "Just now";
       } else if (secs < 60 * 60) {
-        back = (Math.round(secs / 60)) + " minutes ago";
+        minutes = Math.round(secs / 60);
+        back = "" + minutes + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
         back = (Math.round(secs / 60 / 60)) + " hours ago";
       } else if (secs < 60 * 60 * 24 * 3) {
@@ -1713,6 +1743,7 @@
   window.Time = new Time;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Translate.coffee ---- */
@@ -2937,6 +2968,7 @@
       this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
       this.handleUpdateAllClick = __bind(this.handleUpdateAllClick, this);
       this.handleSettingsClick = __bind(this.handleSettingsClick, this);
+      this.handleCreateSiteClick = __bind(this.handleCreateSiteClick, this);
       this.renderMenuLanguage = __bind(this.renderMenuLanguage, this);
       this.handleLanguageClick = __bind(this.handleLanguageClick, this);
       this.menu_settings = new Menu();
@@ -2965,7 +2997,7 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["da", "de", "en", "fr", "hu", "it", "pt", "ru", "zh", "zh-tw"];
+      langs = ["da", "de", "en", "es", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"];
       if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
         langs.push(Page.server_info.language);
       }
@@ -2987,6 +3019,13 @@
         }
         return _results;
       }).call(this));
+    };
+
+    Head.prototype.handleCreateSiteClick = function() {
+      if (Page.server_info.rev < 1770) {
+        return Page.cmd("wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]);
+      }
+      return Page.cmd("siteClone", [Page.site_info.address, "template-new"]);
     };
 
     Head.prototype.handleSettingsClick = function() {
@@ -3028,6 +3067,8 @@
       ]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([this.renderMenuLanguage(), null]);
+      this.menu_settings.items.push(["---"]);
+      this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
@@ -3131,7 +3172,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
@@ -3901,7 +3941,7 @@
     SiteList.prototype.renderMergedSites = function() {
       var back, merged_db, merged_sites, merged_type, site, _i, _len, _name, _ref;
       merged_db = {};
-      _ref = this.sites;
+      _ref = this.sites_merged;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         site = _ref[_i];
         if (!site.row.content.merged_type) {
@@ -3934,6 +3974,7 @@
       this.sites_needaction = [];
       this.sites_favorited = [];
       this.sites_connected = [];
+      this.sites_merged = [];
       _ref = this.sites;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         site = _ref[_i];
@@ -3941,12 +3982,14 @@
           this.sites_needaction.push(site);
         } else if (site.favorite) {
           this.sites_favorited.push(site);
-        } else if (!site.row.content.merged_type) {
+        } else if (site.row.content.merged_type) {
+          this.sites_merged.push(site);
+        } else {
           this.sites_connected.push(site);
         }
       }
       return h("div#SiteList", [
-        this.sites_needaction.length > 0 ? h("h2.needaction", "Needs your interaction:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+        this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();

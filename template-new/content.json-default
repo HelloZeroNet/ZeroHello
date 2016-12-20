@@ -1,0 +1,24 @@
+{
+	"address": "17uxAEdnfTm5AFezpbV1aSSt25UFmQXRD4",
+	"background-color": "#FFF",
+	"clone_root": "template-new",
+	"cloned_from": "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D",
+	"description": "",
+	"files": {
+	},
+	"ignore": "",
+	"inner_path": "content.json",
+	"modified": 1481393762.773,
+	"postmessage_nonce_security": true,
+	"sign": [
+	],
+	"signers_sign": "",
+	"signs": {
+	},
+	"signs_required": 1,
+	"title": " new site",
+	"translate": [
+		"js/all.js"
+	],
+	"zeronet_version": "0.5.1"
+}

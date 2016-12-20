@@ -18,7 +18,7 @@ class Head extends Class
 		return false
 
 	renderMenuLanguage: =>
-		langs = ["da", "de", "en", "fr", "hu", "it", "pt", "ru", "zh", "zh-tw"]
+		langs = ["da", "de", "en", "es", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"]
 		if Page.server_info.language and Page.server_info.language not in langs
 			langs.push Page.server_info.language
 
@@ -30,6 +30,11 @@ class Head extends Class
 					" "
 				]
 		)
+
+	handleCreateSiteClick: =>
+		if Page.server_info.rev < 1770
+			return Page.cmd "wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]
+		Page.cmd("siteClone", [Page.site_info.address, "template-new"])
 
 	handleSettingsClick: =>
 		Page.local_storage.sites_orderby ?= "peers"
@@ -45,7 +50,8 @@ class Head extends Class
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
-		# @menu_settings.items.push ["Create new empty site", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
+		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
+		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 
