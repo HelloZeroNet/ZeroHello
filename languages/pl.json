@@ -33,9 +33,10 @@
 	"Order sites by update time": "Sortuj według czasu aktualizacji",
 	"Order sites by add time": "Sortuj według czasu dodania",
 	"Order sites by size": "Sortuj według rozmiaru stron",
+	"Create new, empty site": "Stwórz nową, pustą stronę",
 	"Version ": "Wersja: ",
 	"New version avalible!": "Nowa wersja dostępna",
-	"Up to date!": "Aktualne!",
+	"Up to date!": "Aktualna!",
 	"Shut down ZeroNet": "Wyłącz ZeroNet",
 
 	"_(Sites)": "_(Strony)",
@@ -87,7 +88,7 @@
 
 	"Optional file": "Pliki opcjonalne",
 	"Size": "Rozmiar",
-	"Peers": "Uzytkownicy równorzędni",
+	"Peers": "Użytkownicy równorzędni",
 	"Uploaded": "Załadowane",
 	"Downloaded": "Ściągnięte",
 	"Finished": "Skończone",
