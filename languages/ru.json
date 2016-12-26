@@ -10,7 +10,7 @@
 	"Re-check opened port": "Перепроверить статус порта",
 	"How to make Tor connection work?": "Как подключится через Tor?",
 	"How to use ZeroNet in Tor Browser?": "Как использовать ZeroNet в Tor Browser?",
-	"Disable always Tor mode": "Отключить режим постонного использования Tor",
+	"Disable always Tor mode": "Отключить режим постоянного использования Tor",
 	"Enable Tor for every connection (slower)": "Включить режим работы всех соединений через Tor (Медленно)",
 	"Help to keep this project alive": "Поддержите проект ZeroNet",
 	"Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.": "Обновление на последнюю версию...<br>Если спустя пару минут ZeroNet недоступен - перезапустите приложение.",
