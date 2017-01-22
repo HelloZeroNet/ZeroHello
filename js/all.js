@@ -2301,9 +2301,9 @@
         username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
         if (username_match) {
           if (username_match[2]) {
-            username_formatted = username_match[2] + " › ";
+            username_formatted = username_match[2] + " 鈥?";
           } else {
-            username_formatted = username_match[3] + " › ";
+            username_formatted = username_match[3] + " 鈥?";
           }
           body = body.replace(/> \[(.*?)\].*/g, "$1: ");
           body = body.replace(/^[ ]*>.*/gm, "");
@@ -3050,6 +3050,13 @@
             return _this.handleOrderbyClick("modified");
           };
         })(this)), orderby === "modified"
+      ]);
+      this.menu_settings.items.push([
+        "Order sites by site titles", ((function(_this) {
+          return function() {
+            return _this.handleOrderbyClick("title");
+          };
+        })(this)), orderby === "title"
       ]);
       this.menu_settings.items.push([
         "Order sites by add time", ((function(_this) {
@@ -3823,6 +3830,10 @@
       if (Page.local_storage.sites_orderby === "modified") {
         rows.sort(function(a, b) {
           return b.row.settings.modified - a.row.settings.modified;
+        });
+      } else if (Page.local_storage.sites_orderby === "title") {
+        rows.sort(function(b, a) {
+          return (b.row.content.title > a.row.content.title) - (a.row.content.title > b.row.content.title);
         });
       } else if (Page.local_storage.sites_orderby === "addtime") {
         rows.sort(function(a, b) {
