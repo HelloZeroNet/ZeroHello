@@ -2301,9 +2301,9 @@
         username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
         if (username_match) {
           if (username_match[2]) {
-            username_formatted = username_match[2] + " 鈥?";
+            username_formatted = username_match[2] + " > ";
           } else {
-            username_formatted = username_match[3] + " 鈥?";
+            username_formatted = username_match[3] + " > ";
           }
           body = body.replace(/> \[(.*?)\].*/g, "$1: ");
           body = body.replace(/^[ ]*>.*/gm, "");
