@@ -503,7 +503,7 @@
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/ZeroHello.css ---- */
 
 
-body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px }
+body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px; -webkit-font-smoothing: subpixel-antialiased; }
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
