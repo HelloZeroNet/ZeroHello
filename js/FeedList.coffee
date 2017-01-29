@@ -6,6 +6,8 @@ class FeedList extends Class
 		@searched_info = null
 		@loading = false
 		@need_update = false
+		@limit = 10
+		@day_limit = 3
 		Page.on_local_storage.then =>
 			@need_update = true
 		@
@@ -46,7 +48,17 @@ class FeedList extends Class
 	update: (cb) =>
 		if @searching
 			return false
-		Page.cmd "feedQuery", [], (rows) =>
+		if Page.server_info.rev < 1840
+			params = []
+		else
+			params = [@limit, @day_limit]
+		Page.cmd "feedQuery", params, (rows) =>
+			if rows.length < 10 and @day_limit
+				# Query without day limit if too few result
+				@limit = 20
+				@day_limit = null
+				setTimeout @update, 500
+
 			@displayRows(rows)
 			if cb then cb()
 
