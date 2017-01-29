@@ -88,7 +88,7 @@ class Site extends Class
 		return false
 
 	handleCheckfilesClick: =>
-		Page.cmd "siteUpdate", {"address": @row.address, "check_files": true}
+		Page.cmd "siteUpdate", {"address": @row.address, "check_files": true, since: 0}
 		@show_errors = true
 		return false
 

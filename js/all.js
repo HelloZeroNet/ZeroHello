@@ -1745,7 +1745,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Translate.coffee ---- */
 
 
@@ -2132,6 +2131,8 @@
       this.searched_info = null;
       this.loading = false;
       this.need_update = false;
+      this.limit = 10;
+      this.day_limit = 3;
       Page.on_local_storage.then((function(_this) {
         return function() {
           return _this.need_update = true;
@@ -2183,11 +2184,22 @@
     };
 
     FeedList.prototype.update = function(cb) {
+      var params;
       if (this.searching) {
         return false;
       }
-      return Page.cmd("feedQuery", [], (function(_this) {
+      if (Page.server_info.rev < 1840) {
+        params = [];
+      } else {
+        params = [this.limit, this.day_limit];
+      }
+      return Page.cmd("feedQuery", params, (function(_this) {
         return function(rows) {
+          if (rows.length < 10 && _this.day_limit) {
+            _this.limit = 20;
+            _this.day_limit = null;
+            setTimeout(_this.update, 500);
+          }
           _this.displayRows(rows);
           if (cb) {
             return cb();
@@ -3313,7 +3325,8 @@
     Site.prototype.handleCheckfilesClick = function() {
       Page.cmd("siteUpdate", {
         "address": this.row.address,
-        "check_files": true
+        "check_files": true,
+        since: 0
       });
       this.show_errors = true;
       return false;
@@ -3565,6 +3578,7 @@
   window.Site = Site;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
