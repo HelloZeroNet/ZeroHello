@@ -2115,6 +2115,7 @@
     function FeedList() {
       this.onSiteInfo = __bind(this.onSiteInfo, this);
       this.render = __bind(this.render, this);
+      this.getClass = __bind(this.getClass, this);
       this.renderWelcome = __bind(this.renderWelcome, this);
       this.renderFeed = __bind(this.renderFeed, this);
       this.exitAnimation = __bind(this.exitAnimation, this);
@@ -2188,7 +2189,7 @@
       if (this.searching) {
         return false;
       }
-      if (Page.server_info.rev < 1840) {
+      if (Page.server_info.rev < 1850) {
         params = [];
       } else {
         params = [this.limit, this.day_limit];
@@ -2198,7 +2199,8 @@
           if (rows.length < 10 && _this.day_limit) {
             _this.limit = 20;
             _this.day_limit = null;
-            setTimeout(_this.update, 500);
+            _this.update();
+            return false;
           }
           _this.displayRows(rows);
           if (cb) {
@@ -2423,7 +2425,7 @@
     FeedList.prototype.renderWelcome = function() {
       return h("div.welcome", [
         h("img", {
-          src: "img/logo_big.png",
+          src: "img/logo.svg",
           height: 150
         }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
           h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
@@ -2439,6 +2441,14 @@
           }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]) : void 0
         ])
       ]);
+    };
+
+    FeedList.prototype.getClass = function() {
+      if (this.searching !== null) {
+        return "search";
+      } else {
+        return "newsfeed";
+      }
     };
 
     FeedList.prototype.render = function() {
@@ -2476,7 +2486,7 @@
           }, "update"), " your ZeroNet client to use the search feature!"
         ]) : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
           enterAnimation: Animation.show
-        }, "No results for " + this.searched) : void 0), h("div.FeedList." + (this.searching !== null ? "search" : "newsfeed"), {
+        }, "No results for " + this.searched) : void 0), h("div.FeedList." + this.getClass(), {
           classes: {
             loading: this.loading
           }
@@ -2500,6 +2510,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
@@ -3156,9 +3167,9 @@
         href: "?Home"
       }, [
         h("img", {
-          src: 'img/logo.png',
+          src: 'img/logo.svg',
           width: 50,
-          height: 50
+          height: 40
         }), h("span", ["Hello ZeroNet_"])
       ]), h("div.modes", [
         h("a.mode.sites", {
@@ -3578,7 +3589,6 @@
   window.Site = Site;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */

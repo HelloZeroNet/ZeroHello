@@ -275,6 +275,7 @@
 .left h2 { text-transform: uppercase; font-size: 13px; font-weight: 500; padding: 10px; padding-left: 45px; opacity: 0.4; letter-spacing: 1px; margin-top: 40px; }
 .left .logo { background-color: #1E2429; padding: 20px; margin-bottom: 30px; display: block; text-decoration: none; color: white;}
 .left .logo span { vertical-align: 39%; font-size: 27px; font-family: 'Text Me One'; }
+.left .logo img { padding-top: 4px; padding-bottom: 4px; }
 
 .left #Head { }
 .left #Head .settings { position: absolute; color: #8A91A2; right: 0px; font-size: 35px; text-decoration: none; padding: 24px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
