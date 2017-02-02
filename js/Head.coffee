@@ -98,7 +98,7 @@ class Head extends Class
 			h("a.settings", {href: "#Settings", onmousedown: @handleSettingsClick, onclick: Page.returnFalse}, ["\u22EE"])
 			@menu_settings.render()
 			h("a.logo", {href: "?Home"}, [
-				h("img", {src: 'img/logo.svg', width: 50, height: 40}),
+				h("img", {src: 'img/logo.svg', width: 40, height: 40, onerror: "this.src='img/logo.png'; this.onerror=null;"}),
 				h("span", ["Hello ZeroNet_"])
 			]),
 			h("div.modes", [

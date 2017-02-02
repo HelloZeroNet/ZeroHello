@@ -221,7 +221,7 @@ class FeedList extends Class
 
 	renderWelcome: =>
 		h("div.welcome", [
-			h("img", {src: "img/logo.svg", height: 150})
+			h("img", {src: "img/logo.svg", height: 150, onerror: "this.src='img/logo.png'; this.onerror=null;"})
 			h("h1", "Welcome to ZeroNet")
 			h("h2", "Let's build a decentralized Internet together!")
 			h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])

@@ -2194,6 +2194,7 @@
       } else {
         params = [this.limit, this.day_limit];
       }
+      this.logStart("Updating feed");
       return Page.cmd("feedQuery", params, (function(_this) {
         return function(rows) {
           if (rows.length < 10 && _this.day_limit) {
@@ -2203,6 +2204,7 @@
             return false;
           }
           _this.displayRows(rows);
+          _this.logEnd("Updating feed");
           if (cb) {
             return cb();
           }
@@ -2426,7 +2428,8 @@
       return h("div.welcome", [
         h("img", {
           src: "img/logo.svg",
-          height: 150
+          height: 150,
+          onerror: "this.src='img/logo.png'; this.onerror=null;"
         }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
           h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
             href: Text.getSiteUrl("Board.ZeroNetwork.bit")
@@ -2510,7 +2513,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
@@ -3168,8 +3170,9 @@
       }, [
         h("img", {
           src: 'img/logo.svg',
-          width: 50,
-          height: 40
+          width: 40,
+          height: 40,
+          onerror: "this.src='img/logo.png'; this.onerror=null;"
         }), h("span", ["Hello ZeroNet_"])
       ]), h("div.modes", [
         h("a.mode.sites", {
@@ -3195,6 +3198,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
