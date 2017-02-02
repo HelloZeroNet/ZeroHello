@@ -52,6 +52,7 @@ class FeedList extends Class
 			params = []
 		else
 			params = [@limit, @day_limit]
+		@logStart "Updating feed"
 		Page.cmd "feedQuery", params, (rows) =>
 			if rows.length < 10 and @day_limit
 				# Query without day limit if too few result
@@ -61,6 +62,7 @@ class FeedList extends Class
 				return false
 
 			@displayRows(rows)
+			@logEnd "Updating feed"
 			if cb then cb()
 
 	search: (search, cb) =>
