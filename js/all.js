@@ -1338,6 +1338,35 @@
 }).call(this);
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
+
+
+(function() {
+  var call_after_interval, limits;
+
+  limits = {};
+
+  call_after_interval = {};
+
+  window.RateLimit = function(interval, fn) {
+    if (!limits[fn]) {
+      call_after_interval[fn] = false;
+      fn();
+      return limits[fn] = setTimeout((function() {
+        if (call_after_interval[fn]) {
+          fn();
+        }
+        delete limits[fn];
+        return delete call_after_interval[fn];
+      }), interval);
+    } else {
+      return call_after_interval[fn] = true;
+    }
+  };
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimitCb.coffee ---- */
 
 
@@ -1657,7 +1686,7 @@
     function Time() {}
 
     Time.prototype.since = function(timestamp) {
-      var back, now, secs;
+      var back, minutes, now, secs;
       now = +(new Date) / 1000;
       if (timestamp > 1000000000000) {
         timestamp = timestamp / 1000;
@@ -1666,7 +1695,8 @@
       if (secs < 60) {
         back = "Just now";
       } else if (secs < 60 * 60) {
-        back = (Math.round(secs / 60)) + " minutes ago";
+        minutes = Math.round(secs / 60);
+        back = "" + minutes + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
         back = (Math.round(secs / 60 / 60)) + " hours ago";
       } else if (secs < 60 * 60 * 24 * 3) {
@@ -2085,6 +2115,7 @@
     function FeedList() {
       this.onSiteInfo = __bind(this.onSiteInfo, this);
       this.render = __bind(this.render, this);
+      this.getClass = __bind(this.getClass, this);
       this.renderWelcome = __bind(this.renderWelcome, this);
       this.renderFeed = __bind(this.renderFeed, this);
       this.exitAnimation = __bind(this.exitAnimation, this);
@@ -2101,6 +2132,8 @@
       this.searched_info = null;
       this.loading = false;
       this.need_update = false;
+      this.limit = 10;
+      this.day_limit = 3;
       Page.on_local_storage.then((function(_this) {
         return function() {
           return _this.need_update = true;
@@ -2152,12 +2185,26 @@
     };
 
     FeedList.prototype.update = function(cb) {
+      var params;
       if (this.searching) {
         return false;
       }
-      return Page.cmd("feedQuery", [], (function(_this) {
+      if (Page.server_info.rev < 1850) {
+        params = [];
+      } else {
+        params = [this.limit, this.day_limit];
+      }
+      this.logStart("Updating feed");
+      return Page.cmd("feedQuery", params, (function(_this) {
         return function(rows) {
+          if (rows.length < 10 && _this.day_limit) {
+            _this.limit = 20;
+            _this.day_limit = null;
+            _this.update();
+            return false;
+          }
           _this.displayRows(rows);
+          _this.logEnd("Updating feed");
           if (cb) {
             return cb();
           }
@@ -2380,8 +2427,9 @@
     FeedList.prototype.renderWelcome = function() {
       return h("div.welcome", [
         h("img", {
-          src: "img/logo_big.png",
-          height: 150
+          src: "img/logo.svg",
+          height: 150,
+          onerror: "this.src='img/logo.png'; this.onerror=null;"
         }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
           h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
             href: Text.getSiteUrl("Board.ZeroNetwork.bit")
@@ -2396,6 +2444,14 @@
           }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]) : void 0
         ])
       ]);
+    };
+
+    FeedList.prototype.getClass = function() {
+      if (this.searching !== null) {
+        return "search";
+      } else {
+        return "newsfeed";
+      }
     };
 
     FeedList.prototype.render = function() {
@@ -2433,7 +2489,7 @@
           }, "update"), " your ZeroNet client to use the search feature!"
         ]) : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
           enterAnimation: Animation.show
-        }, "No results for " + this.searched) : void 0), h("div.FeedList." + (this.searching !== null ? "search" : "newsfeed"), {
+        }, "No results for " + this.searched) : void 0), h("div.FeedList." + this.getClass(), {
           classes: {
             loading: this.loading
           }
@@ -2966,7 +3022,7 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["da", "de", "en", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"];
+      langs = ["da", "de", "en", "es", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"];
       if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
         langs.push(Page.server_info.language);
       }
@@ -3113,9 +3169,10 @@
         href: "?Home"
       }, [
         h("img", {
-          src: 'img/logo.png',
-          width: 50,
-          height: 50
+          src: 'img/logo.svg',
+          width: 40,
+          height: 40,
+          onerror: "this.src='img/logo.png'; this.onerror=null;"
         }), h("span", ["Hello ZeroNet_"])
       ]), h("div.modes", [
         h("a.mode.sites", {
@@ -3283,7 +3340,8 @@
     Site.prototype.handleCheckfilesClick = function() {
       Page.cmd("siteUpdate", {
         "address": this.row.address,
-        "check_files": true
+        "check_files": true,
+        since: 0
       });
       this.show_errors = true;
       return false;

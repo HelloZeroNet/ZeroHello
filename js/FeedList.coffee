@@ -6,6 +6,8 @@ class FeedList extends Class
 		@searched_info = null
 		@loading = false
 		@need_update = false
+		@limit = 10
+		@day_limit = 3
 		Page.on_local_storage.then =>
 			@need_update = true
 		@
@@ -46,8 +48,21 @@ class FeedList extends Class
 	update: (cb) =>
 		if @searching
 			return false
-		Page.cmd "feedQuery", [], (rows) =>
+		if Page.server_info.rev < 1850
+			params = []
+		else
+			params = [@limit, @day_limit]
+		@logStart "Updating feed"
+		Page.cmd "feedQuery", params, (rows) =>
+			if rows.length < 10 and @day_limit
+				# Query without day limit if too few result
+				@limit = 20
+				@day_limit = null
+				@update()
+				return false
+
 			@displayRows(rows)
+			@logEnd "Updating feed"
 			if cb then cb()
 
 	search: (search, cb) =>
@@ -206,7 +221,7 @@ class FeedList extends Class
 
 	renderWelcome: =>
 		h("div.welcome", [
-			h("img", {src: "img/logo_big.png", height: 150})
+			h("img", {src: "img/logo.svg", height: 150, onerror: "this.src='img/logo.png'; this.onerror=null;"})
 			h("h1", "Welcome to ZeroNet")
 			h("h2", "Let's build a decentralized Internet together!")
 			h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])
@@ -241,6 +256,12 @@ class FeedList extends Class
 			])
 		])
 
+	getClass: =>
+		if @searching != null
+			return "search"
+		else
+			return "newsfeed"
+
 	render: =>
 		if @need_update
 			RateLimitCb(5000, @update)
@@ -270,7 +291,7 @@ class FeedList extends Class
 						else if @feeds.length == 0 and @searched
 							h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
 					),
-					h("div.FeedList."+(if @searching != null then "search" else "newsfeed"), {classes: {loading: @loading}}, @feeds[0..30].map(@renderFeed))
+					h("div.FeedList."+@getClass(), {classes: {loading: @loading}}, @feeds[0..30].map(@renderFeed))
 				]
 			else
 				@renderWelcome()

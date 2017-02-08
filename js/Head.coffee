@@ -18,7 +18,7 @@ class Head extends Class
 		return false
 
 	renderMenuLanguage: =>
-		langs = ["da", "de", "en", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"]
+		langs = ["da", "de", "en", "es", "fr", "hu", "it", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"]
 		if Page.server_info.language and Page.server_info.language not in langs
 			langs.push Page.server_info.language
 
@@ -98,7 +98,7 @@ class Head extends Class
 			h("a.settings", {href: "#Settings", onmousedown: @handleSettingsClick, onclick: Page.returnFalse}, ["\u22EE"])
 			@menu_settings.render()
 			h("a.logo", {href: "?Home"}, [
-				h("img", {src: 'img/logo.png', width: 50, height: 50}),
+				h("img", {src: 'img/logo.svg', width: 40, height: 40, onerror: "this.src='img/logo.png'; this.onerror=null;"}),
 				h("span", ["Hello ZeroNet_"])
 			]),
 			h("div.modes", [
