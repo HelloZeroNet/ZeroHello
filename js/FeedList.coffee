@@ -270,7 +270,7 @@ class FeedList extends Class
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
 			document.body.className = "loaded"
 
-		h("div#FeedList.FeedContainer",
+		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null

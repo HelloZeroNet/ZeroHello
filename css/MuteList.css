@@ -1,0 +1,31 @@
+#MuteList {
+	position: absolute; z-index: 1; background-color: white; width: 100%; box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.1); transform: rotateX(-42deg); transform-origin: top;
+	padding-bottom: 0px; max-height: 0px; opacity: 1; overflow: hidden; transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1); white-space: nowrap;
+}
+#MuteList.visible { opacity: 1; padding-bottom: 60px; transform: rotateX(0deg) }
+
+.mute-empty { text-align: center; font-size: 15px; text-transform: uppercase; color: #AAA; font-weight: lighter; }
+
+.mute { padding: 10px 40px; border-top: 1px solid #EEE; padding-right: 60px; transition: all 0.3s }
+.mute.removed { opacity: 0.5; background-color: #EEE }
+.mute.mute-head { font-weight: lighter; border-top: none }
+.mute .mute-col { display: inline-block; width: 32%; max-width: 400px; margin-right: 10px; overflow: hidden; margin-right: 5px }
+.mute .cert_user_id { font-size: 18px; color: #2b333d; }
+.mute .auth_address { color: #99a3a7; font-size: 13px; font-family: monospace; overflow: hidden; padding-right: 25px; text-overflow: ellipsis; }
+.mute .reason { font-size: 13px; color: #99a3a7; display: inline; }
+.mute .reason p { display: inline }
+.mute .reason a { color: inherit; }
+.mute .date_added { font-size: 13px; display: inline; color: #99a3a7; font-weight: lighter; }
+.mute .action {
+	display: inline-block; font-size: 24px; vertical-align: 10px; color: #999; font-weight: lighter; text-decoration: none;
+	transition: all 0.6s; padding: 0px 20px; padding-bottom: 5px; backface-visibility: hidden; transform: rotateZ(0deg)
+}
+.mute.removed .action { transform: rotateZ(45deg); }
+.mute .action:hover { color: red; transition: none }
+.mute .action:focus { transition: all 0.6s }
+
+.mute-hide { color: #797e85; text-transform: uppercase; padding: 30px 26px; display: inline-block; text-decoration: none; letter-spacing: 2px; transition: all 0.3s }
+.mute-hide:hover { color: #000 }
+.mute-hide:hover { opacity: 1; transition: none }
+.mute-hide:active { background-color: #F0F0F0; outline: 5px #F0F0F0; transition: none }
+.mute-hide:focus { transition: all 0.3s }
