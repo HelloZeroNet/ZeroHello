@@ -51,7 +51,13 @@
 	"New version avalible!": "有新版本可用！",
 	"Up to date!": "已是最新！",
 	"Shut down ZeroNet": "關閉 ZeroNet",
+	"You need ZeroNet 0.5.2 to use this feature.": "你需要 ZeroNet 0.5.2 來使用這個特性。",
 	"Update to latest development version?": "更新到最新的開發版？",
+
+	"Muted": "已屏蔽",
+	"\u2039 Back to feed": "\u2039 返回數據源",
+	"Your mute list is empty! :)": "你的屏蔽列表為空！:)",
+	"Why?": "為何？",
 
 	"_(Sites)": "網站",
 	"_(Files)": "檔案",
