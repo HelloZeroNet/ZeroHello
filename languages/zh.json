@@ -1,5 +1,5 @@
 {
-	"Port: ": "端口：",
+	"Port: ": "端口: ",
 	"Checking": "检查中",
 	"Opened": "开放",
 	"Closed": "关闭",
@@ -26,7 +26,7 @@
 	"Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox": "Internet Explorer 不被 ZeroNet 完整支持，请考虑切换到 Chrome 或 Firefox",
 	"Unsupported browser": "不支持的浏览器",
 	"New ZeroNet version: ": "新 ZeroNet 版本：",
-	"User: ": "用户",
+	"User: ": "用户：",
 
 	"Welcome to ZeroNet": "欢迎使用 ZeroNet",
 	"Let's build a decentralized Internet together!": "让我们共同构建一个分布式的互联网！",
