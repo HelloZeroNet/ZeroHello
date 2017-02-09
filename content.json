@@ -4,12 +4,16 @@
  "description": "New ZeroHello",
  "files": {
   "css/all.css": {
-   "sha512": "e8960dac90280fa578cf618d42512cc61f996e87263ebea3ca91b8713bfa0aad",
-   "size": 203080
+   "sha512": "afd06b6ff704b1fdbb7789c065c7a9507ca8dc5490e0d1a678aa42347113e636",
+   "size": 203075
   },
   "img/loading-circle.gif": {
    "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
    "size": 2346
+  },
+  "img/logo.png": {
+   "sha512": "81884a41736056c54274a7332f233b872fdf9e298b6dda91d655cc7105221682",
+   "size": 11379
   },
   "img/logo.svg": {
    "sha512": "27b72d6dbd7bfacc0f10f28ee85feaa4fa6aa8905a459701486cedbafe394643",
@@ -20,8 +24,8 @@
    "size": 1066
   },
   "js/all.js": {
-   "sha512": "fe4e25940658bee0ac503b00690298c4308a6eda0b036df77083d3c633a11a31",
-   "size": 156144
+   "sha512": "5521126fe86766c1d46f4b20df5c2c34cc7d8b2bd5541ec90ba0b60c82160370",
+   "size": 156355
   },
   "languages/da.json": {
    "sha512": "aec7f0efc03710ad27013facfebdc4c2e3b938ebcf67e257fa2fb432c47b6842",
@@ -86,15 +90,15 @@
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1485872352,
+ "modified": 1486039398,
  "postmessage_nonce_security": true,
  "sign": [
-  68109250249780535604448755329022508875317010013745539360299153635236832105278,
-  444923460119475456415859489334184264023371607161197723989661495399936301546
+  92363944228614562727757216171592770743271367445723412872704250961894577227741,
+  70981178788926649052279898373082261587031745251391179423709300849433639467654
  ],
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HLuHBZyATiI9NYXXdELFTAH/2J1jjx1kw3i7d2mnfoXdxyCOnN3xFXnckA+md7R5jzEk2hvZUZutaiHkImLcTF0="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G9LSoZQ3o6BK/MLfoJX0iQaj7doc72WbJBtG78c3wCdceo7HANGnZ4aVyyPdia10eYc4G2Z6AUqIIcT1FwRRNB8="
  },
  "signs_required": 1,
  "title": "ZeroHello",

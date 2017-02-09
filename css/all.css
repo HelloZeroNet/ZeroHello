@@ -356,6 +356,7 @@
 }
 
 .menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s ; border-bottom: none; font-weight: normal; }
+.menu-item .emoji { opacity: 0.6 }
 .menu-item-separator { margin-top: 3px; margin-bottom: 3px; border-top: 1px solid #eee }
 
 .menu-item.noaction { cursor: default }
@@ -375,12 +376,49 @@
 .menu-radio a.long { font-size: 11px }
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/MuteList.css ---- */
+
+
+#MuteList {
+	position: absolute; z-index: 1; background-color: white; width: 100%; -webkit-box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.1); -moz-box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.1); -o-box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.1); -ms-box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.1); box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.1) ; -webkit-transform: rotateX(-42deg); -moz-transform: rotateX(-42deg); -o-transform: rotateX(-42deg); -ms-transform: rotateX(-42deg); transform: rotateX(-42deg) ; transform-origin: top;
+	padding-bottom: 0px; max-height: 0px; opacity: 1; overflow: hidden; -webkit-transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1); -moz-transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1); -o-transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1); -ms-transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1); transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1) ; white-space: nowrap;
+}
+#MuteList.visible { opacity: 1; padding-bottom: 60px; -webkit-transform: rotateX(0deg) ; -moz-transform: rotateX(0deg) ; -o-transform: rotateX(0deg) ; -ms-transform: rotateX(0deg) ; transform: rotateX(0deg)  }
+
+.mute-empty { text-align: center; font-size: 15px; text-transform: uppercase; color: #AAA; font-weight: lighter; }
+
+.mute { padding: 10px 40px; border-top: 1px solid #EEE; padding-right: 60px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+.mute.removed { opacity: 0.5; background-color: #EEE }
+.mute.mute-head { font-weight: lighter; border-top: none }
+.mute .mute-col { display: inline-block; width: 32%; max-width: 400px; margin-right: 10px; overflow: hidden; margin-right: 5px }
+.mute .cert_user_id { font-size: 18px; color: #2b333d; }
+.mute .auth_address { color: #99a3a7; font-size: 13px; font-family: monospace; overflow: hidden; padding-right: 25px; text-overflow: ellipsis; }
+.mute .reason { font-size: 13px; color: #99a3a7; display: inline; }
+.mute .reason p { display: inline }
+.mute .reason a { color: inherit; }
+.mute .date_added { font-size: 13px; display: inline; color: #99a3a7; font-weight: lighter; }
+.mute .action {
+	display: inline-block; font-size: 24px; vertical-align: 10px; color: #999; font-weight: lighter; text-decoration: none;
+	-webkit-transition: all 0.6s; -moz-transition: all 0.6s; -o-transition: all 0.6s; -ms-transition: all 0.6s; transition: all 0.6s ; padding: 0px 20px; padding-bottom: 5px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; transform: rotateZ(0deg)
+}
+.mute.removed .action { -webkit-transform: rotateZ(45deg); -moz-transform: rotateZ(45deg); -o-transform: rotateZ(45deg); -ms-transform: rotateZ(45deg); transform: rotateZ(45deg) ; }
+.mute .action:hover { color: red; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
+.mute .action:focus { -webkit-transition: all 0.6s ; -moz-transition: all 0.6s ; -o-transition: all 0.6s ; -ms-transition: all 0.6s ; transition: all 0.6s  }
+
+.mute-hide { color: #797e85; text-transform: uppercase; padding: 30px 26px; display: inline-block; text-decoration: none; letter-spacing: 2px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+.mute-hide:hover { color: #000 }
+.mute-hide:hover { opacity: 1; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
+.mute-hide:active { background-color: #F0F0F0; outline: 5px #F0F0F0; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
+.mute-hide:focus { -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Right.css ---- */
 
 
 .right {
 	position: relative; border-left: 400px solid #322641; padding-right: 0px; background-color: white;
-	width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; min-height: 100%; border-top: 94px solid #EDF2F5;
+	width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; min-height: 100%; border-top: 94px solid #EDF2F5; -webkit-perspective: 2000px; -moz-perspective: 2000px; -o-perspective: 2000px; -ms-perspective: 2000px; perspective: 2000px ;
 }
 
 #Dashboard { position: absolute; right: 80px; top: -83px; }
@@ -408,6 +446,7 @@
 }*/
 
 .FeedContainer a:active { background-color: rgba(0,0,0,0.05); outline: 2px solid rgba(0,0,0,0.05) }
+.FeedContainer.faded { opacity: 0.1 }
 .feeds-search { max-width: 820px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; padding-left: 190px; margin-top: 30px; position: relative; margin-right: 50px }
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; -webkit-border-radius: 30px ; -moz-border-radius: 30px ; -o-border-radius: 30px ; -ms-border-radius: 30px ; border-radius: 30px  }
 .feeds-search input::-ms-clear { display: none }
@@ -518,6 +557,7 @@ a:hover { text-decoration: none }
 .servedby { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 .head, .topright { display: none }
 
+.emoji { font-family: "Segoe UI Symbol", "Symbola" }
 
 /* Bottom */
 

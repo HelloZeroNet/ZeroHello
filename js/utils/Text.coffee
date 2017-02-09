@@ -1,3 +1,7 @@
+class MarkedRenderer extends marked.Renderer
+	image: (href, title, text) ->
+		return ("<code>![#{text}](#{href})</code>")
+
 class Text
 	toColor: (text, saturation=30, lightness=50) ->
 		hash = 0
@@ -10,10 +14,9 @@ class Text
 	renderMarked: (text, options={}) ->
 		options["gfm"] = true
 		options["breaks"] = true
+		options["sanitize"] = true
 		options["renderer"] = marked_renderer
-		text = @fixReply(text)
 		text = marked(text, options)
-		text = @emailLinks text
 		return @fixHtmlLinks text
 
 	emailLinks: (text) ->
@@ -140,5 +143,6 @@ class Text
 		else
 			return (size/1024).toFixed(2)+" KB"
 
+window.marked_renderer = new MarkedRenderer()
 window.is_proxy = (document.location.host == "zero" or window.location.pathname == "/")
 window.Text = new Text()

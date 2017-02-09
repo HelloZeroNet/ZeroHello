@@ -57,6 +57,7 @@ class ZeroHello extends ZeroFrame
 		@file_list = new FileList()
 		@head = new Head()
 		@dashboard = new Dashboard()
+		@mute_list = new MuteList()
 
 		@route("")
 

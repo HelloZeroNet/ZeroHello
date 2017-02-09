@@ -9,6 +9,7 @@
 }
 
 .menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s; border-bottom: none; font-weight: normal; }
+.menu-item .emoji { opacity: 0.6 }
 .menu-item-separator { margin-top: 3px; margin-bottom: 3px; border-top: 1px solid #eee }
 
 .menu-item.noaction { cursor: default }

@@ -48,7 +48,7 @@ class FeedList extends Class
 	update: (cb) =>
 		if @searching
 			return false
-		if Page.server_info.rev < 1850
+		if not Page.server_info or Page.server_info.rev < 1850
 			params = []
 		else
 			params = [@limit, @day_limit]
@@ -270,7 +270,7 @@ class FeedList extends Class
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
 			document.body.className = "loaded"
 
-		h("div#FeedList.FeedContainer",
+		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null
