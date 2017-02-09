@@ -48,7 +48,7 @@ class FeedList extends Class
 	update: (cb) =>
 		if @searching
 			return false
-		if Page.server_info.rev < 1850
+		if not Page.server_info or Page.server_info.rev < 1850
 			params = []
 		else
 			params = [@limit, @day_limit]
