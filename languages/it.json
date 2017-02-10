@@ -38,6 +38,14 @@
 	"New version avalible!": "Nuova versione disponibile!",
 	"Up to date!": "Aggiornato!!",
 	"Shut down ZeroNet": "Spegni ZeroNet",
+	"You need ZeroNet 0.5.2 to use this feature.": "Hai bisogno di aggiornare alla versione 0.5.2 di ZeroNet per usare questa funzione",
+	"Update to latest development version?": "Vuoi aggiornare all'ultima versione disponibile ?",
+	
+	"Muted": "Utenti bloccati",
+	"\u2039 Back to feed": "\u2039 Indietro",
+	"Your mute list is empty! :)": "La tua lista utenti bloccati è vuota! :)",
+	"Why?": "Perche?",
+
 
 	"_(Sites)": "Siti",
 	"_(Files)": "File",
