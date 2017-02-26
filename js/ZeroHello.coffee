@@ -11,7 +11,7 @@ class ZeroHello extends ZeroFrame
 		@on_local_storage = new Promise()
 		@local_storage = null
 
-		@latest_version = "0.5.1"
+		@latest_version = "0.5.2"
 		@mode = "Sites"
 		@change_timer = null
 		document.body.id = "Page#{@mode}"
@@ -77,12 +77,6 @@ class ZeroHello extends ZeroFrame
 	route: (query) ->
 		@params = Text.parseQuery(query)
 		@log "Route", @params
-		if @params.to
-			@on_site_info.then =>
-				@message_create.show(@params.to)
-			@cmd "wrapperReplaceState", [{}, "", @createUrl("to", "")]  # Remove to parameter from url
-		if @params.url == "Sent"
-			@leftbar.folder_active = "sent"
 
 	# Add/remove/change parameter to current site url
 	createUrl: (key, val) ->
@@ -95,6 +89,19 @@ class ZeroHello extends ZeroFrame
 			params[key] = val
 		return "?"+Text.encodeQuery(params)
 
+	setUrl: (url, mode="push") ->
+		url = url.replace(/.*?\?/, "")
+		@log "setUrl", @history_state["url"], "->", url
+		if @history_state["url"] == url
+			@content.update()
+			return false
+		@history_state["url"] = url
+		if mode == "replace"
+			@cmd "wrapperReplaceState", [@history_state, "", url]
+		else
+			@cmd "wrapperPushState", [@history_state, "", url]
+		@route url
+		return false
 
 	loadLocalStorage: ->
 		@on_site_info.then =>

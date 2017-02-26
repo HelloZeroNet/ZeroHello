@@ -28,7 +28,7 @@
 }*/
 
 .FeedContainer a:active { background-color: rgba(0,0,0,0.05); outline: 2px solid rgba(0,0,0,0.05) }
-.FeedContainer.faded { opacity: 0.1 }
+.FeedContainer.faded { opacity: 0.2 }
 .feeds-search { max-width: 820px; box-sizing: border-box; padding-left: 190px; margin-top: 30px; position: relative; margin-right: 50px }
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; transition: all 0.3s; border-radius: 30px }
 .feeds-search input::-ms-clear { display: none }
