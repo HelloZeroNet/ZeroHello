@@ -4,7 +4,7 @@
 	display: inline-block; z-index: 999;
 }
 .menu.visible {
-	opacity: 1; max-height: 450px; transform: translate(-100%, 0px); pointer-events: all;
+	opacity: 1; max-height: 500px; transform: translate(-100%, 0px); pointer-events: all;
 	transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1);
 }
 

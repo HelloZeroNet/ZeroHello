@@ -25,8 +25,8 @@
 	"Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.": "正在更新到最新版本...<br>如果几分钟以后没有运行，请手动重启。",
 	"Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox": "Internet Explorer 不被 ZeroNet 完整支持，请考虑切换到 Chrome 或 Firefox",
 	"Unsupported browser": "不支持的浏览器",
-	"New ZeroNet version: ": "新 ZeroNet 版本：",
-	"User: ": "用户：",
+	"New ZeroNet version: ": "新 ZeroNet 版本: ",
+	"User: ": "用户: ",
 
 	"Welcome to ZeroNet": "欢迎使用 ZeroNet",
 	"Let's build a decentralized Internet together!": "让我们共同构建一个分布式的互联网！",
@@ -47,6 +47,7 @@
 	"Order sites by add time": "根据站点添加时间排序",
 	"Order sites by size": "根据站点大小排序",
 	"Create new, empty site": "新建空站点",
+	"Manage muted users": "管理已屏蔽用户",
 	"Version ": "版本 ",
 	"New version avalible!": "有新版本可用！",
 	"Up to date!": "已是最新！",
@@ -55,7 +56,7 @@
 	"Update to latest development version?": "更新到最新的开发版？",
 
 	"Muted": "已屏蔽",
-	"\u2039 Back to feed": "\u2039 返回数据源",
+	"\\u2039 Back to feed": "\\u2039 返回数据源",
 	"Your mute list is empty! :)": "你的屏蔽列表为空！:)",
 	"Why?": "为什么？",
 
@@ -64,7 +65,7 @@
 	"Running out of size limit:": "超出站点大小限制：",
 	"Favorited sites:": "收藏的站点",
 	"Connected sites:": "已连接的站点",
-	"Merged: ": "已合并",
+	"Merged: ": "聚合在：",
 	"More sites:": "更多站点：",
 	" file update failed": " 个文件更新失败",
 	"No peers": "没有节点",
@@ -116,6 +117,7 @@
 	"Optional files on site: ": "这个站点的可选文件",
 	"Optional": "可选的",
 	"Help distribute all new files": "帮助分发所有新文件",
+	"Upload/Download ratio": "上传/下载率",
 
 	"Optional file": "可选文件",
 	"Size": "大小",
