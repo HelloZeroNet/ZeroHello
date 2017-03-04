@@ -18,7 +18,7 @@ class FeedList extends Class
 		@
 
 	checkScroll: =>
-		if document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 and not @updating
+		if document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 and not @updating and @feeds?.length > 5
 			@limit += 30
 			@query_limit += 30
 			@query_day_limit += 5
@@ -70,10 +70,11 @@ class FeedList extends Class
 		@logStart "Updating feed"
 		@updating = true
 		Page.cmd "feedQuery", params, (rows) =>
-			if rows.length < 10 and @day_limit
+			if rows.length < 10 and @day_limit != null
 				# Query without day limit if too few result
 				@limit = 20
 				@day_limit = null
+				@updating = false
 				@update()
 				return false
 
