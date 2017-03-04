@@ -24,12 +24,11 @@ class Dashboard extends Class
 		if @getTorTitle() != "OK"
 			@menu_tor.items.push ["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]
 		@menu_tor.items.push ["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]
-		if @getTorTitle() == "OK"
-			@menu_tor.items.push ["---"]
-			if @isTorAlways()
-				@menu_tor.items.push ["Disable always Tor mode", @handleDisableAlwaysTorClick]
-			else
-				@menu_tor.items.push ["Enable Tor for every connection (slower)", @handleEnableAlwaysTorClick]
+		@menu_tor.items.push ["---"]
+		if @isTorAlways()
+			@menu_tor.items.push ["Disable always Tor mode", @handleDisableAlwaysTorClick]
+		else
+			@menu_tor.items.push ["Enable Tor for every connection (slower)", @handleEnableAlwaysTorClick]
 
 		@menu_tor.toggle()
 		return false
