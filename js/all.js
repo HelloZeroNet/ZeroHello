@@ -1975,13 +1975,11 @@
         this.menu_tor.items.push(["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
       }
       this.menu_tor.items.push(["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
-      if (this.getTorTitle() === "OK") {
-        this.menu_tor.items.push(["---"]);
-        if (this.isTorAlways()) {
-          this.menu_tor.items.push(["Disable always Tor mode", this.handleDisableAlwaysTorClick]);
-        } else {
-          this.menu_tor.items.push(["Enable Tor for every connection (slower)", this.handleEnableAlwaysTorClick]);
-        }
+      this.menu_tor.items.push(["---"]);
+      if (this.isTorAlways()) {
+        this.menu_tor.items.push(["Disable always Tor mode", this.handleDisableAlwaysTorClick]);
+      } else {
+        this.menu_tor.items.push(["Enable Tor for every connection (slower)", this.handleEnableAlwaysTorClick]);
       }
       this.menu_tor.toggle();
       return false;
@@ -2130,6 +2128,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
 
 
@@ -2181,7 +2180,8 @@
     }
 
     FeedList.prototype.checkScroll = function() {
-      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating) {
+      var _ref;
+      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((_ref = this.feeds) != null ? _ref.length : void 0) > 5) {
         this.limit += 30;
         this.query_limit += 30;
         this.query_day_limit += 5;
@@ -2248,9 +2248,10 @@
       this.updating = true;
       return Page.cmd("feedQuery", params, (function(_this) {
         return function(rows) {
-          if (rows.length < 10 && _this.day_limit) {
+          if (rows.length < 10 && _this.day_limit !== null) {
             _this.limit = 20;
             _this.day_limit = null;
+            _this.updating = false;
             _this.update();
             return false;
           }
@@ -2576,7 +2577,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
@@ -4289,7 +4289,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      this.latest_version = "0.5.2";
+      this.latest_version = "0.5.3";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;
