@@ -11,7 +11,7 @@ class ZeroHello extends ZeroFrame
 		@on_local_storage = new Promise()
 		@local_storage = null
 
-		@latest_version = "0.5.2"
+		@latest_version = "0.5.3"
 		@mode = "Sites"
 		@change_timer = null
 		document.body.id = "Page#{@mode}"
