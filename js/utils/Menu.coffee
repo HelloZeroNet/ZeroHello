@@ -31,7 +31,7 @@ class Menu
 			node.className = node.className.replace("visible", "")
 			setTimeout (->
 				node.className += " visible"
-			), 10
+			), 20
 
 	handleClick: (e) =>
 		keep_menu = false
