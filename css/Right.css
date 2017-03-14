@@ -22,6 +22,7 @@
 #Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
 #Dashboard .dashboard-item.donate:hover .icon-heart { transform: scale(1.2) }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
+#Dashboard .torbrowserwarning { color: #e91e63 }
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; backface-visibility: hidden; content: "";
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; border-radius: 60px; position: absolute; margin-left: -32px; margin-top: -2px;

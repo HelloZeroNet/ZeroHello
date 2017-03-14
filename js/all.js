@@ -1933,6 +1933,7 @@
 
     function Dashboard() {
       this.render = __bind(this.render, this);
+      this.handleTorBrowserwarningClick = __bind(this.handleTorBrowserwarningClick, this);
       this.handleBrowserwarningClick = __bind(this.handleBrowserwarningClick, this);
       this.handleNewversionClick = __bind(this.handleNewversionClick, this);
       this.handleLogoutClick = __bind(this.handleLogoutClick, this);
@@ -1949,11 +1950,24 @@
       this.menu_multiuser = new Menu();
       this.menu_donate = new Menu();
       this.menu_browserwarning = new Menu();
+      this.menu_torbrowserwarning = new Menu();
       this.port_checking = false;
+      this.has_web_gl = null;
     }
 
     Dashboard.prototype.isTorAlways = function() {
       return Page.server_info.fileserver_ip === "127.0.0.1";
+    };
+
+    Dashboard.prototype.hasWebGl = function() {
+      var canvas, ctx;
+      if (this.has_web_gl === null) {
+        canvas = document.createElement('canvas');
+        ctx = canvas.getContext("webgl");
+        this.has_web_gl = ctx ? true : false;
+        this.log("Webgl:", this.has_web_gl);
+      }
+      return this.has_web_gl;
     };
 
     Dashboard.prototype.getTorTitle = function() {
@@ -2074,6 +2088,13 @@
       return false;
     };
 
+    Dashboard.prototype.handleTorBrowserwarningClick = function() {
+      this.menu_torbrowserwarning.items = [];
+      this.menu_torbrowserwarning.items.push(["To protect your anonymity you should use ZeroNet in the Tor browser.", "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
+      this.menu_torbrowserwarning.toggle();
+      return false;
+    };
+
     Dashboard.prototype.render = function() {
       var tor_title;
       if (Page.server_info) {
@@ -2082,7 +2103,11 @@
           href: "http://browsehappy.com/",
           onmousedown: this.handleBrowserwarningClick,
           onclick: Page.returnFalse
-        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
+        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), this.isTorAlways() && (!navigator.userAgent.match(/(Firefox)/) || this.hasWebGl() || (navigator.serviceWorker != null)) ? h("a.port.dashboard-item.torbrowserwarning", {
+          href: "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser",
+          onmousedown: this.handleTorBrowserwarningClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Your browser is not safe")]) : void 0, this.menu_torbrowserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
@@ -2126,6 +2151,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
@@ -3271,7 +3297,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */

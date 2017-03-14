@@ -6,11 +6,21 @@ class Dashboard extends Class
 		@menu_multiuser = new Menu()
 		@menu_donate = new Menu()
 		@menu_browserwarning = new Menu()
+		@menu_torbrowserwarning = new Menu()
 
 		@port_checking = false
+		@has_web_gl = null
 
 	isTorAlways: ->
 		return Page.server_info.fileserver_ip == "127.0.0.1"
+
+	hasWebGl: ->
+		if @has_web_gl == null
+			canvas = document.createElement('canvas')
+			ctx = canvas.getContext("webgl")
+			@has_web_gl = if ctx then true else false
+			@log "Webgl:", @has_web_gl
+		return @has_web_gl
 
 	getTorTitle: ->
 		tor_title = Page.server_info.tor_status.replace(/\((.*)\)/, "").trim()
@@ -98,6 +108,13 @@ class Dashboard extends Class
 		@menu_browserwarning.toggle()
 		return false
 
+
+	handleTorBrowserwarningClick: =>
+		@menu_torbrowserwarning.items = []
+		@menu_torbrowserwarning.items.push ["To protect your anonymity you should use ZeroNet in the Tor browser.", "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]
+		@menu_torbrowserwarning.toggle()
+		return false
+
 	render: =>
 		if Page.server_info
 			tor_title = @getTorTitle()
@@ -108,6 +125,13 @@ class Dashboard extends Class
 						h("span", "Unsupported browser")
 					])
 				@menu_browserwarning.render(".menu-browserwarning")
+
+				# No tor browser detected
+				if @isTorAlways() and (not navigator.userAgent.match(/(Firefox)/) or @hasWebGl() or navigator.serviceWorker?)
+					h("a.port.dashboard-item.torbrowserwarning", {href: "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser", onmousedown: @handleTorBrowserwarningClick, onclick: Page.returnFalse}, [
+						h("span", "Your browser is not safe")
+					])
+				@menu_torbrowserwarning.render(".menu-browserwarning")
 
 				# Update
 				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
