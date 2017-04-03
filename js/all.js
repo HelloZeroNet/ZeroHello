@@ -2153,7 +2153,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
 
 
@@ -3112,7 +3111,7 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, _ref;
-      langs = ["da", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "ru", "tr", "uk", "zh", "zh-tw"];
+      langs = ["da", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "pt-br", "ru", "tr", "uk", "zh", "zh-tw"];
       if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
         langs.push(Page.server_info.language);
       }
@@ -3297,6 +3296,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */
