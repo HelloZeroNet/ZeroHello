@@ -18,10 +18,11 @@ class FeedList extends Class
 		@
 
 	checkScroll: =>
-		if document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 and not @updating and @feeds?.length > 5
+		if document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 and not @updating and @feeds?.length > 5 and Page.mode == "Sites"
 			@limit += 30
 			@query_limit += 30
 			@query_day_limit += 5
+			@log "checkScroll update"
 			@update()
 			return true
 		else
