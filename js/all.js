@@ -2205,10 +2205,11 @@
 
     FeedList.prototype.checkScroll = function() {
       var _ref;
-      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((_ref = this.feeds) != null ? _ref.length : void 0) > 5) {
+      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((_ref = this.feeds) != null ? _ref.length : void 0) > 5 && Page.mode === "Sites") {
         this.limit += 30;
         this.query_limit += 30;
         this.query_day_limit += 5;
+        this.log("checkScroll update");
         this.update();
         return true;
       } else {
@@ -3064,33 +3065,33 @@
 
 (function() {
   var Head,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  Head = (function(_super) {
-    __extends(Head, _super);
+  Head = (function(superClass) {
+    extend(Head, superClass);
 
     function Head() {
-      this.render = __bind(this.render, this);
-      this.handleModeClick = __bind(this.handleModeClick, this);
-      this.handleShutdownZeronetClick = __bind(this.handleShutdownZeronetClick, this);
-      this.handleUpdateZeronetClick = __bind(this.handleUpdateZeronetClick, this);
-      this.handleManageMutesClick = __bind(this.handleManageMutesClick, this);
-      this.handleTorClick = __bind(this.handleTorClick, this);
-      this.handleOrderbyClick = __bind(this.handleOrderbyClick, this);
-      this.handleUpdateAllClick = __bind(this.handleUpdateAllClick, this);
-      this.handleSettingsClick = __bind(this.handleSettingsClick, this);
-      this.handleCreateSiteClick = __bind(this.handleCreateSiteClick, this);
-      this.renderMenuLanguage = __bind(this.renderMenuLanguage, this);
-      this.handleLanguageClick = __bind(this.handleLanguageClick, this);
+      this.render = bind(this.render, this);
+      this.handleModeClick = bind(this.handleModeClick, this);
+      this.handleShutdownZeronetClick = bind(this.handleShutdownZeronetClick, this);
+      this.handleUpdateZeronetClick = bind(this.handleUpdateZeronetClick, this);
+      this.handleManageMutesClick = bind(this.handleManageMutesClick, this);
+      this.handleTorClick = bind(this.handleTorClick, this);
+      this.handleOrderbyClick = bind(this.handleOrderbyClick, this);
+      this.handleUpdateAllClick = bind(this.handleUpdateAllClick, this);
+      this.handleSettingsClick = bind(this.handleSettingsClick, this);
+      this.handleCreateSiteClick = bind(this.handleCreateSiteClick, this);
+      this.renderMenuLanguage = bind(this.renderMenuLanguage, this);
+      this.handleLanguageClick = bind(this.handleLanguageClick, this);
       this.menu_settings = new Menu();
     }
 
     Head.prototype.formatUpdateInfo = function() {
       if (parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))) {
-        return "New version avalible!";
+        return "New version available!";
       } else {
         return "Up to date!";
       }
@@ -3110,17 +3111,17 @@
     };
 
     Head.prototype.renderMenuLanguage = function() {
-      var lang, langs, _ref;
+      var lang, langs, ref;
       langs = ["da", "de", "en", "es", "fr", "hu", "it", "nl", "pl", "pt", "pt-br", "ru", "tr", "uk", "zh", "zh-tw"];
-      if (Page.server_info.language && (_ref = Page.server_info.language, __indexOf.call(langs, _ref) < 0)) {
+      if (Page.server_info.language && (ref = Page.server_info.language, indexOf.call(langs, ref) < 0)) {
         langs.push(Page.server_info.language);
       }
       return h("div.menu-radio", h("div", "Language: "), (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = langs.length; _i < _len; _i++) {
-          lang = langs[_i];
-          _results.push([
+        var i, len, results;
+        results = [];
+        for (i = 0, len = langs.length; i < len; i++) {
+          lang = langs[i];
+          results.push([
             h("a", {
               href: "#" + lang,
               onclick: this.handleLanguageClick,
@@ -3131,7 +3132,7 @@
             }, lang), " "
           ]);
         }
-        return _results;
+        return results;
       }).call(this));
     };
 
@@ -3143,9 +3144,9 @@
     };
 
     Head.prototype.handleSettingsClick = function() {
-      var orderby, _base;
-      if ((_base = Page.local_storage).sites_orderby == null) {
-        _base.sites_orderby = "peers";
+      var base, orderby;
+      if ((base = Page.local_storage).sites_orderby == null) {
+        base.sites_orderby = "peers";
       }
       orderby = Page.local_storage.sites_orderby;
       this.menu_settings.items = [];
@@ -3196,20 +3197,20 @@
     };
 
     Head.prototype.handleUpdateAllClick = function() {
-      var site, _i, _len, _ref, _results;
-      _ref = Page.site_list.sites;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        site = _ref[_i];
+      var i, len, ref, results, site;
+      ref = Page.site_list.sites;
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
         if (site.row.settings.serving) {
-          _results.push(Page.cmd("siteUpdate", {
+          results.push(Page.cmd("siteUpdate", {
             "address": site.row.address
           }));
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     Head.prototype.handleOrderbyClick = function(orderby) {
@@ -3296,7 +3297,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */
@@ -3440,30 +3440,31 @@
 
 (function() {
   var Site,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  Site = (function(_super) {
-    __extends(Site, _super);
+  Site = (function(superClass) {
+    extend(Site, superClass);
 
-    function Site(row, _at_item_list) {
-      this.item_list = _at_item_list;
-      this.renderOptionalStats = __bind(this.renderOptionalStats, this);
-      this.render = __bind(this.render, this);
-      this.handleHelpsClick = __bind(this.handleHelpsClick, this);
-      this.handleHelpAllClick = __bind(this.handleHelpAllClick, this);
-      this.handleHelpClick = __bind(this.handleHelpClick, this);
-      this.handleSettingsClick = __bind(this.handleSettingsClick, this);
-      this.handleDeleteClick = __bind(this.handleDeleteClick, this);
-      this.handleCloneClick = __bind(this.handleCloneClick, this);
-      this.handlePauseClick = __bind(this.handlePauseClick, this);
-      this.handleResumeClick = __bind(this.handleResumeClick, this);
-      this.handleCheckfilesClick = __bind(this.handleCheckfilesClick, this);
-      this.handleUpdateClick = __bind(this.handleUpdateClick, this);
-      this.handleUnfavoriteClick = __bind(this.handleUnfavoriteClick, this);
-      this.handleFavoriteClick = __bind(this.handleFavoriteClick, this);
+    function Site(row, item_list) {
+      this.item_list = item_list;
+      this.renderOptionalStats = bind(this.renderOptionalStats, this);
+      this.render = bind(this.render, this);
+      this.handleHelpsClick = bind(this.handleHelpsClick, this);
+      this.handleHelpAllClick = bind(this.handleHelpAllClick, this);
+      this.handleHelpClick = bind(this.handleHelpClick, this);
+      this.handleSettingsClick = bind(this.handleSettingsClick, this);
+      this.handleDeleteClick = bind(this.handleDeleteClick, this);
+      this.handleCloneUpgradeClick = bind(this.handleCloneUpgradeClick, this);
+      this.handleCloneClick = bind(this.handleCloneClick, this);
+      this.handlePauseClick = bind(this.handlePauseClick, this);
+      this.handleResumeClick = bind(this.handleResumeClick, this);
+      this.handleCheckfilesClick = bind(this.handleCheckfilesClick, this);
+      this.handleUpdateClick = bind(this.handleUpdateClick, this);
+      this.handleUnfavoriteClick = bind(this.handleUnfavoriteClick, this);
+      this.handleFavoriteClick = bind(this.handleFavoriteClick, this);
       this.deleted = false;
       this.show_errors = false;
       this.message_visible = false;
@@ -3482,10 +3483,10 @@
     }
 
     Site.prototype.setRow = function(row) {
-      var key, val, _ref, _ref1, _ref2;
-      if (((_ref = row.event) != null ? _ref[0] : void 0) === "updated" && row.content_updated !== false) {
+      var key, ref, ref1, ref2, val;
+      if (((ref = row.event) != null ? ref[0] : void 0) === "updated" && row.content_updated !== false) {
         this.setMessage("Updated!", "done");
-      } else if (((_ref1 = row.event) != null ? _ref1[0] : void 0) === "updating") {
+      } else if (((ref1 = row.event) != null ? ref1[0] : void 0) === "updating") {
         this.setMessage("Updating...");
       } else if (row.tasks > 0) {
         this.setMessage("Updating: " + (Math.max(row.tasks, row.bad_files)) + " left");
@@ -3497,27 +3498,27 @@
         } else {
           this.setMessage("Update failed", "error");
         }
-      } else if (row.tasks === 0 && ((_ref2 = this.row) != null ? _ref2.tasks : void 0) > 0) {
+      } else if (row.tasks === 0 && ((ref2 = this.row) != null ? ref2.tasks : void 0) > 0) {
         this.setMessage("Updated!", "done");
       }
       if (row.body == null) {
         row.body = "";
       }
       this.optional_helps = (function() {
-        var _ref3, _results;
-        _ref3 = row.settings.optional_help;
-        _results = [];
-        for (key in _ref3) {
-          val = _ref3[key];
-          _results.push([key, val]);
+        var ref3, results;
+        ref3 = row.settings.optional_help;
+        results = [];
+        for (key in ref3) {
+          val = ref3[key];
+          results.push([key, val]);
         }
-        return _results;
+        return results;
       })();
       return this.row = row;
     };
 
-    Site.prototype.setMessage = function(message, _at_message_class) {
-      this.message_class = _at_message_class != null ? _at_message_class : "";
+    Site.prototype.setMessage = function(message, message_class) {
+      this.message_class = message_class != null ? message_class : "";
       if (message) {
         this.message = message;
         this.message_visible = true;
@@ -3541,8 +3542,8 @@
     };
 
     Site.prototype.isWorking = function() {
-      var _ref;
-      return this.row.tasks > 0 || ((_ref = this.row.event) != null ? _ref[0] : void 0) === "updating";
+      var ref;
+      return this.row.tasks > 0 || ((ref = this.row.event) != null ? ref[0] : void 0) === "updating";
     };
 
     Site.prototype.handleFavoriteClick = function() {
@@ -3602,21 +3603,53 @@
       return false;
     };
 
+    Site.prototype.handleCloneUpgradeClick = function() {
+      Page.cmd("siteClone", {
+        "address": this.row.content.cloned_from,
+        "root_inner_path": this.row.content.clone_root,
+        "target_address": this.row.address
+      });
+      return false;
+    };
+
     Site.prototype.handleDeleteClick = function() {
       if (this.row.settings.own) {
         Page.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
       } else {
-        Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), "Delete"], (function(_this) {
-          return function(confirmed) {
-            if (confirmed) {
-              Page.cmd("siteDelete", {
-                "address": _this.row.address
-              });
-              _this.item_list.deleteItem(_this);
-              return Page.projector.scheduleRender();
-            }
-          };
-        })(this));
+        if (Page.server_info.rev > 2060) {
+          Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), ["Delete", "Blacklist"]], (function(_this) {
+            return function(confirmed) {
+              if (confirmed === 1) {
+                Page.cmd("siteDelete", {
+                  "address": _this.row.address
+                });
+                _this.item_list.deleteItem(_this);
+                return Page.projector.scheduleRender();
+              } else if (confirmed === 2) {
+                return Page.cmd("wrapperPrompt", ["Blacklist <b>" + _this.row.content.title + "</b>", "text", "Delete and Blacklist", "Reason"], function(reason) {
+                  Page.cmd("siteDelete", {
+                    "address": _this.row.address
+                  });
+                  Page.cmd("blacklistAdd", [_this.row.address, reason]);
+                  _this.item_list.deleteItem(_this);
+                  return Page.projector.scheduleRender();
+                });
+              }
+            };
+          })(this));
+        } else {
+          Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), "Delete"], (function(_this) {
+            return function(confirmed) {
+              if (confirmed) {
+                Page.cmd("siteDelete", {
+                  "address": _this.row.address
+                });
+                _this.item_list.deleteItem(_this);
+                return Page.projector.scheduleRender();
+              }
+            };
+          })(this));
+        }
       }
       return false;
     };
@@ -3637,6 +3670,10 @@
       }
       if (this.row.content.cloneable === true) {
         this.menu.items.push(["Clone", this.handleCloneClick]);
+      }
+      if (this.row.settings.own && this.row.content.cloned_from) {
+        this.menu.items.push(["---"]);
+        this.menu.items.push(["Upgrade source", this.handleCloneUpgradeClick]);
       }
       this.menu.items.push(["---"]);
       this.menu.items.push(["Delete", this.handleDeleteClick]);
@@ -3678,7 +3715,7 @@
     };
 
     Site.prototype.handleHelpsClick = function(e) {
-      var directory, title, _i, _len, _ref, _ref1;
+      var directory, i, len, ref, ref1, title;
       if (e.target.classList.contains("menu-item")) {
         return;
       }
@@ -3696,9 +3733,9 @@
       if (this.optional_helps.length > 0) {
         this.menu_helps.items.push(["---"]);
       }
-      _ref = this.optional_helps;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        _ref1 = _ref[_i], directory = _ref1[0], title = _ref1[1];
+      ref = this.optional_helps;
+      for (i = 0, len = ref.length; i < len; i++) {
+        ref1 = ref[i], directory = ref1[0], title = ref1[1];
         this.menu_helps.items.push([
           title, ((function(_this) {
             return function() {
@@ -3716,9 +3753,9 @@
     };
 
     Site.prototype.getHref = function() {
-      var has_plugin, href, _ref, _ref1;
-      has_plugin = (((_ref = Page.server_info) != null ? _ref.plugins : void 0) != null) && (__indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || __indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || __indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
-      if (has_plugin && ((_ref1 = this.row.content) != null ? _ref1.domain : void 0)) {
+      var has_plugin, href, ref, ref1;
+      has_plugin = (((ref = Page.server_info) != null ? ref.plugins : void 0) != null) && (indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
+      if (has_plugin && ((ref1 = this.row.content) != null ? ref1.domain : void 0)) {
         href = Text.getSiteUrl(this.row.content.domain);
       } else {
         href = Text.getSiteUrl(this.row.address);
@@ -3727,7 +3764,7 @@
     };
 
     Site.prototype.render = function() {
-      var now, _ref;
+      var now, ref;
       now = Date.now() / 1000;
       return h("div.site", {
         key: this.key,
@@ -3741,7 +3778,7 @@
         style: "color: " + (Text.toColor(this.row.address, 40, 50))
       }, ["\u2022"]), h("a.inner", {
         href: this.getHref(),
-        title: ((_ref = this.row.content.title) != null ? _ref.length : void 0) > 20 ? this.row.content.title : void 0
+        title: ((ref = this.row.content.title) != null ? ref.length : void 0) > 20 ? this.row.content.title : void 0
       }, [
         h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.local_storage.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, h("div.message", {
           classes: {
@@ -3827,6 +3864,7 @@
   window.Site = Site;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
@@ -4290,19 +4328,19 @@
 
 (function() {
   var ZeroHello,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty;
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   window.h = maquette.h;
 
-  ZeroHello = (function(_super) {
-    __extends(ZeroHello, _super);
+  ZeroHello = (function(superClass) {
+    extend(ZeroHello, superClass);
 
     function ZeroHello() {
-      this.reloadServerInfo = __bind(this.reloadServerInfo, this);
-      this.reloadSiteInfo = __bind(this.reloadSiteInfo, this);
-      this.onOpenWebsocket = __bind(this.onOpenWebsocket, this);
+      this.reloadServerInfo = bind(this.reloadServerInfo, this);
+      this.reloadSiteInfo = bind(this.reloadSiteInfo, this);
+      this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
       return ZeroHello.__super__.constructor.apply(this, arguments);
     }
 
@@ -4314,7 +4352,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      this.latest_version = "0.5.3";
+      this.latest_version = "0.5.4";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;
@@ -4325,7 +4363,7 @@
       if (mode === "Sites") {
         try {
           this.projector.detach(this.file_list.render);
-        } catch (_error) {
+        } catch (error) {
           this;
         }
         this.projector.replace($("#FeedList"), this.feed_list.render);
@@ -4334,7 +4372,7 @@
         try {
           this.projector.detach(this.feed_list.render);
           this.projector.detach(this.site_list.render);
-        } catch (_error) {
+        } catch (error) {
           this;
         }
         this.projector.replace($("#FileList"), this.file_list.render);
@@ -4421,18 +4459,18 @@
       return this.on_site_info.then((function(_this) {
         return function() {
           _this.log("Loading localstorage");
-          return _this.cmd("wrapperGetLocalStorage", [], function(_at_local_storage) {
-            var _base, _base1;
-            _this.local_storage = _at_local_storage;
+          return _this.cmd("wrapperGetLocalStorage", [], function(local_storage) {
+            var base, base1;
+            _this.local_storage = local_storage;
             _this.log("Loaded localstorage");
             if (_this.local_storage == null) {
               _this.local_storage = {};
             }
-            if ((_base = _this.local_storage).sites_orderby == null) {
-              _base.sites_orderby = "peers";
+            if ((base = _this.local_storage).sites_orderby == null) {
+              base.sites_orderby = "peers";
             }
-            if ((_base1 = _this.local_storage).favorite_sites == null) {
-              _base1.favorite_sites = {};
+            if ((base1 = _this.local_storage).favorite_sites == null) {
+              base1.favorite_sites = {};
             }
             return _this.on_local_storage.resolve(_this.local_storage);
           });
