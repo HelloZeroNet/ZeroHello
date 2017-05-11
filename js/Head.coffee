@@ -4,7 +4,7 @@ class Head extends Class
 
 	formatUpdateInfo: ->
 		if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
-			return "New version avalible!"
+			return "New version available!"
 		else
 			return "Up to date!"
 
