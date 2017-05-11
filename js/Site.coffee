@@ -108,11 +108,24 @@ class Site extends Class
 		if @row.settings.own
 			Page.cmd "wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]
 		else
-			Page.cmd "wrapperConfirm", ["Are you sure?" + " <b>#{@row.content.title}</b>", "Delete"], (confirmed) =>
-				if confirmed
-					Page.cmd "siteDelete", {"address": @row.address}
-					@item_list.deleteItem(@)
-					Page.projector.scheduleRender()
+			if Page.server_info.rev > 2060
+				Page.cmd "wrapperConfirm", ["Are you sure?" + " <b>#{@row.content.title}</b>", ["Delete", "Blacklist"]], (confirmed) =>
+					if confirmed == 1
+						Page.cmd "siteDelete", {"address": @row.address}
+						@item_list.deleteItem(@)
+						Page.projector.scheduleRender()
+					else if confirmed == 2
+						Page.cmd "wrapperPrompt", ["Blacklist <b>#{@row.content.title}</b>", "text", "Delete and Blacklist", "Reason"], (reason) =>
+							Page.cmd "siteDelete", {"address": @row.address}
+							Page.cmd "blacklistAdd", [@row.address, reason]
+							@item_list.deleteItem(@)
+							Page.projector.scheduleRender()
+			else
+				Page.cmd "wrapperConfirm", ["Are you sure?" + " <b>#{@row.content.title}</b>", "Delete"], (confirmed) =>
+					if confirmed
+						Page.cmd "siteDelete", {"address": @row.address}
+						@item_list.deleteItem(@)
+						Page.projector.scheduleRender()
 		return false
 
 	handleSettingsClick: (e) =>
