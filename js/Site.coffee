@@ -104,6 +104,11 @@ class Site extends Class
 		Page.cmd "siteClone", {"address": @row.address}
 		return false
 
+	handleCloneUpgradeClick: =>
+		Page.cmd "wrapperConfirm", ["Are you sure?" + " Any modifications you made on<br><b>#{@row.content.title}</b> site's js/css files will be lost.", "Upgrade"], (confirmed) =>
+			Page.cmd "siteClone", {"address": @row.content.cloned_from, "root_inner_path": @row.content.clone_root, "target_address": @row.address}
+		return false
+
 	handleDeleteClick: =>
 		if @row.settings.own
 			Page.cmd "wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]
@@ -142,6 +147,9 @@ class Site extends Class
 			@menu.items.push ["Resume", @handleResumeClick]
 		if @row.content.cloneable == true
 			@menu.items.push ["Clone", @handleCloneClick]
+		if @row.settings.own and @row.content.cloned_from and Page.server_info.rev >= 2080
+			@menu.items.push ["---"]
+			@menu.items.push ["Upgrade code", @handleCloneUpgradeClick]
 		@menu.items.push ["---"]
 		@menu.items.push ["Delete", @handleDeleteClick]
 

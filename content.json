@@ -24,8 +24,8 @@
    "size": 1093
   },
   "js/all.js": {
-   "sha512": "dfbcff3404049287b0b7531a77333dd98d43c4d2e317474ff6b8da7d8adcac7b",
-   "size": 184116
+   "sha512": "e5f33eb8e86234b03fd26595d8725228d836f225ebfe3e3cf17928f0077df1f4",
+   "size": 185659
   },
   "languages/da.json": {
    "sha512": "aec7f0efc03710ad27013facfebdc4c2e3b938ebcf67e257fa2fb432c47b6842",
@@ -54,6 +54,10 @@
   "languages/pl.json": {
    "sha512": "7af9a32eb1cc223b3065fff2591c99a44f33a38fd035c75737108ffb524e62b8",
    "size": 4718
+  },
+  "languages/pt-br.json": {
+   "sha512": "c6ca0da11c11abd8c963c7bcd1b7dee0bcfafb04b813c7ce23c3e16c3fd7a015",
+   "size": 4411
   },
   "languages/pt.json": {
    "sha512": "a5e03e01a2ba455e55ca71ca03ed9d81896776fd4b169a0fffd0764783f70024",
@@ -94,20 +98,20 @@
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1489452370,
+ "modified": 1494543869,
  "postmessage_nonce_security": true,
  "sign": [
-  57428244983281043523535217805158178525351007280174175530823995611909264920465,
-  29478580753857751651475570737491370103933675211669907254266795176546735899533
+  115509920349406122701136938079044191635015033502899747262814298556411271141156,
+  89121994807882290928876990191559795326376670617267499436722461689208814069359
  ],
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G01P6ODfxClv+Yh6CYaJ2llQuXa4jIEc1zkH92xUJAwsUDOlnEdBa8fNxVJN8g2A2jzemNhjECt1E2BTMup9HPg="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G+ae7Hwvp43BPR26xCGO9f9JmBmEKl6EkNN7mYqWpCB+AlcHpqg9rnxyadHY2gft3hveQfG0ipNW6PZ6oTwERjk="
  },
  "signs_required": 1,
  "title": "ZeroHello",
  "translate": [
   "js/all.js"
  ],
- "zeronet_version": "0.5.3"
+ "zeronet_version": "0.5.4"
 }

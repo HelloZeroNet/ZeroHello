@@ -2158,28 +2158,28 @@
 
 (function() {
   var FeedList,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty;
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
-  FeedList = (function(_super) {
-    __extends(FeedList, _super);
+  FeedList = (function(superClass) {
+    extend(FeedList, superClass);
 
     function FeedList() {
-      this.onSiteInfo = __bind(this.onSiteInfo, this);
-      this.render = __bind(this.render, this);
-      this.getClass = __bind(this.getClass, this);
-      this.renderWelcome = __bind(this.renderWelcome, this);
-      this.renderFeed = __bind(this.renderFeed, this);
-      this.exitAnimation = __bind(this.exitAnimation, this);
-      this.enterAnimation = __bind(this.enterAnimation, this);
-      this.handleSearchKeyup = __bind(this.handleSearchKeyup, this);
-      this.handleSearchInput = __bind(this.handleSearchInput, this);
-      this.storeNodeSearch = __bind(this.storeNodeSearch, this);
-      this.search = __bind(this.search, this);
-      this.update = __bind(this.update, this);
-      this.displayRows = __bind(this.displayRows, this);
-      this.checkScroll = __bind(this.checkScroll, this);
+      this.onSiteInfo = bind(this.onSiteInfo, this);
+      this.render = bind(this.render, this);
+      this.getClass = bind(this.getClass, this);
+      this.renderWelcome = bind(this.renderWelcome, this);
+      this.renderFeed = bind(this.renderFeed, this);
+      this.exitAnimation = bind(this.exitAnimation, this);
+      this.enterAnimation = bind(this.enterAnimation, this);
+      this.handleSearchKeyup = bind(this.handleSearchKeyup, this);
+      this.handleSearchInput = bind(this.handleSearchInput, this);
+      this.storeNodeSearch = bind(this.storeNodeSearch, this);
+      this.search = bind(this.search, this);
+      this.update = bind(this.update, this);
+      this.displayRows = bind(this.displayRows, this);
+      this.checkScroll = bind(this.checkScroll, this);
       this.feeds = null;
       this.searching = null;
       this.searched = null;
@@ -2204,8 +2204,8 @@
     }
 
     FeedList.prototype.checkScroll = function() {
-      var _ref;
-      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((_ref = this.feeds) != null ? _ref.length : void 0) > 5 && Page.mode === "Sites") {
+      var ref;
+      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((ref = this.feeds) != null ? ref.length : void 0) > 5 && Page.mode === "Sites") {
         this.limit += 30;
         this.query_limit += 30;
         this.query_day_limit += 5;
@@ -2218,7 +2218,7 @@
     };
 
     FeedList.prototype.displayRows = function(rows, search) {
-      var last_row, row, row_group, _i, _len;
+      var i, last_row, len, row, row_group;
       this.feeds = [];
       if (!rows) {
         return false;
@@ -2229,8 +2229,8 @@
       row_group = {};
       last_row = {};
       rows.reverse();
-      for (_i = 0, _len = rows.length; _i < _len; _i++) {
-        row = rows[_i];
+      for (i = 0, len = rows.length; i < len; i++) {
+        row = rows[i];
         if (last_row.body === row.body && last_row.date_added === row.date_added) {
           continue;
         }
@@ -2317,11 +2317,11 @@
     FeedList.prototype.storeNodeSearch = function(node) {
       return document.body.onkeypress = (function(_this) {
         return function(e) {
-          var _ref, _ref1;
-          if ((_ref = e.charCode) === 0 || _ref === 32) {
+          var ref, ref1;
+          if ((ref = e.charCode) === 0 || ref === 32) {
             return;
           }
-          if (((_ref1 = document.activeElement) != null ? _ref1.tagName : void 0) !== "INPUT") {
+          if (((ref1 = document.activeElement) != null ? ref1.tagName : void 0) !== "INPUT") {
             return node.focus();
           }
         };
@@ -2496,8 +2496,8 @@
             href: site.getHref() + feed.url
           }, ["+" + feed.more + " more"]) : void 0
         ]);
-      } catch (_error) {
-        err = _error;
+      } catch (error) {
+        err = error;
         this.log(err);
         return h("div");
       }
@@ -2587,8 +2587,8 @@
     };
 
     FeedList.prototype.onSiteInfo = function(site_info) {
-      var _ref, _ref1, _ref2;
-      if (((_ref = site_info.event) != null ? _ref[0] : void 0) === "file_done" && ((_ref1 = site_info.event) != null ? _ref1[1].endsWith(".json") : void 0) && !((_ref2 = site_info.event) != null ? _ref2[1].endsWith("content.json") : void 0)) {
+      var ref, ref1, ref2;
+      if (((ref = site_info.event) != null ? ref[0] : void 0) === "file_done" && ((ref1 = site_info.event) != null ? ref1[1].endsWith(".json") : void 0) && !((ref2 = site_info.event) != null ? ref2[1].endsWith("content.json") : void 0)) {
         if (!this.searching) {
           return this.need_update = true;
         }
@@ -3604,11 +3604,15 @@
     };
 
     Site.prototype.handleCloneUpgradeClick = function() {
-      Page.cmd("siteClone", {
-        "address": this.row.content.cloned_from,
-        "root_inner_path": this.row.content.clone_root,
-        "target_address": this.row.address
-      });
+      Page.cmd("wrapperConfirm", ["Are you sure?" + (" Any modifications you made on<br><b>" + this.row.content.title + "</b> site's js/css files will be lost."), "Upgrade"], (function(_this) {
+        return function(confirmed) {
+          return Page.cmd("siteClone", {
+            "address": _this.row.content.cloned_from,
+            "root_inner_path": _this.row.content.clone_root,
+            "target_address": _this.row.address
+          });
+        };
+      })(this));
       return false;
     };
 
@@ -3671,9 +3675,9 @@
       if (this.row.content.cloneable === true) {
         this.menu.items.push(["Clone", this.handleCloneClick]);
       }
-      if (this.row.settings.own && this.row.content.cloned_from) {
+      if (this.row.settings.own && this.row.content.cloned_from && Page.server_info.rev >= 2080) {
         this.menu.items.push(["---"]);
-        this.menu.items.push(["Upgrade source", this.handleCloneUpgradeClick]);
+        this.menu.items.push(["Upgrade code", this.handleCloneUpgradeClick]);
       }
       this.menu.items.push(["---"]);
       this.menu.items.push(["Delete", this.handleDeleteClick]);
@@ -4077,20 +4081,20 @@
 
 (function() {
   var SiteList,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __hasProp = {}.hasOwnProperty;
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
-  SiteList = (function(_super) {
-    __extends(SiteList, _super);
+  SiteList = (function(superClass) {
+    extend(SiteList, superClass);
 
     function SiteList() {
-      this.onSiteInfo = __bind(this.onSiteInfo, this);
-      this.render = __bind(this.render, this);
-      this.renderMergedSites = __bind(this.renderMergedSites, this);
-      this.reorder = __bind(this.reorder, this);
-      this.sortRows = __bind(this.sortRows, this);
-      this.reorderTimer = __bind(this.reorderTimer, this);
+      this.onSiteInfo = bind(this.onSiteInfo, this);
+      this.render = bind(this.render, this);
+      this.renderMergedSites = bind(this.renderMergedSites, this);
+      this.reorder = bind(this.reorder, this);
+      this.sortRows = bind(this.sortRows, this);
+      this.reorderTimer = bind(this.reorderTimer, this);
       this.item_list = new ItemList(Site, "address");
       this.sites = this.item_list.items;
       this.sites_byaddress = this.item_list.items_bykey;
@@ -4163,7 +4167,7 @@
     };
 
     SiteList.prototype.updateInactiveDemoSites = function() {
-      var demo_site_rows, site_row, _i, _len, _results;
+      var demo_site_rows, i, len, results, site_row;
       demo_site_rows = [
         {
           address: "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
@@ -4226,29 +4230,29 @@
         });
       }
       this.inactive_demo_sites = [];
-      _results = [];
-      for (_i = 0, _len = demo_site_rows.length; _i < _len; _i++) {
-        site_row = demo_site_rows[_i];
+      results = [];
+      for (i = 0, len = demo_site_rows.length; i < len; i++) {
+        site_row = demo_site_rows[i];
         if (!this.sites_byaddress[site_row.address]) {
-          _results.push(this.inactive_demo_sites.push(new Site(site_row)));
+          results.push(this.inactive_demo_sites.push(new Site(site_row)));
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     SiteList.prototype.renderMergedSites = function() {
-      var back, merged_db, merged_sites, merged_type, site, _i, _len, _name, _ref;
+      var back, i, len, merged_db, merged_sites, merged_type, name, ref, site;
       merged_db = {};
-      _ref = this.sites_merged;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        site = _ref[_i];
+      ref = this.sites_merged;
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
         if (!site.row.content.merged_type) {
           continue;
         }
-        if (merged_db[_name = site.row.content.merged_type] == null) {
-          merged_db[_name] = [];
+        if (merged_db[name = site.row.content.merged_type] == null) {
+          merged_db[name] = [];
         }
         merged_db[site.row.content.merged_type].push(site);
       }
@@ -4267,23 +4271,26 @@
     };
 
     SiteList.prototype.render = function() {
-      var site, _i, _len, _ref;
+      var i, len, ref, ref1, site;
       if (!this.loaded) {
         return h("div#SiteList");
       }
       this.sites_needaction = [];
       this.sites_favorited = [];
+      this.sites_owned = [];
       this.sites_connected = [];
       this.sites_merged = [];
-      _ref = this.sites;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        site = _ref[_i];
+      ref = this.sites;
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
         if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
           this.sites_needaction.push(site);
         } else if (site.favorite) {
           this.sites_favorited.push(site);
         } else if (site.row.content.merged_type) {
           this.sites_merged.push(site);
+        } else if ((ref1 = site.row.settings) != null ? ref1.own : void 0) {
+          this.sites_owned.push(site);
         } else {
           this.sites_connected.push(site);
         }
@@ -4292,6 +4299,8 @@
         this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
+          return item.render();
+        })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
           return item.render();
         })), h("h2.connected", "Connected sites:"), h("div.SiteList.connected", this.sites_connected.map(function(item) {
           return item.render();
@@ -4306,9 +4315,9 @@
     };
 
     SiteList.prototype.onSiteInfo = function(site_info) {
-      var _ref;
-      if ((_ref = this.item_list.items_bykey[site_info.address]) != null) {
-        _ref.setRow(site_info);
+      var ref;
+      if ((ref = this.item_list.items_bykey[site_info.address]) != null) {
+        ref.setRow(site_info);
       }
       this.schedule_reorder = true;
       return Page.projector.scheduleRender();
