@@ -96,8 +96,10 @@ class SiteList extends Class
 
 		@sites_needaction = []
 		@sites_favorited = []
+		@sites_owned = []
 		@sites_connected = []
 		@sites_merged = []
+
 		for site in @sites
 			if site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024
 				@sites_needaction.push site
@@ -105,6 +107,8 @@ class SiteList extends Class
 				@sites_favorited.push site
 			else if site.row.content.merged_type
 				@sites_merged.push site
+			else if site.row.settings?.own
+				@sites_owned.push site
 			else
 				@sites_connected.push site
 		h("div#SiteList", [
@@ -114,6 +118,10 @@ class SiteList extends Class
 			),
 			if @sites_favorited.length > 0 then h("h2.favorited", "Favorited sites:"),
 			h("div.SiteList.favorited", @sites_favorited.map (item) ->
+				item.render()
+			),
+			if @sites_owned.length > 0 then h("h2.owned", "Owned sites:"),
+			h("div.SiteList.owned", @sites_owned.map (item) ->
 				item.render()
 			),
 			h("h2.connected", "Connected sites:"),
