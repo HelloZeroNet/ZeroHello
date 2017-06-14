@@ -267,12 +267,17 @@ class FeedList extends Class
 					h("div.description", ["End-to-end encrypted mailing"])
 					h("div.visit", ["Activate \u2501"])
 				]),
-				if Page.server_info.rev >= 1400
-					h("a.site.site-zerome", {href: Text.getSiteUrl("Me.ZeroNetwork.bit")}, [
-						h("div.title", ["ZeroMe"])
-						h("div.description", ["P2P social network"])
-						h("div.visit", ["Activate \u2501"])
-					])
+				h("a.site.site-zerome", {href: Text.getSiteUrl("Me.ZeroNetwork.bit")}, [
+					h("div.title", ["ZeroMe"])
+					h("div.description", ["P2P social network"])
+					h("div.visit", ["Activate \u2501"])
+				]),
+				h("a.site.site-zerosites", {href: Text.getSiteUrl("Sites.ZeroNetwork.bit")}, [
+					h("div.title", ["ZeroSites"])
+					h("div.description", ["Discover more sites"])
+					h("div.visit", ["Activate \u2501"])
+				])
+
 			])
 		])
 

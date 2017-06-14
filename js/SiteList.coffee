@@ -62,7 +62,7 @@ class SiteList extends Class
 			{address: "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8", demo: true, content: {title: "ZeroBlog", domain: "Blog.ZeroNetwork.bit"}, settings: {}}
 			{address: "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27", demo: true, content: {title: "ZeroMail", domain: "Mail.ZeroNetwork.bit"}, settings: {}}
 			{address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h", demo: true, content: {title: "GIF Time"}, settings: {}}
-			{address: "186THqMWuptrZxq1rxzpguAivK3Bs6z84o", demo: true, content: {title: "More sites @ 0list", domain: "0list.bit"}, settings: {}}
+			{address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwBa", demo: true, content: {title: "More @ ZeroSites", domain: "Sites.ZeroNetwork.bit"}, settings: {}}
 		]
 		if Page.server_info.rev >= 1400
 			demo_site_rows.push {address: "1MeFqFfFFGQfa1J3gJyYYUvb5Lksczq7nH", demo: true, content: {title: "ZeroMe", domain: "Me.ZeroNetwork.bit"}, settings: {}}
