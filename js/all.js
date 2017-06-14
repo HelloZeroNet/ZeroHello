@@ -2205,7 +2205,7 @@
 
     FeedList.prototype.checkScroll = function() {
       var ref;
-      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((ref = this.feeds) != null ? ref.length : void 0) > 5 && Page.mode === "Sites") {
+      if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((ref = this.feeds) != null ? ref.length : void 0) > 5 && Page.mode === "Sites" && this.limit < 300) {
         this.limit += 30;
         this.query_limit += 30;
         this.query_day_limit += 5;
@@ -2518,9 +2518,11 @@
             href: Text.getSiteUrl("Blog.ZeroNetwork.bit")
           }, [h("div.title", ["ZeroBlog"]), h("div.description", ["Microblogging platform"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeromail", {
             href: Text.getSiteUrl("Mail.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroMail"]), h("div.description", ["End-to-end encrypted mailing"]), h("div.visit", ["Activate \u2501"])]), Page.server_info.rev >= 1400 ? h("a.site.site-zerome", {
+          }, [h("div.title", ["ZeroMail"]), h("div.description", ["End-to-end encrypted mailing"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerome", {
             href: Text.getSiteUrl("Me.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]) : void 0
+          }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerosites", {
+            href: Text.getSiteUrl("Sites.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroSites"]), h("div.description", ["Discover more sites"]), h("div.visit", ["Activate \u2501"])])
         ])
       ]);
     };
@@ -2602,6 +2604,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
@@ -3870,7 +3873,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
 
 
@@ -4209,11 +4211,11 @@
           },
           settings: {}
         }, {
-          address: "186THqMWuptrZxq1rxzpguAivK3Bs6z84o",
+          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwBa",
           demo: true,
           content: {
-            title: "More sites @ 0list",
-            domain: "0list.bit"
+            title: "More @ ZeroSites",
+            domain: "Sites.ZeroNetwork.bit"
           },
           settings: {}
         }
@@ -4361,7 +4363,7 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      this.latest_version = "0.5.4";
+      this.latest_version = "0.5.5";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;

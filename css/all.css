@@ -514,6 +514,7 @@
 .welcome .site-zerotalk { background: linear-gradient(45deg, #9F63BF, #E2556F) }
 .welcome .site-zeromail { background: linear-gradient(-25deg, #C04848 -40%, #4A569D) }
 .welcome .site-zerome { background: linear-gradient(-45deg, #F39963, #F7417D) }
+.welcome .site-zerosites { background: linear-gradient(33deg, #1bb2d4, #7eca26) }
 
 @media only screen and (max-width: 1250px) {
 	.welcome .site { width: 49%; }
