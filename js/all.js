@@ -3170,6 +3170,13 @@
         })(this)), orderby === "modified"
       ]);
       this.menu_settings.items.push([
+        "Order sites by site titles", ((function(_this) {
+          return function() {
+            return _this.handleOrderbyClick("title");
+          };
+        })(this)), orderby === "title"
+      ]);
+      this.menu_settings.items.push([
         "Order sites by add time", ((function(_this) {
           return function() {
             return _this.handleOrderbyClick("addtime");
@@ -4129,6 +4136,10 @@
       if (Page.local_storage.sites_orderby === "modified") {
         rows.sort(function(a, b) {
           return b.row.settings.modified - a.row.settings.modified;
+        });
+      } else if (Page.local_storage.sites_orderby === "title") {
+        rows.sort(function(b, a) {
+          return (b.row.content.title > a.row.content.title) - (a.row.content.title > b.row.content.title);
         });
       } else if (Page.local_storage.sites_orderby === "addtime") {
         rows.sort(function(a, b) {
