@@ -61,7 +61,7 @@ class ZeroHello extends ZeroFrame
 
 		@route("")
 
-		@loadLocalStorage()
+		@loadSettings()
 		@on_site_info.then =>
 			@projector.replace($("#Head"), @head.render)
 			@projector.replace($("#Dashboard"), @dashboard.render)
@@ -103,20 +103,33 @@ class ZeroHello extends ZeroFrame
 		@route url
 		return false
 
-	loadLocalStorage: ->
+	loadSettings: ->
 		@on_site_info.then =>
-			@log "Loading localstorage"
-			@cmd "wrapperGetLocalStorage", [], (@local_storage) =>
-				@log "Loaded localstorage"
-				@local_storage ?= {}
-				@local_storage.sites_orderby ?= "peers"
-				@local_storage.favorite_sites ?= {}
-				@on_local_storage.resolve(@local_storage)
+			@cmd "userGetSettings", [], (res) =>
+				if not res or res.error
+					@loadLocalStorage()
+				else
+					@settings = res
+					@settings.sites_orderby ?= "peers"
+					@settings.favorite_sites ?= {}
+					@on_settings.resolve(@settings)
 
-	saveLocalStorage: (cb) ->
-		if @local_storage
-			@cmd "wrapperSetLocalStorage", @local_storage, (res) =>
-				if cb then cb(res)
+	loadLocalStorage: ->
+		@cmd "wrapperGetLocalStorage", [], (@settings) =>
+			@log "Loaded localstorage"
+			@settings ?= {}
+			@settings.sites_orderby ?= "peers"
+			@settings.favorite_sites ?= {}
+			@on_settings.resolve(@settings)
+
+	saveSettings: (cb) ->
+		if @settings
+			if Page.server_info.rev > 2140
+				@cmd "userSetSettings", [@settings], (res) =>
+					if cb then cb(res)
+			else
+				@cmd "wrapperSetLocalStorage", @settings, (res) =>
+					if cb then cb(res)
 
 
 	onOpenWebsocket: (e) =>
