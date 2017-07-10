@@ -8,10 +8,10 @@ class ZeroHello extends ZeroFrame
 		@address = null
 
 		@on_site_info = new Promise()
-		@on_local_storage = new Promise()
-		@local_storage = null
+		@on_settings = new Promise()
+		@settings = null
 
-		@latest_version = "0.5.4"
+		@latest_version = "0.5.6"
 		@mode = "Sites"
 		@change_timer = null
 		document.body.id = "Page#{@mode}"

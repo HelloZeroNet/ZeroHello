@@ -7,7 +7,7 @@ class Site extends Class
 		@message_class = ""
 		@message_collapsed = false
 		@message_timer = null
-		@favorite = Page.local_storage.favorite_sites[row.address]
+		@favorite = Page.settings.favorite_sites[row.address]
 		@key = row.address
 		@optional_helps = []
 		@optional_helps_disabled = {}
@@ -69,16 +69,16 @@ class Site extends Class
 	handleFavoriteClick: =>
 		@favorite = true
 		@menu = new Menu()
-		Page.local_storage.favorite_sites[@row.address] = true
-		Page.saveLocalStorage()
+		Page.settings.favorite_sites[@row.address] = true
+		Page.saveSettings()
 		Page.site_list.reorder()
 		return false
 
 	handleUnfavoriteClick: =>
 		@favorite = false
 		@menu = new Menu()
-		delete Page.local_storage.favorite_sites[@row.address]
-		Page.saveLocalStorage()
+		delete Page.settings.favorite_sites[@row.address]
+		Page.saveSettings()
 		Page.site_list.reorder()
 		return false
 
@@ -220,7 +220,7 @@ class Site extends Class
 				h("div.details", [
 					h("span.modified", [
 						h("div.icon-clock")
-						if Page.local_storage.sites_orderby == "size"
+						if Page.settings.sites_orderby == "size"
 							h("span.value", [(@row.settings.size/1024/1024 + @row.settings.size_optional?/1024/1024).toFixed(1), "MB"])
 						else
 							h("span.value", [Time.since(@row.settings.modified)])

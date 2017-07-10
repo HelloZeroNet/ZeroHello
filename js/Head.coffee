@@ -37,8 +37,8 @@ class Head extends Class
 		Page.cmd("siteClone", [Page.site_info.address, "template-new"])
 
 	handleSettingsClick: =>
-		Page.local_storage.sites_orderby ?= "peers"
-		orderby = Page.local_storage.sites_orderby
+		Page.settings.sites_orderby ?= "peers"
+		orderby = Page.settings.sites_orderby
 
 		@menu_settings.items = []
 		@menu_settings.items.push ["Update all sites", @handleUpdateAllClick]
@@ -68,9 +68,9 @@ class Head extends Class
 				Page.cmd "siteUpdate", {"address": site.row.address}
 
 	handleOrderbyClick: (orderby) =>
-		Page.local_storage.sites_orderby = orderby
+		Page.settings.sites_orderby = orderby
 		Page.site_list.reorder()
-		Page.saveLocalStorage()
+		Page.saveSettings()
 
 	handleTorClick: =>
 		return true

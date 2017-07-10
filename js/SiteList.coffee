@@ -9,7 +9,7 @@ class SiteList extends Class
 		@merged_db = {}
 		setInterval(@reorderTimer, 10000)
 
-		Page.on_local_storage.then =>
+		Page.on_settings.then =>
 			@update()
 			Page.cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
@@ -23,13 +23,13 @@ class SiteList extends Class
 			@schedule_reorder = false
 
 	sortRows: (rows) =>
-		if Page.local_storage.sites_orderby == "modified"
+		if Page.settings.sites_orderby == "modified"
 			rows.sort (a, b) ->
 				return b.row.settings.modified - a.row.settings.modified
-		else if Page.local_storage.sites_orderby == "addtime"
+		else if Page.settings.sites_orderby == "addtime"
 			rows.sort (a, b) ->
 				return (b.row.settings.added or 0) - (a.row.settings.added or 0)
-		else if Page.local_storage.sites_orderby == "size"
+		else if Page.settings.sites_orderby == "size"
 			rows.sort (a, b) ->
 				return b.row.settings.size - a.row.settings.size
 		else
@@ -43,7 +43,7 @@ class SiteList extends Class
 
 	update: ->
 		Page.cmd "siteList", {}, (site_rows) =>
-			favorite_sites = Page.local_storage.favorite_sites
+			favorite_sites = Page.settings.favorite_sites
 
 			@item_list.sync(site_rows)
 

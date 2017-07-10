@@ -2,7 +2,7 @@ class MuteList extends Class
 	constructor: ->
 		@mutes = null
 		@visible = false
-		Page.on_local_storage.then =>
+		Page.on_settings.then =>
 			@need_update = true
 		@
 

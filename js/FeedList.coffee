@@ -10,7 +10,7 @@ class FeedList extends Class
 		@limit = 30
 		@query_limit = 20
 		@query_day_limit = 3
-		Page.on_local_storage.then =>
+		Page.on_settings.then =>
 			@need_update = true
 			document.body.onscroll = =>
 				RateLimit 300, =>
