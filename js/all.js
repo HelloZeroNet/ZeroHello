@@ -104,7 +104,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Property.coffee ---- */
 
 
@@ -114,7 +113,6 @@
   };
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/maquette.js ---- */
@@ -1062,7 +1060,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Class.coffee ---- */
 
 
@@ -1120,7 +1117,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Dollar.coffee ---- */
 
 
@@ -1132,7 +1128,6 @@
   };
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ItemList.coffee ---- */
@@ -1186,7 +1181,6 @@
   window.ItemList = ItemList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Menu.coffee ---- */
@@ -1329,7 +1323,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
 
 
@@ -1355,7 +1348,6 @@
   };
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimit.coffee ---- */
@@ -1385,7 +1377,6 @@
   };
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/RateLimitCb.coffee ---- */
@@ -1473,7 +1464,6 @@
    */
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Text.coffee ---- */
@@ -1716,7 +1706,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Time.coffee ---- */
 
 
@@ -1786,7 +1775,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Translate.coffee ---- */
 
 
@@ -1796,7 +1784,6 @@
   };
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/ZeroFrame.coffee ---- */
@@ -1929,7 +1916,6 @@
   window.ZeroFrame = ZeroFrame;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
@@ -2165,7 +2151,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
@@ -2620,7 +2605,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
@@ -3079,7 +3063,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
 
 
@@ -3103,6 +3086,7 @@
       this.handleOrderbyClick = bind(this.handleOrderbyClick, this);
       this.handleUpdateAllClick = bind(this.handleUpdateAllClick, this);
       this.handleSettingsClick = bind(this.handleSettingsClick, this);
+      this.handleBackupClick = bind(this.handleBackupClick, this);
       this.handleCreateSiteClick = bind(this.handleCreateSiteClick, this);
       this.renderMenuLanguage = bind(this.renderMenuLanguage, this);
       this.handleLanguageClick = bind(this.handleLanguageClick, this);
@@ -3163,6 +3147,14 @@
       return Page.cmd("siteClone", [Page.site_info.address, "template-new"]);
     };
 
+    Head.prototype.handleBackupClick = function() {
+      if (Page.server_info.rev < 2160) {
+        return Page.cmd("wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]);
+      }
+      Page.cmd("serverShowdirectory", "backup");
+      return Page.cmd("wrapperNotification", ["info", "Backup <b>users.json</b> file to keep your identity safe."]);
+    };
+
     Head.prototype.handleSettingsClick = function() {
       var base, orderby;
       if ((base = Page.settings).sites_orderby == null) {
@@ -3206,6 +3198,7 @@
       this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], this.handleManageMutesClick]);
+      this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
       if (this.menu_settings.visible) {
@@ -3454,7 +3447,6 @@
   window.MuteList = MuteList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
@@ -3892,7 +3884,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
 
 
@@ -4096,7 +4087,6 @@
   window.SiteFiles = SiteFiles;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
@@ -4355,7 +4345,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
 
 
@@ -4385,7 +4374,7 @@
       this.on_site_info = new Promise();
       this.on_settings = new Promise();
       this.settings = null;
-      this.latest_version = "0.5.6";
+      this.latest_version = "0.5.7";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;

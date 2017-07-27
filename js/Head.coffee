@@ -36,6 +36,14 @@ class Head extends Class
 			return Page.cmd "wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]
 		Page.cmd("siteClone", [Page.site_info.address, "template-new"])
 
+	handleBackupClick: =>
+		if Page.server_info.rev < 2165
+			return Page.cmd "wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]
+		Page.cmd("serverShowdirectory", "backup")
+		return Page.cmd "wrapperNotification", ["info", "Backup <b>users.json</b> file to keep your identity safe."]
+
+
+
 	handleSettingsClick: =>
 		Page.settings.sites_orderby ?= "peers"
 		orderby = Page.settings.sites_orderby
@@ -53,6 +61,7 @@ class Head extends Class
 		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], @handleManageMutesClick]
+		@menu_settings.items.push ["Show data directory", @handleBackupClick]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 
