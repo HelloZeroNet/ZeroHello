@@ -1,0 +1,182 @@
+#Trigger {
+display: none;
+}
+
+@media screen and (max-width: 970px) {
+.right {
+width: 600px;
+border-left: none !important;
+margin-left: 370px;
+z-index: 1;
+}
+.left, .SiteList .site {
+width: 370px;
+}
+.left {
+background: #2A333C;
+position: fixed;
+transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1);
+}
+.left #Head {
+position: absolute;
+width: 100%;
+z-index: 10;
+}
+.left #Head .modes .sites, .left #Head .modes .files {
+border-radius: 20px;
+padding: 5px 10px;
+background-color: #1a1c25;
+}
+.left #SiteList, .left #FileList {
+overflow: auto;
+height: auto;
+position: absolute;
+top: 92px;
+bottom: 0px;
+padding-top: 40px;
+}
+.left #SiteList {
+overflow-x: hidden;
+}
+.SiteList .site .inner {
+padding-left: 20px;
+}
+.SiteList .site .circle {
+margin-left: 10px;
+}
+.FeedList {
+margin-top: 10px;
+}
+.feeds-search {
+margin-left: -10px;
+}
+#FileList .files .tbody .td.inner_path {
+overflow: hidden;
+}
+#PageFiles .left {
+position: absolute;
+}
+#PageFiles .left, #FileList {
+min-width: 770px;
+}
+#PageFiles .right {
+display: none;
+}
+}
+
+@media screen and (max-width: 600px) {
+.right {
+width: 100%;
+margin-left: 0px;
+z-index: 0;
+}
+#PageSites .left {
+left: -370px;
+}
+#PageSites .left.trigger-on {
+left: 0px;
+}
+#Trigger {
+display: block;
+position: fixed;
+left: 5px;
+top: 45%;
+width: 40px;
+height: 40px;
+z-index: 100;
+border: 1px solid #ccc;
+border-radius: 40px;
+}
+#PageFiles #Trigger {
+display: none;
+}
+#Trigger .icon {
+display: block;
+height: 16px;
+outline: none;
+border-radius: 40px;
+text-decoration: none;
+text-align: center;
+font-size: 30px;
+font-weight: bold;
+margin-top: -1px;
+padding-top: 0px;
+padding-bottom: 24px;
+-webkit-tap-highlight-color: transparent;
+}
+#Trigger .icon:active {
+transform: rotate3d(0,1,0,180deg);
+transition: transform 0.6s;
+background-color: transparent;
+}
+.feeds-line {
+border-right: none;
+}
+.FeedList .feed .circle {
+display: none;
+}
+.FeedList .feed {
+margin: 0px 5px 10px 5px;
+border: 1px solid #eee;
+border-radius: 8px;
+background: #fff;
+}
+.FeedList .feed, .feeds-search {
+padding-left: 20px;
+}
+.feeds-search {
+margin-top: 10px;
+margin-left: -18px;
+}
+.FeedList .feed .details {
+position: relative;
+left: unset;
+width: 100%;
+text-align: left;
+padding-bottom: 5px;
+margin-bottom: 5px;
+border-bottom: 1px solid #eee;
+}
+.FeedList .feed .added {
+float: right;
+margin-top: 5px;
+}
+#Dashboard {
+margin-top: 10px;
+}
+#Dashboard .menu, #Dashboard .menu.visible {
+position: fixed;
+overflow: auto;
+max-width: 100%;
+left: 100%;
+top: -15px;
+}
+}
+
+@media screen and (max-width: 470px) {
+#Dashboard {
+width: 98%;
+right: unset;
+margin-top: 10px;
+margin-left: 5px;
+}
+#Dashboard .dashboard-item {
+margin: 0px;
+}
+.welcome .site {
+width: 100%;
+}
+}
+
+@media screen and (max-width: 370px) {
+.SiteList .site .inner {
+max-width: 100%;
+}
+#SiteList, #PageSites .left, #PageSites .SiteList, #PageSites .SiteList .site {
+width: 100%;
+}
+#SiteList .details {
+position: absolute;
+right: 30px;
+}
+}
