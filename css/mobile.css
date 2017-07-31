@@ -3,9 +3,6 @@ display: none;
 }
 
 @media screen and (max-width: 970px) {
-body {
-overflow-x: auto;
-}
 .right {
 width: 100%;
 border-left: 370px solid #2A333C !important;
