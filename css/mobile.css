@@ -3,11 +3,13 @@ display: none;
 }
 
 @media screen and (max-width: 970px) {
+body {
+overflow-x: auto;
+}
 .right {
-width: 600px;
-border-left: none !important;
-margin-left: 370px;
-z-index: 1;
+width: 100%;
+border-left: 370px solid #2A333C !important;
+background-color: #f7f8f9;
 }
 .left, .SiteList .site {
 width: 370px;
@@ -47,8 +49,37 @@ margin-left: 10px;
 .FeedList {
 margin-top: 10px;
 }
+.feeds-line {
+border-right: none;
+}
+.FeedList .feed .circle {
+display: none;
+}
+.FeedList .feed {
+margin: 0px 5px 10px 5px;
+border: 1px solid #eee;
+border-radius: 8px;
+background: #fff;
+}
+.FeedList .feed, .feeds-search {
+padding-left: 20px;
+}
 .feeds-search {
-margin-left: -10px;
+margin-top: 10px;
+margin-left: -18px;
+}
+.FeedList .feed .details {
+position: relative;
+left: unset;
+width: 100%;
+text-align: left;
+padding-bottom: 5px;
+margin-bottom: 5px;
+border-bottom: 1px solid #eee;
+}
+.FeedList .feed .added {
+float: right;
+margin-top: 5px;
 }
 #FileList .files .tbody .td.inner_path {
 overflow: hidden;
@@ -64,11 +95,10 @@ display: none;
 }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 740px) {
 .right {
-width: 100%;
+border-left: none !important;
 margin-left: 0px;
-z-index: 0;
 }
 #PageSites .left {
 left: -370px;
@@ -108,38 +138,6 @@ padding-bottom: 24px;
 transform: rotate3d(0,1,0,180deg);
 transition: transform 0.6s;
 background-color: transparent;
-}
-.feeds-line {
-border-right: none;
-}
-.FeedList .feed .circle {
-display: none;
-}
-.FeedList .feed {
-margin: 0px 5px 10px 5px;
-border: 1px solid #eee;
-border-radius: 8px;
-background: #fff;
-}
-.FeedList .feed, .feeds-search {
-padding-left: 20px;
-}
-.feeds-search {
-margin-top: 10px;
-margin-left: -18px;
-}
-.FeedList .feed .details {
-position: relative;
-left: unset;
-width: 100%;
-text-align: left;
-padding-bottom: 5px;
-margin-bottom: 5px;
-border-bottom: 1px solid #eee;
-}
-.FeedList .feed .added {
-float: right;
-margin-top: 5px;
 }
 #Dashboard {
 margin-top: 10px;
