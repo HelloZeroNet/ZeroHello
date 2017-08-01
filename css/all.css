@@ -691,3 +691,173 @@ body.changing { overflow-y: scroll; }
 	display: inline-block; width: 16px; height: 16px; background-repeat: no-repeat;
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAOVBMVEUAAAC9w8e9w8e9w8e9w8e/xMi9w8e9w8e+w8e9w8e9w8e9w8e9w8e9w8e9w8e+w8e/xMi9w8e9w8fvY4+KAAAAEnRSTlMASPv3WQbwOTCkt4/psX4YDMWr+RRCAAAAUUlEQVQY06XLORKAMAxDUTs7kA3d/7AYGju0UfffjIgoHkxm0vB5bZyxKHx9eX0FJw0Y4bcXKQ4/CTtS5yqp5GFFOjGpVGl00k1pNDIb3Nv9AHC7BOZC4ZjvAAAAAElFTkSuQmCC+d0ckOwyAMRVGHUOO0gUyd+P8f7WApz4Iki9wFmyOEATrXLZcFp5LrGogPOxKp6zfFf9fZ1/I/cY7YZSS3U6S3XFZJmGBwL+FuJX/F1K0wUUlZyZGlXgXESthTEs4B8fh7xoVUDPGYJnsfkCRarKAgz8cAKbpD6pqDPz3XB8K6HdUEeN9NAAAAAElFTkSuQmCC');
 }
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/mobile.css ---- */
+
+
+#Trigger {
+display: none;
+}
+
+@media screen and (max-width: 970px) {
+.right {
+width: 100%;
+border-left: 370px solid #2A333C !important;
+background-color: #f7f8f9;
+}
+.left, .SiteList .site {
+width: 370px;
+}
+.left {
+background: #2A333C;
+position: fixed;
+-webkit-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -moz-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -o-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -ms-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1) ;
+}
+.left #Head {
+position: absolute;
+width: 100%;
+z-index: 10;
+}
+.left #SiteList, .left #FileList {
+overflow: auto;
+height: auto;
+position: absolute;
+top: 92px;
+bottom: 0px;
+padding-top: 40px;
+}
+.left #SiteList {
+overflow-x: hidden;
+}
+.SiteList .site .inner {
+padding-left: 20px;
+}
+.SiteList .site .circle {
+margin-left: 10px;
+}
+.FeedList {
+margin-top: 10px;
+}
+.feeds-line {
+border-right: none;
+}
+.FeedList .feed .circle {
+margin-left: 0px;
+margin-top: -29px;
+}
+.FeedList .feed {
+margin: 0px 0px 10px 0px;
+background: #fff;
+}
+.FeedList .feed, .feeds-search {
+padding-left: 20px;
+}
+.feeds-search {
+margin-top: 10px;
+margin-left: -8px;
+margin-right: 56px;
+}
+.FeedList .feed .details {
+position: relative;
+left: unset;
+width: 100%;
+text-align: left;
+padding-bottom: 5px;
+margin-bottom: 5px;
+border-bottom: 1px solid #eee;
+padding-left: 20px;
+-webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ;
+}
+.FeedList .feed .added {
+float: right;
+margin-top: 5px;
+}
+#FileList .files .tbody .td.inner_path {
+overflow: hidden;
+}
+#PageFiles .left {
+position: absolute;
+}
+#PageFiles .left, #FileList {
+min-width: 770px;
+}
+#PageFiles .right {
+display: none;
+}
+}
+
+@media screen and (max-width: 740px) {
+.right {
+border-left: none !important;
+margin-left: 0px;
+}
+#PageSites .left {
+left: -370px;
+}
+#PageSites .left.trigger-on {
+left: 0px;
+}
+#Trigger {
+display: block;
+position: fixed;
+left: 0px;
+top: 16px;
+z-index: 100;
+background-color: #1E2429;
+-webkit-border-radius: 0px 40px 40px 0px; -moz-border-radius: 0px 40px 40px 0px; -o-border-radius: 0px 40px 40px 0px; -ms-border-radius: 0px 40px 40px 0px; border-radius: 0px 40px 40px 0px ;
+-webkit-transition: transform 0.2s; -moz-transition: transform 0.2s; -o-transition: transform 0.2s; -ms-transition: transform 0.2s; transition: transform 0.2s ;
+-webkit-transform: rotateZ(0deg); -moz-transform: rotateZ(0deg); -o-transform: rotateZ(0deg); -ms-transform: rotateZ(0deg); transform: rotateZ(0deg) ;
+}
+#PageFiles #Trigger {
+display: none;
+}
+#Trigger .icon {
+display: block;
+-webkit-tap-highlight-color: transparent;
+color: #FFF;
+padding: 9px 16px;
+text-decoration: none;
+-webkit-transition: transform 0.6s; -moz-transition: transform 0.6s; -o-transition: transform 0.6s; -ms-transition: transform 0.6s; transition: transform 0.6s ;
+padding-top: 7px;
+}
+#Trigger.active {
+-webkit-transform: translateX(368px) translateY(98px); -moz-transform: translateX(368px) translateY(98px); -o-transform: translateX(368px) translateY(98px); -ms-transform: translateX(368px) translateY(98px); transform: translateX(368px) translateY(98px) ;
+background-color: #2a333c;
+}
+#Trigger.active .icon {
+-webkit-transform: rotateZ(180deg); -moz-transform: rotateZ(180deg); -o-transform: rotateZ(180deg); -ms-transform: rotateZ(180deg); transform: rotateZ(180deg) ;
+background-color: transparent;
+}
+#Dashboard .menu, #Dashboard .menu.visible {
+position: fixed;
+overflow: auto;
+max-width: 100%;
+left: 100%;
+top: -15px;
+}
+}
+
+@media screen and (max-width: 420px) {
+#Dashboard {
+width: 98%;right: 0px;
+}
+#Dashboard .dashboard-item {
+}
+.welcome .site {
+width: 100%;
+}
+}
+
+@media screen and (max-width: 370px) {
+.SiteList .site .inner {
+max-width: 100%;
+}
+#SiteList, #PageSites .left, #PageSites .SiteList, #PageSites .SiteList .site {
+width: 100%;
+}
+#SiteList .details {
+position: absolute;
+right: 30px;
+}
+}

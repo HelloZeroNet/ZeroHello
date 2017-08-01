@@ -21,11 +21,6 @@ position: absolute;
 width: 100%;
 z-index: 10;
 }
-.left #Head .modes .sites, .left #Head .modes .files {
-border-radius: 20px;
-padding: 5px 10px;
-background-color: #1a1c25;
-}
 .left #SiteList, .left #FileList {
 overflow: auto;
 height: auto;
@@ -50,12 +45,11 @@ margin-top: 10px;
 border-right: none;
 }
 .FeedList .feed .circle {
-display: none;
+margin-left: 0px;
+margin-top: -29px;
 }
 .FeedList .feed {
-margin: 0px 5px 10px 5px;
-border: 1px solid #eee;
-border-radius: 8px;
+margin: 0px 0px 10px 0px;
 background: #fff;
 }
 .FeedList .feed, .feeds-search {
@@ -63,7 +57,8 @@ padding-left: 20px;
 }
 .feeds-search {
 margin-top: 10px;
-margin-left: -18px;
+margin-left: -8px;
+margin-right: 56px;
 }
 .FeedList .feed .details {
 position: relative;
@@ -73,6 +68,8 @@ text-align: left;
 padding-bottom: 5px;
 margin-bottom: 5px;
 border-bottom: 1px solid #eee;
+padding-left: 20px;
+box-sizing: border-box;
 }
 .FeedList .feed .added {
 float: right;
@@ -106,38 +103,33 @@ left: 0px;
 #Trigger {
 display: block;
 position: fixed;
-left: 5px;
-top: 45%;
-width: 40px;
-height: 40px;
+left: 0px;
+top: 16px;
 z-index: 100;
-border: 1px solid #ccc;
-border-radius: 40px;
+background-color: #1E2429;
+border-radius: 0px 40px 40px 0px;
+transition: transform 0.2s;
+transform: rotateZ(0deg);
 }
 #PageFiles #Trigger {
 display: none;
 }
 #Trigger .icon {
 display: block;
-height: 16px;
-outline: none;
-border-radius: 40px;
-text-decoration: none;
-text-align: center;
-font-size: 30px;
-font-weight: bold;
-margin-top: -1px;
-padding-top: 0px;
-padding-bottom: 24px;
 -webkit-tap-highlight-color: transparent;
-}
-#Trigger .icon:active {
-transform: rotate3d(0,1,0,180deg);
+color: #FFF;
+padding: 9px 16px;
+text-decoration: none;
 transition: transform 0.6s;
-background-color: transparent;
+padding-top: 7px;
 }
-#Dashboard {
-margin-top: 10px;
+#Trigger.active {
+transform: translateX(368px) translateY(98px);
+background-color: #2a333c;
+}
+#Trigger.active .icon {
+transform: rotateZ(180deg);
+background-color: transparent;
 }
 #Dashboard .menu, #Dashboard .menu.visible {
 position: fixed;
@@ -148,15 +140,11 @@ top: -15px;
 }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 420px) {
 #Dashboard {
-width: 98%;
-right: unset;
-margin-top: 10px;
-margin-left: 5px;
+width: 98%;right: 0px;
 }
 #Dashboard .dashboard-item {
-margin: 0px;
 }
 .welcome .site {
 width: 100%;

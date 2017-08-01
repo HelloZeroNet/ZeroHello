@@ -3148,7 +3148,7 @@
     };
 
     Head.prototype.handleBackupClick = function() {
-      if (Page.server_info.rev < 2160) {
+      if (Page.server_info.rev < 2165) {
         return Page.cmd("wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]);
       }
       Page.cmd("serverShowdirectory", "backup");
@@ -3310,7 +3310,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */
@@ -4345,6 +4344,58 @@
 }).call(this);
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Trigger.coffee ---- */
+
+
+(function() {
+  var Trigger,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  Trigger = (function(superClass) {
+    extend(Trigger, superClass);
+
+    function Trigger() {
+      this.render = bind(this.render, this);
+      this.handleTitleClick = bind(this.handleTitleClick, this);
+      this.active = false;
+    }
+
+    Trigger.prototype.handleTitleClick = function() {
+      this.active = !this.active;
+      if (this.active) {
+        document.getElementById("left").classList.add("trigger-on");
+      } else {
+        document.getElementById("left").classList.remove("trigger-on");
+      }
+      return false;
+    };
+
+    Trigger.prototype.render = function() {
+      return h("div.Trigger", {
+        classes: {
+          "active": this.active
+        }
+      }, [
+        h("a.icon", {
+          "href": "#Trigger",
+          onclick: this.handleTitleClick,
+          ontouchend: ""
+        }, "\u23F5")
+      ]);
+    };
+
+    return Trigger;
+
+  })(Class);
+
+  window.Trigger = Trigger;
+
+}).call(this);
+
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
 
 
@@ -4423,12 +4474,14 @@
       this.head = new Head();
       this.dashboard = new Dashboard();
       this.mute_list = new MuteList();
+      this.trigger = new Trigger();
       this.route("");
       this.loadSettings();
       this.on_site_info.then((function(_this) {
         return function() {
           _this.projector.replace($("#Head"), _this.head.render);
           _this.projector.replace($("#Dashboard"), _this.dashboard.render);
+          _this.projector.merge($("#Trigger"), _this.trigger.render);
           return _this.setProjectorMode(_this.mode);
         };
       })(this));

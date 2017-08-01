@@ -1,21 +1,18 @@
 class Trigger extends Class
 	constructor: ->
-		@trigger_off = true
-		@text = ">"
+		@active = false
 
 	handleTitleClick: =>
-		if @trigger_off
-		  @trigger_off = false
-		  @text = "<"
-		  document.getElementById("left").classList.add("trigger-on")
+		@active = not @active
+		if @active
+			document.getElementById("left").classList.add("trigger-on")
 		else
-		  document.getElementById("left").classList.remove("trigger-on")
-		  @trigger_off = true
-		  @text = ">"
+			document.getElementById("left").classList.remove("trigger-on")
+
 		return false
 
 	render: =>
-		h("div.Trigger", {classes: { "trigger-off": @trigger_off }}, [
-			h("a.icon", {"href": "#Trigger", onclick: @handleTitleClick, ontouchend: ""}, [@text])
+		h("div.Trigger", {classes: { "active": @active }}, [
+			h("a.icon", {"href": "#Trigger", onclick: @handleTitleClick, ontouchend: ""}, "\u23F5")
 		])
 window.Trigger = Trigger

@@ -59,7 +59,6 @@ class ZeroHello extends ZeroFrame
 		@dashboard = new Dashboard()
 		@mute_list = new MuteList()
 		@trigger = new Trigger()
-		@projector.merge($("#Trigger"), @trigger.render)
 
 		@route("")
 
@@ -67,6 +66,7 @@ class ZeroHello extends ZeroFrame
 		@on_site_info.then =>
 			@projector.replace($("#Head"), @head.render)
 			@projector.replace($("#Dashboard"), @dashboard.render)
+			@projector.merge($("#Trigger"), @trigger.render)
 			@setProjectorMode(@mode)
 
 		# Update every minute to keep time since fields up-to date
