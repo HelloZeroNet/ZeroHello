@@ -129,6 +129,10 @@ padding: 11px;
 text-decoration: none;
 transition: transform 0.6s;
 font-size: 13px;
+outline: none !important;
+}
+#Trigger .icon:active {
+background-color: transparent;
 }
 #Trigger.active {
 transform: translateX(368px);
