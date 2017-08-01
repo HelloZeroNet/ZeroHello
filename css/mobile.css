@@ -124,9 +124,16 @@ display: none;
 display: block;
 -webkit-tap-highlight-color: transparent;
 color: #1E2429;
-padding: 11px;
+padding: 13px 20px;
 text-decoration: none;
 transition: transform 0.6s;
+}
+#Trigger .icon .arrow-right {
+border: solid currentColor;
+border-width: 0 3px 3px 0;
+display: inline-block;
+padding: 3px;
+transform: rotate(-45deg);
 }
 #Trigger.active {
 transform: translateX(368px);

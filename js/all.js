@@ -4382,7 +4382,7 @@
           "href": "#Trigger",
           onclick: this.handleTitleClick,
           ontouchend: ""
-        }, "\u23F5")
+        }, h("div.arrow-right"))
       ]);
     };
 
