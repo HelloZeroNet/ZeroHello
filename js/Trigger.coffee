@@ -13,6 +13,6 @@ class Trigger extends Class
 
 	render: =>
 		h("div.Trigger", {classes: { "active": @active }}, [
-			h("a.icon", {"href": "#Trigger", onclick: @handleTitleClick, ontouchend: ""}, "\u25B6")
+			h("a.icon", {"href": "#Trigger", onclick: @handleTitleClick, ontouchend: ""}, h("div.arrow-right"))
 		])
 window.Trigger = Trigger

@@ -785,14 +785,17 @@ min-width: 770px;
 #PageFiles .right {
 display: none;
 }
-}
-
-@media screen and (max-width: 740px) {
 .left #Head .modes {
 padding-left: 29px;
 background-color: #2a333c;
 -webkit-box-shadow: 0px 0px 0px 31px #2a333c; -moz-box-shadow: 0px 0px 0px 31px #2a333c; -o-box-shadow: 0px 0px 0px 31px #2a333c; -ms-box-shadow: 0px 0px 0px 31px #2a333c; box-shadow: 0px 0px 0px 31px #2a333c ;
 }
+.SiteList .site .message {
+z-index: inherit;
+}
+}
+
+@media screen and (max-width: 740px) {
 .right {
 border-left: none !important;
 margin-left: 0px;
@@ -822,9 +825,16 @@ display: none;
 display: block;
 -webkit-tap-highlight-color: transparent;
 color: #1E2429;
-padding: 11px;
+padding: 13px 20px;
 text-decoration: none;
 -webkit-transition: transform 0.6s; -moz-transition: transform 0.6s; -o-transition: transform 0.6s; -ms-transition: transform 0.6s; transition: transform 0.6s ;
+}
+#Trigger .icon .arrow-right {
+border: solid currentColor;
+border-width: 0 3px 3px 0;
+display: inline-block;
+padding: 3px;
+-webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -o-transform: rotate(-45deg); -ms-transform: rotate(-45deg); transform: rotate(-45deg) ;
 }
 #Trigger.active {
 -webkit-transform: translateX(368px); -moz-transform: translateX(368px); -o-transform: translateX(368px); -ms-transform: translateX(368px); transform: translateX(368px) ;
