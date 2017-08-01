@@ -15,6 +15,7 @@ width: 370px;
 background: #2A333C;
 position: fixed;
 transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1);
+border-bottom: 1px solid #2A333C;
 }
 .left #Head {
 position: absolute;
@@ -130,6 +131,11 @@ color: #1E2429;
 padding: 13px 20px;
 text-decoration: none;
 transition: transform 0.6s;
+font-size: 13px;
+outline: none !important;
+}
+#Trigger .icon:active {
+background-color: transparent;
 }
 #Trigger .icon .arrow-right {
 border: solid currentColor;
