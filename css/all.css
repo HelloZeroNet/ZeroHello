@@ -788,6 +788,11 @@ display: none;
 }
 
 @media screen and (max-width: 740px) {
+.left #Head .modes {
+padding-left: 29px;
+background-color: #2a333c;
+-webkit-box-shadow: 0px 0px 0px 31px #2a333c; -moz-box-shadow: 0px 0px 0px 31px #2a333c; -o-box-shadow: 0px 0px 0px 31px #2a333c; -ms-box-shadow: 0px 0px 0px 31px #2a333c; box-shadow: 0px 0px 0px 31px #2a333c ;
+}
 .right {
 border-left: none !important;
 margin-left: 0px;
@@ -802,12 +807,13 @@ left: 0px;
 display: block;
 position: fixed;
 left: 0px;
-top: 16px;
+bottom: 16px;
 z-index: 100;
-background-color: #1E2429;
 -webkit-border-radius: 0px 40px 40px 0px; -moz-border-radius: 0px 40px 40px 0px; -o-border-radius: 0px 40px 40px 0px; -ms-border-radius: 0px 40px 40px 0px; border-radius: 0px 40px 40px 0px ;
 -webkit-transition: transform 0.2s; -moz-transition: transform 0.2s; -o-transition: transform 0.2s; -ms-transition: transform 0.2s; transition: transform 0.2s ;
 -webkit-transform: rotateZ(0deg); -moz-transform: rotateZ(0deg); -o-transform: rotateZ(0deg); -ms-transform: rotateZ(0deg); transform: rotateZ(0deg) ;
+-webkit-box-shadow: 0px 0px 15px #737d8c; -moz-box-shadow: 0px 0px 15px #737d8c; -o-box-shadow: 0px 0px 15px #737d8c; -ms-box-shadow: 0px 0px 15px #737d8c; box-shadow: 0px 0px 15px #737d8c ;
+background-color: rgba(255, 255, 255, 0.75);
 }
 #PageFiles #Trigger {
 display: none;
@@ -815,19 +821,20 @@ display: none;
 #Trigger .icon {
 display: block;
 -webkit-tap-highlight-color: transparent;
-color: #FFF;
-padding: 9px 16px;
+color: #1E2429;
+padding: 11px;
 text-decoration: none;
 -webkit-transition: transform 0.6s; -moz-transition: transform 0.6s; -o-transition: transform 0.6s; -ms-transition: transform 0.6s; transition: transform 0.6s ;
-padding-top: 7px;
 }
 #Trigger.active {
--webkit-transform: translateX(368px) translateY(98px); -moz-transform: translateX(368px) translateY(98px); -o-transform: translateX(368px) translateY(98px); -ms-transform: translateX(368px) translateY(98px); transform: translateX(368px) translateY(98px) ;
+-webkit-transform: translateX(368px); -moz-transform: translateX(368px); -o-transform: translateX(368px); -ms-transform: translateX(368px); transform: translateX(368px) ;
 background-color: #2a333c;
+-webkit-box-shadow: none; -moz-box-shadow: none; -o-box-shadow: none; -ms-box-shadow: none; box-shadow: none ;
 }
 #Trigger.active .icon {
 -webkit-transform: rotateZ(180deg); -moz-transform: rotateZ(180deg); -o-transform: rotateZ(180deg); -ms-transform: rotateZ(180deg); transform: rotateZ(180deg) ;
 background-color: transparent;
+color: white;
 }
 #Dashboard .menu, #Dashboard .menu.visible {
 position: fixed;
