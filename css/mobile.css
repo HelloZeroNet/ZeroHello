@@ -87,14 +87,17 @@ min-width: 770px;
 #PageFiles .right {
 display: none;
 }
-}
-
-@media screen and (max-width: 740px) {
 .left #Head .modes {
 padding-left: 29px;
 background-color: #2a333c;
 box-shadow: 0px 0px 0px 31px #2a333c;
 }
+.SiteList .site .message {
+z-index: inherit;
+}
+}
+
+@media screen and (max-width: 740px) {
 .right {
 border-left: none !important;
 margin-left: 0px;
