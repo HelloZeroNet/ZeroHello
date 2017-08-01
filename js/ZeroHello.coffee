@@ -58,6 +58,8 @@ class ZeroHello extends ZeroFrame
 		@head = new Head()
 		@dashboard = new Dashboard()
 		@mute_list = new MuteList()
+		@trigger = new Trigger()
+		@projector.merge($("#Trigger"), @trigger.render)
 
 		@route("")
 
