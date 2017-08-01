@@ -152,7 +152,7 @@ padding: 3px;
 transform: rotate(-45deg);
 }
 #Trigger.active {
-transform: translateX(368px);
+transform: translateX(348px);
 background-color: #2a333c;
 box-shadow: none;
 }
