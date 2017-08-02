@@ -171,6 +171,9 @@ max-width: 100%;
 left: 100%;
 top: -15px;
 }
+.menu-item .emoji {
+display: none;
+}
 }
 
 @media screen and (max-width: 420px) {
