@@ -103,9 +103,12 @@ box-shadow: 0px 0px 0px 31px #2a333c;
 .SiteList .site .message {
 z-index: inherit;
 }
+.welcome .site {
+font-size: 35px;
+}
 }
 
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 800px) {
 .right {
 border-left: none !important;
 margin-left: 0px;
