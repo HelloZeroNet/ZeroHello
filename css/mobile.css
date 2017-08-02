@@ -108,7 +108,7 @@ font-size: 35px;
 }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
 .right {
 border-left: none !important;
 margin-left: 0px;
