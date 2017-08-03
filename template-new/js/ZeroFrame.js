@@ -68,6 +68,18 @@ class ZeroFrame {
         }, cb)
     }
 
+    cmdp(cmd, params={}) {
+        return new Promise((resolve, reject) => {
+            this.cmd(cmd, params, (res) => {
+                if (res.error) {
+                    reject(res.error)
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    }
+
     send(message, cb=null) {
         message.wrapper_nonce = this.wrapper_nonce
         message.id = this.next_message_id
