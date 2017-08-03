@@ -5,11 +5,11 @@ display: none;
 @media screen and (max-width: 970px) {
 .right {
 width: 100%;
-border-left: 370px solid #2A333C !important;
+border-left: 350px solid #2A333C !important;
 background-color: #f7f8f9;
 }
 .left, .SiteList .site {
-width: 370px;
+width: 350px;
 }
 .left {
 background: #2A333C;
@@ -33,8 +33,15 @@ padding-top: 40px;
 .left #SiteList {
 overflow-x: hidden;
 }
+.left #SiteList .details {
+position: absolute;
+right: 30px;
+}
 .SiteList .site .inner {
 padding-left: 20px;
+}
+.SiteList .site .inner .title {
+max-width: 140px;
 }
 .SiteList .site .circle {
 margin-left: 10px;
@@ -96,15 +103,18 @@ box-shadow: 0px 0px 0px 31px #2a333c;
 .SiteList .site .message {
 z-index: inherit;
 }
+.welcome .site {
+font-size: 35px;
+}
 }
 
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 799px) {
 .right {
 border-left: none !important;
 margin-left: 0px;
 }
 #PageSites .left {
-left: -370px;
+left: -350px;
 }
 #PageSites .left.trigger-on {
 left: 0px;
@@ -145,7 +155,7 @@ padding: 3px;
 transform: rotate(-45deg);
 }
 #Trigger.active {
-transform: translateX(368px);
+transform: translateX(348px);
 background-color: #2a333c;
 box-shadow: none;
 }
@@ -161,6 +171,9 @@ max-width: 100%;
 left: 100%;
 top: -15px;
 }
+.menu-item .emoji {
+display: none;
+}
 }
 
 @media screen and (max-width: 420px) {
@@ -174,15 +187,3 @@ width: 100%;
 }
 }
 
-@media screen and (max-width: 370px) {
-.SiteList .site .inner {
-max-width: 100%;
-}
-#SiteList, #PageSites .left, #PageSites .SiteList, #PageSites .SiteList .site {
-width: 100%;
-}
-#SiteList .details {
-position: absolute;
-right: 30px;
-}
-}
