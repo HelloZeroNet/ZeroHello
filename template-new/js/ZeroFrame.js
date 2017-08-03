@@ -101,5 +101,43 @@ class ZeroFrame {
     onCloseWebsocket() {
         this.log('Websocket close')
     }
+
+    monkeyPatchAjax() {
+        window.XMLHttpRequest = ZeroFakeXMLHttpRequest
+        ZeroFakeXMLHttpRequest.zero_frame = this
+    }
 }
 
+class ZeroFakeXMLHttpRequest {
+    open (method, path) {
+        this.path = path
+        this.zero_frame = ZeroFakeXMLHttpRequest.zero_frame
+    }
+
+    onResult (res) {
+        this.status = 200
+        this.statusText = "200 OK"
+        this.readyState = 4 // Done
+        this.responseType = "text"
+        this.responseText = this.response = res
+        if (this.onload) this.onload()
+        if (this.onreadystatechange) this.onreadystatechange()
+    }
+
+    setRequestHeader (key, val) {
+        return
+    }
+
+    getAllResponseHeaders () {
+        return ""
+    }
+
+    getAllResponseHeaders (name) {
+        return null
+    }
+
+    send () {
+        this.zero_frame.cmd("fileGet", this.path, (res) => this.onResult(res))
+
+    }
+}
