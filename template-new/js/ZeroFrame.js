@@ -1,3 +1,7 @@
+// Version 1.0.0 - Initial release
+// Version 1.1.0 (2017-08-02) - Added cmdp function that returns promise instead of using callback
+// Version 1.2.0 (2017-08-02) - Added Ajax monkey patch to emulate XMLHttpRequest over ZeroFrame API
+
 const CMD_INNER_READY = 'innerReady'
 const CMD_RESPONSE = 'response'
 const CMD_WRAPPER_READY = 'wrapperReady'
