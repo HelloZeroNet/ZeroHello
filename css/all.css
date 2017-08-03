@@ -703,16 +703,17 @@ display: none;
 @media screen and (max-width: 970px) {
 .right {
 width: 100%;
-border-left: 370px solid #2A333C !important;
+border-left: 350px solid #2A333C !important;
 background-color: #f7f8f9;
 }
 .left, .SiteList .site {
-width: 370px;
+width: 350px;
 }
 .left {
 background: #2A333C;
 position: fixed;
 -webkit-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -moz-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -o-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -ms-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1) ;
+border-bottom: 1px solid #2A333C;
 }
 .left #Head {
 position: absolute;
@@ -730,11 +731,18 @@ padding-top: 40px;
 .left #SiteList {
 overflow-x: hidden;
 }
+.left #SiteList .details {
+position: absolute;
+right: 30px;
+}
 .SiteList .site .inner {
 padding-left: 20px;
 }
+.SiteList .site .inner .title {
+max-width: 140px;
+}
 .SiteList .site .circle {
-margin-left: 10px;
+margin-left: 7px;
 }
 .FeedList {
 margin-top: 10px;
@@ -793,15 +801,18 @@ background-color: #2a333c;
 .SiteList .site .message {
 z-index: inherit;
 }
+.welcome .site {
+font-size: 35px;
+}
 }
 
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 799px) {
 .right {
 border-left: none !important;
 margin-left: 0px;
 }
 #PageSites .left {
-left: -370px;
+left: -350px;
 }
 #PageSites .left.trigger-on {
 left: 0px;
@@ -828,6 +839,11 @@ color: #1E2429;
 padding: 13px 20px;
 text-decoration: none;
 -webkit-transition: transform 0.6s; -moz-transition: transform 0.6s; -o-transition: transform 0.6s; -ms-transition: transform 0.6s; transition: transform 0.6s ;
+font-size: 13px;
+outline: none !important;
+}
+#Trigger .icon:active {
+background-color: transparent;
 }
 #Trigger .icon .arrow-right {
 border: solid currentColor;
@@ -837,7 +853,7 @@ padding: 3px;
 -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -o-transform: rotate(-45deg); -ms-transform: rotate(-45deg); transform: rotate(-45deg) ;
 }
 #Trigger.active {
--webkit-transform: translateX(368px); -moz-transform: translateX(368px); -o-transform: translateX(368px); -ms-transform: translateX(368px); transform: translateX(368px) ;
+-webkit-transform: translateX(348px); -moz-transform: translateX(348px); -o-transform: translateX(348px); -ms-transform: translateX(348px); transform: translateX(348px) ;
 background-color: #2a333c;
 -webkit-box-shadow: none; -moz-box-shadow: none; -o-box-shadow: none; -ms-box-shadow: none; box-shadow: none ;
 }
@@ -853,6 +869,9 @@ max-width: 100%;
 left: 100%;
 top: -15px;
 }
+.menu-item .emoji {
+display: none;
+}
 }
 
 @media screen and (max-width: 420px) {
@@ -863,18 +882,5 @@ width: 98%;right: 0px;
 }
 .welcome .site {
 width: 100%;
-}
-}
-
-@media screen and (max-width: 370px) {
-.SiteList .site .inner {
-max-width: 100%;
-}
-#SiteList, #PageSites .left, #PageSites .SiteList, #PageSites .SiteList .site {
-width: 100%;
-}
-#SiteList .details {
-position: absolute;
-right: 30px;
 }
 }
