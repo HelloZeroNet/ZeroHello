@@ -1918,6 +1918,75 @@
 }).call(this);
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Bigfiles.coffee ---- */
+
+
+(function() {
+  var Bigfiles,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  Bigfiles = (function(superClass) {
+    extend(Bigfiles, superClass);
+
+    function Bigfiles() {
+      this.render = bind(this.render, this);
+      this.getHref = bind(this.getHref, this);
+      this.updateFiles = bind(this.updateFiles, this);
+      this.files = new SiteFiles(this);
+      this.files.mode = "bigfiles";
+      this.files.limit = 100;
+      this.files.update = this.updateFiles;
+      this.row = {
+        "address": "bigfiles"
+      };
+    }
+
+    Bigfiles.prototype.updateFiles = function(cb) {
+      var orderby;
+      orderby = this.files.orderby + (this.files.orderby_desc ? " DESC" : "");
+      return Page.cmd("optionalFileList", {
+        address: "all",
+        filter: "downloaded,bigfile",
+        limit: this.files.limit + 1,
+        orderby: orderby
+      }, (function(_this) {
+        return function(res) {
+          var i, len, row;
+          for (i = 0, len = res.length; i < len; i++) {
+            row = res[i];
+            row.site = Page.site_list.sites_byaddress[row.address];
+          }
+          _this.files.items = res.slice(0, +(_this.files.limit - 1) + 1 || 9e9);
+          _this.files.loaded = true;
+          _this.files.has_more = res.length > _this.files.limit;
+          Page.projector.scheduleRender();
+          return typeof cb === "function" ? cb() : void 0;
+        };
+      })(this));
+    };
+
+    Bigfiles.prototype.getHref = function(row) {
+      return row.inner_path;
+    };
+
+    Bigfiles.prototype.render = function() {
+      if (!this.files.items.length) {
+        return [];
+      }
+      return h("div.Site", [h("div.title", [h("h3.name", "Bigfiles")]), this.files.render()]);
+    };
+
+    return Bigfiles;
+
+  })(Class);
+
+  window.Bigfiles = Bigfiles;
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
 
 
@@ -2638,6 +2707,7 @@
       this.handleSelectbarPin = bind(this.handleSelectbarPin, this);
       this.handleSelectbarCancel = bind(this.handleSelectbarCancel, this);
       this.checkSelectedFiles = bind(this.checkSelectedFiles, this);
+      this.getSites = bind(this.getSites, this);
       this.need_update = true;
       this.updating_files = 0;
       this.optional_stats = {
@@ -2653,15 +2723,47 @@
       this.selected_files_num = 0;
       this.selected_files_size = 0;
       this.selected_files_pinned = 0;
+      this.bigfiles = new Bigfiles();
       this;
     }
+
+    FileList.prototype.getSites = function() {
+      var address, back, bigfile_sites, file, i, len, name, ref, site;
+      if (this.bigfiles.files.items.length > 0) {
+        back = [];
+        bigfile_sites = {};
+        ref = this.bigfiles.files.items;
+        for (i = 0, len = ref.length; i < len; i++) {
+          file = ref[i];
+          if (bigfile_sites[name = file.site.row.address] == null) {
+            bigfile_sites[name] = {
+              row: file.site.row,
+              files: {
+                items: [],
+                selected: this.bigfiles.files.selected,
+                update: this.bigfiles.files.update
+              }
+            };
+          }
+          bigfile_sites[file.site.row.address].files.items.push(file);
+        }
+        for (address in bigfile_sites) {
+          site = bigfile_sites[address];
+          back.push(site);
+        }
+        back = back.concat(Page.site_list.sites);
+        return back;
+      } else {
+        return Page.site_list.sites;
+      }
+    };
 
     FileList.prototype.checkSelectedFiles = function() {
       var i, len, ref, results, site, site_file;
       this.selected_files_num = 0;
       this.selected_files_size = 0;
       this.selected_files_pinned = 0;
-      ref = Page.site_list.sites;
+      ref = this.getSites();
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
@@ -2685,14 +2787,18 @@
     };
 
     FileList.prototype.handleSelectbarCancel = function() {
-      var i, j, len, len1, ref, ref1, site, site_file;
-      ref = Page.site_list.sites;
+      var i, j, key, len, len1, ref, ref1, ref2, site, site_file, val;
+      ref = this.getSites();
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
         ref1 = site.files.items;
         for (j = 0, len1 = ref1.length; j < len1; j++) {
           site_file = ref1[j];
-          site.files.selected = {};
+          ref2 = site.files.selected;
+          for (key in ref2) {
+            val = ref2[key];
+            delete site.files.selected[key];
+          }
         }
       }
       this.checkSelectedFiles();
@@ -2702,7 +2808,7 @@
 
     FileList.prototype.handleSelectbarPin = function() {
       var i, inner_paths, len, ref, site, site_file;
-      ref = Page.site_list.sites;
+      ref = this.getSites();
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
         inner_paths = (function() {
@@ -2730,7 +2836,7 @@
 
     FileList.prototype.handleSelectbarUnpin = function() {
       var i, inner_paths, len, ref, site, site_file;
-      ref = Page.site_list.sites;
+      ref = this.getSites();
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
         inner_paths = (function() {
@@ -2758,7 +2864,7 @@
 
     FileList.prototype.handleSelectbarDelete = function() {
       var i, inner_path, inner_paths, j, len, len1, ref, site, site_file;
-      ref = Page.site_list.sites;
+      ref = this.getSites();
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
         inner_paths = (function() {
@@ -2962,10 +3068,7 @@
           });
         };
       })(this));
-      if (used !== this.optional_stats.used) {
-        this.log("Used " + (Text.formatSize(this.optional_stats.used)) + " -> " + (Text.formatSize(used)));
-        return this.optional_stats.used = used;
-      }
+      return this.bigfiles.files.update();
     };
 
     FileList.prototype.render = function() {
@@ -3025,7 +3128,7 @@
         return h("div#FileList", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
       }
       return h("div#FileList", [
-        this.renderSelectbar(), this.renderTotalbar(), sites_favorited.map((function(_this) {
+        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_favorited.map((function(_this) {
           return function(site) {
             return site.renderOptionalStats();
           };
@@ -3504,7 +3607,11 @@
       } else if (row.tasks > 0) {
         this.setMessage("Updating: " + (Math.max(row.tasks, row.bad_files)) + " left");
       } else if (row.bad_files > 0) {
-        this.setMessage(row.bad_files + " file update failed", "error");
+        if (row.peers <= 1) {
+          this.setMessage("No peers", "error");
+        } else {
+          this.setMessage(row.bad_files + " file update failed", "error");
+        }
       } else if (row.content_updated === false) {
         if (row.peers <= 1) {
           this.setMessage("No peers", "error");
@@ -3769,7 +3876,7 @@
       return true;
     };
 
-    Site.prototype.getHref = function() {
+    Site.prototype.getHref = function(row) {
       var has_plugin, href, ref, ref1;
       has_plugin = (((ref = Page.server_info) != null ? ref.plugins : void 0) != null) && (indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
       if (has_plugin && ((ref1 = this.row.content) != null ? ref1.domain : void 0)) {
@@ -3777,7 +3884,11 @@
       } else {
         href = Text.getSiteUrl(this.row.address);
       }
-      return href;
+      if (row != null ? row.inner_path : void 0) {
+        return href + row.inner_path;
+      } else {
+        return href;
+      }
     };
 
     Site.prototype.render = function() {
@@ -3895,8 +4006,8 @@
   SiteFiles = (function(superClass) {
     extend(SiteFiles, superClass);
 
-    function SiteFiles(site) {
-      this.site = site;
+    function SiteFiles(site1) {
+      this.site = site1;
       this.update = bind(this.update, this);
       this.render = bind(this.render, this);
       this.renderOrderRight = bind(this.renderOrderRight, this);
@@ -3912,6 +4023,8 @@
       this.items = [];
       this.loaded = false;
       this.orderby = "time_downloaded";
+      this.mode = "site";
+      this.mode = "single_site";
       this.orderby_desc = true;
       this.has_more = false;
     }
@@ -4005,18 +4118,32 @@
         return [];
       }
       return [
-        h("div.files", {
+        h("div.files.files-" + this.mode, {
           exitAnimation: Animation.slideUpInout
         }, [
-          h("div.tr.thead", [h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
+          h("div.tr.thead", [h("div.td.pre", "."), this.mode === "bigfiles" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
             return function(file) {
-              var profile_color;
+              var percent, profile_color, site;
+              site = file.site || _this.site;
               if (file.peer >= 10) {
                 profile_color = "#47d094";
               } else if (file.peer > 0) {
                 profile_color = "#f5b800";
               } else {
                 profile_color = "#d1d1d1";
+              }
+              if (_this.mode === "bigfiles") {
+                if (file.pieces == null) {
+                  file.pieces = 0;
+                }
+                if (file.pieces_downloaded == null) {
+                  file.pieces_downloaded = 0;
+                }
+                if (file.pieces === 0 || file.pieces_downloaded === 0) {
+                  percent = 0;
+                } else {
+                  percent = parseInt((file.pieces_downloaded / file.pieces) * 100);
+                }
               }
               return h("div.tr", {
                 key: file.inner_path,
@@ -4028,18 +4155,23 @@
                 },
                 onmouseenter: _this.handleRowMouseenter
               }, [
-                h("div.td.inner_path", h("a.checkbox", {
+                h("div.td.pre", h("a.checkbox", {
                   href: "#Select",
                   onmousedown: _this.handleSelectMousedown,
                   onclick: _this.handleSelectClick,
                   inner_path: file.inner_path
-                }), h("a.title", {
-                  href: _this.site.getHref() + file.inner_path,
+                })), _this.mode === "bigfiles" ? h("div.td.site", h("a.link", {
+                  href: site.getHref()
+                }, site.row.content.title)) : void 0, h("div.td.inner_path", h("a.title.link", {
+                  href: site.getHref(file),
                   target: "_top"
-                }, file.inner_path), file.is_pinned ? h("span.pinned", {
+                }, file.inner_path.replace(/.*\//, "")), file.is_pinned ? h("span.pinned", {
                   exitAnimation: Animation.slideUpInout,
                   enterAnimation: Animation.slideDown
-                }, "Pinned") : void 0), h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
+                }, "Pinned") : void 0), _this.mode === "bigfiles" ? h("div.td.status", h("span.percent", {
+                  title: file.pieces_downloaded + " of " + file.pieces + " pieces downloaded",
+                  style: "box-shadow: inset " + (percent * 0.8) + "px 0px 0px #9ef5cf;"
+                }, percent + "%")) : void 0, h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
                   h("div.icon.icon-profile", {
                     style: "color: " + profile_color
                   }), h("span.num", file.peer)
@@ -4088,6 +4220,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
@@ -4129,7 +4262,7 @@
       if (!this.schedule_reorder) {
         return;
       }
-      if (!document.querySelector('.left:hover') && !document.querySelector(".working")) {
+      if (!document.querySelector('.left:hover') && !document.querySelector(".working") && !Page.mode === "Files") {
         this.reorder();
         return this.schedule_reorder = false;
       }
@@ -4221,7 +4354,7 @@
           },
           settings: {}
         }, {
-          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwBa",
+          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB",
           demo: true,
           content: {
             title: "More @ ZeroSites",
@@ -4393,7 +4526,6 @@
   window.Trigger = Trigger;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
