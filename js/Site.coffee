@@ -25,7 +25,10 @@ class Site extends Class
 		else if row.tasks > 0
 			@setMessage "Updating: #{Math.max(row.tasks, row.bad_files)} left"
 		else if row.bad_files > 0
-			@setMessage row.bad_files+" file update failed", "error"
+			if row.peers <= 1
+				@setMessage "No peers", "error"
+			else
+				@setMessage row.bad_files+" file update failed", "error"
 		else if row.content_updated == false
 			if row.peers <= 1
 				@setMessage "No peers", "error"
