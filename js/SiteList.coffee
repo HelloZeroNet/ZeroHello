@@ -18,7 +18,7 @@ class SiteList extends Class
 			return
 
 		# Don't reorder if user if over site list or any of the sites are updating
-		if not document.querySelector('.left:hover') and not document.querySelector(".working")
+		if not document.querySelector('.left:hover') and not document.querySelector(".working") and not Page.mode == "Files"
 			@reorder()
 			@schedule_reorder = false
 
