@@ -11,28 +11,48 @@ class FileList extends Class
 		@selected_files_num = 0
 		@selected_files_size = 0
 		@selected_files_pinned = 0
+		@bigfiles = new Bigfiles()
 		@
+
+	getSites: =>
+		if @bigfiles.files.items.length > 0
+			back = []
+			# Create separate fake site objects for bigfiles
+			bigfile_sites = {}
+			for file in @bigfiles.files.items
+				bigfile_sites[file.site.row.address] ?= {row: file.site.row, files: {items: [], selected: @bigfiles.files.selected, update: @bigfiles.files.update}}
+				bigfile_sites[file.site.row.address].files.items.push(file)
+
+			for address, site of bigfile_sites
+				back.push(site)
+
+			# Add other sites
+			back = back.concat(Page.site_list.sites)
+			return back
+		else
+			return Page.site_list.sites
 
 	checkSelectedFiles: =>
 		@selected_files_num = 0
 		@selected_files_size = 0
 		@selected_files_pinned = 0
-		for site in Page.site_list.sites
+		for site in @getSites()
 			for site_file in site.files.items when site.files.selected[site_file.inner_path]
 				@selected_files_num += 1
 				@selected_files_size += site_file.size
 				@selected_files_pinned += site_file.is_pinned
 
 	handleSelectbarCancel: =>
-		for site in Page.site_list.sites
+		for site in @getSites()
 			for site_file in site.files.items
-				site.files.selected = {}
+				for key, val of site.files.selected
+					delete site.files.selected[key]
 		@checkSelectedFiles()
 		Page.projector.scheduleRender()
 		return false
 
 	handleSelectbarPin: =>
-		for site in Page.site_list.sites
+		for site in @getSites()
 			inner_paths = (site_file.inner_path for site_file in site.files.items when site.files.selected[site_file.inner_path])
 
 			if inner_paths.length > 0
@@ -43,7 +63,7 @@ class FileList extends Class
 		@handleSelectbarCancel()
 
 	handleSelectbarUnpin: =>
-		for site in Page.site_list.sites
+		for site in @getSites()
 			inner_paths = (site_file.inner_path for site_file in site.files.items when site.files.selected[site_file.inner_path])
 
 			if inner_paths.length > 0
@@ -54,7 +74,7 @@ class FileList extends Class
 		@handleSelectbarCancel()
 
 	handleSelectbarDelete: =>
-		for site in Page.site_list.sites
+		for site in @getSites()
 			inner_paths = (site_file.inner_path for site_file in site.files.items when site.files.selected[site_file.inner_path])
 
 			if inner_paths.length > 0
@@ -198,11 +218,7 @@ class FileList extends Class
 			used += site.row.settings.optional_downloaded
 			site.files.update =>
 				@updating_files -= 1
-		if used != @optional_stats.used
-			@log "Used #{Text.formatSize(@optional_stats.used)} -> #{Text.formatSize(used)}"
-			@optional_stats.used = used
-
-
+		@bigfiles.files.update()
 
 	render: =>
 		if Page.site_list.sites and not @need_update and @updating_files == 0 and document.body.className != "loaded"
@@ -237,6 +253,7 @@ class FileList extends Class
 		h("div#FileList", [
 			@renderSelectbar()
 			@renderTotalbar()
+			@bigfiles.render()
 			sites_favorited.map (site) =>
 				site.renderOptionalStats()
 			sites_connected.map (site) =>

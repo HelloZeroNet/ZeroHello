@@ -195,13 +195,17 @@ class Site extends Class
 
 		return true
 
-	getHref: ->
+	getHref: (row) ->
 		has_plugin = Page.server_info?.plugins? and ("Zeroname" in Page.server_info.plugins or "Dnschain" in Page.server_info.plugins or "Zeroname-local" in Page.server_info.plugins)
 		if has_plugin and @row.content?.domain # Domain
 			href = Text.getSiteUrl(@row.content.domain)
 		else # Address
 			href = Text.getSiteUrl(@row.address)
-		return href
+
+		if row?.inner_path
+			return href + row.inner_path
+		else
+			return href
 
 
 	render: =>
