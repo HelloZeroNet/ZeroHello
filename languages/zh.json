@@ -48,6 +48,8 @@
 	"Order sites by size": "根据站点大小排序",
 	"Create new, empty site": "新建空站点",
 	"Manage muted users": "管理已屏蔽用户",
+	"Show data directory": "打开数据目录",
+	"Backup <b>users.json</b> file to keep your identity safe.": "备份 <b>users.json</b> 文件以确保妥善保管你的身份信息。",
 	"Version ": "版本 ",
 	"New version avalible!": "有新版本可用！",
 	"Up to date!": "已是最新！",
