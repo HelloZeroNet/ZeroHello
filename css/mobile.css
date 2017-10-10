@@ -90,7 +90,7 @@ overflow: hidden;
 position: absolute;
 }
 #PageFiles .left, #FileList {
-min-width: 770px;
+min-width: 970px;
 }
 #PageFiles .right {
 display: none;
