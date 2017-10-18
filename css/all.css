@@ -168,8 +168,10 @@
 #FileList .empty small { font-size: 50%; opacity: 0.5; }
 
 /* Table*/
+#FileList .files .tr { white-space: nowrap }
 #FileList .files .td { display: inline-block; width: 60px }
 #FileList .files .tbody .td { line-height: 17px; vertical-align: bottom; }
+#FileList .files .td.inner_path { min-width: 300px }
 #FileList .files .td.size { width: 90px; text-align: right; }
 #FileList .files .td.status { text-align: right; }
 #FileList .files .td.peer { width: 60px }
@@ -354,10 +356,10 @@
 .menu {
 	background-color: white; padding: 10px 0px; position: absolute; top: 0px; max-height: 0px; overflow: hidden; -webkit-transform: translate(-100%, -30px); -moz-transform: translate(-100%, -30px); -o-transform: translate(-100%, -30px); -ms-transform: translate(-100%, -30px); transform: translate(-100%, -30px) ; pointer-events: none;
 	-webkit-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); -moz-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); -o-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); -ms-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); box-shadow: 0px 2px 8px rgba(0,0,0,0.3) ; -webkit-border-radius: 2px; -moz-border-radius: 2px; -o-border-radius: 2px; -ms-border-radius: 2px; border-radius: 2px ; opacity: 0; -webkit-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; -moz-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; -o-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; -ms-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out ; z-index: 99;
-	display: inline-block; z-index: 999;
+	display: inline-block; z-index: 999; transform-style: preserve-3d;
 }
 .menu.visible {
-	opacity: 1; max-height: 500px; -webkit-transform: translate(-100%, 0px); -moz-transform: translate(-100%, 0px); -o-transform: translate(-100%, 0px); -ms-transform: translate(-100%, 0px); transform: translate(-100%, 0px) ; pointer-events: all;
+	opacity: 1; -webkit-transform: translate(-100%, 0px); -moz-transform: translate(-100%, 0px); -o-transform: translate(-100%, 0px); -ms-transform: translate(-100%, 0px); transform: translate(-100%, 0px) ; pointer-events: all;
 	-webkit-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); -moz-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); -o-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); -ms-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1) ;
 }
 
@@ -726,16 +728,20 @@ position: absolute;
 width: 100%;
 z-index: 10;
 }
-.left #SiteList, .left #FileList {
-overflow: auto;
+.left #SiteList {
+overflow-x: hidden;
 height: auto;
 position: absolute;
 top: 92px;
 bottom: 0px;
 padding-top: 40px;
 }
-.left #SiteList {
-overflow-x: hidden;
+.left #FileList {
+height: auto;
+position: relative;
+top: 92px;
+bottom: 0px;
+padding-top: 40px;
 }
 .left #SiteList .details {
 position: absolute;
@@ -799,7 +805,7 @@ min-width: 770px;
 #PageFiles .right {
 display: none;
 }
-.left #Head .modes {
+#PageSites .left #Head .modes {
 padding-left: 29px;
 background-color: #2a333c;
 -webkit-box-shadow: 0px 0px 0px 31px #2a333c; -moz-box-shadow: 0px 0px 0px 31px #2a333c; -o-box-shadow: 0px 0px 0px 31px #2a333c; -ms-box-shadow: 0px 0px 0px 31px #2a333c; box-shadow: 0px 0px 0px 31px #2a333c ;

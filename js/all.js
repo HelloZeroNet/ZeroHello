@@ -1202,6 +1202,7 @@
       this.visible = false;
       this.items = [];
       this.node = null;
+      this.height = 0;
     }
 
     Menu.prototype.show = function() {
@@ -1237,9 +1238,15 @@
       this.node = node;
       if (this.visible) {
         node.className = node.className.replace("visible", "");
-        return setTimeout((function() {
-          return node.className += " visible";
-        }), 20);
+        setTimeout(((function(_this) {
+          return function() {
+            node.className += " visible";
+            return node.style.maxHeight = _this.height + "px";
+          };
+        })(this)), 20);
+        node.style.maxHeight = "none";
+        this.height = node.offsetHeight;
+        return node.style.maxHeight = "0px";
       }
     };
 
@@ -1291,14 +1298,21 @@
     };
 
     Menu.prototype.render = function(class_name) {
+      var max_height;
       if (class_name == null) {
         class_name = "";
       }
       if (this.visible || this.node) {
+        if (this.visible) {
+          max_height = this.height;
+        } else {
+          max_height = 0;
+        }
         return h("div.menu" + class_name, {
           classes: {
             "visible": this.visible
           },
+          style: "max-height: " + max_height + "px",
           afterCreate: this.storeNode
         }, this.items.map(this.renderItem));
       }
@@ -1945,6 +1959,9 @@
 
     Bigfiles.prototype.updateFiles = function(cb) {
       var orderby;
+      if (Page.server_info.rev < 3090) {
+        return typeof cb === "function" ? cb() : void 0;
+      }
       orderby = this.files.orderby + (this.files.orderby_desc ? " DESC" : "");
       return Page.cmd("optionalFileList", {
         address: "all",
@@ -2304,7 +2321,7 @@
         if (last_row.body === row.body && last_row.date_added === row.date_added) {
           continue;
         }
-        if (row_group.type === row.type && row.url === row_group.url) {
+        if (row_group.type === row.type && row.url === row_group.url && row.site === row_group.site) {
           if (row_group.body_more == null) {
             row_group.body_more = [];
             row_group.body_more.push(row.body);
@@ -3164,6 +3181,7 @@
   window.FileList = FileList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
@@ -4220,7 +4238,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
 
 
@@ -4347,6 +4364,13 @@
           },
           settings: {}
         }, {
+          address: "1uPLoaDwKzP6MCGoVzw48r4pxawRBdmQc",
+          demo: true,
+          content: {
+            title: "ZeroUp"
+          },
+          settings: {}
+        }, {
           address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h",
           demo: true,
           content: {
@@ -4354,7 +4378,7 @@
           },
           settings: {}
         }, {
-          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB",
+          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwBa",
           demo: true,
           content: {
             title: "More @ ZeroSites",
@@ -4557,7 +4581,7 @@
       this.on_site_info = new Promise();
       this.on_settings = new Promise();
       this.settings = null;
-      this.latest_version = "0.5.7";
+      this.latest_version = "0.6.0";
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Page" + this.mode;
