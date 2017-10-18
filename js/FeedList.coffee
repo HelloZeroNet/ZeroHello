@@ -44,7 +44,7 @@ class FeedList extends Class
 			if last_row.body == row.body and last_row.date_added == row.date_added
 				continue  # Duplicate (eg. also signed up for comments and mentions)
 
-			if row_group.type == row.type and row.url == row_group.url
+			if row_group.type == row.type and row.url == row_group.url and row.site == row_group.site
 				if not row_group.body_more?
 					row_group.body_more = []
 					row_group.body_more.push(row.body)
