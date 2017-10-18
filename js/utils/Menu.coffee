@@ -3,6 +3,7 @@ class Menu
 		@visible = false
 		@items = []
 		@node = null
+		@height = 0
 
 	show: =>
 		window.visible_menu?.hide()
@@ -29,9 +30,13 @@ class Menu
 		# Animate visible
 		if @visible
 			node.className = node.className.replace("visible", "")
-			setTimeout (->
+			setTimeout (=>
 				node.className += " visible"
+				node.style.maxHeight = @height + "px"
 			), 20
+			node.style.maxHeight = "none"
+			@height = node.offsetHeight
+			node.style.maxHeight = "0px"
 
 	handleClick: (e) =>
 		keep_menu = false
@@ -61,7 +66,11 @@ class Menu
 
 	render: (class_name="") =>
 		if @visible or @node
-			h("div.menu#{class_name}", {classes: {"visible": @visible}, afterCreate: @storeNode}, @items.map(@renderItem))
+			if @visible
+				max_height = @height
+			else
+				max_height = 0
+			h("div.menu#{class_name}", {classes: {"visible": @visible}, style: "max-height: #{max_height}px", afterCreate: @storeNode}, @items.map(@renderItem))
 
 window.Menu = Menu
 
