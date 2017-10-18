@@ -7,6 +7,8 @@ class Bigfiles extends Class
 		@row = {"address": "bigfiles"}
 
 	updateFiles: (cb) =>
+		if Page.server_info.rev < 3090
+			return cb?()
 		orderby = @files.orderby + (if @files.orderby_desc then " DESC" else "")
 		Page.cmd "optionalFileList", {address: "all", filter: "downloaded,bigfile", limit: @files.limit+1, orderby: orderby}, (res) =>
 			for row in res
