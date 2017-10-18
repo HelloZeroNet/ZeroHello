@@ -22,16 +22,20 @@ position: absolute;
 width: 100%;
 z-index: 10;
 }
-.left #SiteList, .left #FileList {
-overflow: auto;
+.left #SiteList {
+overflow-x: hidden;
 height: auto;
 position: absolute;
 top: 92px;
 bottom: 0px;
 padding-top: 40px;
 }
-.left #SiteList {
-overflow-x: hidden;
+.left #FileList {
+height: auto;
+position: relative;
+top: 92px;
+bottom: 0px;
+padding-top: 40px;
 }
 .left #SiteList .details {
 position: absolute;
@@ -90,12 +94,12 @@ overflow: hidden;
 position: absolute;
 }
 #PageFiles .left, #FileList {
-min-width: 970px;
+min-width: 800px;
 }
 #PageFiles .right {
 display: none;
 }
-.left #Head .modes {
+#PageSites .left #Head .modes {
 padding-left: 29px;
 background-color: #2a333c;
 box-shadow: 0px 0px 0px 31px #2a333c;

@@ -44,8 +44,10 @@
 #FileList .empty small { font-size: 50%; opacity: 0.5; }
 
 /* Table*/
+#FileList .files .tr { white-space: nowrap }
 #FileList .files .td { display: inline-block; width: 60px }
 #FileList .files .tbody .td { line-height: 17px; vertical-align: bottom; }
+#FileList .files .td.inner_path { min-width: 300px }
 #FileList .files .td.size { width: 90px; text-align: right; }
 #FileList .files .td.status { text-align: right; }
 #FileList .files .td.peer { width: 60px }
