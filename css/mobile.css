@@ -17,6 +17,10 @@ position: fixed;
 transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1);
 border-bottom: 1px solid #2A333C;
 }
+.left #Head .menu {
+font-size: 90%;
+line-height: 180%;
+}
 .left #Head {
 position: absolute;
 width: 100%;
@@ -170,10 +174,12 @@ color: white;
 }
 #Dashboard .menu, #Dashboard .menu.visible {
 position: fixed;
-overflow: auto;
+overflow-x: auto;
 max-width: 100%;
 left: 100%;
 top: -15px;
+font-size: 80%;
+line-height: 180%;
 }
 .menu-item .emoji {
 display: none;

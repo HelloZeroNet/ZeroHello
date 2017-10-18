@@ -723,6 +723,10 @@ position: fixed;
 -webkit-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -moz-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -o-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -ms-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1) ;
 border-bottom: 1px solid #2A333C;
 }
+.left #Head .menu {
+font-size: 90%;
+line-height: 180%;
+}
 .left #Head {
 position: absolute;
 width: 100%;
@@ -800,7 +804,7 @@ overflow: hidden;
 position: absolute;
 }
 #PageFiles .left, #FileList {
-min-width: 770px;
+min-width: 800px;
 }
 #PageFiles .right {
 display: none;
@@ -876,10 +880,12 @@ color: white;
 }
 #Dashboard .menu, #Dashboard .menu.visible {
 position: fixed;
-overflow: auto;
+overflow-x: auto;
 max-width: 100%;
 left: 100%;
 top: -15px;
+font-size: 80%;
+line-height: 180%;
 }
 .menu-item .emoji {
 display: none;

@@ -1337,6 +1337,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
 
 
@@ -3181,7 +3182,6 @@
   window.FileList = FileList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Head.coffee ---- */
