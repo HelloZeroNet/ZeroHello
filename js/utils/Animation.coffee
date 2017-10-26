@@ -1,5 +1,8 @@
 class Animation
 	slideDown: (elem, props) ->
+		if elem.offsetTop > 1000
+			return
+
 		h = elem.offsetHeight
 		cstyle = window.getComputedStyle(elem)
 		margin_top = cstyle.marginTop
@@ -39,6 +42,9 @@ class Animation
 
 
 	slideUp: (elem, remove_func, props) ->
+		if elem.offsetTop > 1000
+			return remove_func()
+
 		elem.className += " animate-back"
 		elem.style.boxSizing = "border-box"
 		elem.style.height = elem.offsetHeight+"px"
