@@ -913,6 +913,9 @@
 
     Animation.prototype.slideDown = function(elem, props) {
       var cstyle, h, margin_bottom, margin_top, padding_bottom, padding_top, transition;
+      if (elem.offsetTop > 1000) {
+        return;
+      }
       h = elem.offsetHeight;
       cstyle = window.getComputedStyle(elem);
       margin_top = cstyle.marginTop;
@@ -950,6 +953,9 @@
     };
 
     Animation.prototype.slideUp = function(elem, remove_func, props) {
+      if (elem.offsetTop > 1000) {
+        return remove_func();
+      }
       elem.className += " animate-back";
       elem.style.boxSizing = "border-box";
       elem.style.height = elem.offsetHeight + "px";
@@ -1335,7 +1341,6 @@
   });
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
@@ -2260,6 +2265,7 @@
       this.renderFeed = bind(this.renderFeed, this);
       this.exitAnimation = bind(this.exitAnimation, this);
       this.enterAnimation = bind(this.enterAnimation, this);
+      this.handleFilterClick = bind(this.handleFilterClick, this);
       this.handleSearchKeyup = bind(this.handleSearchKeyup, this);
       this.handleSearchInput = bind(this.handleSearchInput, this);
       this.storeNodeSearch = bind(this.storeNodeSearch, this);
@@ -2272,6 +2278,8 @@
       this.searched = null;
       this.searched_info = null;
       this.loading = false;
+      this.filter = null;
+      this.feed_types = {};
       this.need_update = false;
       this.updating = false;
       this.limit = 30;
@@ -2316,6 +2324,7 @@
       });
       row_group = {};
       last_row = {};
+      this.feed_types = {};
       rows.reverse();
       for (i = 0, len = rows.length; i < len; i++) {
         row = rows[i];
@@ -2342,6 +2351,7 @@
           this.feeds.push(row);
           row_group = row;
         }
+        this.feed_types[row.type] = true;
         last_row = row;
       }
       return Page.projector.scheduleRender();
@@ -2469,6 +2479,14 @@
       return false;
     };
 
+    FeedList.prototype.handleFilterClick = function(e) {
+      this.filter = e.target.getAttribute("href").replace("#", "");
+      if (this.filter === "all") {
+        this.filter = null;
+      }
+      return false;
+    };
+
     FeedList.prototype.formatTitle = function(title) {
       if (this.searching && this.searching.length > 1) {
         return Text.highlight(title, this.searching);
@@ -2552,6 +2570,9 @@
 
     FeedList.prototype.renderFeed = function(feed) {
       var err, site, type_formatted;
+      if (this.filter && feed.type !== this.filter) {
+        return null;
+      }
       try {
         site = Page.site_list.item_list.items_bykey[feed.site];
         type_formatted = this.formatType(feed.type, feed.title);
@@ -2624,6 +2645,7 @@
     };
 
     FeedList.prototype.render = function() {
+      var feed_type;
       if (this.need_update) {
         RateLimitCb(5000, this.update);
         this.need_update = false;
@@ -2642,7 +2664,28 @@
           faded: Page.mute_list.visible
         }
       }, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
-        h("div.feeds-line"), h("div.feeds-search", {
+        h("div.feeds-filters", [
+          h("a.feeds-filter", {
+            href: "#all",
+            classes: {
+              active: this.filter === null
+            },
+            onclick: this.handleFilterClick
+          }, "All"), (function() {
+            var results;
+            results = [];
+            for (feed_type in this.feed_types) {
+              results.push(h("a.feeds-filter", {
+                href: "#" + feed_type,
+                classes: {
+                  active: this.filter === feed_type
+                },
+                onclick: this.handleFilterClick
+              }, feed_type));
+            }
+            return results;
+          }).call(this)
+        ]), h("div.feeds-line"), h("div.feeds-search", {
           classes: {
             "searching": this.searching
           }
@@ -2692,6 +2735,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */

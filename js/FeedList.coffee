@@ -5,6 +5,8 @@ class FeedList extends Class
 		@searched = null
 		@searched_info = null
 		@loading = false
+		@filter = null
+		@feed_types = {}
 		@need_update = false
 		@updating = false
 		@limit = 30
@@ -39,6 +41,7 @@ class FeedList extends Class
 
 		row_group = {}
 		last_row = {}
+		@feed_types = {}
 		rows.reverse()
 		for row in rows
 			if last_row.body == row.body and last_row.date_added == row.date_added
@@ -58,6 +61,7 @@ class FeedList extends Class
 				row.feed_id ?= row.date_added
 				@feeds.push(row)
 				row_group = row
+			@feed_types[row.type] = true
 			last_row = row
 		Page.projector.scheduleRender()
 
@@ -148,6 +152,12 @@ class FeedList extends Class
 			@handleSearchInput(e)
 		return false
 
+	handleFilterClick: (e) =>
+		@filter = e.target.getAttribute("href").replace("#", "")
+		if @filter == "all"
+			@filter = null
+		return false
+
 	formatTitle: (title) ->
 		if @searching and @searching.length > 1
 			return Text.highlight(title, @searching)
@@ -218,6 +228,9 @@ class FeedList extends Class
 			remove_func()
 
 	renderFeed: (feed) =>
+		if @filter and feed.type != @filter
+			return null
+
 		try
 			site = Page.site_list.item_list.items_bykey[feed.site]
 			type_formatted = @formatType(feed.type, feed.title)
@@ -304,6 +317,11 @@ class FeedList extends Class
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null
 				[
+					h("div.feeds-filters", [
+						h("a.feeds-filter", {href: "#all", classes: {active: @filter == null}, onclick: @handleFilterClick}, "All"),
+						for feed_type of @feed_types
+							h("a.feeds-filter", {href: "#" + feed_type, classes: {active: @filter == feed_type}, onclick: @handleFilterClick}, feed_type)
+					])
 					h("div.feeds-line"),
 					h("div.feeds-search", {classes: {"searching": @searching}},
 						h("div.icon-magnifier"),
