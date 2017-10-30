@@ -2676,6 +2676,7 @@
             results = [];
             for (feed_type in this.feed_types) {
               results.push(h("a.feeds-filter", {
+                key: feed_type,
                 href: "#" + feed_type,
                 classes: {
                   active: this.filter === feed_type

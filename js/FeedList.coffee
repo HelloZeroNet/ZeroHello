@@ -320,7 +320,7 @@ class FeedList extends Class
 					h("div.feeds-filters", [
 						h("a.feeds-filter", {href: "#all", classes: {active: @filter == null}, onclick: @handleFilterClick}, "All"),
 						for feed_type of @feed_types
-							h("a.feeds-filter", {href: "#" + feed_type, classes: {active: @filter == feed_type}, onclick: @handleFilterClick}, feed_type)
+							h("a.feeds-filter", {key: feed_type, href: "#" + feed_type, classes: {active: @filter == feed_type}, onclick: @handleFilterClick}, feed_type)
 					])
 					h("div.feeds-line"),
 					h("div.feeds-search", {classes: {"searching": @searching}},
