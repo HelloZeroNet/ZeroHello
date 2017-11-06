@@ -151,6 +151,8 @@ class ZeroHello extends ZeroFrame
 	onRequest: (cmd, params) ->
 		if cmd == "setSiteInfo" # Site updated
 			@setSiteInfo(params)
+		else if cmd == "setServerInfo"
+			@setServerInfo(params)
 		else
 			@log "Unknown command", params
 

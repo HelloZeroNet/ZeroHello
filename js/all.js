@@ -2738,7 +2738,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
 
 
@@ -4820,6 +4819,8 @@
     ZeroHello.prototype.onRequest = function(cmd, params) {
       if (cmd === "setSiteInfo") {
         return this.setSiteInfo(params);
+      } else if (cmd === "setServerInfo") {
+        return this.setServerInfo(params);
       } else {
         return this.log("Unknown command", params);
       }
