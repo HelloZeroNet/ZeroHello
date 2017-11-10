@@ -2,6 +2,7 @@ class FeedList extends Class
 	constructor: ->
 		@feeds = null
 		@searching = null
+		@searching_text = null
 		@searched = null
 		@searched_info = null
 		@loading = false
@@ -120,6 +121,7 @@ class FeedList extends Class
 		else
 			delay = 600
 		@searching = e.target.value
+		@searching_text = @searching.replace(/[^ ]+:.*$/, "").trim()
 
 		if Page.server_info.rev < 1230
 			@feeds = []
@@ -159,8 +161,8 @@ class FeedList extends Class
 		return false
 
 	formatTitle: (title) ->
-		if @searching and @searching.length > 1
-			return Text.highlight(title, @searching)
+		if @searching_text and @searching_text.length > 1
+			return Text.highlight(title, @searching_text)
 		else
 			return title
 
@@ -183,11 +185,11 @@ class FeedList extends Class
 			body = body.trim()
 
 			# Highligh matched search parts
-			if @searching and @searching.length > 1
-				body = Text.highlight(body, @searching)
+			if @searching_text and @searching_text.length > 1
+				body = Text.highlight(body, @searching_text)
 				if body[0].length > 60 and body.length > 1
 					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
-				return [h("b", Text.highlight(username_formatted, @searching)), body]
+				return [h("b", Text.highlight(username_formatted, @searching_text)), body]
 			else
 				body = body[0..200]
 				return [h("b", [username_formatted]), body]
@@ -196,8 +198,8 @@ class FeedList extends Class
 			body = body.replace(/\n/g, " ")
 
 			# Highligh matched search parts
-			if @searching and @searching.length > 1
-				body = Text.highlight(body, @searching)
+			if @searching_text and @searching_text.length > 1
+				body = Text.highlight(body, @searching_text)
 				if body[0].length > 60
 					body[0] = "..."+body[0][body[0].length-50..body[0].length-1]
 			else
