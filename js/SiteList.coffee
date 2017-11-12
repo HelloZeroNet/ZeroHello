@@ -145,7 +145,7 @@ class SiteList extends Class
 			h("div.SiteList.owned", @sites_owned.map (item) ->
 				item.render()
 			),
-			h("h2.connected", "Connected sites:"),
+			if @sites_connected.length > 0 then h("h2.connected", "Connected sites:"),
 			h("div.SiteList.connected", @sites_connected.map (item) ->
 				item.render()
 			),
