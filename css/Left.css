@@ -21,6 +21,12 @@
 .left #Head .modes .mode:focus { transition: all 0.3s }
 .left #Head .modes .mode.active { font-size: 90%; border-bottom: 1px solid #83EFFF; color: #83EFFF; opacity: 1 }
 
+.left .site-filter {
+	margin-top: 30px; margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b;
+	padding: 13px; box-sizing: border-box; color: white; transition: all 0.3s; font-family: Roboto; font-size: 16px;
+}
+.left .site-filter:focus { border-color: #6c7884; outline: none }
+
 .SiteList { margin-bottom: 40px; }
 .SiteList .site { border-bottom: 1px solid #3D444B; position: relative }
 .SiteList .site.disabled:hover { background-color: rgba(173,136,183,0.04); }
@@ -30,7 +36,7 @@
 .SiteList .site .circle { pointer-events: none; position: absolute; margin-top: 17px; margin-left: 27px; font-size: 12px; font-family: Verdana; }
 .SiteList .site .inner { color: #C2CBDB; text-decoration: none; display: block; padding: 15px 25px; padding-left: 45px; transition: all 0.3s }
 .SiteList .site .inner:hover { background-color: rgba(173,136,183,0.08); transition: none; color: white }
-.SiteList .site .inner:active, .SiteList .site .inner:focus { background-color: rgba(173,136,183,0.2); transition: none; color: white }
+.SiteList .site .inner:active, .SiteList .site .inner:focus { background-color: rgba(173,136,183,0.2); transition: none; color: white; outline: none }
 .SiteList .site .inner .title { max-width: 157px; overflow: hidden; display: inline-block; white-space: nowrap; text-overflow: ellipsis; margin-bottom: -4px }
 .SiteList .site .inner .details {
 	float: right; display: inline; font-size: 11px; text-transform: uppercase; line-height: 23px;

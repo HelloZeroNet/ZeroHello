@@ -7,6 +7,7 @@ class SiteList extends Class
 		@loaded = false
 		@schedule_reorder = false
 		@merged_db = {}
+		@filtering = ""
 		setInterval(@reorderTimer, 10000)
 
 		Page.on_settings.then =>
@@ -70,6 +71,8 @@ class SiteList extends Class
 
 		@inactive_demo_sites = []
 		for site_row in demo_site_rows
+			if @filtering and site.row.content.title.toLowerCase().indexOf(@filtering.toLowerCase()) == -1
+				continue
 			if not @sites_byaddress[site_row.address]
 				@inactive_demo_sites.push(new Site(site_row))
 
@@ -91,6 +94,15 @@ class SiteList extends Class
 			]
 		return back
 
+	handleFilterInput: (e) =>
+		@filtering = e.target.value
+
+	handleFilterKeyup: (e) =>
+		if e.keyCode == 27 # Esc
+			e.target.value = ""
+			@handleFilterInput(e)
+		return false
+
 	render: =>
 		if not @loaded
 			return h("div#SiteList")
@@ -102,6 +114,11 @@ class SiteList extends Class
 		@sites_merged = []
 
 		for site in @sites
+			if @filtering
+				filter_base = site.row.content.title + site.row.content.merged_type
+				if filter_base.toLowerCase().indexOf(@filtering.toLowerCase()) == -1
+					continue
+
 			if site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024
 				@sites_needaction.push site
 			else if site.favorite
@@ -112,7 +129,10 @@ class SiteList extends Class
 				@sites_owned.push site
 			else
 				@sites_connected.push site
+
 		h("div#SiteList", [
+			if @sites.length > 20
+				h("input.site-filter", {placeholder: "Filter: Site name", spellcheck: false, oninput: @handleFilterInput, onkeyup: @handleFilterKeyup})
 			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
 			h("div.SiteList.needaction", @sites_needaction.map (item) ->
 				item.render()
