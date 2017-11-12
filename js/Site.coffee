@@ -244,7 +244,7 @@ class Site extends Class
 					[@message]
 				)
 			]),
-			h("a.settings", {href: "#", onmousedown: @handleSettingsClick, onclick: Page.returnFalse}, ["\u22EE"]),
+			h("a.settings", {href: "#Settings", tabIndex: -1, onmousedown: @handleSettingsClick, onclick: Page.returnFalse}, ["\u22EE"]),
 			@menu.render()
 		)
 
