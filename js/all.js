@@ -2275,6 +2275,7 @@
       this.checkScroll = bind(this.checkScroll, this);
       this.feeds = null;
       this.searching = null;
+      this.searching_text = null;
       this.searched = null;
       this.searched_info = null;
       this.loading = false;
@@ -2436,6 +2437,7 @@
         delay = 600;
       }
       this.searching = e.target.value;
+      this.searching_text = this.searching.replace(/[^ ]+:.*$/, "").trim();
       if (Page.server_info.rev < 1230) {
         this.feeds = [];
       }
@@ -2488,8 +2490,8 @@
     };
 
     FeedList.prototype.formatTitle = function(title) {
-      if (this.searching && this.searching.length > 1) {
-        return Text.highlight(title, this.searching);
+      if (this.searching_text && this.searching_text.length > 1) {
+        return Text.highlight(title, this.searching_text);
       } else {
         return title;
       }
@@ -2514,20 +2516,20 @@
         }
         body = body.replace(/\n/g, " ");
         body = body.trim();
-        if (this.searching && this.searching.length > 1) {
-          body = Text.highlight(body, this.searching);
+        if (this.searching_text && this.searching_text.length > 1) {
+          body = Text.highlight(body, this.searching_text);
           if (body[0].length > 60 && body.length > 1) {
             body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
           }
-          return [h("b", Text.highlight(username_formatted, this.searching)), body];
+          return [h("b", Text.highlight(username_formatted, this.searching_text)), body];
         } else {
           body = body.slice(0, 201);
           return [h("b", [username_formatted]), body];
         }
       } else {
         body = body.replace(/\n/g, " ");
-        if (this.searching && this.searching.length > 1) {
-          body = Text.highlight(body, this.searching);
+        if (this.searching_text && this.searching_text.length > 1) {
+          body = Text.highlight(body, this.searching_text);
           if (body[0].length > 60) {
             body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
           }
@@ -3979,7 +3981,8 @@
           }
         }, [this.message])
       ]), h("a.settings", {
-        href: "#",
+        href: "#Settings",
+        tabIndex: -1,
         onmousedown: this.handleSettingsClick,
         onclick: Page.returnFalse
       }, ["\u22EE"]), this.menu.render());
@@ -4297,6 +4300,8 @@
     function SiteList() {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
+      this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
+      this.handleFilterInput = bind(this.handleFilterInput, this);
       this.renderMergedSites = bind(this.renderMergedSites, this);
       this.reorder = bind(this.reorder, this);
       this.sortRows = bind(this.sortRows, this);
@@ -4308,6 +4313,7 @@
       this.loaded = false;
       this.schedule_reorder = false;
       this.merged_db = {};
+      this.filtering = "";
       setInterval(this.reorderTimer, 10000);
       Page.on_settings.then((function(_this) {
         return function() {
@@ -4422,7 +4428,7 @@
           },
           settings: {}
         }, {
-          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwBa",
+          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB",
           demo: true,
           content: {
             title: "More @ ZeroSites",
@@ -4446,6 +4452,9 @@
       results = [];
       for (i = 0, len = demo_site_rows.length; i < len; i++) {
         site_row = demo_site_rows[i];
+        if (this.filtering && site.row.content.title.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
+          continue;
+        }
         if (!this.sites_byaddress[site_row.address]) {
           results.push(this.inactive_demo_sites.push(new Site(site_row)));
         } else {
@@ -4483,8 +4492,20 @@
       return back;
     };
 
+    SiteList.prototype.handleFilterInput = function(e) {
+      return this.filtering = e.target.value;
+    };
+
+    SiteList.prototype.handleFilterKeyup = function(e) {
+      if (e.keyCode === 27) {
+        e.target.value = "";
+        this.handleFilterInput(e);
+      }
+      return false;
+    };
+
     SiteList.prototype.render = function() {
-      var i, len, ref, ref1, site;
+      var filter_base, i, len, ref, ref1, site;
       if (!this.loaded) {
         return h("div#SiteList");
       }
@@ -4496,6 +4517,12 @@
       ref = this.sites;
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
+        if (this.filtering) {
+          filter_base = site.row.content.title + site.row.content.merged_type;
+          if (filter_base.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
+            continue;
+          }
+        }
         if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
           this.sites_needaction.push(site);
         } else if (site.favorite) {
@@ -4509,13 +4536,18 @@
         }
       }
       return h("div#SiteList", [
-        this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+        this.sites.length > 20 ? h("input.site-filter", {
+          placeholder: "Filter: Site name",
+          spellcheck: false,
+          oninput: this.handleFilterInput,
+          onkeyup: this.handleFilterKeyup
+        }) : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
         })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
           return item.render();
-        })), h("h2.connected", "Connected sites:"), h("div.SiteList.connected", this.sites_connected.map(function(item) {
+        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", this.sites_connected.map(function(item) {
           return item.render();
         })), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
           h("h2.more", {
@@ -4543,6 +4575,7 @@
   window.SiteList = SiteList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Trigger.coffee ---- */
