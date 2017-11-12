@@ -26,6 +26,12 @@ position: absolute;
 width: 100%;
 z-index: 10;
 }
+.left .site-filter {
+margin-left: 4px;
+position: relative;
+z-index: 999;
+width: 83%;
+}
 .left #SiteList {
 overflow-x: hidden;
 height: auto;
