@@ -32,7 +32,7 @@ padding-left: 19px;
 .left .site-filter {
 margin-left: 4px;
 position: relative;
-z-index: 999;
+z-index: inherit;
 width: 83%;
 }
 .left #SiteList {
