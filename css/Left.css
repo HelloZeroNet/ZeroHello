@@ -22,7 +22,7 @@
 .left #Head .modes .mode.active { font-size: 90%; border-bottom: 1px solid #83EFFF; color: #83EFFF; opacity: 1 }
 
 .left .site-filter {
-	margin-top: 30px; margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b;
+	margin-top: 40px; margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b;
 	padding: 13px; box-sizing: border-box; color: white; transition: all 0.3s; font-family: Roboto; font-size: 16px;
 }
 .left .site-filter:focus { border-color: #6c7884; outline: none }
