@@ -132,7 +132,7 @@ class SiteList extends Class
 
 		h("div#SiteList", [
 			if @sites.length > 20
-				h("input.site-filter", {placeholder: "Filter: Site name", spellcheck: false, oninput: @handleFilterInput, onkeyup: @handleFilterKeyup})
+				h("input.site-filter", {placeholder: "Filter: Site name", spellcheck: false, oninput: @handleFilterInput, onkeyup: @handleFilterKeyup, value: @filtering})
 			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
 			h("div.SiteList.needaction", @sites_needaction.map (item) ->
 				item.render()

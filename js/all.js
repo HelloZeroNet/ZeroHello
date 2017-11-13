@@ -4540,7 +4540,8 @@
           placeholder: "Filter: Site name",
           spellcheck: false,
           oninput: this.handleFilterInput,
-          onkeyup: this.handleFilterKeyup
+          onkeyup: this.handleFilterKeyup,
+          value: this.filtering
         }) : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
