@@ -748,9 +748,7 @@ z-index: 10;
 padding-left: 19px;
 }
 .left .site-filter {
-margin-left: 4px;
-position: relative;
-z-index: 999;
+margin-left: 6px;
 width: 83%;
 }
 .left #SiteList {
@@ -833,7 +831,7 @@ display: none;
 #PageSites .left #Head .modes {
 padding-left: 29px;
 background-color: #2a333c;
--webkit-box-shadow: 0px 0px 0px 31px #2a333c; -moz-box-shadow: 0px 0px 0px 31px #2a333c; -o-box-shadow: 0px 0px 0px 31px #2a333c; -ms-box-shadow: 0px 0px 0px 31px #2a333c; box-shadow: 0px 0px 0px 31px #2a333c ;
+-webkit-box-shadow: 0px -8px 0px 22px #2a333c; -moz-box-shadow: 0px -8px 0px 22px #2a333c; -o-box-shadow: 0px -8px 0px 22px #2a333c; -ms-box-shadow: 0px -8px 0px 22px #2a333c; box-shadow: 0px -8px 0px 22px #2a333c ;
 }
 .SiteList .site .message {
 z-index: inherit;
