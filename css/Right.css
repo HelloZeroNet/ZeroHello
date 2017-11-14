@@ -32,7 +32,7 @@
 .FeedContainer.faded { opacity: 0.2 }
 
 .feeds-filters { margin-top: -25px; margin-left: 25px }
-.feeds-filter { padding: 5px 15px; color: #5d5d5d; text-transform: uppercase; font-size: 13px; text-decoration: none; margin-right: 5px; opacity: 0.6; transition: all 0.3s; border-bottom: 2px solid rgba(0,0,0,0) }
+.feeds-filter { padding: 5px 15px; color: #5d5d5d; text-transform: uppercase; font-size: 13px; text-decoration: none; margin-right: 5px; opacity: 0.6; transition: all 0.3s; border-bottom: 2px solid rgba(0,0,0,0); display: inline-block }
 .feeds-filter.active { opacity: 1; border-bottom: 2px solid #ae4dff }
 .feeds-filter:hover { transition: none; opacity: 1 }
 
