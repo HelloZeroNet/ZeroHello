@@ -193,7 +193,7 @@ display: none;
 }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 500px) {
 #Dashboard {
 width: 98%;right: 0px;
 }
