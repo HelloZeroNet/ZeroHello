@@ -463,8 +463,8 @@
 .FeedContainer a:active { background-color: rgba(0,0,0,0.05); outline: 2px solid rgba(0,0,0,0.05) }
 .FeedContainer.faded { opacity: 0.2 }
 
-.feeds-filters { margin-top: -25px; margin-left: 25px }
-.feeds-filter { padding: 5px 15px; color: #5d5d5d; text-transform: uppercase; font-size: 13px; text-decoration: none; margin-right: 5px; opacity: 0.6; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; border-bottom: 2px solid rgba(0,0,0,0) }
+.feeds-filters { margin-top: -25px; margin-left: 25px; max-width: 100% }
+.feeds-filter { padding: 5px 15px; color: #5d5d5d; text-transform: uppercase; font-size: 13px; text-decoration: none; margin-right: 5px; opacity: 0.6; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; border-bottom: 2px solid rgba(0,0,0,0); display: inline-block }
 .feeds-filter.active { opacity: 1; border-bottom: 2px solid #ae4dff }
 .feeds-filter:hover { -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; opacity: 1 }
 
@@ -539,6 +539,7 @@
 @media only screen and (max-width: 1250px) {
 	.welcome .site { width: 49%; }
 }
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Selectbar.css ---- */
@@ -911,7 +912,7 @@ display: none;
 }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 500px) {
 #Dashboard {
 width: 98%;right: 0px;
 }
