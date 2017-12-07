@@ -107,41 +107,13 @@ class ZeroFrame {
     }
 
     monkeyPatchAjax() {
-        window.XMLHttpRequest = ZeroFakeXMLHttpRequest
-        ZeroFakeXMLHttpRequest.zero_frame = this
-    }
-}
-
-class ZeroFakeXMLHttpRequest {
-    open (method, path) {
-        this.path = path
-        this.zero_frame = ZeroFakeXMLHttpRequest.zero_frame
-    }
-
-    onResult (res) {
-        this.status = 200
-        this.statusText = "200 OK"
-        this.readyState = 4 // Done
-        this.responseType = "text"
-        this.responseText = this.response = res
-        if (this.onload) this.onload()
-        if (this.onreadystatechange) this.onreadystatechange()
-    }
-
-    setRequestHeader (key, val) {
-        return
-    }
-
-    getAllResponseHeaders () {
-        return ""
-    }
-
-    getAllResponseHeaders (name) {
-        return null
-    }
-
-    send () {
-        this.zero_frame.cmd("fileGet", this.path, (res) => this.onResult(res))
-
+        var self = this
+        XMLHttpRequest.prototype.realOpen = XMLHttpRequest.prototype.open
+        this.cmd("wrapperGetAjaxKey", [], () => { this.ajax_key = ajax_key })
+        var newOpen = (method, url, async) => {
+            url += "?ajax_key=" + this.ajax_key
+            return XMLHttpRequest.prototype.realOpen.realOpen(method, url, async)
+        }
+        XMLHttpRequest.prototype.open = newOpen
     }
 }
