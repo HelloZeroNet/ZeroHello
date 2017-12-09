@@ -107,12 +107,12 @@ class ZeroFrame {
     }
 
     monkeyPatchAjax() {
-        var self = this
+        var page = this
         XMLHttpRequest.prototype.realOpen = XMLHttpRequest.prototype.open
-        this.cmd("wrapperGetAjaxKey", [], () => { this.ajax_key = ajax_key })
-        var newOpen = (method, url, async) => {
-            url += "?ajax_key=" + this.ajax_key
-            return XMLHttpRequest.prototype.realOpen.realOpen(method, url, async)
+        this.cmd("wrapperGetAjaxKey", [], (res) => { this.ajax_key = res })
+        var newOpen = function (method, url, async) {
+            url += "?ajax_key=" + page.ajax_key
+            return this.realOpen(method, url, async)
         }
         XMLHttpRequest.prototype.open = newOpen
     }
