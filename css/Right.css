@@ -41,7 +41,14 @@
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
 .search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
-.search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; }
+
+.search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; text-decoration: none }
+.search-info-stats { padding-left: 30px; padding-top: 10px; }
+.search-info-stats td, .search-info-stats th { padding: 5px 11px; font-family: monospace; font-size: 12px; border-bottom: 1px solid #EEE; text-align: left }
+.search-info-stats .taken { text-align: right }
+.search-info-stats .extra-slow .taken { background-color: #FFE9E2 }
+.search-info-stats .slow .taken { color: #FF5722 }
+
 .feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px }
 /*.loader { background: url("../img/loading-ring.gif") no-repeat; width: 28px; height: 28px; position: absolute; right: -30px; top: -30px }*/
 .FeedList { margin-top: 50px; position: relative; max-width: 820px; overflow: hidden }

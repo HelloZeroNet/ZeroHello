@@ -4,7 +4,7 @@ class FeedList extends Class
 		@searching = null
 		@searching_text = null
 		@searched = null
-		@searched_info = null
+		@res = null
 		@loading = false
 		@filter = null
 		@feed_types = {}
@@ -13,6 +13,7 @@ class FeedList extends Class
 		@limit = 30
 		@query_limit = 20
 		@query_day_limit = 3
+		@show_stats = false
 		Page.on_settings.then =>
 			@need_update = true
 			document.body.onscroll = =>
@@ -76,7 +77,13 @@ class FeedList extends Class
 			params = [@query_limit, @query_day_limit]
 		@logStart "Updating feed"
 		@updating = true
-		Page.cmd "feedQuery", params, (rows) =>
+		Page.cmd "feedQuery", params, (res) =>
+			if res.rows
+				rows = res.rows
+			else
+				rows = res
+			@res = res
+
 			if rows.length < 10 and @day_limit != null
 				# Query without day limit if too few result
 				@limit = 20
@@ -101,7 +108,7 @@ class FeedList extends Class
 			@loading = false
 			@displayRows(res["rows"], search)
 			delete res["rows"]
-			@searched_info = res
+			@res = res
 			@searched = search
 			if cb then cb()
 
@@ -158,6 +165,10 @@ class FeedList extends Class
 		@filter = e.target.getAttribute("href").replace("#", "")
 		if @filter == "all"
 			@filter = null
+		return false
+
+	handleSearchInfoClick: (e) =>
+		@show_stats = not @show_stats
 		return false
 
 	formatTitle: (title) ->
@@ -297,6 +308,19 @@ class FeedList extends Class
 			])
 		])
 
+	renderSearchStat: (stat) =>
+		if stat.taken == 0
+			return null
+
+		total_taken = @res.taken
+		site = Page.site_list.item_list.items_bykey[stat.site]
+
+		h("tr", {key: stat.site + "_" + stat.feed_name, classes: {"slow": stat.taken > total_taken * 0.1, "extra-slow": stat.taken > total_taken * 0.3}}, [
+			h("td.site", h("a.site", {href: site.getHref()}, [site.row.content.title])),
+			h("td.feed_name", stat.feed_name),
+			h("td.taken", (if stat.taken? then stat.taken + "s" else "n/a "))
+		])
+
 	getClass: =>
 		if @searching != null
 			return "search"
@@ -330,11 +354,18 @@ class FeedList extends Class
 						if @loading
 							h("div.loader", {enterAnimation: Animation.show, exitAnimation: Animation.hide}, h("div.arc"))
 						h("input", {type: "text", placeholder: "Search in connected sites", value: @searching, onkeyup: @handleSearchKeyup, oninput: @handleSearchInput, afterCreate: @storeNodeSearch}),
-						if @searched and @searched_info and not @loading
-							h("div.search-info",
-								{enterAnimation: Animation.show, exitAnimation: Animation.hide},
-								"#{@searched_info.num} results from #{@searched_info.sites} sites in #{@searched_info.taken.toFixed(2)}s"
+						if @res?.stats and not @loading
+							h("a.search-info.nolink",
+								{href: "#ShowStats", enterAnimation: Animation.show, exitAnimation: Animation.hide, onclick: @handleSearchInfoClick},
+								(if @searching then "#{@res.num} results " else "") + "from #{@res.sites} sites in #{@res.taken.toFixed(2)}s"
 							)
+						if @show_stats
+							h("div.search-info-stats", {enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [
+								h("table", [
+									h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")),
+									@res.stats.map @renderSearchStat
+								])
+							])
 						if Page.server_info.rev < 1230 and @searching
 							h("div.search-noresult", {enterAnimation: Animation.show}, ["You need to ", h("a", {href: "#Update", onclick: Page.head.handleUpdateZeronetClick}, "update"), " your ZeroNet client to use the search feature!"])
 						else if @feeds.length == 0 and @searched
