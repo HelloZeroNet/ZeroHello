@@ -899,8 +899,25 @@
  * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
  * https://github.com/chjj/marked
  */
-(function(){var block={newline:/^\n+/,code:/^( {4}[^\n]+\n*)+/,fences:noop,hr:/^( *[-*_]){3,} *(?:\n+|$)/,heading:/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,nptable:noop,lheading:/^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,blockquote:/^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,list:/^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,html:/^ *(?:comment|closed|closing) *(?:\n{2,}|\s*$)/,def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,table:noop,paragraph:/^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,text:/^[^\n]+/};block.bullet=/(?:[*+-]|\d+\.)/;block.item=/^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;block.item=replace(block.item,"gm")(/bull/g,block.bullet)();block.list=replace(block.list)(/bull/g,block.bullet)("hr","\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))")("def","\\n+(?="+block.def.source+")")();block.blockquote=replace(block.blockquote)("def",block.def)();block._tag="(?!(?:"+"a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"+"|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"+"|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b";block.html=replace(block.html)("comment",/<!--[\s\S]*?-->/)("closed",/<(tag)[\s\S]+?<\/\1>/)("closing",/<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)(/tag/g,block._tag)();block.paragraph=replace(block.paragraph)("hr",block.hr)("heading",block.heading)("lheading",block.lheading)("blockquote",block.blockquote)("tag","<"+block._tag)("def",block.def)();block.normal=merge({},block);block.gfm=merge({},block.normal,{fences:/^ *(`{3,}|~{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n+|$)/,paragraph:/^/});block.gfm.paragraph=replace(block.paragraph)("(?!","(?!"+block.gfm.fences.source.replace("\\1","\\2")+"|"+block.list.source.replace("\\1","\\3")+"|")();block.tables=merge({},block.gfm,{nptable:/^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,table:/^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/});function Lexer(options){this.tokens=[];this.tokens.links={};this.options=options||marked.defaults;this.rules=block.normal;if(this.options.gfm){if(this.options.tables){this.rules=block.tables}else{this.rules=block.gfm}}}Lexer.rules=block;Lexer.lex=function(src,options){var lexer=new Lexer(options);return lexer.lex(src)};Lexer.prototype.lex=function(src){src=src.replace(/\r\n|\r/g,"\n").replace(/\t/g,"    ").replace(/\u00a0/g," ").replace(/\u2424/g,"\n");return this.token(src,true)};Lexer.prototype.token=function(src,top,bq){var src=src.replace(/^ +$/gm,""),next,loose,cap,bull,b,item,space,i,l;while(src){if(cap=this.rules.newline.exec(src)){src=src.substring(cap[0].length);if(cap[0].length>1){this.tokens.push({type:"space"})}}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);cap=cap[0].replace(/^ {4}/gm,"");this.tokens.push({type:"code",text:!this.options.pedantic?cap.replace(/\n+$/,""):cap});continue}if(cap=this.rules.fences.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"code",lang:cap[2],text:cap[3]});continue}if(cap=this.rules.heading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[1].length,text:cap[2]});continue}if(top&&(cap=this.rules.nptable.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].split(/ *\| */)}this.tokens.push(item);continue}if(cap=this.rules.lheading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[2]==="="?1:2,text:cap[1]});continue}if(cap=this.rules.hr.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"hr"});continue}if(cap=this.rules.blockquote.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"blockquote_start"});cap=cap[0].replace(/^ *> ?/gm,"");this.token(cap,top,true);this.tokens.push({type:"blockquote_end"});continue}if(cap=this.rules.list.exec(src)){src=src.substring(cap[0].length);bull=cap[2];this.tokens.push({type:"list_start",ordered:bull.length>1});cap=cap[0].match(this.rules.item);next=false;l=cap.length;i=0;for(;i<l;i++){item=cap[i];space=item.length;item=item.replace(/^ *([*+-]|\d+\.) +/,"");if(~item.indexOf("\n ")){space-=item.length;item=!this.options.pedantic?item.replace(new RegExp("^ {1,"+space+"}","gm"),""):item.replace(/^ {1,4}/gm,"")}if(this.options.smartLists&&i!==l-1){b=block.bullet.exec(cap[i+1])[0];if(bull!==b&&!(bull.length>1&&b.length>1)){src=cap.slice(i+1).join("\n")+src;i=l-1}}loose=next||/\n\n(?!\s*$)/.test(item);if(i!==l-1){next=item.charAt(item.length-1)==="\n";if(!loose)loose=next}this.tokens.push({type:loose?"loose_item_start":"list_item_start"});this.token(item,false,bq);this.tokens.push({type:"list_item_end"})}this.tokens.push({type:"list_end"});continue}if(cap=this.rules.html.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:this.options.sanitize?"paragraph":"html",pre:cap[1]==="pre"||cap[1]==="script"||cap[1]==="style",text:cap[0]});continue}if(!bq&&top&&(cap=this.rules.def.exec(src))){src=src.substring(cap[0].length);this.tokens.links[cap[1].toLowerCase()]={href:cap[2],title:cap[3]};continue}if(top&&(cap=this.rules.table.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/(?: *\| *)?\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].replace(/^ *\| *| *\| *$/g,"").split(/ *\| */)}this.tokens.push(item);continue}if(top&&(cap=this.rules.paragraph.exec(src))){src=src.substring(cap[0].length);this.tokens.push({type:"paragraph",text:cap[1].charAt(cap[1].length-1)==="\n"?cap[1].slice(0,-1):cap[1]});continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"text",text:cap[0]});continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return this.tokens};var inline={escape:/^\\([\\`*{}\[\]()#+\-.!_>])/,autolink:/^<([^ >]+(@|:\/)[^ >]+)>/,url:noop,tag:/^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,link:/^!?\[(inside)\]\(href\)/,reflink:/^!?\[(inside)\]\s*\[([^\]]*)\]/,nolink:/^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,strong:/^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,em:/^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,code:/^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,br:/^ {2,}\n(?!\s*$)/,del:noop,text:/^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/};inline._inside=/(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;inline._href=/\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;inline.link=replace(inline.link)("inside",inline._inside)("href",inline._href)();inline.reflink=replace(inline.reflink)("inside",inline._inside)();inline.normal=merge({},inline);inline.pedantic=merge({},inline.normal,{strong:/^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,em:/^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/});inline.gfm=merge({},inline.normal,{escape:replace(inline.escape)("])","~|])")(),url:/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,del:/^~~(?=\S)([\s\S]*?\S)~~/,text:replace(inline.text)("]|","~]|")("|","|https?://|")()});inline.breaks=merge({},inline.gfm,{br:replace(inline.br)("{2,}","*")(),text:replace(inline.gfm.text)("{2,}","*")()});function InlineLexer(links,options){this.options=options||marked.defaults;this.links=links;this.rules=inline.normal;this.renderer=this.options.renderer||new Renderer;this.renderer.options=this.options;if(!this.links){throw new Error("Tokens array requires a `links` property.")}if(this.options.gfm){if(this.options.breaks){this.rules=inline.breaks}else{this.rules=inline.gfm}}else if(this.options.pedantic){this.rules=inline.pedantic}}InlineLexer.rules=inline;InlineLexer.output=function(src,links,options){var inline=new InlineLexer(links,options);return inline.output(src)};InlineLexer.prototype.output=function(src){var out="",link,text,href,cap;while(src){if(cap=this.rules.escape.exec(src)){src=src.substring(cap[0].length);out+=cap[1];continue}if(cap=this.rules.autolink.exec(src)){src=src.substring(cap[0].length);if(cap[2]==="@"){text=cap[1].charAt(6)===":"?this.mangle(cap[1].substring(7)):this.mangle(cap[1]);href=this.mangle("mailto:")+text}else{text=escape(cap[1]);href=text}out+=this.renderer.link(href,null,text);continue}if(!this.inLink&&(cap=this.rules.url.exec(src))){src=src.substring(cap[0].length);text=escape(cap[1]);href=text;out+=this.renderer.link(href,null,text);continue}if(cap=this.rules.tag.exec(src)){if(!this.inLink&&/^<a /i.test(cap[0])){this.inLink=true}else if(this.inLink&&/^<\/a>/i.test(cap[0])){this.inLink=false}src=src.substring(cap[0].length);out+=this.options.sanitize?escape(cap[0]):cap[0];continue}if(cap=this.rules.link.exec(src)){src=src.substring(cap[0].length);this.inLink=true;out+=this.outputLink(cap,{href:cap[2],title:cap[3]});this.inLink=false;continue}if((cap=this.rules.reflink.exec(src))||(cap=this.rules.nolink.exec(src))){src=src.substring(cap[0].length);link=(cap[2]||cap[1]).replace(/\s+/g," ");link=this.links[link.toLowerCase()];if(!link||!link.href){out+=cap[0].charAt(0);src=cap[0].substring(1)+src;continue}this.inLink=true;out+=this.outputLink(cap,link);this.inLink=false;continue}if(cap=this.rules.strong.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.strong(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.em.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.em(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.codespan(escape(cap[2],true));continue}if(cap=this.rules.br.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.br();continue}if(cap=this.rules.del.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.del(this.output(cap[1]));continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);out+=escape(this.smartypants(cap[0]));continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return out};InlineLexer.prototype.outputLink=function(cap,link){var href=escape(link.href),title=link.title?escape(link.title):null;return cap[0].charAt(0)!=="!"?this.renderer.link(href,title,this.output(cap[1])):this.renderer.image(href,title,escape(cap[1]))};InlineLexer.prototype.smartypants=function(text){if(!this.options.smartypants)return text;return text.replace(/--/g,"—").replace(/(^|[-\u2014/(\[{"\s])'/g,"$1‘").replace(/'/g,"’").replace(/(^|[-\u2014/(\[{\u2018\s])"/g,"$1“").replace(/"/g,"”").replace(/\.{3}/g,"…")};InlineLexer.prototype.mangle=function(text){var out="",l=text.length,i=0,ch;for(;i<l;i++){ch=text.charCodeAt(i);if(Math.random()>.5){ch="x"+ch.toString(16)}out+="&#"+ch+";"}return out};function Renderer(options){this.options=options||{}}Renderer.prototype.code=function(code,lang,escaped){if(this.options.highlight){var out=this.options.highlight(code,lang);if(out!=null&&out!==code){escaped=true;code=out}}if(!lang){return"<pre><code>"+(escaped?code:escape(code,true))+"\n</code></pre>"}return'<pre><code class="'+this.options.langPrefix+escape(lang,true)+'">'+(escaped?code:escape(code,true))+"\n</code></pre>\n"};Renderer.prototype.blockquote=function(quote){return"<blockquote>\n"+quote+"</blockquote>\n"};Renderer.prototype.html=function(html){return html};Renderer.prototype.heading=function(text,level,raw){return"<h"+level+' id="'+this.options.headerPrefix+raw.toLowerCase().replace(/[^\w]+/g,"-")+'">'+text+"</h"+level+">\n"};Renderer.prototype.hr=function(){return this.options.xhtml?"<hr/>\n":"<hr>\n"};Renderer.prototype.list=function(body,ordered){var type=ordered?"ol":"ul";return"<"+type+">\n"+body+"</"+type+">\n"};Renderer.prototype.listitem=function(text){return"<li>"+text+"</li>\n"};Renderer.prototype.paragraph=function(text){return"<p>"+text+"</p>\n"};Renderer.prototype.table=function(header,body){return"<table>\n"+"<thead>\n"+header+"</thead>\n"+"<tbody>\n"+body+"</tbody>\n"+"</table>\n"};Renderer.prototype.tablerow=function(content){return"<tr>\n"+content+"</tr>\n"};Renderer.prototype.tablecell=function(content,flags){var type=flags.header?"th":"td";var tag=flags.align?"<"+type+' style="text-align:'+flags.align+'">':"<"+type+">";return tag+content+"</"+type+">\n"};Renderer.prototype.strong=function(text){return"<strong>"+text+"</strong>"};Renderer.prototype.em=function(text){return"<em>"+text+"</em>"};Renderer.prototype.codespan=function(text){return"<code>"+text+"</code>"};Renderer.prototype.br=function(){return this.options.xhtml?"<br/>":"<br>"};Renderer.prototype.del=function(text){return"<del>"+text+"</del>"};Renderer.prototype.link=function(href,title,text){if(this.options.sanitize){try{var prot=decodeURIComponent(unescape(href)).replace(/[^\w:]/g,"").toLowerCase()}catch(e){return""}if(prot.indexOf("javascript:")===0){return""}}var out='<a href="'+href+'"';if(title){out+=' title="'+title+'"'}out+=">"+text+"</a>";return out};Renderer.prototype.image=function(href,title,text){var out='<img src="'+href+'" alt="'+text+'"';if(title){out+=' title="'+title+'"'}out+=this.options.xhtml?"/>":">";return out};function Parser(options){this.tokens=[];this.token=null;this.options=options||marked.defaults;this.options.renderer=this.options.renderer||new Renderer;this.renderer=this.options.renderer;this.renderer.options=this.options}Parser.parse=function(src,options,renderer){var parser=new Parser(options,renderer);return parser.parse(src)};Parser.prototype.parse=function(src){this.inline=new InlineLexer(src.links,this.options,this.renderer);this.tokens=src.reverse();var out="";while(this.next()){out+=this.tok()}return out};Parser.prototype.next=function(){return this.token=this.tokens.pop()};Parser.prototype.peek=function(){return this.tokens[this.tokens.length-1]||0};Parser.prototype.parseText=function(){var body=this.token.text;while(this.peek().type==="text"){body+="\n"+this.next().text}return this.inline.output(body)};Parser.prototype.tok=function(){switch(this.token.type){case"space":{return""}case"hr":{return this.renderer.hr()}case"heading":{return this.renderer.heading(this.inline.output(this.token.text),this.token.depth,this.token.text)}case"code":{return this.renderer.code(this.token.text,this.token.lang,this.token.escaped)}case"table":{var header="",body="",i,row,cell,flags,j;cell="";for(i=0;i<this.token.header.length;i++){flags={header:true,align:this.token.align[i]};cell+=this.renderer.tablecell(this.inline.output(this.token.header[i]),{header:true,align:this.token.align[i]})}header+=this.renderer.tablerow(cell);for(i=0;i<this.token.cells.length;i++){row=this.token.cells[i];cell="";for(j=0;j<row.length;j++){cell+=this.renderer.tablecell(this.inline.output(row[j]),{header:false,align:this.token.align[j]})}body+=this.renderer.tablerow(cell)}return this.renderer.table(header,body)}case"blockquote_start":{var body="";while(this.next().type!=="blockquote_end"){body+=this.tok()}return this.renderer.blockquote(body)}case"list_start":{var body="",ordered=this.token.ordered;while(this.next().type!=="list_end"){body+=this.tok()}return this.renderer.list(body,ordered)}case"list_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.token.type==="text"?this.parseText():this.tok()}return this.renderer.listitem(body)}case"loose_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.tok()}return this.renderer.listitem(body)}case"html":{var html=!this.token.pre&&!this.options.pedantic?this.inline.output(this.token.text):this.token.text;return this.renderer.html(html)}case"paragraph":{return this.renderer.paragraph(this.inline.output(this.token.text))}case"text":{return this.renderer.paragraph(this.parseText())}}};function escape(html,encode){return html.replace(!encode?/&(?!#?\w+;)/g:/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function unescape(html){return html.replace(/&([#\w]+);/g,function(_,n){n=n.toLowerCase();if(n==="colon")return":";if(n.charAt(0)==="#"){return n.charAt(1)==="x"?String.fromCharCode(parseInt(n.substring(2),16)):String.fromCharCode(+n.substring(1))}return""})}function replace(regex,opt){regex=regex.source;opt=opt||"";return function self(name,val){if(!name)return new RegExp(regex,opt);val=val.source||val;val=val.replace(/(^|[^\[])\^/g,"$1");regex=regex.replace(name,val);return self}}function noop(){}noop.exec=noop;function merge(obj){var i=1,target,key;for(;i<arguments.length;i++){target=arguments[i];for(key in target){if(Object.prototype.hasOwnProperty.call(target,key)){obj[key]=target[key]}}}return obj}function marked(src,opt,callback){if(callback||typeof opt==="function"){if(!callback){callback=opt;opt=null}opt=merge({},marked.defaults,opt||{});var highlight=opt.highlight,tokens,pending,i=0;try{tokens=Lexer.lex(src,opt)}catch(e){return callback(e)}pending=tokens.length;var done=function(err){if(err){opt.highlight=highlight;return callback(err)}var out;try{out=Parser.parse(tokens,opt)}catch(e){err=e}opt.highlight=highlight;return err?callback(err):callback(null,out)};if(!highlight||highlight.length<3){return done()}delete opt.highlight;if(!pending)return done();for(;i<tokens.length;i++){(function(token){if(token.type!=="code"){return--pending||done()}return highlight(token.text,token.lang,function(err,code){if(err)return done(err);if(code==null||code===token.text){return--pending||done()}token.text=code;token.escaped=true;--pending||done()})})(tokens[i])}return}try{if(opt)opt=merge({},marked.defaults,opt);return Parser.parse(Lexer.lex(src,opt),opt)}catch(e){e.message+="\nPlease report this to https://github.com/chjj/marked.";if((opt||marked.defaults).silent){return"<p>An error occured:</p><pre>"+escape(e.message+"",true)+"</pre>"}throw e}}marked.options=marked.setOptions=function(opt){merge(marked.defaults,opt);return marked};marked.defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartLists:false,silent:false,highlight:null,langPrefix:"lang-",smartypants:false,headerPrefix:"",renderer:new Renderer,xhtml:false};marked.Parser=Parser;marked.parser=Parser.parse;marked.Renderer=Renderer;marked.Lexer=Lexer;marked.lexer=Lexer.lex;marked.InlineLexer=InlineLexer;marked.inlineLexer=InlineLexer.output;marked.parse=marked;if(typeof module!=="undefined"&&typeof exports==="object"){module.exports=marked}else if(typeof define==="function"&&define.amd){define(function(){return marked})}else{this.marked=marked}}).call(function(){return this||(typeof window!=="undefined"?window:global)}());
-
+(function(){var block={newline:/^\n+/,code:/^( {4}[^\n]+\n*)+/,fences:noop,hr:/^( *[-*_]){3,} *(?:\n+|$)/,heading:/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,nptable:noop,lheading:/^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,blockquote:/^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,list:/^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,html:/^ *(?:comment|closed|closing) *(?:\n{2,}|\s*$)/,def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,table:noop,paragraph:/^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,text:/^[^\n]+/};block.bullet=/(?:[*+-]|\d+\.)/;block.item=/^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;block.item=replace(block.item,"gm")(/bull/g,block.bullet)();block.list=replace(block.list)(/bull/g,block.bullet)("hr","\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))")("def","\\n+(?="+block.def.source+")")();block.blockquote=replace(block.blockquote)("def",block.def)();block._tag="(?!(?:"+"a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"+"
+|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"+"|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b";block.html=replace(block.html)("comment",/<!--[\s\S]*?-->/)("closed",/<(tag)[\s\S]+?<\/\1>/)("closing",/<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)(/tag/g,block._tag)();block.paragraph=replace(block.paragraph)("hr",block.hr)("heading",block.heading)("lheading",block.lheading)("blockquote",block.blockquote)("tag","<"+block._tag)("def",block.def)();block.normal=merge({},block);block.gfm=merge({},block.normal,{fences:/^ *(`{3,}|~{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n+|$)/,paragraph:/^/});block.gfm.paragraph=replace(block.paragraph)("(?!","(?!"+block.gfm.fences.source.replace("\\1","\\2")+"|"+block.list.source.replace("\\1","\\3")+"|")();block.tables=merge({},block.gfm,{nptable:/^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,table:/^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/});function Lexer(options){this.tokens=[];this.tokens.links={};this.options=options||marked.defaults;this.
+rules=block.normal;if(this.options.gfm){if(this.options.tables){this.rules=block.tables}else{this.rules=block.gfm}}}Lexer.rules=block;Lexer.lex=function(src,options){var lexer=new Lexer(options);return lexer.lex(src)};Lexer.prototype.lex=function(src){src=src.replace(/\r\n|\r/g,"\n").replace(/\t/g,"    ").replace(/\u00a0/g," ").replace(/\u2424/g,"\n");return this.token(src,true)};Lexer.prototype.token=function(src,top,bq){var src=src.replace(/^ +$/gm,""),next,loose,cap,bull,b,item,space,i,l;while(src){if(cap=this.rules.newline.exec(src)){src=src.substring(cap[0].length);if(cap[0].length>1){this.tokens.push({type:"space"})}}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);cap=cap[0].replace(/^ {4}/gm,"");this.tokens.push({type:"code",text:!this.options.pedantic?cap.replace(/\n+$/,""):cap});continue}if(cap=this.rules.fences.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"code",lang:cap[2],text:cap[3]});continue}if(cap=this.rules.heading.exec(src)){src=src.substring(cap[0].
+length);this.tokens.push({type:"heading",depth:cap[1].length,text:cap[2]});continue}if(top&&(cap=this.rules.nptable.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].split(/ *\| */)}this.tokens.push(item);continue}if(cap=this.rules.lheading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[2]==="="?1:2,text:cap[1]});continue}if(cap=this.rules.hr.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"hr"});continue}if(cap=this.rules.blockquote.exec(src)){src=src.substring(cap[0].length);this.
+tokens.push({type:"blockquote_start"});cap=cap[0].replace(/^ *> ?/gm,"");this.token(cap,top,true);this.tokens.push({type:"blockquote_end"});continue}if(cap=this.rules.list.exec(src)){src=src.substring(cap[0].length);bull=cap[2];this.tokens.push({type:"list_start",ordered:bull.length>1});cap=cap[0].match(this.rules.item);next=false;l=cap.length;i=0;for(;i<l;i++){item=cap[i];space=item.length;item=item.replace(/^ *([*+-]|\d+\.) +/,"");if(~item.indexOf("\n ")){space-=item.length;item=!this.options.pedantic?item.replace(new RegExp("^ {1,"+space+"}","gm"),""):item.replace(/^ {1,4}/gm,"")}if(this.options.smartLists&&i!==l-1){b=block.bullet.exec(cap[i+1])[0];if(bull!==b&&!(bull.length>1&&b.length>1)){src=cap.slice(i+1).join("\n")+src;i=l-1}}loose=next||/\n\n(?!\s*$)/.test(item);if(i!==l-1){next=item.charAt(item.length-1)==="\n";if(!loose)loose=next}this.tokens.push({type:loose?"loose_item_start":"list_item_start"});this.token(item,false,bq);this.tokens.push({type:"list_item_end"})}this.tokens.push({type:"list_end"})
+;continue}if(cap=this.rules.html.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:this.options.sanitize?"paragraph":"html",pre:cap[1]==="pre"||cap[1]==="script"||cap[1]==="style",text:cap[0]});continue}if(!bq&&top&&(cap=this.rules.def.exec(src))){src=src.substring(cap[0].length);this.tokens.links[cap[1].toLowerCase()]={href:cap[2],title:cap[3]};continue}if(top&&(cap=this.rules.table.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/(?: *\| *)?\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].replace(/^ *\| *| *\| *$/g,"").split(/ *\| */)}this.tokens.push(item);continue}if(top&
+&(cap=this.rules.paragraph.exec(src))){src=src.substring(cap[0].length);this.tokens.push({type:"paragraph",text:cap[1].charAt(cap[1].length-1)==="\n"?cap[1].slice(0,-1):cap[1]});continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"text",text:cap[0]});continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return this.tokens};var inline={escape:/^\\([\\`*{}\[\]()#+\-.!_>])/,autolink:/^<([^ >]+(@|:\/)[^ >]+)>/,url:noop,tag:/^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,link:/^!?\[(inside)\]\(href\)/,reflink:/^!?\[(inside)\]\s*\[([^\]]*)\]/,nolink:/^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,strong:/^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,em:/^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,code:/^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,br:/^ {2,}\n(?!\s*$)/,del:noop,text:/^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/};inline._inside=/(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;inline._href=/\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;inline.
+link=replace(inline.link)("inside",inline._inside)("href",inline._href)();inline.reflink=replace(inline.reflink)("inside",inline._inside)();inline.normal=merge({},inline);inline.pedantic=merge({},inline.normal,{strong:/^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,em:/^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/});inline.gfm=merge({},inline.normal,{escape:replace(inline.escape)("])","~|])")(),url:/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,del:/^~~(?=\S)([\s\S]*?\S)~~/,text:replace(inline.text)("]|","~]|")("|","|https?://|")()});inline.breaks=merge({},inline.gfm,{br:replace(inline.br)("{2,}","*")(),text:replace(inline.gfm.text)("{2,}","*")()});function InlineLexer(links,options){this.options=options||marked.defaults;this.links=links;this.rules=inline.normal;this.renderer=this.options.renderer||new Renderer;this.renderer.options=this.options;if(!this.links){throw new Error("Tokens array requires a `links` property.")}if(this.options.gfm){if(this.options.breaks){this.rules=inline.
+breaks}else{this.rules=inline.gfm}}else if(this.options.pedantic){this.rules=inline.pedantic}}InlineLexer.rules=inline;InlineLexer.output=function(src,links,options){var inline=new InlineLexer(links,options);return inline.output(src)};InlineLexer.prototype.output=function(src){var out="",link,text,href,cap;while(src){if(cap=this.rules.escape.exec(src)){src=src.substring(cap[0].length);out+=cap[1];continue}if(cap=this.rules.autolink.exec(src)){src=src.substring(cap[0].length);if(cap[2]==="@"){text=cap[1].charAt(6)===":"?this.mangle(cap[1].substring(7)):this.mangle(cap[1]);href=this.mangle("mailto:")+text}else{text=escape(cap[1]);href=text}out+=this.renderer.link(href,null,text);continue}if(!this.inLink&&(cap=this.rules.url.exec(src))){src=src.substring(cap[0].length);text=escape(cap[1]);href=text;out+=this.renderer.link(href,null,text);continue}if(cap=this.rules.tag.exec(src)){if(!this.inLink&&/^<a /i.test(cap[0])){this.inLink=true}else if(this.inLink&&/^<\/a>/i.test(cap[0])){this.inLink=false}src=src.
+substring(cap[0].length);out+=this.options.sanitize?escape(cap[0]):cap[0];continue}if(cap=this.rules.link.exec(src)){src=src.substring(cap[0].length);this.inLink=true;out+=this.outputLink(cap,{href:cap[2],title:cap[3]});this.inLink=false;continue}if((cap=this.rules.reflink.exec(src))||(cap=this.rules.nolink.exec(src))){src=src.substring(cap[0].length);link=(cap[2]||cap[1]).replace(/\s+/g," ");link=this.links[link.toLowerCase()];if(!link||!link.href){out+=cap[0].charAt(0);src=cap[0].substring(1)+src;continue}this.inLink=true;out+=this.outputLink(cap,link);this.inLink=false;continue}if(cap=this.rules.strong.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.strong(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.em.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.em(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.codespan(escape(cap[2],true));continue}if(cap=this.rules.br.exec(src)){src=src.substring(
+cap[0].length);out+=this.renderer.br();continue}if(cap=this.rules.del.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.del(this.output(cap[1]));continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);out+=escape(this.smartypants(cap[0]));continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return out};InlineLexer.prototype.outputLink=function(cap,link){var href=escape(link.href),title=link.title?escape(link.title):null;return cap[0].charAt(0)!=="!"?this.renderer.link(href,title,this.output(cap[1])):this.renderer.image(href,title,escape(cap[1]))};InlineLexer.prototype.smartypants=function(text){if(!this.options.smartypants)return text;return text.replace(/--/g,"—").replace(/(^|[-\u2014/(\[{"\s])'/g,"$1‘").replace(/'/g,"’").replace(/(^|[-\u2014/(\[{\u2018\s])"/g,"$1“").replace(/"/g,"”").replace(/\.{3}/g,"…")};InlineLexer.prototype.mangle=function(text){var out="",l=text.length,i=0,ch;for(;i<l;i++){ch=text.charCodeAt(i);if(Math.random()>.5){ch="x"+ch.
+toString(16)}out+="&#"+ch+";"}return out};function Renderer(options){this.options=options||{}}Renderer.prototype.code=function(code,lang,escaped){if(this.options.highlight){var out=this.options.highlight(code,lang);if(out!=null&&out!==code){escaped=true;code=out}}if(!lang){return"<pre><code>"+(escaped?code:escape(code,true))+"\n</code></pre>"}return'<pre><code class="'+this.options.langPrefix+escape(lang,true)+'">'+(escaped?code:escape(code,true))+"\n</code></pre>\n"};Renderer.prototype.blockquote=function(quote){return"<blockquote>\n"+quote+"</blockquote>\n"};Renderer.prototype.html=function(html){return html};Renderer.prototype.heading=function(text,level,raw){return"<h"+level+' id="'+this.options.headerPrefix+raw.toLowerCase().replace(/[^\w]+/g,"-")+'">'+text+"</h"+level+">\n"};Renderer.prototype.hr=function(){return this.options.xhtml?"<hr/>\n":"<hr>\n"};Renderer.prototype.list=function(body,ordered){var type=ordered?"ol":"ul";return"<"+type+">\n"+body+"</"+type+">\n"};Renderer.prototype.
+listitem=function(text){return"<li>"+text+"</li>\n"};Renderer.prototype.paragraph=function(text){return"<p>"+text+"</p>\n"};Renderer.prototype.table=function(header,body){return"<table>\n"+"<thead>\n"+header+"</thead>\n"+"<tbody>\n"+body+"</tbody>\n"+"</table>\n"};Renderer.prototype.tablerow=function(content){return"<tr>\n"+content+"</tr>\n"};Renderer.prototype.tablecell=function(content,flags){var type=flags.header?"th":"td";var tag=flags.align?"<"+type+' style="text-align:'+flags.align+'">':"<"+type+">";return tag+content+"</"+type+">\n"};Renderer.prototype.strong=function(text){return"<strong>"+text+"</strong>"};Renderer.prototype.em=function(text){return"<em>"+text+"</em>"};Renderer.prototype.codespan=function(text){return"<code>"+text+"</code>"};Renderer.prototype.br=function(){return this.options.xhtml?"<br/>":"<br>"};Renderer.prototype.del=function(text){return"<del>"+text+"</del>"};Renderer.prototype.link=function(href,title,text){if(this.options.sanitize){try{var prot=decodeURIComponent(unescape(
+href)).replace(/[^\w:]/g,"").toLowerCase()}catch(e){return""}if(prot.indexOf("javascript:")===0){return""}}var out='<a href="'+href+'"';if(title){out+=' title="'+title+'"'}out+=">"+text+"</a>";return out};Renderer.prototype.image=function(href,title,text){var out='<img src="'+href+'" alt="'+text+'"';if(title){out+=' title="'+title+'"'}out+=this.options.xhtml?"/>":">";return out};function Parser(options){this.tokens=[];this.token=null;this.options=options||marked.defaults;this.options.renderer=this.options.renderer||new Renderer;this.renderer=this.options.renderer;this.renderer.options=this.options}Parser.parse=function(src,options,renderer){var parser=new Parser(options,renderer);return parser.parse(src)};Parser.prototype.parse=function(src){this.inline=new InlineLexer(src.links,this.options,this.renderer);this.tokens=src.reverse();var out="";while(this.next()){out+=this.tok()}return out};Parser.prototype.next=function(){return this.token=this.tokens.pop()};Parser.prototype.peek=function(){return this.tokens[
+this.tokens.length-1]||0};Parser.prototype.parseText=function(){var body=this.token.text;while(this.peek().type==="text"){body+="\n"+this.next().text}return this.inline.output(body)};Parser.prototype.tok=function(){switch(this.token.type){case"space":{return""}case"hr":{return this.renderer.hr()}case"heading":{return this.renderer.heading(this.inline.output(this.token.text),this.token.depth,this.token.text)}case"code":{return this.renderer.code(this.token.text,this.token.lang,this.token.escaped)}case"table":{var header="",body="",i,row,cell,flags,j;cell="";for(i=0;i<this.token.header.length;i++){flags={header:true,align:this.token.align[i]};cell+=this.renderer.tablecell(this.inline.output(this.token.header[i]),{header:true,align:this.token.align[i]})}header+=this.renderer.tablerow(cell);for(i=0;i<this.token.cells.length;i++){row=this.token.cells[i];cell="";for(j=0;j<row.length;j++){cell+=this.renderer.tablecell(this.inline.output(row[j]),{header:false,align:this.token.align[j]})}body+=this.renderer.tablerow(
+cell)}return this.renderer.table(header,body)}case"blockquote_start":{var body="";while(this.next().type!=="blockquote_end"){body+=this.tok()}return this.renderer.blockquote(body)}case"list_start":{var body="",ordered=this.token.ordered;while(this.next().type!=="list_end"){body+=this.tok()}return this.renderer.list(body,ordered)}case"list_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.token.type==="text"?this.parseText():this.tok()}return this.renderer.listitem(body)}case"loose_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.tok()}return this.renderer.listitem(body)}case"html":{var html=!this.token.pre&&!this.options.pedantic?this.inline.output(this.token.text):this.token.text;return this.renderer.html(html)}case"paragraph":{return this.renderer.paragraph(this.inline.output(this.token.text))}case"text":{return this.renderer.paragraph(this.parseText())}}};function escape(html,encode){return html.replace(!encode?/&(?!#?\w+;)/g:/&/g,"&amp;").replace(/
+</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function unescape(html){return html.replace(/&([#\w]+);/g,function(_,n){n=n.toLowerCase();if(n==="colon")return":";if(n.charAt(0)==="#"){return n.charAt(1)==="x"?String.fromCharCode(parseInt(n.substring(2),16)):String.fromCharCode(+n.substring(1))}return""})}function replace(regex,opt){regex=regex.source;opt=opt||"";return function self(name,val){if(!name)return new RegExp(regex,opt);val=val.source||val;val=val.replace(/(^|[^\[])\^/g,"$1");regex=regex.replace(name,val);return self}}function noop(){}noop.exec=noop;function merge(obj){var i=1,target,key;for(;i<arguments.length;i++){target=arguments[i];for(key in target){if(Object.prototype.hasOwnProperty.call(target,key)){obj[key]=target[key]}}}return obj}function marked(src,opt,callback){if(callback||typeof opt==="function"){if(!callback){callback=opt;opt=null}opt=merge({},marked.defaults,opt||{});var highlight=opt.highlight,tokens,pending,i=0;try{tokens=Lexer.lex(src,opt)}catch(e){
+return callback(e)}pending=tokens.length;var done=function(err){if(err){opt.highlight=highlight;return callback(err)}var out;try{out=Parser.parse(tokens,opt)}catch(e){err=e}opt.highlight=highlight;return err?callback(err):callback(null,out)};if(!highlight||highlight.length<3){return done()}delete opt.highlight;if(!pending)return done();for(;i<tokens.length;i++){(function(token){if(token.type!=="code"){return--pending||done()}return highlight(token.text,token.lang,function(err,code){if(err)return done(err);if(code==null||code===token.text){return--pending||done()}token.text=code;token.escaped=true;--pending||done()})})(tokens[i])}return}try{if(opt)opt=merge({},marked.defaults,opt);return Parser.parse(Lexer.lex(src,opt),opt)}catch(e){e.message+="\nPlease report this to https://github.com/chjj/marked.";if((opt||marked.defaults).silent){return"<p>An error occured:</p><pre>"+escape(e.message+"",true)+"</pre>"}throw e}}marked.options=marked.setOptions=function(opt){merge(marked.defaults,opt);return marked};marked.
+defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartLists:false,silent:false,highlight:null,langPrefix:"lang-",smartypants:false,headerPrefix:"",renderer:new Renderer,xhtml:false};marked.Parser=Parser;marked.parser=Parser.parse;marked.Renderer=Renderer;marked.Lexer=Lexer;marked.lexer=Lexer.lex;marked.InlineLexer=InlineLexer;marked.inlineLexer=InlineLexer.output;marked.parse=marked;if(typeof module!=="undefined"&&typeof exports==="object"){module.exports=marked}else if(typeof define==="function"&&define.amd){define(function(){return marked})}else{this.marked=marked}}).call(function(){return this||(typeof window!=="undefined"?window:global)}());
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Animation.coffee ---- */
 
@@ -2374,13 +2391,13 @@
       this.logStart("Updating feed");
       this.updating = true;
       return Page.cmd("feedQuery", params, (function(_this) {
-        return function(res) {
-          var rows;
-          if (res.rows) {
-            rows = res.rows;
-          } else {
-            rows = res;
-          }
+         return function(res) {
+           var rows;
+           if (res.rows) {
+             rows = res.rows;
+           } else {
+             rows = res;
+           }
           _this.res = res;
           if (rows.length < 10 && _this.day_limit !== null) {
             _this.limit = 20;
@@ -2510,6 +2527,26 @@
       } else {
         return title;
       }
+    };
+
+    FeedList.prototype.renderSearchStat = function(stat) {
+      var site, total_taken;
+      if (stat.taken === 0) {
+        return null;
+      }
+      total_taken = this.res.taken;
+      site = Page.site_list.item_list.items_bykey[stat.site];
+      return h("tr", {
+        key: stat.site + "_" + stat.feed_name,
+        classes: {
+          "slow": stat.taken > total_taken * 0.1,
+          "extra-slow": stat.taken > total_taken * 0.3
+        }
+      }, [
+        h("td.site", h("a.site", {
+          href: site.getHref()
+        }, [site.row.content.title])), h("td.feed_name", stat.feed_name), h("td.taken", (stat.taken != null ? stat.taken + "s" : "n/a "))
+      ]);
     };
 
     FeedList.prototype.formatBody = function(body, type) {
@@ -2653,26 +2690,6 @@
       ]);
     };
 
-    FeedList.prototype.renderSearchStat = function(stat) {
-      var site, total_taken;
-      if (stat.taken === 0) {
-        return null;
-      }
-      total_taken = this.res.taken;
-      site = Page.site_list.item_list.items_bykey[stat.site];
-      return h("tr", {
-        key: stat.site + "_" + stat.feed_name,
-        classes: {
-          "slow": stat.taken > total_taken * 0.1,
-          "extra-slow": stat.taken > total_taken * 0.3
-        }
-      }, [
-        h("td.site", h("a.site", {
-          href: site.getHref()
-        }, [site.row.content.title])), h("td.feed_name", stat.feed_name), h("td.taken", (stat.taken != null ? stat.taken + "s" : "n/a "))
-      ]);
-    };
-
     FeedList.prototype.getClass = function() {
       if (this.searching !== null) {
         return "search";
@@ -2778,7 +2795,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
@@ -3175,9 +3191,8 @@
       })(this));
       return this.bigfiles.files.update();
     };
-
     FileList.prototype.render = function() {
-      var site, sites, sites_connected, sites_favorited;
+      var site, sites, sites_connected, sites_favorited, sites_politics, sites_blogs, sites_services, sites_forums_boards, sites_chat, sites_video_images, sites_guides, sites_news, sites_porn, sites_other;
       if (Page.site_list.sites && !this.need_update && this.updating_files === 0 && document.body.className !== "loaded") {
         document.body.className = "loaded";
       }
@@ -3197,6 +3212,94 @@
         }
         return results;
       })();
+      sites_other = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Other') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_porn = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Porn') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_news = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='News') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_guides = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Guides') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_video_images = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Video, Images') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_chat = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Chat') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_forums_boards = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Forums, Boards') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_services = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];    
+          if (!site.favorite&&site.has_category&&site.category=='Services') { 
+            results.push(site);
+          }
+        }  
+        return results;
+      })();
       sites_favorited = (function() {
         var i, len, results;
         results = [];
@@ -3208,12 +3311,34 @@
         }
         return results;
       })();
+      sites_blogs = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Blogs') {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_politics = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite&&site.has_category&&site.category=='Politics') {
+            results.push(site);
+          }
+        }  
+        return results;
+      })();
       sites_connected = (function() {
         var i, len, results;
         results = [];
         for (i = 0, len = sites.length; i < len; i++) {
           site = sites[i];
-          if (!site.favorite) {
+          if (!site.favorite&&!site.has_category) {
             results.push(site);
           }
         }
@@ -3227,13 +3352,104 @@
           sites_favorited = [];
           sites_connected = [sites_connected[0]];
         }
+        if (sites_politics.length) {
+          sites_politics = [sites_politics[0]];
+        } else {    
+          sites_politics = [];
+        }
+        if (sites_blogs.length) {
+          sites_blogs = [sites_blogs[0]];
+        } else {
+          sites_blogs = [];
+        }
+        if (sites_other.length) {
+          sites_other = [sites_other[0]];
+        } else {
+          sites_other = [];
+        }
+        if (sites_porn.length) {
+          sites_porn = [sites_porn[0]];
+        } else {
+          sites_porn = [];
+        }
+        if (sites_news.length) {
+          sites_news = [sites_news[0]];
+        } else {
+          sites_news = [];
+        }
+        if (sites_guides.length) {
+          sites_guides = [sites_guides[0]];
+        } else {
+          sites_guides = [];
+        }
+        if (sites_services.length) {
+          sites_services = [sites_services[0]];
+        } else {
+          sites_services = [];
+        }
+        if (sites_forums_boards.length) {
+          sites_forums_boards = [sites_forums_boards[0]];
+        } else {
+          sites_forums_boards = [];
+        }
+        if (sites_chat.length) {
+          sites_chat = [sites_chat[0]];
+        } else {
+          sites_chat = [];
+        }
+        if (sites_video_images.length) {
+          sites_video_images = [sites_video_images[0]];
+        } else {
+          sites_video_images = [];
+        }
       }
       if (sites.length === 0) {
         document.body.className = "loaded";
         return h("div#FileList", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
       }
       return h("div#FileList", [
-        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_favorited.map((function(_this) {
+        
+        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_blogs.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_services.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_forums_boards.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_chat.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_video_images.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_guides.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_news.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_porn.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_other.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_politics.map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_favorited.map((function(_this) {
           return function(site) {
             return site.renderOptionalStats();
           };
@@ -3520,6 +3736,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */
 
 
@@ -3686,6 +3903,16 @@
       this.handleUpdateClick = bind(this.handleUpdateClick, this);
       this.handleUnfavoriteClick = bind(this.handleUnfavoriteClick, this);
       this.handleFavoriteClick = bind(this.handleFavoriteClick, this);
+      this.handlePoliticsClick = bind(this.handlePoliticsClick, this);
+      this.handleBlogsClick = bind(this.handleBlogsClick, this);
+      this.handleServicesClick = bind(this.handleServicesClick, this);
+      this.handleForumsBoardsClick = bind(this.handleForumsBoardsClick, this);
+      this.handleVideoImagesClick = bind(this.handleVideoImagesClick, this);
+      this.handleGuidesClick = bind(this.handleGuidesClick, this);
+      this.handleNewsClick = bind(this.handleNewsClick, this);
+      this.handlePornClick = bind(this.handlePornClick, this);
+      this.handleOtherClick = bind(this.handleOtherClick, this);
+      this.handleUnCategoryClick = bind(this.handleUnCategoryClick, this);
       this.deleted = false;
       this.show_errors = false;
       this.message_visible = false;
@@ -3694,6 +3921,41 @@
       this.message_collapsed = false;
       this.message_timer = null;
       this.favorite = Page.settings.favorite_sites[row.address];
+      if(Page.settings.services_sites[row.address])
+      {
+         this.has_category = true;
+         this.category = 'Services';
+      } else if (Page.settings.forums_boards_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Forums, Boards';
+      } else if(Page.settings.chat_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Chat';
+      } else if (Page.settings.video_images_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Video, Images';
+      } else if(Page.settings.guides_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Guides';
+      } else if (Page.settings.news_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'News';
+      } else if(Page.settings.porn_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Porn';
+      } else if (Page.settings.other_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Other';
+      } else if(Page.settings.politics_sites[row.address]) {
+         this.has_category = true;
+         this.category = 'Politics';
+      } else if (Page.settings.blogs_sites[row.address]) {
+	 this.has_category = true;
+         this.category = 'Blogs';
+      } else {   
+         this.has_category = false;
+         this.category = '';
+      }
       this.key = row.address;
       this.optional_helps = [];
       this.optional_helps_disabled = {};
@@ -3778,12 +4040,153 @@
       Page.saveSettings();
       Page.site_list.reorder();
       return false;
+    }
+
+    Site.prototype.handleServicesClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Services';
+      this.menu = new Menu();
+      Page.settings.services_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleForumsBoardsClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Forums, Boards';
+      this.menu = new Menu();
+      Page.settings.forums_boards_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleChatClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Chat';
+      this.menu = new Menu();
+      Page.settings.chat_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleVideoImagesClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Video, Images';
+      this.menu = new Menu();
+      Page.settings.video_images_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleGuidesClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;
+      this.category = 'Guides';  
+      this.menu = new Menu();
+      Page.settings.guides_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleNewsClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'News';
+      this.menu = new Menu();
+      Page.settings.news_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handlePornClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Porn';
+      this.menu = new Menu();
+      Page.settings.porn_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleOtherClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Other';
+      this.menu = new Menu();
+      Page.settings.other_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handlePoliticsClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;    
+      this.category = 'Politics';
+      this.menu = new Menu();
+      Page.settings.politics_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleBlogsClick = function() {
+      this.handleUnfavoriteClick();
+      this.has_category = true;
+      this.category = 'Blogs';
+      this.menu = new Menu();
+      Page.settings.blogs_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
     };
 
     Site.prototype.handleUnfavoriteClick = function() {
       this.favorite = false;
       this.menu = new Menu();
       delete Page.settings.favorite_sites[this.row.address];
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleUnCategoryClick = function() {
+      this.handleFavoriteClick();
+      this.has_category = false;
+      this.menu = new Menu();
+      if (this.category == 'Services') {
+          delete Page.settings.services_sites[this.row.address];
+      } else if (this.category == 'Forums, Boards') {
+          delete Page.settings.forums_boards_sites[this.row.address];
+      } else if (this.category == 'Chat') {
+          delete Page.settings.chat_sites[this.row.address];
+      } else if (this.category == 'Video, Images') {
+          delete Page.settings.video_images_sites[this.row.address];
+      } else if (this.category == 'Guides') {
+          delete Page.settings.guides_sites[this.row.address];
+      } else if (this.category == 'News') {
+          delete Page.settings.news_sites[this.row.address];
+      } else if (this.category == 'Porn') {
+          delete Page.settings.porn_sites[this.row.address];
+      } else if (this.category == 'Other') {
+          delete Page.settings.other_sites[this.row.address];
+      } else if(this.category == 'Politics') {
+          delete Page.settings.politics_sites[this.row.address];
+      } else if (this.category == 'Blogs') {
+          delete Page.settings.blogs_sites[this.row.address];
+      }
+      this.category = '';
       Page.saveSettings();
       Page.site_list.reorder();
       return false;
@@ -3888,7 +4291,26 @@
       if (this.favorite) {
         this.menu.items.push(["Unfavorite", this.handleUnfavoriteClick]);
       } else {
-        this.menu.items.push(["Favorite", this.handleFavoriteClick]);
+	if(!this.has_category) {
+        	this.menu.items.push(["Favorite", this.handleFavoriteClick]);
+	}
+      }
+      if (this.favorite) {
+        if(!this.has_category) {
+             this.menu.items.push(["To Services", this.handleServicesClick]);
+             this.menu.items.push(["To Forums, Boards", this.handleForumsBoardsClick]);
+             this.menu.items.push(["To Chat", this.handleChatClick]);
+             this.menu.items.push(["To Video, Images", this.handleVideoImagesClick]);
+             this.menu.items.push(["To Guides", this.handleGuidesClick]);
+             this.menu.items.push(["To News", this.handleNewsClick]);
+             this.menu.items.push(["To Porn", this.handlePornClick]);
+             this.menu.items.push(["To Other", this.handleOtherClick]);
+             this.menu.items.push(["To Politics", this.handlePoliticsClick]);
+	     this.menu.items.push(["To Blogs", this.handleBlogsClick]);
+        }
+      }
+      if(this.has_category) {
+        this.menu.items.push(["Remove from category", this.handleUnCategoryClick]);
       }
       this.menu.items.push(["Update", this.handleUpdateClick]);
       this.menu.items.push(["Check files", this.handleCheckfilesClick]);
@@ -4341,9 +4763,37 @@
     function SiteList() {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
+      this.renderOwnedSitesHelper = false;
+      this.renderConnectedSitesHelper = false;
+      this.renderMergedSitesHelper = false;
+      this.renderFavoriteSitesHelper = false;
+      this.renderPoliticsSitesHelper = false;
+      this.renderBlogsSitesHelper = false;
+      this.renderServicesSitesHelper = false;
+      this.renderGuidesSitesHelper = false;
+      this.renderNewsSitesHelper = false;
+      this.renderVideoImagesSitesHelper = false;
+      this.renderPornSitesHelper = false;
+      this.renderOtherSitesHelper = false;
+      this.renderChatSitesHelper = false;
+      this.renderForumsBoardsSitesHelper = false;
       this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
       this.handleFilterInput = bind(this.handleFilterInput, this);
       this.renderMergedSites = bind(this.renderMergedSites, this);
+      this.renderOwnedSitesHelperClick = bind(this.renderOwnedSitesHelperClick, this);
+      this.renderConnectedSitesHelperClick = bind(this.renderConnectedSitesHelperClick, this);
+      this.renderMergedSitesHelperClick = bind(this.renderMergedSitesHelperClick, this);  
+      this.renderFavoriteSitesHelperClick = bind(this.renderFavoriteSitesHelperClick, this);
+      this.renderPoliticsSitesHelperClick = bind(this.renderPoliticsSitesHelperClick, this);
+      this.renderBlogsSitesHelperClick = bind(this.renderBlogsSitesHelperClick, this);   
+      this.renderServicesSitesHelperClick = bind(this.renderServicesSitesHelperClick, this);
+      this.renderGuidesSitesHelperClick = bind(this.renderGuidesSitesHelperClick, this);  
+      this.renderNewsSitesHelperClick = bind(this.renderNewsSitesHelperClick, this);  
+      this.renderVideoImagesSitesHelperClick = bind(this.renderVideoImagesSitesHelperClick, this);
+      this.renderPornSitesHelperClick = bind(this.renderPornSitesHelperClick, this); 
+      this.renderOtherSitesHelperClick = bind(this.renderOtherSitesHelperClick, this);
+      this.renderChatSitesHelperClick = bind(this.renderChatSitesHelperClick, this); 
+      this.renderForumsBoardsSitesHelperClick = bind(this.renderForumsBoardsSitesHelperClick, this);
       this.reorder = bind(this.reorder, this);
       this.sortRows = bind(this.sortRows, this);
       this.reorderTimer = bind(this.reorderTimer, this);
@@ -4406,7 +4856,27 @@
       Page.cmd("siteList", {}, (function(_this) {
         return function(site_rows) {
           var favorite_sites;
-          favorite_sites = Page.settings.favorite_sites;
+          var politics_sites;
+          var blogs_sites;
+          var services_sites;
+          var forums_boards_sites;
+          var chat_sites;
+          var video_images_sites;
+          var guides_sites;
+          var news_sites;
+          var porn_sites;
+          var other_sites;
+          services_sites = Page.settings.services_sites;
+          forums_boards_sites = Page.settings.forums_boards_sites;
+          chat_sites = Page.settings.chat_sites;
+          video_images_sites = Page.settings.video_images_sites;
+          guides_sites = Page.settings.guides_sites;
+          news_sites = Page.settings.news_sites;
+          porn_sites = Page.settings.porn_sites;
+          other_sites = Page.settings.other_sites;
+          favorite_sites = Page.settings.favorite_sites;  
+          politics_sites = Page.settings.politics_sites;
+          blogs_sites = Page.settings.blogs_sites;
           _this.item_list.sync(site_rows);
           _this.sortRows(_this.item_list.items);
           if (_this.inactive_demo_sites === null) {
@@ -4505,6 +4975,131 @@
       return results;
     };
 
+      SiteList.prototype.renderOwnedSitesHelperClick = function() {
+                this.renderOwnedSitesHelper = Page.settings.owned_sites_helper;
+                this.renderOwnedSitesHelper = !this.renderOwnedSitesHelper;
+                Page.settings.owned_sites_helper = this.renderOwnedSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderConnectedSitesHelperClick = function() {
+		this.renderConnectedSitesHelper = Page.settings.connected_sites_helper;
+                this.renderConnectedSitesHelper = !this.renderConnectedSitesHelper;
+                Page.settings.connected_sites_helper = this.renderConnectedSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderMergedSitesHelperClick = function() {
+		this.renderMergedSitesHelper = Page.settings.merged_sites_helper;
+                this.renderMergedSitesHelper = !this.renderMergedSitesHelper;
+                Page.settings.merged_sites_helper = this.renderMergedSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderFavoriteSitesHelperClick = function() {
+		this.renderFavoriteSitesHelper = Page.settings.favorite_sites_helper;
+                this.renderFavoriteSitesHelper = !this.renderFavoriteSitesHelper;
+                Page.settings.favorite_sites_helper = this.renderFavoriteSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderPoliticsSitesHelperClick = function() {
+		this.renderPoliticsSitesHelper = Page.settings.politics_sites_helper;
+                this.renderPoliticsSitesHelper = !this.renderPoliticsSitesHelper;
+                Page.settings.politics_sites_helper = this.renderPoliticsSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderBlogsSitesHelperClick = function() {
+	     	this.renderBlogsSitesHelper = Page.settings.blogs_sites_helper;
+                this.renderBlogsSitesHelper = !this.renderBlogsSitesHelper;
+                Page.settings.blogs_sites_helper = this.renderBlogsSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderServicesSitesHelperClick = function() {
+     		this.renderServicesSitesHelper = Page.settings.services_sites_helper;
+                this.renderServicesSitesHelper = !this.renderServicesSitesHelper;
+                Page.settings.services_sites_helper = this.renderServicesSitesHelper;
+                Page.saveSettings();
+                return false;
+      };
+
+      SiteList.prototype.renderGuidesSitesHelperClick = function() {
+		this.renderGuidesSitesHelper = Page.settings.guides_sites_helper;
+                this.renderGuidesSitesHelper = !this.renderGuidesSitesHelper;
+                Page.settings.guides_sites_helper = this.renderGuidesSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderNewsSitesHelperClick = function() {
+	        this.renderNewsSitesHelper = Page.settings.news_sites_helper;
+                this.renderNewsSitesHelper = !this.renderNewsSitesHelper;
+                Page.settings.news_sites_helper = this.renderNewsSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderVideoImagesSitesHelperClick = function() {
+	        this.renderVideoImagesSitesHelper = Page.settings.video_images_sites_helper;
+                this.renderVideoImagesSitesHelper = !this.renderVideoImagesSitesHelper;
+                Page.settings.video_images_sites_helper = this.renderVideoImagesSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return true;
+      };
+
+      SiteList.prototype.renderPornSitesHelperClick = function() {
+     		this.renderPornSitesHelper = Page.settings.porn_sites_helper;
+                this.renderPornSitesHelper = !this.renderPornSitesHelper;
+                Page.settings.porn_sites_helper = this.renderPornSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderOtherSitesHelperClick = function() {
+	        this.renderOtherSitesHelper = Page.settings.other_sites_helper;
+                this.renderOtherSitesHelper = !this.renderOtherSitesHelper;
+                Page.settings.other_sites_helper = this.renderOtherSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderChatSitesHelperClick = function() {
+     		this.renderChatSitesHelper = Page.settings.chat_sites_helper;
+                this.renderChatSitesHelper = !this.renderChatSitesHelper;
+                Page.settings.chat_sites_helper = this.renderChatSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
+      SiteList.prototype.renderForumsBoardsSitesHelperClick = function() {
+     		this.renderForumsBoardsSitesHelper = Page.settings.forums_boards_sites_helper;
+                this.renderForumsBoardsSitesHelper = !this.renderForumsBoardsSitesHelper;
+                Page.settings.forums_boards_sites_helper = this.renderForumsBoardsSitesHelper;
+                Page.saveSettings();
+                Page.site_list.reorder();
+                return false;
+      };
+
     SiteList.prototype.renderMergedSites = function() {
       var back, i, len, merged_db, merged_sites, merged_type, name, ref, site;
       merged_db = {};
@@ -4524,7 +5119,9 @@
         merged_sites = merged_db[merged_type];
         back.push([
           h("h2.more", {
-            key: "Merged: " + merged_type
+            key: "Merged: " + merged_type,
+            onmousedown: this.renderMergedSitesHelperClick,
+            onclick: Page.returnFalse
           }, "Merged: " + merged_type), h("div.SiteList.merged.merged-" + merged_type, merged_sites.map(function(item) {
             return item.render();
           }))
@@ -4545,6 +5142,126 @@
       return false;
     };
 
+    SiteList.prototype.renderFavoriteSitesH = function()
+    {
+      return h("h2.favorited", {
+           onmousedown: this.renderFavoriteSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Favorited sites:");
+    };
+
+    SiteList.prototype.renderPoliticsSitesH = function()
+    {
+      return h("h2.politics", {
+           onmousedown: this.renderPoliticsSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Politics sites:");
+    };
+
+
+    SiteList.prototype.renderBlogsSitesH = function()
+    {
+      return h("h2.blogs", {
+           onmousedown: this.renderBlogsSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Blogs sites:");
+    };
+
+    SiteList.prototype.renderServicesSitesH = function()
+    {
+      return h("h2.services", {
+           onmousedown: this.renderServicesSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Services sites:");
+    };
+
+
+    SiteList.prototype.renderGuidesSitesH = function()
+    {
+      return h("h2.guides", {
+           onmousedown: this.renderGuidesSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Guides sites:");
+    };
+
+    SiteList.prototype.renderNewsSitesH = function()
+    {
+      return h("h2.news", {
+           onmousedown: this.renderNewsSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "News sites:");
+    };
+
+   SiteList.prototype.renderVideoImagesSitesH = function()
+    {
+      return h("h2.video_images", {
+           onmousedown: this.renderVideoImagesSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Video, Images sites:");
+    };
+
+    SiteList.prototype.renderPornSitesH = function()
+    {
+      return h("h2.porn", {
+           onmousedown: this.rendePornSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Porn sites:");
+    };
+
+   SiteList.prototype.renderOtherSitesH = function()
+    {
+      return h("h2.other", {
+           onmousedown: this.renderOtherSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Other sites:");
+    };
+
+   SiteList.prototype.renderChatSitesH = function()
+    {
+      return h("h2.chat", {
+           onmousedown: this.renderChatSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Chat sites:");
+    };
+
+   SiteList.prototype.renderOwnedSitesH = function()
+    {
+      return h("h2.owned", {
+           onmousedown: this.renderOwnedSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Owned sites:");
+    };
+
+   SiteList.prototype.renderForumsBoardsSitesH = function()
+    {
+      return h("h2.forums_boards", {
+           onmousedown: this.renderForumsBoardsSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Forums, Boards sites:");
+    };
+
+    SiteList.prototype.renderConnectedSitesH = function()
+    {
+      return h("h2.connected", {
+           onmousedown: this.renderConnectedSitesHelperClick,
+           onclick: Page.returnFalse
+      }, "Connected sites:");
+    };
+
+    SiteList.prototype.renderMergedSitesH = function()
+    {
+      this.renderMergedSitesHelper = Page.settings.merged_sites_helper;
+      if(!this.renderMergedSitesHelper)
+          return this.renderMergedSites();
+      else
+           return h("h2.more", {
+                onmousedown: this.renderMergedSitesHelperClick,
+                onclick: Page.returnFalse
+      	   }, "Merged sites:");
+    };
+
+
+
     SiteList.prototype.render = function() {
       var filter_base, i, len, ref, ref1, site;
       if (!this.loaded) {
@@ -4552,10 +5269,37 @@
       }
       this.sites_needaction = [];
       this.sites_favorited = [];
+      this.sites_services = [];
+      this.sites_forums_boards = [];
+      this.sites_chat = [];
+      this.sites_video_images = [];
+      this.sites_guides = [];
+      this.sites_news = [];
+      this.sites_porn = [];
+      this.sites_other = [];
+      this.sites_politics = [];
+      this.sites_blogs = [];
       this.sites_owned = [];
       this.sites_connected = [];
       this.sites_merged = [];
       ref = this.sites;
+      //Page.settings.owned_sites_helper = false;
+      //Page.saveSettings();
+      this.renderOwnedSitesHelper = Page.settings.owned_sites_helper;
+      this.renderConnectedSitesHelper = Page.settings.connected_sites_helper;
+      this.renderMergedSitesHelper = Page.settings.merged_sites_helper;
+      this.renderFavoriteSitesHelper = Page.settings.favorite_sites_helper;
+      this.renderPoliticsSitesHelper = Page.settings.politics_sites_helper;
+      this.renderBlogsSitesHelper = Page.settings.blogs_sites_helper;
+      this.renderServicesSitesHelper = Page.settings.services_sites_helper;
+      this.renderGuidesSitesHelper = Page.settings.guides_sites_helper;
+      this.renderNewsSitesHelper = Page.settings.news_sites_helper;
+      this.renderVideoImagesSitesHelper = Page.settings.video_images_sites_helper;
+      this.renderPornSitesHelper = Page.settings.porn_sites_helper;
+      this.renderOtherSitesHelper = Page.settings.other_sites_helper;
+      this.renderChatSitesHelper = Page.settings.chat_sites_helper;
+      this.renderForumsBoardsSitesHelper = Page.settings.forums_boards_sites_helper;
+
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
         if (this.filtering) {
@@ -4565,15 +5309,73 @@
           }
         }
         if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
-          this.sites_needaction.push(site);
-        } else if (site.favorite) {
-          this.sites_favorited.push(site);
+                this.sites_needaction.push(site);
+	} else if (site.has_category) {
+          if(site.category == 'Services') {
+		if(!this.renderServicesSitesHelper)
+                	this.sites_services.push(site);
+          	else if(this.sites_services.length==0)
+                	this.sites_services.push(site);
+          } else if(site.category == 'Forums, Boards') {
+		if(!this.renderForumsBoardsSitesHelper)
+                	this.sites_forums_boards.push(site);
+          	else if(this.sites_forums_boards.length==0)
+                	this.sites_forums_boards.push(site);
+          } else if(site.category == 'Chat') {
+          	this.sites_chat.push(site);
+          } else if(site.category == 'Video, Images') {
+          	this.sites_video_images.push(site);
+          } else if(site.category == 'Guides') {
+		if(!this.renderGuidesSitesHelper)
+                	this.sites_guides.push(site);
+          	else if(this.sites_guides.length==0)
+                	this.sites_guides.push(site);
+          } else if(site.category == 'News') {
+		if(!this.renderNewsSitesHelper)
+                	this.sites_news.push(site);
+          	else if(this.sites_news.length==0)
+                	this.sites_news.push(site);
+          } else if(site.category == 'Porn') {
+		if(!this.renderPornSitesHelper)
+                	this.sites_porn.push(site);
+          	else if(this.sites_porn.length==0)
+                	this.sites_porn.push(site);
+          } else if(site.category == 'Other') {
+		if(!this.renderOtherSitesHelper)
+                	this.sites_other.push(site);
+          	else if(this.sites_other.length==0)
+                	this.sites_other.push(site);
+	  } else if(site.category == 'Politics') {
+		if(!this.renderPoliticsSitesHelper)
+                	this.sites_politics.push(site);
+          	else if(this.sites_politics.length==0)
+                	this.sites_politics.push(site);
+	  } else if(site.category == 'Blogs') {
+		if(!this.renderBlogsSitesHelper)
+                	this.sites_blogs.push(site);
+          	else if(this.sites_blogs.length==0)
+                	this.sites_blogs.push(site);
+          } else if (site.favorite) {
+		if(!this.renderFavoriteSitesHelper)
+                	this.sites_favorited.push(site);
+          	else if(this.sites_favorited.length==0)
+                	this.sites_favorited.push(site);
+	  }
         } else if (site.row.content.merged_type) {
-          this.sites_merged.push(site);
+          if(!this.renderMergedSitesHelper)
+                this.sites_merged.push(site);
+          else if(this.sites_merged.length==0)
+                this.sites_merged.push(site);
         } else if ((ref1 = site.row.settings) != null ? ref1.own : void 0) {
-          this.sites_owned.push(site);
+	    if(!this.renderOwnedSitesHelper)
+          	this.sites_owned.push(site);
+	    else if(this.sites_owned.length==0)
+		this.sites_owned.push(site);
         } else {
-          this.sites_connected.push(site);
+          if(!this.renderConnectedSitesHelper)
+                this.sites_connected.push(site);
+          else if(this.sites_connected.length==0)
+                this.sites_connected.push(site);
         }
       }
       return h("div#SiteList", [
@@ -4585,15 +5387,35 @@
           value: this.filtering
         }) : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
-        })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
+        })), this.sites_services.length > 0 ? (this.renderServicesSitesH()) : void 0, (this.renderServicesSitesHelper) ? (void 0) : (h("div.SiteList.services", this.sites_services.map(function(item) {
+            return item.render();
+        }))), this.sites_forums_boards.length > 0 ? (this.renderForumsBoardsSitesH()) : void 0, (this.renderForumsBoardsSitesHelper) ? (void 0) : (h("div.SiteList.forums_boards", this.sites_forums_boards.map(function(item) {
+            return item.render();
+        }))), this.sites_chat.length > 0 ? (this.renderChatSitesH()) : void 0, (this.renderChatSitesHelper) ? (void 0) : (h("div.SiteList.chat", this.sites_chat.map(function(item) {
+            return item.render();
+        }))), this.sites_video_images.length > 0 ? (this.renderVideoImagesSitesH()) : void 0, (this.renderVideoImagesSitesHelper) ? (void 0) : (h("div.SiteList.video_images", this.sites_video_images.map(function(item) {
+            return item.render();
+        }))), this.sites_guides.length > 0 ? (this.renderGuidesSitesH()) : void 0, (this.renderGuidesSitesHelper) ? (void 0) : (h("div.SiteList.guides", this.sites_guides.map(function(item) {
+            return item.render();
+        }))), this.sites_news.length > 0 ? (this.renderNewsSitesH()) : void 0, (this.renderNewsSitesHelper) ? (void 0) : (h("div.SiteList.news", this.sites_news.map(function(item) {
+            return item.render();
+        }))), this.sites_porn.length > 0 ? (this.renderPornSitesH()) : void 0, (this.renderPornSitesHelper) ? (void 0) : (h("div.SiteList.porn", this.sites_porn.map(function(item) {
+            return item.render();
+        }))), this.sites_other.length > 0 ? (this.renderOtherSitesH()) : void 0, (this.renderOtherSitesHelper) ? (void 0) : (h("div.SiteList.other", this.sites_other.map(function(item) {
+            return item.render();
+        }))), this.sites_blogs.length > 0 ? (this.renderBlogsSitesH()) : void 0, (this.renderBlogsSitesHelper) ? (void 0) : (h("div.SiteList.blogs", this.sites_blogs.map(function(item) {
+            return item.render();
+        }))), this.sites_politics.length > 0 ? (this.renderPoliticsSitesH()) : void 0, (this.renderPoliticsSitesHelper) ? (void 0) : (h("div.SiteList.politics", this.sites_politics.map(function(item) {
+	    return item.render();
+	}))), this.sites_favorited.length > 0 ? (this.renderFavoriteSitesH()) : void 0, (this.renderFavoriteSitesHelper) ? (void 0) : (h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
-        })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
+        }))), this.sites_owned.length > 0 ? (this.renderOwnedSitesH()) : void 0, (this.renderOwnedSitesHelper) ? (void 0) : (h("div.SiteList.owned", this.sites_owned.map(function(item) {
           return item.render();
-        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", this.sites_connected.map(function(item) {
+        }))), this.sites_connected.length > 0 ? (this.renderConnectedSitesH()) : void 0, (this.renderConnectedSitesHelper) ? (void 0) : (h("div.SiteList.connected", this.sites_connected.map(function(item) {
           return item.render();
-        })), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
+        }))), this.renderMergedSitesH(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
           h("h2.more", {
-            key: "More"
+            key: "More" 
           }, "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
             return item.render();
           }))
@@ -4819,11 +5641,83 @@
               if ((base1 = _this.settings).favorite_sites == null) {
                 base1.favorite_sites = {};
               }
+              if ((base1 = _this.settings).politics_sites == null) {
+                base1.politics_sites = {};
+              }
+              if ((base1 = _this.settings).blogs_sites == null) {
+                base1.blogs_sites = {}; 
+              }
+              if ((base1 = _this.settings).services_sites == null) {
+                base1.services_sites = {};
+              }
+              if ((base1 = _this.settings).guides_sites == null) {
+                base1.guides_sites = {}; 
+              }
+              if ((base1 = _this.settings).news_sites == null) {
+                base1.news_sites = {};
+              }
+              if ((base1 = _this.settings).video_images_sites == null) {
+                base1.video_images_sites = {};
+              }
+              if ((base1 = _this.settings).porn_sites == null) {
+                base1.porn_sites = {}; 
+              }
+              if ((base1 = _this.settings).chat_sites == null) {
+                base1.chat_sites = {};
+              }
+              if ((base1 = _this.settings).forums_boards_sites == null) {
+                base1.forums_boards_sites = {}; 
+              }
+              if ((base1 = _this.settings).other_sites == null) {
+                base1.other_sites = {};
+              }
+              if ((base1 = _this.settings).favorite_sites_helper == null) {
+                base1.favorite_sites_helper = false;
+              }
+              if ((base1 = _this.settings).politics_sites_helper == null) {
+                base1.politics_sites_helper = false;
+              }
+              if ((base1 = _this.settings).blogs_sites_helper == null) {
+                base1.blogs_sites_helper = false;
+              }
+              if ((base1 = _this.settings).services_sites_helper == null) {
+                base1.services_sites_helper = false;
+              }
+              if ((base1 = _this.settings).guides_sites_helper == null) {
+                base1.guides_sites_helper = false;
+              }
+              if ((base1 = _this.settings).news_sites_helper == null) {
+                base1.news_sites_helper = false;
+              }
+              if ((base1 = _this.settings).video_images_sites_helper == null) {
+                base1.video_images_sites_helper = false;
+              }
+              if ((base1 = _this.settings).porn_sites_helper == null) {
+                base1.porn_sites_helper = false;
+              }
+              if ((base1 = _this.settings).chat_sites_helper  == null) {
+                base1.chat_sites_helper = false;
+              }
+              if ((base1 = _this.settings).forums_boards_sites_helper == null) {
+                base1.forums_boards_sites_helper = false;
+              }
+              if ((base1 = _this.settings).other_sites_helper == null) {
+                base1.other_sites_helper = false;
+              }
+              if ((base1 = _this.settings).owned_sites_helper == null) {
+                base1.owned_sites_helper = false;
+              }
+              if ((base1 = _this.settings).connected_sites_helper == null) {
+                base1.connected_sites_helper = false;
+              }
+              if ((base1 = _this.settings).merged_sites_helper == null) {
+                base1.merged_sites_helper = false;
+              }
               return _this.on_settings.resolve(_this.settings);
             }
           });
         };
-      })(this));
+       })(this));
     };
 
     ZeroHello.prototype.loadLocalStorage = function() {
@@ -4840,6 +5734,78 @@
           }
           if ((base1 = _this.settings).favorite_sites == null) {
             base1.favorite_sites = {};
+          }
+          if ((base1 = _this.settings).politics_sites == null) {
+            base1.politics_sites = {}; 
+          }
+          if ((base1 = _this.settings).blogs_sites == null) {
+            base1.blogs_sites = {};
+          }
+          if ((base1 = _this.settings).services_sites == null) {
+            base1.services_sites = {};
+          }
+          if ((base1 = _this.settings).guides_sites == null) {
+            base1.guides_sites = {};
+          }
+          if ((base1 = _this.settings).news_sites == null) {
+            base1.news_sites = {};
+          }
+          if ((base1 = _this.settings).video_images_sites == null) {
+            base1.video_images_sites = {};
+          }
+          if ((base1 = _this.settings).porn_sites == null) {
+            base1.porn_sites = {};
+          }
+          if ((base1 = _this.settings).chat_sites == null) {
+            base1.chat_sites = {};
+          }
+          if ((base1 = _this.settings).forums_boards_sites == null) {
+            base1.forums_boards_sites = {};
+          }
+          if ((base1 = _this.settings).other_sites == null) {
+            base1.other_sites = {};
+          }
+          if ((base1 = _this.settings).favorite_sites_helper == null) {
+            base1.favorite_sites_helper = false;
+          }
+          if ((base1 = _this.settings).politics_sites_helper == null) {
+            base1.politics_sites_helper = false;
+          }
+          if ((base1 = _this.settings).blogs_sites_helper == null) {
+            base1.blogs_sites_helper = false;
+          }
+          if ((base1 = _this.settings).services_sites_helper == null) {
+            base1.services_sites_helper = false;
+          }
+          if ((base1 = _this.settings).guides_sites_helper == null) {
+            base1.guides_sites_helper = false;
+          }
+          if ((base1 = _this.settings).news_sites_helper == null) {
+            base1.news_sites_helper = false;
+          }
+          if ((base1 = _this.settings).video_images_sites_helper == null) {
+            base1.video_images_sites_helper = false;
+          }
+          if ((base1 = _this.settings).porn_sites_helper == null) {
+            base1.porn_sites_helper = false;
+          }
+          if ((base1 = _this.settings).chat_sites_helper == null) {
+            base1.chat_sites_helper = false;
+          }
+          if ((base1 = _this.settings).forums_boards_sites_helper == null) {
+            base1.forums_boards_sites_helper = false;
+          }
+          if ((base1 = _this.settings).other_sites_helper == null) {
+            base1.other_sites_helper = false;
+          }
+          if ((base1 = _this.settings).owned_sites_helper == null) {
+            base1.owned_sites_helper = false;
+          }
+          if ((base1 = _this.settings).connected_sites_helper == null) {
+            base1.connected_sites_helper = false;
+          }
+          if ((base1 = _this.settings).merged_sites_helper == null) {
+            base1.merged_sites_helper = false;
           }
           return _this.on_settings.resolve(_this.settings);
         };
