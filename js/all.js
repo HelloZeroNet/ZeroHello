@@ -2279,10 +2279,12 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
       this.getClass = bind(this.getClass, this);
+      this.renderSearchStat = bind(this.renderSearchStat, this);
       this.renderWelcome = bind(this.renderWelcome, this);
       this.renderFeed = bind(this.renderFeed, this);
       this.exitAnimation = bind(this.exitAnimation, this);
       this.enterAnimation = bind(this.enterAnimation, this);
+      this.handleSearchInfoClick = bind(this.handleSearchInfoClick, this);
       this.handleFilterClick = bind(this.handleFilterClick, this);
       this.handleSearchKeyup = bind(this.handleSearchKeyup, this);
       this.handleSearchInput = bind(this.handleSearchInput, this);
@@ -2295,7 +2297,7 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
       this.searching = null;
       this.searching_text = null;
       this.searched = null;
-      this.searched_info = null;
+      this.res = null;
       this.loading = false;
       this.filter = null;
       this.feed_types = {};
@@ -2304,6 +2306,7 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
       this.limit = 30;
       this.query_limit = 20;
       this.query_day_limit = 3;
+      this.show_stats = false;
       Page.on_settings.then((function(_this) {
         return function() {
           _this.need_update = true;
@@ -2389,7 +2392,14 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
       this.logStart("Updating feed");
       this.updating = true;
       return Page.cmd("feedQuery", params, (function(_this) {
-        return function(rows) {
+         return function(res) {
+           var rows;
+           if (res.rows) {
+             rows = res.rows;
+           } else {
+             rows = res;
+           }
+          _this.res = res;
           if (rows.length < 10 && _this.day_limit !== null) {
             _this.limit = 20;
             _this.day_limit = null;
@@ -2422,7 +2432,7 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
           _this.loading = false;
           _this.displayRows(res["rows"], search);
           delete res["rows"];
-          _this.searched_info = res;
+          _this.res = res;
           _this.searched = search;
           if (cb) {
             return cb();
@@ -2507,12 +2517,37 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
       return false;
     };
 
+    FeedList.prototype.handleSearchInfoClick = function(e) {
+      this.show_stats = !this.show_stats;
+      return false;
+    };
+
     FeedList.prototype.formatTitle = function(title) {
       if (this.searching_text && this.searching_text.length > 1) {
         return Text.highlight(title, this.searching_text);
       } else {
         return title;
       }
+    };
+
+    FeedList.prototype.renderSearchStat = function(stat) {
+      var site, total_taken;
+      if (stat.taken === 0) {
+        return null;
+      }
+      total_taken = this.res.taken;
+      site = Page.site_list.item_list.items_bykey[stat.site];
+      return h("tr", {
+        key: stat.site + "_" + stat.feed_name,
+        classes: {
+          "slow": stat.taken > total_taken * 0.1,
+          "extra-slow": stat.taken > total_taken * 0.3
+        }
+      }, [
+        h("td.site", h("a.site", {
+          href: site.getHref()
+        }, [site.row.content.title])), h("td.feed_name", stat.feed_name), h("td.taken", (stat.taken != null ? stat.taken + "s" : "n/a "))
+      ]);
     };
 
     FeedList.prototype.formatBody = function(body, type) {
@@ -2665,7 +2700,7 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
     };
 
     FeedList.prototype.render = function() {
-      var feed_type;
+      var feed_type, ref;
       if (this.need_update) {
         RateLimitCb(5000, this.update);
         this.need_update = false;
@@ -2720,10 +2755,15 @@ defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartL
           onkeyup: this.handleSearchKeyup,
           oninput: this.handleSearchInput,
           afterCreate: this.storeNodeSearch
-        }), this.searched && this.searched_info && !this.loading ? h("div.search-info", {
+        }), ((ref = this.res) != null ? ref.stats : void 0) && !this.loading ? h("a.search-info.nolink", {
+          href: "#ShowStats",
           enterAnimation: Animation.show,
-          exitAnimation: Animation.hide
-        }, this.searched_info.num + " results from " + this.searched_info.sites + " sites in " + (this.searched_info.taken.toFixed(2)) + "s") : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
+          exitAnimation: Animation.hide,
+          onclick: this.handleSearchInfoClick
+        }, (this.searching ? this.res.num + " results " : "") + ("from " + this.res.sites + " sites in " + (this.res.taken.toFixed(2)) + "s")) : void 0, this.show_stats ? h("div.search-info-stats", {
+          enterAnimation: Animation.slideDown,
+          exitAnimation: Animation.slideUp
+        }, [h("table", [h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")), this.res.stats.map(this.renderSearchStat)])]) : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
           enterAnimation: Animation.show
         }, [
           "You need to ", h("a", {
