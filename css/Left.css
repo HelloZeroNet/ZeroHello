@@ -75,3 +75,9 @@
 .SiteList.more .site .details.demo { display: inline; background-color: #8041f1; color: white; }
 
 .SiteList.needaction .site { background-color: rgba(255, 238, 59, 0.06) }
+.SiteList.needaction .site .details { display: none }
+.SiteList.needaction .site .details.needaction {
+	display: inherit; color: black; text-decoration: none; background-color: #f1de3b; border-radius: 3px; border-bottom: 2px solid #b1a74b; opacity: 1;
+}
+.SiteList.needaction .site .details.needaction:hover { background-color: #fcff2b; transition: none !important }
+.SiteList.needaction .site .details.needaction:active { transform: translateY(1px); transition: none }

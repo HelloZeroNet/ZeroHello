@@ -210,6 +210,19 @@ class Site extends Class
 		else
 			return href
 
+	handleLimitIncreaseClick: =>
+		if Page.server_info.rev < 3170
+			return Page.cmd "wrapperNotification", ["info", "You need ZeroNet Rev3170 to use this command"]
+
+		Page.cmd "as", [@row.address, "siteSetLimit", @row.need_limit], (res) =>
+			if res == "ok"
+				Page.cmd "wrapperNotification", ["done", "Site <b>#{@row.content.title}</b> storage limit modified to <b>#{@row.need_limit}MB</b>", 5000]
+			else
+				Page.cmd "wrapperNotification", ["error", res.error]
+
+			Page.projector.scheduleRender()
+
+		return false
 
 	render: =>
 		now = Date.now()/1000
@@ -239,6 +252,8 @@ class Site extends Class
 				])
 				if @row.demo
 					h("div.details.demo", "Activate \u00BB")
+				if @row.need_limit
+					h("a.details.needaction", {href: "#Set+limit", onclick: @handleLimitIncreaseClick}, "Set limit to #{@row.need_limit}MB")
 				h("div.message",
 					{classes: {visible: @message_visible, done: @message_class == 'done', error: @message_class == 'error', collapsed: @message_collapsed}},
 					[@message]

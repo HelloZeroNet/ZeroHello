@@ -2780,7 +2780,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
 
 
@@ -3673,6 +3672,7 @@
       this.item_list = item_list;
       this.renderOptionalStats = bind(this.renderOptionalStats, this);
       this.render = bind(this.render, this);
+      this.handleLimitIncreaseClick = bind(this.handleLimitIncreaseClick, this);
       this.handleHelpsClick = bind(this.handleHelpsClick, this);
       this.handleHelpAllClick = bind(this.handleHelpAllClick, this);
       this.handleHelpClick = bind(this.handleHelpClick, this);
@@ -3996,6 +3996,23 @@
       }
     };
 
+    Site.prototype.handleLimitIncreaseClick = function() {
+      if (Page.server_info.rev < 3170) {
+        return Page.cmd("wrapperNotification", ["info", "You need ZeroNet Rev3170 to use this command"]);
+      }
+      Page.cmd("as", [this.row.address, "siteSetLimit", this.row.need_limit], (function(_this) {
+        return function(res) {
+          if (res === "ok") {
+            Page.cmd("wrapperNotification", ["done", "Site <b>" + _this.row.content.title + "</b> storage limit modified to <b>" + _this.row.need_limit + "MB</b>", 5000]);
+          } else {
+            Page.cmd("wrapperNotification", ["error", res.error]);
+          }
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+      return false;
+    };
+
     Site.prototype.render = function() {
       var now, ref;
       now = Date.now() / 1000;
@@ -4013,7 +4030,10 @@
         href: this.getHref(),
         title: ((ref = this.row.content.title) != null ? ref.length : void 0) > 20 ? this.row.content.title : void 0
       }, [
-        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.settings.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, h("div.message", {
+        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.settings.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, this.row.need_limit ? h("a.details.needaction", {
+          href: "#Set+limit",
+          onclick: this.handleLimitIncreaseClick
+        }, "Set limit to " + this.row.need_limit + "MB") : void 0, h("div.message", {
           classes: {
             visible: this.message_visible,
             done: this.message_class === 'done',
@@ -4098,6 +4118,7 @@
   window.Site = Site;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
@@ -4565,6 +4586,7 @@
           }
         }
         if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
+          site.row.need_limit = site.row.size_limit * 2;
           this.sites_needaction.push(site);
         } else if (site.favorite) {
           this.sites_favorited.push(site);

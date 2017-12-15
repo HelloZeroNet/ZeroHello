@@ -120,6 +120,7 @@ class SiteList extends Class
 					continue
 
 			if site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024
+				site.row.need_limit = site.row.size_limit * 2
 				@sites_needaction.push site
 			else if site.favorite
 				@sites_favorited.push site
