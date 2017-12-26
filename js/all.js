@@ -2289,6 +2289,7 @@
       this.query_limit = 20;
       this.query_day_limit = 3;
       this.show_stats = false;
+      this.feed_keys = {};
       Page.on_settings.then((function(_this) {
         return function() {
           _this.need_update = true;
@@ -2320,6 +2321,7 @@
     FeedList.prototype.displayRows = function(rows, search) {
       var i, last_row, len, row, row_group;
       this.feeds = [];
+      this.feed_keys = {};
       if (!rows) {
         return false;
       }
@@ -2352,7 +2354,13 @@
           if (row.feed_id == null) {
             row.feed_id = row.date_added;
           }
-          this.feeds.push(row);
+          row.key = row.site + row.type + row.title + row.feed_id;
+          if (this.feed_keys[row.key]) {
+            this.log("Duplicate feed key: " + row.key);
+          } else {
+            this.feeds.push(row);
+          }
+          this.feed_keys[row.key] = true;
           row_group = row;
         }
         this.feed_types[row.type] = true;
@@ -2450,6 +2458,7 @@
       this.searching_text = this.searching.replace(/[^ ]+:.*$/, "").trim();
       if (Page.server_info.rev < 1230) {
         this.feeds = [];
+        this.feed_keys = {};
       }
       if (e.target.value === "") {
         delay = 1;
@@ -2594,7 +2603,7 @@
         site = Page.site_list.item_list.items_bykey[feed.site];
         type_formatted = this.formatType(feed.type, feed.title);
         return h("div.feed." + feed.type, {
-          key: feed.site + feed.type + feed.title + feed.feed_id,
+          key: feed.key,
           enterAnimation: this.enterAnimation,
           exitAnimation: this.exitAnimation
         }, [
@@ -2625,7 +2634,9 @@
       } catch (error) {
         err = error;
         this.log(err);
-        return h("div");
+        return h("div", {
+          key: Time.timestamp()
+        });
       }
     };
 
@@ -2815,9 +2826,9 @@
       this.need_update = true;
       this.updating_files = 0;
       this.optional_stats = {
-        limit: 0,
-        free: 0,
-        used: 0
+        limit: "0",
+        free: "0",
+        used: "0"
       };
       this.updateOptionalStats();
       this.hover_totalbar = false;
@@ -2828,6 +2839,7 @@
       this.selected_files_size = 0;
       this.selected_files_pinned = 0;
       this.bigfiles = new Bigfiles();
+      this.display_limit = 0;
       this;
     }
 
@@ -3172,7 +3184,12 @@
           });
         };
       })(this));
-      return this.bigfiles.files.update();
+      this.updating_files += 1;
+      return this.bigfiles.files.update((function(_this) {
+        return function() {
+          return _this.updating_files -= 1;
+        };
+      })(this));
     };
 
     FileList.prototype.render = function() {
@@ -3231,12 +3248,20 @@
         document.body.className = "loaded";
         return h("div#FileList", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
       }
+      if (this.display_limit < sites.length) {
+        setTimeout(((function(_this) {
+          return function() {
+            _this.display_limit += 1;
+            return Page.projector.scheduleRender();
+          };
+        })(this)), 1000);
+      }
       return h("div#FileList", [
-        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_favorited.map((function(_this) {
+        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_favorited.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
           return function(site) {
             return site.renderOptionalStats();
           };
-        })(this)), sites_connected.map((function(_this) {
+        })(this)), sites_connected.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
           return function(site) {
             return site.renderOptionalStats();
           };
@@ -3474,7 +3499,7 @@
       if (Page.server_info.rev < 1700) {
         Page.cmd("wrapperNotification", ["info", "This feature requires ZeroNet version 0.5.0"]);
       } else {
-        Page.setProjectorMode(e.target.hash.replace("#", ""));
+        Page.handleLinkClick(e);
       }
       return false;
     };
@@ -3495,18 +3520,24 @@
         }), h("span", ["Hello ZeroNet_"])
       ]), h("div.modes", [
         h("a.mode.sites", {
-          href: "#Sites",
+          href: "?",
           classes: {
             active: Page.mode === "Sites"
           },
-          onclick: this.handleModeClick
+          onclick: Page.handleLinkClick
         }, _("Sites")), h("a.mode.files", {
-          href: "#Files",
+          href: "?Files",
           classes: {
             active: Page.mode === "Files"
           },
-          onclick: this.handleModeClick
-        }, _("Files"))
+          onclick: Page.handleLinkClick
+        }, _("Files")), Page.site_info.settings.own ? h("a.mode.stats", {
+          href: "?Stats",
+          classes: {
+            active: Page.mode === "Stats"
+          },
+          onclick: Page.handleLinkClick
+        }, _("Stats")) : void 0
       ]));
     };
 
@@ -3517,6 +3548,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */
@@ -4120,7 +4152,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
 
 
@@ -4641,6 +4672,40 @@
 }).call(this);
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/StatList.coffee ---- */
+
+
+(function() {
+  var StatList,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  StatList = (function(superClass) {
+    extend(StatList, superClass);
+
+    function StatList() {
+      this.render = bind(this.render, this);
+      this.need_update = true;
+      this;
+    }
+
+    StatList.prototype.render = function() {
+      if (this.need_update && Page.site_list.sites.length) {
+        this.need_update = false;
+      }
+      return h("div#StatList", []);
+    };
+
+    return StatList;
+
+  })(Class);
+
+  window.StatList = StatList;
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Trigger.coffee ---- */
 
 
@@ -4710,6 +4775,7 @@
       this.reloadServerInfo = bind(this.reloadServerInfo, this);
       this.reloadSiteInfo = bind(this.reloadSiteInfo, this);
       this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
+      this.handleLinkClick = bind(this.handleLinkClick, this);
       return ZeroHello.__super__.constructor.apply(this, arguments);
     }
 
@@ -4720,6 +4786,7 @@
       this.address = null;
       this.on_site_info = new Promise();
       this.on_settings = new Promise();
+      this.on_loaded = new Promise();
       this.settings = null;
       this.latest_version = "0.6.0";
       this.mode = "Sites";
@@ -4727,24 +4794,32 @@
       return document.body.id = "Page" + this.mode;
     };
 
+    ZeroHello.prototype.addRenderer = function(node, renderer) {
+      this.projector.replace(node, renderer);
+      return this.renderers.push(renderer);
+    };
+
+    ZeroHello.prototype.detachRenderers = function() {
+      var i, len, ref, renderer;
+      ref = this.renderers;
+      for (i = 0, len = ref.length; i < len; i++) {
+        renderer = ref[i];
+        this.projector.detach(renderer);
+      }
+      return this.renderers = [];
+    };
+
     ZeroHello.prototype.setProjectorMode = function(mode) {
       this.log("setProjectorMode", mode);
-      if (mode === "Sites") {
-        try {
-          this.projector.detach(this.file_list.render);
-        } catch (error) {
-          this;
-        }
-        this.projector.replace($("#FeedList"), this.feed_list.render);
-        this.projector.replace($("#SiteList"), this.site_list.render);
-      } else if (mode === "Files") {
-        try {
-          this.projector.detach(this.feed_list.render);
-          this.projector.detach(this.site_list.render);
-        } catch (error) {
-          this;
-        }
-        this.projector.replace($("#FileList"), this.file_list.render);
+      this.detachRenderers();
+      if (mode === "Files") {
+        this.addRenderer($("#FileList"), this.file_list.render);
+      } else if (mode === "Stats") {
+        this.addRenderer($("#StatList"), this.stat_list.render);
+      } else {
+        mode = "Sites";
+        this.addRenderer($("#FeedList"), this.feed_list.render);
+        this.addRenderer($("#SiteList"), this.site_list.render);
       }
       if (this.mode !== mode) {
         this.mode = mode;
@@ -4762,16 +4837,25 @@
     };
 
     ZeroHello.prototype.createProjector = function() {
+      var url;
       this.projector = maquette.createProjector();
       this.projectors = {};
+      this.renderers = [];
       this.site_list = new SiteList();
       this.feed_list = new FeedList();
       this.file_list = new FileList();
+      this.stat_list = new StatList();
       this.head = new Head();
       this.dashboard = new Dashboard();
       this.mute_list = new MuteList();
       this.trigger = new Trigger();
-      this.route("");
+      if (base.href.indexOf("?") === -1) {
+        this.route("");
+      } else {
+        url = base.href.replace(/.*?\?/, "");
+        this.route(url);
+        this.history_state["url"] = url;
+      }
       this.loadSettings();
       this.on_site_info.then((function(_this) {
         return function() {
@@ -4788,7 +4872,8 @@
 
     ZeroHello.prototype.route = function(query) {
       this.params = Text.parseQuery(query);
-      return this.log("Route", this.params);
+      this.log("Route", this.params);
+      return this.setProjectorMode(this.params.url);
     };
 
     ZeroHello.prototype.createUrl = function(key, val) {
@@ -4813,7 +4898,6 @@
       url = url.replace(/.*?\?/, "");
       this.log("setUrl", this.history_state["url"], "->", url);
       if (this.history_state["url"] === url) {
-        this.content.update();
         return false;
       }
       this.history_state["url"] = url;
@@ -4826,20 +4910,36 @@
       return false;
     };
 
+    ZeroHello.prototype.handleLinkClick = function(e) {
+      if (e.which === 2) {
+        return true;
+      } else {
+        this.log("save scrollTop", window.pageYOffset);
+        this.history_state["scrollTop"] = window.pageYOffset;
+        this.cmd("wrapperReplaceState", [this.history_state, null]);
+        window.scroll(window.pageXOffset, 0);
+        this.history_state["scrollTop"] = 0;
+        this.on_loaded.resolved = false;
+        document.body.className = "";
+        this.setUrl(e.currentTarget.search);
+        return false;
+      }
+    };
+
     ZeroHello.prototype.loadSettings = function() {
       return this.on_site_info.then((function(_this) {
         return function() {
           return _this.cmd("userGetSettings", [], function(res) {
-            var base, base1;
+            var base1, base2;
             if (!res || res.error) {
               return _this.loadLocalStorage();
             } else {
               _this.settings = res;
-              if ((base = _this.settings).sites_orderby == null) {
-                base.sites_orderby = "peers";
+              if ((base1 = _this.settings).sites_orderby == null) {
+                base1.sites_orderby = "peers";
               }
-              if ((base1 = _this.settings).favorite_sites == null) {
-                base1.favorite_sites = {};
+              if ((base2 = _this.settings).favorite_sites == null) {
+                base2.favorite_sites = {};
               }
               return _this.on_settings.resolve(_this.settings);
             }
@@ -4851,17 +4951,17 @@
     ZeroHello.prototype.loadLocalStorage = function() {
       return this.cmd("wrapperGetLocalStorage", [], (function(_this) {
         return function(settings) {
-          var base, base1;
+          var base1, base2;
           _this.settings = settings;
           _this.log("Loaded localstorage");
           if (_this.settings == null) {
             _this.settings = {};
           }
-          if ((base = _this.settings).sites_orderby == null) {
-            base.sites_orderby = "peers";
+          if ((base1 = _this.settings).sites_orderby == null) {
+            base1.sites_orderby = "peers";
           }
-          if ((base1 = _this.settings).favorite_sites == null) {
-            base1.favorite_sites = {};
+          if ((base2 = _this.settings).favorite_sites == null) {
+            base2.favorite_sites = {};
           }
           return _this.on_settings.resolve(_this.settings);
         };
