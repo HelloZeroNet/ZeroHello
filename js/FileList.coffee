@@ -2,7 +2,7 @@ class FileList extends Class
 	constructor: ->
 		@need_update = true
 		@updating_files = 0
-		@optional_stats = {limit: 0, free: 0, used: 0}
+		@optional_stats = {limit: "0", free: "0", used: "0"}
 		@updateOptionalStats()
 		@hover_totalbar = false
 		@menu_totalbar = new Menu()
@@ -12,6 +12,7 @@ class FileList extends Class
 		@selected_files_size = 0
 		@selected_files_pinned = 0
 		@bigfiles = new Bigfiles()
+		@display_limit = 0
 		@
 
 	getSites: =>
@@ -221,7 +222,7 @@ class FileList extends Class
 		@bigfiles.files.update()
 
 	render: =>
-		if Page.site_list.sites and not @need_update and @updating_files == 0 and document.body.className != "loaded"
+		if Page.site_list.sites and not @need_update and @updating_files == 0and document.body.className != "loaded"
 			document.body.className = "loaded"
 		if @need_update and Page.site_list.sites.length
 			@updateAllFiles()
@@ -250,13 +251,20 @@ class FileList extends Class
 				])
 			)
 
+		# Progressive display of sites to large ui blocks
+		if @display_limit < sites.length
+			setTimeout ( =>
+				@display_limit += 1
+				Page.projector.scheduleRender()
+			), 1000
+
 		h("div#FileList", [
 			@renderSelectbar()
 			@renderTotalbar()
 			@bigfiles.render()
-			sites_favorited.map (site) =>
+			sites_favorited[0..@display_limit].map (site) =>
 				site.renderOptionalStats()
-			sites_connected.map (site) =>
+			sites_connected[0..@display_limit].map (site) =>
 				site.renderOptionalStats()
 		])
 
