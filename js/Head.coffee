@@ -107,7 +107,7 @@ class Head extends Class
 		if Page.server_info.rev < 1700
 			Page.cmd "wrapperNotification", ["info", "This feature requires ZeroNet version 0.5.0"]
 		else
-			Page.setProjectorMode(e.target.hash.replace("#", ""))
+			Page.handleLinkClick(e)
 		return false
 
 	render: =>
@@ -119,8 +119,9 @@ class Head extends Class
 				h("span", ["Hello ZeroNet_"])
 			]),
 			h("div.modes", [
-				h("a.mode.sites", {href: "#Sites", classes: {active: Page.mode == "Sites"}, onclick: @handleModeClick}, _("Sites"))
-				h("a.mode.files", {href: "#Files", classes: {active: Page.mode == "Files"}, onclick: @handleModeClick}, _("Files"))
+				h("a.mode.sites", {href: "?", classes: {active: Page.mode == "Sites"}, onclick: Page.handleLinkClick}, _("Sites"))
+				h("a.mode.files", {href: "?Files", classes: {active: Page.mode == "Files"}, onclick: Page.handleLinkClick}, _("Files"))
+				if Page.site_info.settings.own then h("a.mode.stats", {href: "?Stats", classes: {active: Page.mode == "Stats"}, onclick: Page.handleLinkClick}, _("Stats"))
 			])
 		)
 

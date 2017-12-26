@@ -118,6 +118,24 @@ class ZeroHello extends ZeroFrame
 		@route url
 		return false
 
+	handleLinkClick: (e) =>
+		if e.which == 2
+			# Middle click dont do anything
+			return true
+		else
+			@log "save scrollTop", window.pageYOffset
+			@history_state["scrollTop"] = window.pageYOffset
+			@cmd "wrapperReplaceState", [@history_state, null]
+
+			window.scroll(window.pageXOffset, 0)
+			@history_state["scrollTop"] = 0
+
+			@on_loaded.resolved = false
+			document.body.className = ""
+
+			@setUrl e.currentTarget.search
+			return false
+
 	loadSettings: ->
 		@on_site_info.then =>
 			@cmd "userGetSettings", [], (res) =>
