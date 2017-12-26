@@ -219,7 +219,9 @@ class FileList extends Class
 			used += site.row.settings.optional_downloaded
 			site.files.update =>
 				@updating_files -= 1
-		@bigfiles.files.update()
+		@updating_files += 1
+		@bigfiles.files.update =>
+			@updating_files -= 1
 
 	render: =>
 		if Page.site_list.sites and not @need_update and @updating_files == 0and document.body.className != "loaded"
