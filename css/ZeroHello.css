@@ -39,15 +39,19 @@ a:hover { text-decoration: none }
 body.changing { overflow-y: scroll; }
 
 /* PageSites */
-#PageSites #FileList, body.changing #FileList { opacity: 0; transform: translateY(30px); pointer-events: none; overflow: hidden; }
-#PageSites #FileList { max-height: 0px }
-#PageSites #FileList .files, body.changing #FileList .files { opacity: 0; transform: translateY(30px); pointer-events: none; }
+#PageSites #FileList, #PageStats #FileList, body.changing #FileList { opacity: 0; transform: translateY(30px); pointer-events: none; overflow: hidden; }
+#PageSites #FileList, #PageStats #FileList { max-height: 0px }
+#PageSites #FileList .files, #PageStats #FileList .files, body.changing #FileList .files { opacity: 0; transform: translateY(30px); pointer-events: none; }
 
 /* PageFiles */
-#PageFiles #SiteList { opacity: 0; visibility: hidden; transform: translateX(-20px); height: 0px; pointer-events: none; }
-#PageFiles #SiteList .details { transform: translateX(180px); }
-#PageFiles #FeedList { visibility: hidden; height: 0px; pointer-events: none; overflow: hidden }
-#PageFiles #Head .settings { opacity: 0; visibility: hidden; overflow: hidden }
-#PageFiles .left { width: 100%; background-image: linear-gradient(220deg, #372d56 0px, #162761 2000px); }
-#PageFiles .left .logo { background-color: #162150 }
-#PageFiles .right { height: 0px }
+#PageFiles #SiteList, #PageStats #SiteList { opacity: 0; visibility: hidden; transform: translateX(-20px); height: 0px; pointer-events: none; }
+#PageFiles #SiteList .details, #PageStats #SiteList .details { transform: translateX(180px); }
+#PageFiles #FeedList, #PageStats #FeedList { visibility: hidden; height: 0px; pointer-events: none; overflow: hidden }
+#PageFiles #Head .settings, #PageStats #Head .settings { opacity: 0; visibility: hidden; overflow: hidden }
+#PageFiles .left, #PageStats .left { width: 100%; background-image: linear-gradient(220deg, #372d56 0px, #162761 2000px); }
+#PageFiles .left .logo, #PageStats .left .logo { background-color: #162150 }
+#PageFiles .right, #PageStats .right { height: 0px }
+
+/* PageStats */
+#PageStats .left { background-image: linear-gradient(180deg, hsl(252, 61%, 16%) 0px, hsla(226, 59%, 6%, 1) 1260px) }
+#PageStats .left .logo { background-color: rgba(0,0,0,0) }
