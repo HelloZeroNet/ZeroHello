@@ -9,6 +9,7 @@ class ZeroHello extends ZeroFrame
 
 		@on_site_info = new Promise()
 		@on_settings = new Promise()
+		@on_loaded = new Promise()
 		@settings = null
 
 		@latest_version = "0.6.0"
@@ -16,22 +17,27 @@ class ZeroHello extends ZeroFrame
 		@change_timer = null
 		document.body.id = "Page#{@mode}"
 
+	addRenderer: (node, renderer) ->
+		@projector.replace(node, renderer)
+		@renderers.push(renderer)
+
+	detachRenderers: ->
+		for renderer in @renderers
+			@projector.detach(renderer)
+		@renderers = []
+
 	setProjectorMode: (mode) ->
 		@log "setProjectorMode", mode
-		if mode == "Sites"
-			try
-				@projector.detach(@file_list.render)
-			catch
-				@
-			@projector.replace($("#FeedList"), @feed_list.render)
-			@projector.replace($("#SiteList"), @site_list.render)
-		else if mode == "Files"
-			try
-				@projector.detach(@feed_list.render)
-				@projector.detach(@site_list.render)
-			catch
-				@
-			@projector.replace($("#FileList"), @file_list.render)
+		@detachRenderers()
+		if mode == "Files"
+			@addRenderer($("#FileList"), @file_list.render)
+		else if mode == "Stats"
+			@addRenderer($("#StatList"), @stat_list.render)
+		else
+			mode = "Sites"
+			@addRenderer($("#FeedList"), @feed_list.render)
+			@addRenderer($("#SiteList"), @site_list.render)
+
 		if @mode != mode
 			@mode = mode
 			setTimeout ( ->
@@ -51,16 +57,23 @@ class ZeroHello extends ZeroFrame
 	createProjector: ->
 		@projector = maquette.createProjector()  # Dummy, will set later
 		@projectors = {}
+		@renderers = []
 
 		@site_list = new SiteList()
 		@feed_list = new FeedList()
 		@file_list = new FileList()
+		@stat_list = new StatList()
 		@head = new Head()
 		@dashboard = new Dashboard()
 		@mute_list = new MuteList()
 		@trigger = new Trigger()
 
-		@route("")
+		if base.href.indexOf("?") == -1
+			@route("")
+		else
+			url = base.href.replace(/.*?\?/, "")
+			@route(url)
+			@history_state["url"] = url
 
 		@loadSettings()
 		@on_site_info.then =>
@@ -79,6 +92,7 @@ class ZeroHello extends ZeroFrame
 	route: (query) ->
 		@params = Text.parseQuery(query)
 		@log "Route", @params
+		@setProjectorMode(@params.url)
 
 	# Add/remove/change parameter to current site url
 	createUrl: (key, val) ->
@@ -95,7 +109,6 @@ class ZeroHello extends ZeroFrame
 		url = url.replace(/.*?\?/, "")
 		@log "setUrl", @history_state["url"], "->", url
 		if @history_state["url"] == url
-			@content.update()
 			return false
 		@history_state["url"] = url
 		if mode == "replace"
