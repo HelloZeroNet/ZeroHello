@@ -14,6 +14,7 @@ class FeedList extends Class
 		@query_limit = 20
 		@query_day_limit = 3
 		@show_stats = false
+		@feed_keys = {}
 		Page.on_settings.then =>
 			@need_update = true
 			document.body.onscroll = =>
@@ -35,6 +36,7 @@ class FeedList extends Class
 
 	displayRows: (rows, search) =>
 		@feeds = []
+		@feed_keys = {}
 		if not rows
 			return false
 
@@ -61,7 +63,12 @@ class FeedList extends Class
 				row_group.feed_id = row.date_added
 			else
 				row.feed_id ?= row.date_added
-				@feeds.push(row)
+				row.key = row.site + row.type + row.title + row.feed_id
+				if @feed_keys[row.key]
+					@log "Duplicate feed key: #{row.key}"
+				else
+					@feeds.push(row)
+				@feed_keys[row.key] = true
 				row_group = row
 			@feed_types[row.type] = true
 			last_row = row
@@ -132,6 +139,7 @@ class FeedList extends Class
 
 		if Page.server_info.rev < 1230
 			@feeds = []
+			@feed_keys = {}
 
 		if e.target.value == ""  # No delay when returning to newsfeed
 			delay = 1
@@ -247,7 +255,7 @@ class FeedList extends Class
 		try
 			site = Page.site_list.item_list.items_bykey[feed.site]
 			type_formatted = @formatType(feed.type, feed.title)
-			return h("div.feed."+feed.type, {key: feed.site+feed.type+feed.title+feed.feed_id, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [
+			return h("div.feed."+feed.type, {key: feed.key, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [
 				h("div.details", [
 					h("a.site", {href: site.getHref()}, [site.row.content.title]),
 					h("div.added", [Time.since(feed.date_added)])
@@ -264,7 +272,7 @@ class FeedList extends Class
 			])
 		catch err
 			@log err
-			return h("div")
+			return h("div", key: Time.timestamp())
 
 	renderWelcome: =>
 		h("div.welcome", [
