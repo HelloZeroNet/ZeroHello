@@ -97,6 +97,11 @@ class ZeroHello extends ZeroFrame
 		@params = Text.parseQuery(query)
 		@log "Route", @params
 		@setProjectorMode(@params.url)
+		if @mode == "Stats"
+			@page_stats.need_update = true
+		else if @mode == "Files"
+			@page_files.need_update = true
+		@projector.scheduleRender()
 
 	# Add/remove/change parameter to current site url
 	createUrl: (key, val) ->
