@@ -1,5 +1,62 @@
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Class.coffee ---- */
+
+
+(function() {
+  var Class,
+    slice = [].slice;
+
+  Class = (function() {
+    function Class() {}
+
+    Class.prototype.trace = true;
+
+    Class.prototype.log = function() {
+      var args;
+      args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+      if (!this.trace) {
+        return;
+      }
+      if (typeof console === 'undefined') {
+        return;
+      }
+      args.unshift("[" + this.constructor.name + "]");
+      console.log.apply(console, args);
+      return this;
+    };
+
+    Class.prototype.logStart = function() {
+      var args, name;
+      name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+      if (!this.trace) {
+        return;
+      }
+      this.logtimers || (this.logtimers = {});
+      this.logtimers[name] = +(new Date);
+      if (args.length > 0) {
+        this.log.apply(this, ["" + name].concat(slice.call(args), ["(started)"]));
+      }
+      return this;
+    };
+
+    Class.prototype.logEnd = function() {
+      var args, ms, name;
+      name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+      ms = +(new Date) - this.logtimers[name];
+      this.log.apply(this, ["" + name].concat(slice.call(args), ["(Done in " + ms + "ms)"]));
+      return this;
+    };
+
+    return Class;
+
+  })();
+
+  window.Class = Class;
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Promise.coffee ---- */
 
 
@@ -110,6 +167,33 @@
 (function() {
   Function.prototype.property = function(prop, desc) {
     return Object.defineProperty(this.prototype, prop, desc);
+  };
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/lib/Prototypes.coffee ---- */
+
+
+(function() {
+  String.prototype.startsWith = function(s) {
+    return this.slice(0, s.length) === s;
+  };
+
+  String.prototype.endsWith = function(s) {
+    return s === '' || this.slice(-s.length) === s;
+  };
+
+  String.prototype.repeat = function(count) {
+    return new Array(count + 1).join(this);
+  };
+
+  window.isEmpty = function(obj) {
+    var key;
+    for (key in obj) {
+      return false;
+    }
+    return true;
   };
 
 }).call(this);
@@ -902,6 +986,4190 @@
 (function(){var block={newline:/^\n+/,code:/^( {4}[^\n]+\n*)+/,fences:noop,hr:/^( *[-*_]){3,} *(?:\n+|$)/,heading:/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,nptable:noop,lheading:/^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,blockquote:/^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,list:/^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,html:/^ *(?:comment|closed|closing) *(?:\n{2,}|\s*$)/,def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,table:noop,paragraph:/^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,text:/^[^\n]+/};block.bullet=/(?:[*+-]|\d+\.)/;block.item=/^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;block.item=replace(block.item,"gm")(/bull/g,block.bullet)();block.list=replace(block.list)(/bull/g,block.bullet)("hr","\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))")("def","\\n+(?="+block.def.source+")")();block.blockquote=replace(block.blockquote)("def",block.def)();block._tag="(?!(?:"+"a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"+"|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"+"|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b";block.html=replace(block.html)("comment",/<!--[\s\S]*?-->/)("closed",/<(tag)[\s\S]+?<\/\1>/)("closing",/<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)(/tag/g,block._tag)();block.paragraph=replace(block.paragraph)("hr",block.hr)("heading",block.heading)("lheading",block.lheading)("blockquote",block.blockquote)("tag","<"+block._tag)("def",block.def)();block.normal=merge({},block);block.gfm=merge({},block.normal,{fences:/^ *(`{3,}|~{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n+|$)/,paragraph:/^/});block.gfm.paragraph=replace(block.paragraph)("(?!","(?!"+block.gfm.fences.source.replace("\\1","\\2")+"|"+block.list.source.replace("\\1","\\3")+"|")();block.tables=merge({},block.gfm,{nptable:/^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,table:/^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/});function Lexer(options){this.tokens=[];this.tokens.links={};this.options=options||marked.defaults;this.rules=block.normal;if(this.options.gfm){if(this.options.tables){this.rules=block.tables}else{this.rules=block.gfm}}}Lexer.rules=block;Lexer.lex=function(src,options){var lexer=new Lexer(options);return lexer.lex(src)};Lexer.prototype.lex=function(src){src=src.replace(/\r\n|\r/g,"\n").replace(/\t/g,"    ").replace(/\u00a0/g," ").replace(/\u2424/g,"\n");return this.token(src,true)};Lexer.prototype.token=function(src,top,bq){var src=src.replace(/^ +$/gm,""),next,loose,cap,bull,b,item,space,i,l;while(src){if(cap=this.rules.newline.exec(src)){src=src.substring(cap[0].length);if(cap[0].length>1){this.tokens.push({type:"space"})}}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);cap=cap[0].replace(/^ {4}/gm,"");this.tokens.push({type:"code",text:!this.options.pedantic?cap.replace(/\n+$/,""):cap});continue}if(cap=this.rules.fences.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"code",lang:cap[2],text:cap[3]});continue}if(cap=this.rules.heading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[1].length,text:cap[2]});continue}if(top&&(cap=this.rules.nptable.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].split(/ *\| */)}this.tokens.push(item);continue}if(cap=this.rules.lheading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[2]==="="?1:2,text:cap[1]});continue}if(cap=this.rules.hr.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"hr"});continue}if(cap=this.rules.blockquote.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"blockquote_start"});cap=cap[0].replace(/^ *> ?/gm,"");this.token(cap,top,true);this.tokens.push({type:"blockquote_end"});continue}if(cap=this.rules.list.exec(src)){src=src.substring(cap[0].length);bull=cap[2];this.tokens.push({type:"list_start",ordered:bull.length>1});cap=cap[0].match(this.rules.item);next=false;l=cap.length;i=0;for(;i<l;i++){item=cap[i];space=item.length;item=item.replace(/^ *([*+-]|\d+\.) +/,"");if(~item.indexOf("\n ")){space-=item.length;item=!this.options.pedantic?item.replace(new RegExp("^ {1,"+space+"}","gm"),""):item.replace(/^ {1,4}/gm,"")}if(this.options.smartLists&&i!==l-1){b=block.bullet.exec(cap[i+1])[0];if(bull!==b&&!(bull.length>1&&b.length>1)){src=cap.slice(i+1).join("\n")+src;i=l-1}}loose=next||/\n\n(?!\s*$)/.test(item);if(i!==l-1){next=item.charAt(item.length-1)==="\n";if(!loose)loose=next}this.tokens.push({type:loose?"loose_item_start":"list_item_start"});this.token(item,false,bq);this.tokens.push({type:"list_item_end"})}this.tokens.push({type:"list_end"});continue}if(cap=this.rules.html.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:this.options.sanitize?"paragraph":"html",pre:cap[1]==="pre"||cap[1]==="script"||cap[1]==="style",text:cap[0]});continue}if(!bq&&top&&(cap=this.rules.def.exec(src))){src=src.substring(cap[0].length);this.tokens.links[cap[1].toLowerCase()]={href:cap[2],title:cap[3]};continue}if(top&&(cap=this.rules.table.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/(?: *\| *)?\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].replace(/^ *\| *| *\| *$/g,"").split(/ *\| */)}this.tokens.push(item);continue}if(top&&(cap=this.rules.paragraph.exec(src))){src=src.substring(cap[0].length);this.tokens.push({type:"paragraph",text:cap[1].charAt(cap[1].length-1)==="\n"?cap[1].slice(0,-1):cap[1]});continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"text",text:cap[0]});continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return this.tokens};var inline={escape:/^\\([\\`*{}\[\]()#+\-.!_>])/,autolink:/^<([^ >]+(@|:\/)[^ >]+)>/,url:noop,tag:/^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,link:/^!?\[(inside)\]\(href\)/,reflink:/^!?\[(inside)\]\s*\[([^\]]*)\]/,nolink:/^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,strong:/^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,em:/^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,code:/^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,br:/^ {2,}\n(?!\s*$)/,del:noop,text:/^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/};inline._inside=/(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;inline._href=/\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;inline.link=replace(inline.link)("inside",inline._inside)("href",inline._href)();inline.reflink=replace(inline.reflink)("inside",inline._inside)();inline.normal=merge({},inline);inline.pedantic=merge({},inline.normal,{strong:/^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,em:/^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/});inline.gfm=merge({},inline.normal,{escape:replace(inline.escape)("])","~|])")(),url:/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,del:/^~~(?=\S)([\s\S]*?\S)~~/,text:replace(inline.text)("]|","~]|")("|","|https?://|")()});inline.breaks=merge({},inline.gfm,{br:replace(inline.br)("{2,}","*")(),text:replace(inline.gfm.text)("{2,}","*")()});function InlineLexer(links,options){this.options=options||marked.defaults;this.links=links;this.rules=inline.normal;this.renderer=this.options.renderer||new Renderer;this.renderer.options=this.options;if(!this.links){throw new Error("Tokens array requires a `links` property.")}if(this.options.gfm){if(this.options.breaks){this.rules=inline.breaks}else{this.rules=inline.gfm}}else if(this.options.pedantic){this.rules=inline.pedantic}}InlineLexer.rules=inline;InlineLexer.output=function(src,links,options){var inline=new InlineLexer(links,options);return inline.output(src)};InlineLexer.prototype.output=function(src){var out="",link,text,href,cap;while(src){if(cap=this.rules.escape.exec(src)){src=src.substring(cap[0].length);out+=cap[1];continue}if(cap=this.rules.autolink.exec(src)){src=src.substring(cap[0].length);if(cap[2]==="@"){text=cap[1].charAt(6)===":"?this.mangle(cap[1].substring(7)):this.mangle(cap[1]);href=this.mangle("mailto:")+text}else{text=escape(cap[1]);href=text}out+=this.renderer.link(href,null,text);continue}if(!this.inLink&&(cap=this.rules.url.exec(src))){src=src.substring(cap[0].length);text=escape(cap[1]);href=text;out+=this.renderer.link(href,null,text);continue}if(cap=this.rules.tag.exec(src)){if(!this.inLink&&/^<a /i.test(cap[0])){this.inLink=true}else if(this.inLink&&/^<\/a>/i.test(cap[0])){this.inLink=false}src=src.substring(cap[0].length);out+=this.options.sanitize?escape(cap[0]):cap[0];continue}if(cap=this.rules.link.exec(src)){src=src.substring(cap[0].length);this.inLink=true;out+=this.outputLink(cap,{href:cap[2],title:cap[3]});this.inLink=false;continue}if((cap=this.rules.reflink.exec(src))||(cap=this.rules.nolink.exec(src))){src=src.substring(cap[0].length);link=(cap[2]||cap[1]).replace(/\s+/g," ");link=this.links[link.toLowerCase()];if(!link||!link.href){out+=cap[0].charAt(0);src=cap[0].substring(1)+src;continue}this.inLink=true;out+=this.outputLink(cap,link);this.inLink=false;continue}if(cap=this.rules.strong.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.strong(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.em.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.em(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.codespan(escape(cap[2],true));continue}if(cap=this.rules.br.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.br();continue}if(cap=this.rules.del.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.del(this.output(cap[1]));continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);out+=escape(this.smartypants(cap[0]));continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return out};InlineLexer.prototype.outputLink=function(cap,link){var href=escape(link.href),title=link.title?escape(link.title):null;return cap[0].charAt(0)!=="!"?this.renderer.link(href,title,this.output(cap[1])):this.renderer.image(href,title,escape(cap[1]))};InlineLexer.prototype.smartypants=function(text){if(!this.options.smartypants)return text;return text.replace(/--/g,"—").replace(/(^|[-\u2014/(\[{"\s])'/g,"$1‘").replace(/'/g,"’").replace(/(^|[-\u2014/(\[{\u2018\s])"/g,"$1“").replace(/"/g,"”").replace(/\.{3}/g,"…")};InlineLexer.prototype.mangle=function(text){var out="",l=text.length,i=0,ch;for(;i<l;i++){ch=text.charCodeAt(i);if(Math.random()>.5){ch="x"+ch.toString(16)}out+="&#"+ch+";"}return out};function Renderer(options){this.options=options||{}}Renderer.prototype.code=function(code,lang,escaped){if(this.options.highlight){var out=this.options.highlight(code,lang);if(out!=null&&out!==code){escaped=true;code=out}}if(!lang){return"<pre><code>"+(escaped?code:escape(code,true))+"\n</code></pre>"}return'<pre><code class="'+this.options.langPrefix+escape(lang,true)+'">'+(escaped?code:escape(code,true))+"\n</code></pre>\n"};Renderer.prototype.blockquote=function(quote){return"<blockquote>\n"+quote+"</blockquote>\n"};Renderer.prototype.html=function(html){return html};Renderer.prototype.heading=function(text,level,raw){return"<h"+level+' id="'+this.options.headerPrefix+raw.toLowerCase().replace(/[^\w]+/g,"-")+'">'+text+"</h"+level+">\n"};Renderer.prototype.hr=function(){return this.options.xhtml?"<hr/>\n":"<hr>\n"};Renderer.prototype.list=function(body,ordered){var type=ordered?"ol":"ul";return"<"+type+">\n"+body+"</"+type+">\n"};Renderer.prototype.listitem=function(text){return"<li>"+text+"</li>\n"};Renderer.prototype.paragraph=function(text){return"<p>"+text+"</p>\n"};Renderer.prototype.table=function(header,body){return"<table>\n"+"<thead>\n"+header+"</thead>\n"+"<tbody>\n"+body+"</tbody>\n"+"</table>\n"};Renderer.prototype.tablerow=function(content){return"<tr>\n"+content+"</tr>\n"};Renderer.prototype.tablecell=function(content,flags){var type=flags.header?"th":"td";var tag=flags.align?"<"+type+' style="text-align:'+flags.align+'">':"<"+type+">";return tag+content+"</"+type+">\n"};Renderer.prototype.strong=function(text){return"<strong>"+text+"</strong>"};Renderer.prototype.em=function(text){return"<em>"+text+"</em>"};Renderer.prototype.codespan=function(text){return"<code>"+text+"</code>"};Renderer.prototype.br=function(){return this.options.xhtml?"<br/>":"<br>"};Renderer.prototype.del=function(text){return"<del>"+text+"</del>"};Renderer.prototype.link=function(href,title,text){if(this.options.sanitize){try{var prot=decodeURIComponent(unescape(href)).replace(/[^\w:]/g,"").toLowerCase()}catch(e){return""}if(prot.indexOf("javascript:")===0){return""}}var out='<a href="'+href+'"';if(title){out+=' title="'+title+'"'}out+=">"+text+"</a>";return out};Renderer.prototype.image=function(href,title,text){var out='<img src="'+href+'" alt="'+text+'"';if(title){out+=' title="'+title+'"'}out+=this.options.xhtml?"/>":">";return out};function Parser(options){this.tokens=[];this.token=null;this.options=options||marked.defaults;this.options.renderer=this.options.renderer||new Renderer;this.renderer=this.options.renderer;this.renderer.options=this.options}Parser.parse=function(src,options,renderer){var parser=new Parser(options,renderer);return parser.parse(src)};Parser.prototype.parse=function(src){this.inline=new InlineLexer(src.links,this.options,this.renderer);this.tokens=src.reverse();var out="";while(this.next()){out+=this.tok()}return out};Parser.prototype.next=function(){return this.token=this.tokens.pop()};Parser.prototype.peek=function(){return this.tokens[this.tokens.length-1]||0};Parser.prototype.parseText=function(){var body=this.token.text;while(this.peek().type==="text"){body+="\n"+this.next().text}return this.inline.output(body)};Parser.prototype.tok=function(){switch(this.token.type){case"space":{return""}case"hr":{return this.renderer.hr()}case"heading":{return this.renderer.heading(this.inline.output(this.token.text),this.token.depth,this.token.text)}case"code":{return this.renderer.code(this.token.text,this.token.lang,this.token.escaped)}case"table":{var header="",body="",i,row,cell,flags,j;cell="";for(i=0;i<this.token.header.length;i++){flags={header:true,align:this.token.align[i]};cell+=this.renderer.tablecell(this.inline.output(this.token.header[i]),{header:true,align:this.token.align[i]})}header+=this.renderer.tablerow(cell);for(i=0;i<this.token.cells.length;i++){row=this.token.cells[i];cell="";for(j=0;j<row.length;j++){cell+=this.renderer.tablecell(this.inline.output(row[j]),{header:false,align:this.token.align[j]})}body+=this.renderer.tablerow(cell)}return this.renderer.table(header,body)}case"blockquote_start":{var body="";while(this.next().type!=="blockquote_end"){body+=this.tok()}return this.renderer.blockquote(body)}case"list_start":{var body="",ordered=this.token.ordered;while(this.next().type!=="list_end"){body+=this.tok()}return this.renderer.list(body,ordered)}case"list_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.token.type==="text"?this.parseText():this.tok()}return this.renderer.listitem(body)}case"loose_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.tok()}return this.renderer.listitem(body)}case"html":{var html=!this.token.pre&&!this.options.pedantic?this.inline.output(this.token.text):this.token.text;return this.renderer.html(html)}case"paragraph":{return this.renderer.paragraph(this.inline.output(this.token.text))}case"text":{return this.renderer.paragraph(this.parseText())}}};function escape(html,encode){return html.replace(!encode?/&(?!#?\w+;)/g:/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function unescape(html){return html.replace(/&([#\w]+);/g,function(_,n){n=n.toLowerCase();if(n==="colon")return":";if(n.charAt(0)==="#"){return n.charAt(1)==="x"?String.fromCharCode(parseInt(n.substring(2),16)):String.fromCharCode(+n.substring(1))}return""})}function replace(regex,opt){regex=regex.source;opt=opt||"";return function self(name,val){if(!name)return new RegExp(regex,opt);val=val.source||val;val=val.replace(/(^|[^\[])\^/g,"$1");regex=regex.replace(name,val);return self}}function noop(){}noop.exec=noop;function merge(obj){var i=1,target,key;for(;i<arguments.length;i++){target=arguments[i];for(key in target){if(Object.prototype.hasOwnProperty.call(target,key)){obj[key]=target[key]}}}return obj}function marked(src,opt,callback){if(callback||typeof opt==="function"){if(!callback){callback=opt;opt=null}opt=merge({},marked.defaults,opt||{});var highlight=opt.highlight,tokens,pending,i=0;try{tokens=Lexer.lex(src,opt)}catch(e){return callback(e)}pending=tokens.length;var done=function(err){if(err){opt.highlight=highlight;return callback(err)}var out;try{out=Parser.parse(tokens,opt)}catch(e){err=e}opt.highlight=highlight;return err?callback(err):callback(null,out)};if(!highlight||highlight.length<3){return done()}delete opt.highlight;if(!pending)return done();for(;i<tokens.length;i++){(function(token){if(token.type!=="code"){return--pending||done()}return highlight(token.text,token.lang,function(err,code){if(err)return done(err);if(code==null||code===token.text){return--pending||done()}token.text=code;token.escaped=true;--pending||done()})})(tokens[i])}return}try{if(opt)opt=merge({},marked.defaults,opt);return Parser.parse(Lexer.lex(src,opt),opt)}catch(e){e.message+="\nPlease report this to https://github.com/chjj/marked.";if((opt||marked.defaults).silent){return"<p>An error occured:</p><pre>"+escape(e.message+"",true)+"</pre>"}throw e}}marked.options=marked.setOptions=function(opt){merge(marked.defaults,opt);return marked};marked.defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,smartLists:false,silent:false,highlight:null,langPrefix:"lang-",smartypants:false,headerPrefix:"",renderer:new Renderer,xhtml:false};marked.Parser=Parser;marked.parser=Parser.parse;marked.Renderer=Renderer;marked.Lexer=Lexer;marked.lexer=Lexer.lex;marked.InlineLexer=InlineLexer;marked.inlineLexer=InlineLexer.output;marked.parse=marked;if(typeof module!=="undefined"&&typeof exports==="object"){module.exports=marked}else if(typeof define==="function"&&define.amd){define(function(){return marked})}else{this.marked=marked}}).call(function(){return this||(typeof window!=="undefined"?window:global)}());
 
 
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageFiles/Bigfiles.coffee ---- */
+
+
+(function() {
+  var Bigfiles,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  Bigfiles = (function(superClass) {
+    extend(Bigfiles, superClass);
+
+    function Bigfiles() {
+      this.render = bind(this.render, this);
+      this.getHref = bind(this.getHref, this);
+      this.updateFiles = bind(this.updateFiles, this);
+      this.files = new SiteFiles(this);
+      this.files.mode = "bigfiles";
+      this.files.limit = 100;
+      this.files.update = this.updateFiles;
+      this.row = {
+        "address": "bigfiles"
+      };
+    }
+
+    Bigfiles.prototype.updateFiles = function(cb) {
+      var orderby;
+      if (Page.server_info.rev < 3090) {
+        return typeof cb === "function" ? cb() : void 0;
+      }
+      orderby = this.files.orderby + (this.files.orderby_desc ? " DESC" : "");
+      return Page.cmd("optionalFileList", {
+        address: "all",
+        filter: "downloaded,bigfile",
+        limit: this.files.limit + 1,
+        orderby: orderby
+      }, (function(_this) {
+        return function(res) {
+          var i, len, row;
+          for (i = 0, len = res.length; i < len; i++) {
+            row = res[i];
+            row.site = Page.site_list.sites_byaddress[row.address];
+          }
+          _this.files.items = res.slice(0, +(_this.files.limit - 1) + 1 || 9e9);
+          _this.files.loaded = true;
+          _this.files.has_more = res.length > _this.files.limit;
+          Page.projector.scheduleRender();
+          return typeof cb === "function" ? cb() : void 0;
+        };
+      })(this));
+    };
+
+    Bigfiles.prototype.getHref = function(row) {
+      return row.inner_path;
+    };
+
+    Bigfiles.prototype.render = function() {
+      if (!this.files.items.length) {
+        return [];
+      }
+      return h("div.Site", [h("div.title", [h("h3.name", "Bigfiles")]), this.files.render()]);
+    };
+
+    return Bigfiles;
+
+  })(Class);
+
+  window.Bigfiles = Bigfiles;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageFiles/PageFiles.coffee ---- */
+
+
+(function() {
+  var PageFiles,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  PageFiles = (function(superClass) {
+    extend(PageFiles, superClass);
+
+    function PageFiles() {
+      this.onSiteInfo = bind(this.onSiteInfo, this);
+      this.render = bind(this.render, this);
+      this.updateAllFiles = bind(this.updateAllFiles, this);
+      this.updateOptionalStats = bind(this.updateOptionalStats, this);
+      this.renderSelectbar = bind(this.renderSelectbar, this);
+      this.renderTotalbar = bind(this.renderTotalbar, this);
+      this.handleLimitInput = bind(this.handleLimitInput, this);
+      this.handleTotalbarMenu = bind(this.handleTotalbarMenu, this);
+      this.handleLimitSetClick = bind(this.handleLimitSetClick, this);
+      this.handleLimitCancelClick = bind(this.handleLimitCancelClick, this);
+      this.handleEditlimitClick = bind(this.handleEditlimitClick, this);
+      this.handleTotalbarOut = bind(this.handleTotalbarOut, this);
+      this.handleTotalbarOver = bind(this.handleTotalbarOver, this);
+      this.handleSelectbarDelete = bind(this.handleSelectbarDelete, this);
+      this.handleSelectbarUnpin = bind(this.handleSelectbarUnpin, this);
+      this.handleSelectbarPin = bind(this.handleSelectbarPin, this);
+      this.handleSelectbarCancel = bind(this.handleSelectbarCancel, this);
+      this.checkSelectedFiles = bind(this.checkSelectedFiles, this);
+      this.getSites = bind(this.getSites, this);
+      this.need_update = true;
+      this.updating_files = 0;
+      this.optional_stats = {
+        limit: "0",
+        free: "0",
+        used: "0"
+      };
+      this.updateOptionalStats();
+      this.hover_totalbar = false;
+      this.menu_totalbar = new Menu();
+      this.editing_limit = false;
+      this.limit = "";
+      this.selected_files_num = 0;
+      this.selected_files_size = 0;
+      this.selected_files_pinned = 0;
+      this.bigfiles = new Bigfiles();
+      this.display_limit = 0;
+      this;
+    }
+
+    PageFiles.prototype.getSites = function() {
+      var address, back, bigfile_sites, file, i, len, name, ref, site;
+      if (this.bigfiles.files.items.length > 0) {
+        back = [];
+        bigfile_sites = {};
+        ref = this.bigfiles.files.items;
+        for (i = 0, len = ref.length; i < len; i++) {
+          file = ref[i];
+          if (bigfile_sites[name = file.site.row.address] == null) {
+            bigfile_sites[name] = {
+              row: file.site.row,
+              files: {
+                items: [],
+                selected: this.bigfiles.files.selected,
+                update: this.bigfiles.files.update
+              }
+            };
+          }
+          bigfile_sites[file.site.row.address].files.items.push(file);
+        }
+        for (address in bigfile_sites) {
+          site = bigfile_sites[address];
+          back.push(site);
+        }
+        back = back.concat(Page.site_list.sites);
+        return back;
+      } else {
+        return Page.site_list.sites;
+      }
+    };
+
+    PageFiles.prototype.checkSelectedFiles = function() {
+      var i, len, ref, results, site, site_file;
+      this.selected_files_num = 0;
+      this.selected_files_size = 0;
+      this.selected_files_pinned = 0;
+      ref = this.getSites();
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        results.push((function() {
+          var j, len1, ref1, results1;
+          ref1 = site.files.items;
+          results1 = [];
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            site_file = ref1[j];
+            if (!site.files.selected[site_file.inner_path]) {
+              continue;
+            }
+            this.selected_files_num += 1;
+            this.selected_files_size += site_file.size;
+            results1.push(this.selected_files_pinned += site_file.is_pinned);
+          }
+          return results1;
+        }).call(this));
+      }
+      return results;
+    };
+
+    PageFiles.prototype.handleSelectbarCancel = function() {
+      var i, j, key, len, len1, ref, ref1, ref2, site, site_file, val;
+      ref = this.getSites();
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        ref1 = site.files.items;
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          site_file = ref1[j];
+          ref2 = site.files.selected;
+          for (key in ref2) {
+            val = ref2[key];
+            delete site.files.selected[key];
+          }
+        }
+      }
+      this.checkSelectedFiles();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    PageFiles.prototype.handleSelectbarPin = function() {
+      var i, inner_paths, len, ref, site, site_file;
+      ref = this.getSites();
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        inner_paths = (function() {
+          var j, len1, ref1, results;
+          ref1 = site.files.items;
+          results = [];
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            site_file = ref1[j];
+            if (site.files.selected[site_file.inner_path]) {
+              results.push(site_file.inner_path);
+            }
+          }
+          return results;
+        })();
+        if (inner_paths.length > 0) {
+          (function(site) {
+            return Page.cmd("optionalFilePin", [inner_paths, site.row.address], function() {
+              return site.files.update();
+            });
+          })(site);
+        }
+      }
+      return this.handleSelectbarCancel();
+    };
+
+    PageFiles.prototype.handleSelectbarUnpin = function() {
+      var i, inner_paths, len, ref, site, site_file;
+      ref = this.getSites();
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        inner_paths = (function() {
+          var j, len1, ref1, results;
+          ref1 = site.files.items;
+          results = [];
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            site_file = ref1[j];
+            if (site.files.selected[site_file.inner_path]) {
+              results.push(site_file.inner_path);
+            }
+          }
+          return results;
+        })();
+        if (inner_paths.length > 0) {
+          (function(site) {
+            return Page.cmd("optionalFileUnpin", [inner_paths, site.row.address], function() {
+              return site.files.update();
+            });
+          })(site);
+        }
+      }
+      return this.handleSelectbarCancel();
+    };
+
+    PageFiles.prototype.handleSelectbarDelete = function() {
+      var i, inner_path, inner_paths, j, len, len1, ref, site, site_file;
+      ref = this.getSites();
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        inner_paths = (function() {
+          var j, len1, ref1, results;
+          ref1 = site.files.items;
+          results = [];
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            site_file = ref1[j];
+            if (site.files.selected[site_file.inner_path]) {
+              results.push(site_file.inner_path);
+            }
+          }
+          return results;
+        })();
+        if (inner_paths.length > 0) {
+          for (j = 0, len1 = inner_paths.length; j < len1; j++) {
+            inner_path = inner_paths[j];
+            Page.cmd("optionalFileDelete", [inner_path, site.row.address]);
+          }
+          site.files.update();
+        }
+      }
+      Page.site_list.update();
+      return this.handleSelectbarCancel();
+    };
+
+    PageFiles.prototype.handleTotalbarOver = function() {
+      this.hover_totalbar = true;
+      return Page.projector.scheduleRender();
+    };
+
+    PageFiles.prototype.handleTotalbarOut = function() {
+      this.hover_totalbar = false;
+      return Page.projector.scheduleRender();
+    };
+
+    PageFiles.prototype.handleEditlimitClick = function() {
+      this.editing_limit = true;
+      return false;
+    };
+
+    PageFiles.prototype.handleLimitCancelClick = function() {
+      this.editing_limit = false;
+      return false;
+    };
+
+    PageFiles.prototype.handleLimitSetClick = function() {
+      var limit;
+      if (this.limit.indexOf("M") > 0 || this.limit.indexOf("m") > 0) {
+        limit = (parseFloat(this.limit) / 1024).toString();
+      } else if (this.limit.indexOf("%") > 0) {
+        limit = parseFloat(this.limit) + "%";
+      } else {
+        limit = parseFloat(this.limit).toString();
+      }
+      this.optional_stats.limit = limit;
+      Page.cmd("optionalLimitSet", limit);
+      this.editing_limit = false;
+      return false;
+    };
+
+    PageFiles.prototype.handleTotalbarMenu = function() {
+      this.menu_totalbar.items = [];
+      this.menu_totalbar.items.push(["Edit optional files limit", this.handleEditlimitClick]);
+      if (this.menu_totalbar.visible) {
+        this.menu_totalbar.hide();
+      } else {
+        this.menu_totalbar.show();
+      }
+      return false;
+    };
+
+    PageFiles.prototype.handleLimitInput = function(e) {
+      return this.limit = e.target.value;
+    };
+
+    PageFiles.prototype.renderTotalbar = function() {
+
+      /*
+      		size_optional = 0
+      		optional_downloaded = 0
+      		for site in Page.site_list.sites
+      			size_optional += site.row.settings.size_optional
+      			optional_downloaded += site.row.settings.optional_downloaded
+       */
+      var limit, percent_limit, percent_optional_downloaded, percent_optional_used, total_space_limited;
+      if (this.editing_limit && parseFloat(this.limit) > 0) {
+        if (this.limit.indexOf("M") > 0 || this.limit.indexOf("m") > 0) {
+          limit = (parseFloat(this.limit) / 1024) + "GB";
+        } else {
+          limit = this.limit;
+        }
+      } else {
+        limit = this.optional_stats.limit;
+      }
+      if (limit.endsWith("%")) {
+        limit = this.optional_stats.free * (parseFloat(limit) / 100);
+      } else {
+        limit = parseFloat(limit) * 1024 * 1024 * 1024;
+      }
+      if (this.optional_stats.free > limit * 1.8 && !this.hover_totalbar) {
+        total_space_limited = limit * 1.8;
+      } else {
+        total_space_limited = this.optional_stats.free;
+      }
+      percent_optional_downloaded = (this.optional_stats.used / limit) * 100;
+      percent_optional_used = percent_optional_downloaded * (limit / total_space_limited);
+      percent_limit = (limit / total_space_limited) * 100;
+      return h("div#PageFilesDashboard", {
+        classes: {
+          editing: this.editing_limit
+        }
+      }, [
+        h("div.totalbar-edit", [
+          h("span.title", "Optional files limit:"), h("input", {
+            type: "text",
+            value: this.limit,
+            oninput: this.handleLimitInput
+          }), h("a.set", {
+            href: "#",
+            onclick: this.handleLimitSetClick
+          }, "Set"), h("a.cancel", {
+            href: "#",
+            onclick: this.handleLimitCancelClick
+          }, "Cancel")
+        ]), h("a.totalbar-title", {
+          href: "#",
+          title: "Space current used by optional files",
+          onclick: this.handleTotalbarMenu
+        }, "Used: " + (Text.formatSize(this.optional_stats.used)) + " / " + (Text.formatSize(limit)) + " (" + (Math.round(percent_optional_downloaded)) + "%)", h("div.icon-arrow-down")), this.menu_totalbar.render(), h("div.totalbar", {
+          onmouseover: this.handleTotalbarOver,
+          onmouseout: this.handleTotalbarOut
+        }, h("div.totalbar-used", {
+          style: "width: " + percent_optional_used + "%"
+        }), h("div.totalbar-limitbar", {
+          style: "width: " + percent_limit + "%"
+        }), h("div.totalbar-limit", {
+          style: "margin-left: " + percent_limit + "%"
+        }, h("span", {
+          title: "Space allowed to used by optional files"
+        }, Text.formatSize(limit))), h("div.totalbar-hddfree", h("span", {
+          title: "Total free space on your storage"
+        }, [
+          Text.formatSize(this.optional_stats.free), h("div.arrow", {
+            style: this.optional_stats.free > total_space_limited ? "width: 10px" : "width: 0px"
+          }, " \u25B6")
+        ])))
+      ]);
+    };
+
+    PageFiles.prototype.renderSelectbar = function() {
+      return h("div.selectbar", {
+        classes: {
+          visible: this.selected_files_num > 0
+        }
+      }, [
+        "Selected:", h("span.info", [h("span.num", this.selected_files_num + " files"), h("span.size", "(" + (Text.formatSize(this.selected_files_size)) + ")")]), h("div.actions", [
+          this.selected_files_pinned > this.selected_files_num / 2 ? h("a.action.pin.unpin", {
+            href: "#",
+            onclick: this.handleSelectbarUnpin
+          }, "UnPin") : h("a.action.pin", {
+            href: "#",
+            title: "Don't delete these files automatically",
+            onclick: this.handleSelectbarPin
+          }, "Pin"), h("a.action.delete", {
+            href: "#",
+            onclick: this.handleSelectbarDelete
+          }, "Delete")
+        ]), h("a.cancel.link", {
+          href: "#",
+          onclick: this.handleSelectbarCancel
+        }, "Cancel")
+      ]);
+    };
+
+    PageFiles.prototype.updateOptionalStats = function() {
+      return Page.cmd("optionalLimitStats", [], (function(_this) {
+        return function(res) {
+          _this.limit = res.limit;
+          if (!_this.limit.endsWith("%")) {
+            _this.limit += " GB";
+          }
+          return _this.optional_stats = res;
+        };
+      })(this));
+    };
+
+    PageFiles.prototype.updateAllFiles = function() {
+      var used;
+      this.updating_files = 0;
+      used = 0;
+      Page.site_list.sites.map((function(_this) {
+        return function(site) {
+          if (!site.row.settings.size_optional) {
+            return;
+          }
+          _this.updating_files += 1;
+          used += site.row.settings.optional_downloaded;
+          return site.files.update(function() {
+            return _this.updating_files -= 1;
+          });
+        };
+      })(this));
+      this.updating_files += 1;
+      return this.bigfiles.files.update((function(_this) {
+        return function() {
+          return _this.updating_files -= 1;
+        };
+      })(this));
+    };
+
+    PageFiles.prototype.render = function() {
+      var site, sites, sites_connected, sites_favorited;
+      if (Page.site_list.sites && !this.need_update && this.updating_files === 0 && document.body.className !== "loaded") {
+        document.body.className = "loaded";
+      }
+      if (this.need_update && Page.site_list.sites.length) {
+        this.updateAllFiles();
+        this.need_update = false;
+      }
+      sites = (function() {
+        var i, len, ref, results;
+        ref = Page.site_list.sites;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          site = ref[i];
+          if (site.row.settings.size_optional) {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_favorited = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (site.favorite) {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      sites_connected = (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = sites.length; i < len; i++) {
+          site = sites[i];
+          if (!site.favorite) {
+            results.push(site);
+          }
+        }
+        return results;
+      })();
+      if (sites.length > 0 && sites[0].files.loaded === false) {
+        if (sites_favorited.length) {
+          sites_favorited = [sites_favorited[0]];
+          sites_connected = [];
+        } else {
+          sites_favorited = [];
+          sites_connected = [sites_connected[0]];
+        }
+      }
+      if (sites.length === 0) {
+        document.body.className = "loaded";
+        return h("div#PageFiles", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
+      }
+      if (this.display_limit < sites.length) {
+        setTimeout(((function(_this) {
+          return function() {
+            _this.display_limit += 1;
+            return Page.projector.scheduleRender();
+          };
+        })(this)), 1000);
+      }
+      return h("div#PageFiles", [
+        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_favorited.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this)), sites_connected.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
+          return function(site) {
+            return site.renderOptionalStats();
+          };
+        })(this))
+      ]);
+    };
+
+    PageFiles.prototype.onSiteInfo = function(site_info) {
+      var rate_limit, ref, ref1;
+      if (((ref = site_info.event) != null ? ref[0] : void 0) === "peers_added") {
+        return false;
+      }
+      if (site_info.tasks === 0 && ((ref1 = site_info.event) != null ? ref1[0] : void 0) === "file_done") {
+        rate_limit = 1000;
+      } else {
+        rate_limit = 10000;
+      }
+      return RateLimit(rate_limit, (function(_this) {
+        return function() {
+          return _this.need_update = true;
+        };
+      })(this));
+    };
+
+    return PageFiles;
+
+  })(Class);
+
+  window.PageFiles = PageFiles;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageFiles/SiteFiles.coffee ---- */
+
+
+(function() {
+  var SiteFiles,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  SiteFiles = (function(superClass) {
+    extend(SiteFiles, superClass);
+
+    function SiteFiles(site1) {
+      this.site = site1;
+      this.update = bind(this.update, this);
+      this.render = bind(this.render, this);
+      this.renderOrderRight = bind(this.renderOrderRight, this);
+      this.renderOrder = bind(this.renderOrder, this);
+      this.handleMoreClick = bind(this.handleMoreClick, this);
+      this.handleOrderbyClick = bind(this.handleOrderbyClick, this);
+      this.handleRowMouseenter = bind(this.handleRowMouseenter, this);
+      this.handleSelectMousedown = bind(this.handleSelectMousedown, this);
+      this.handleSelectEnd = bind(this.handleSelectEnd, this);
+      this.handleSelectClick = bind(this.handleSelectClick, this);
+      this.limit = 10;
+      this.selected = {};
+      this.items = [];
+      this.loaded = false;
+      this.orderby = "time_downloaded";
+      this.mode = "site";
+      this.mode = "single_site";
+      this.orderby_desc = true;
+      this.has_more = false;
+    }
+
+    SiteFiles.prototype.handleSelectClick = function(e) {
+      return false;
+    };
+
+    SiteFiles.prototype.handleSelectEnd = function(e) {
+      document.body.removeEventListener('mouseup', this.handleSelectEnd);
+      return this.select_action = null;
+    };
+
+    SiteFiles.prototype.handleSelectMousedown = function(e) {
+      var inner_path;
+      inner_path = e.target.attributes.inner_path.value;
+      if (this.selected[inner_path]) {
+        delete this.selected[inner_path];
+        this.select_action = "deselect";
+      } else {
+        this.selected[inner_path] = true;
+        this.select_action = "select";
+      }
+      Page.file_list.checkSelectedFiles();
+      document.body.addEventListener('mouseup', this.handleSelectEnd);
+      e.stopPropagation();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    SiteFiles.prototype.handleRowMouseenter = function(e) {
+      var inner_path;
+      if (e.buttons && this.select_action) {
+        inner_path = e.target.attributes.inner_path.value;
+        if (this.select_action === "select") {
+          this.selected[inner_path] = true;
+        } else {
+          delete this.selected[inner_path];
+        }
+        Page.file_list.checkSelectedFiles();
+        Page.projector.scheduleRender();
+      }
+      return false;
+    };
+
+    SiteFiles.prototype.handleOrderbyClick = function(e) {
+      var orderby;
+      orderby = e.currentTarget.attributes.orderby.value;
+      if (this.orderby === orderby) {
+        this.orderby_desc = !this.orderby_desc;
+      }
+      this.orderby = orderby;
+      this.update();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    SiteFiles.prototype.handleMoreClick = function() {
+      this.limit += 15;
+      this.update();
+      return false;
+    };
+
+    SiteFiles.prototype.renderOrder = function(title, orderby) {
+      return h("a.title.orderby", {
+        href: "#" + orderby,
+        orderby: orderby,
+        onclick: this.handleOrderbyClick,
+        classes: {
+          selected: this.orderby === orderby,
+          desc: this.orderby_desc
+        }
+      }, [title, h("div.icon.icon-arrow-down")]);
+    };
+
+    SiteFiles.prototype.renderOrderRight = function(title, orderby) {
+      return h("a.title.orderby", {
+        href: "#" + orderby,
+        orderby: orderby,
+        onclick: this.handleOrderbyClick,
+        classes: {
+          selected: this.orderby === orderby,
+          desc: this.orderby_desc
+        }
+      }, [h("div.icon.icon-arrow-down"), title]);
+    };
+
+    SiteFiles.prototype.render = function() {
+      var ref;
+      if (!((ref = this.items) != null ? ref.length : void 0)) {
+        return [];
+      }
+      return [
+        h("div.files.files-" + this.mode, {
+          exitAnimation: Animation.slideUpInout
+        }, [
+          h("div.tr.thead", [h("div.td.pre", "."), this.mode === "bigfiles" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
+            return function(file) {
+              var percent, profile_color, site;
+              site = file.site || _this.site;
+              if (file.peer >= 10) {
+                profile_color = "#47d094";
+              } else if (file.peer > 0) {
+                profile_color = "#f5b800";
+              } else {
+                profile_color = "#d1d1d1";
+              }
+              if (_this.mode === "bigfiles") {
+                if (file.pieces == null) {
+                  file.pieces = 0;
+                }
+                if (file.pieces_downloaded == null) {
+                  file.pieces_downloaded = 0;
+                }
+                if (file.pieces === 0 || file.pieces_downloaded === 0) {
+                  percent = 0;
+                } else {
+                  percent = parseInt((file.pieces_downloaded / file.pieces) * 100);
+                }
+              }
+              return h("div.tr", {
+                key: file.inner_path,
+                inner_path: file.inner_path,
+                exitAnimation: Animation.slideUpInout,
+                enterAnimation: Animation.slideDown,
+                classes: {
+                  selected: _this.selected[file.inner_path]
+                },
+                onmouseenter: _this.handleRowMouseenter
+              }, [
+                h("div.td.pre", h("a.checkbox", {
+                  href: "#Select",
+                  onmousedown: _this.handleSelectMousedown,
+                  onclick: _this.handleSelectClick,
+                  inner_path: file.inner_path
+                })), _this.mode === "bigfiles" ? h("div.td.site", h("a.link", {
+                  href: site.getHref()
+                }, site.row.content.title)) : void 0, h("div.td.inner_path", h("a.title.link", {
+                  href: site.getHref(file),
+                  target: "_top"
+                }, file.inner_path.replace(/.*\//, "")), file.is_pinned ? h("span.pinned", {
+                  exitAnimation: Animation.slideUpInout,
+                  enterAnimation: Animation.slideDown
+                }, "Pinned") : void 0), _this.mode === "bigfiles" ? h("div.td.status", h("span.percent", {
+                  title: file.pieces_downloaded + " of " + file.pieces + " pieces downloaded",
+                  style: "box-shadow: inset " + (percent * 0.8) + "px 0px 0px #9ef5cf;"
+                }, percent + "%")) : void 0, h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
+                  h("div.icon.icon-profile", {
+                    style: "color: " + profile_color
+                  }), h("span.num", file.peer)
+                ]), h("div.td.uploaded", h("div.uploaded-text", Text.formatSize(file.uploaded)), h("div.dots-container", [
+                  h("span.dots.dots-bg", {
+                    title: "Ratio: " + ((file.uploaded / file.size).toFixed(1))
+                  }, "\u2022\u2022\u2022\u2022\u2022"), h("span.dots.dots-fg", {
+                    title: "Ratio: " + ((file.uploaded / file.size).toFixed(1)),
+                    style: "width: " + (Math.min(5, file.uploaded / file.size) * 9) + "px"
+                  }, "\u2022\u2022\u2022\u2022\u2022")
+                ])), h("div.td.added", file.time_downloaded ? Time.since(file.time_downloaded) : "n/a")
+              ]);
+            };
+          })(this)))
+        ]), this.has_more ? h("div.more-container", h("a.more", {
+          href: "#More",
+          onclick: this.handleMoreClick
+        }, "More files...")) : void 0
+      ];
+    };
+
+    SiteFiles.prototype.update = function(cb) {
+      var orderby;
+      orderby = this.orderby + (this.orderby_desc ? " DESC" : "");
+      return Page.cmd("optionalFileList", {
+        address: this.site.row.address,
+        limit: this.limit + 1,
+        orderby: orderby
+      }, (function(_this) {
+        return function(res) {
+          _this.items = res.slice(0, +(_this.limit - 1) + 1 || 9e9);
+          _this.loaded = true;
+          _this.has_more = res.length > _this.limit;
+          Page.projector.scheduleRender();
+          return typeof cb === "function" ? cb() : void 0;
+        };
+      })(this));
+    };
+
+    return SiteFiles;
+
+  })(Class);
+
+  window.SiteFiles = SiteFiles;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Dashboard.coffee ---- */
+
+
+(function() {
+  var Dashboard,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  Dashboard = (function(superClass) {
+    extend(Dashboard, superClass);
+
+    function Dashboard() {
+      this.render = bind(this.render, this);
+      this.handleTorBrowserwarningClick = bind(this.handleTorBrowserwarningClick, this);
+      this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
+      this.handleNewversionClick = bind(this.handleNewversionClick, this);
+      this.handleLogoutClick = bind(this.handleLogoutClick, this);
+      this.handleDonateClick = bind(this.handleDonateClick, this);
+      this.handleMultiuserClick = bind(this.handleMultiuserClick, this);
+      this.handlePortRecheckClick = bind(this.handlePortRecheckClick, this);
+      this.handlePortClick = bind(this.handlePortClick, this);
+      this.handleDisableAlwaysTorClick = bind(this.handleDisableAlwaysTorClick, this);
+      this.handleEnableAlwaysTorClick = bind(this.handleEnableAlwaysTorClick, this);
+      this.handleTorClick = bind(this.handleTorClick, this);
+      this.menu_newversion = new Menu();
+      this.menu_tor = new Menu();
+      this.menu_port = new Menu();
+      this.menu_multiuser = new Menu();
+      this.menu_donate = new Menu();
+      this.menu_browserwarning = new Menu();
+      this.menu_torbrowserwarning = new Menu();
+      this.port_checking = false;
+      this.has_web_gl = null;
+    }
+
+    Dashboard.prototype.isTorAlways = function() {
+      return Page.server_info.fileserver_ip === "127.0.0.1";
+    };
+
+    Dashboard.prototype.hasWebGl = function() {
+      var canvas, ctx;
+      if (this.has_web_gl === null) {
+        canvas = document.createElement('canvas');
+        ctx = canvas.getContext("webgl");
+        this.has_web_gl = ctx ? true : false;
+        this.log("Webgl:", this.has_web_gl);
+      }
+      return this.has_web_gl;
+    };
+
+    Dashboard.prototype.getTorTitle = function() {
+      var tor_title;
+      tor_title = Page.server_info.tor_status.replace(/\((.*)\)/, "").trim();
+      if (tor_title === "Disabled") {
+        tor_title = _("Disabled");
+      } else if (tor_title === "Error") {
+        tor_title = _("Error");
+      }
+      return tor_title;
+    };
+
+    Dashboard.prototype.handleTorClick = function() {
+      var ref;
+      this.menu_tor.items = [];
+      this.menu_tor.items.push(["Status: " + ((ref = Page.server_info) != null ? ref.tor_status : void 0), "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
+      if (this.getTorTitle() !== "OK") {
+        this.menu_tor.items.push(["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
+      }
+      this.menu_tor.items.push(["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
+      this.menu_tor.items.push(["---"]);
+      if (this.isTorAlways()) {
+        this.menu_tor.items.push(["Disable always Tor mode", this.handleDisableAlwaysTorClick]);
+      } else {
+        this.menu_tor.items.push(["Enable Tor for every connection (slower)", this.handleEnableAlwaysTorClick]);
+      }
+      this.menu_tor.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.handleEnableAlwaysTorClick = function() {
+      return Page.cmd("configSet", ["tor", "always"], (function(_this) {
+        return function(res) {
+          return Page.cmd("wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]);
+        };
+      })(this));
+    };
+
+    Dashboard.prototype.handleDisableAlwaysTorClick = function() {
+      return Page.cmd("configSet", ["tor", null], (function(_this) {
+        return function(res) {
+          return Page.cmd("wrapperNotification", ["done", "Tor always mode disabled, please restart your ZeroNet."]);
+        };
+      })(this));
+    };
+
+    Dashboard.prototype.handlePortClick = function() {
+      this.menu_port.items = [];
+      if (Page.server_info.ip_external) {
+        this.menu_port.items.push(["Nice! Your port " + Page.server_info.fileserver_port + " is opened.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+      } else if (this.isTorAlways()) {
+        this.menu_port.items.push(["Good, your port is always closed when using ZeroNet in Tor always mode.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+      } else if (this.getTorTitle() === "OK") {
+        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed, but your Tor gateway is running well.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+      } else {
+        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed. You are still fine, but for faster experience try open it.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+      }
+      this.menu_port.items.push(["---"]);
+      this.menu_port.items.push(["Re-check opened port", this.handlePortRecheckClick]);
+      this.menu_port.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.handlePortRecheckClick = function() {
+      this.port_checking = true;
+      return Page.cmd("serverPortcheck", [], (function(_this) {
+        return function(res) {
+          _this.port_checking = false;
+          return Page.reloadServerInfo();
+        };
+      })(this));
+    };
+
+    Dashboard.prototype.handleMultiuserClick = function() {
+      this.menu_multiuser.items = [];
+      this.menu_multiuser.items.push([
+        "Show your masterseed", (function() {
+          return Page.cmd("userShowMasterSeed");
+        })
+      ]);
+      this.menu_multiuser.items.push([
+        "Logout", (function() {
+          return Page.cmd("userLogout");
+        })
+      ]);
+      this.menu_multiuser.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.handleDonateClick = function() {
+      this.menu_donate.items = [];
+      this.menu_donate.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
+      this.menu_donate.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.handleLogoutClick = function() {
+      return Page.cmd("uiLogout");
+    };
+
+    Dashboard.prototype.handleNewversionClick = function() {
+      this.menu_newversion.items = [];
+      this.menu_newversion.items.push([
+        "Update and restart ZeroNet", (function() {
+          Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]);
+          return Page.cmd("serverUpdate");
+        })
+      ]);
+      this.menu_newversion.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.handleBrowserwarningClick = function() {
+      this.menu_browserwarning.items = [];
+      this.menu_browserwarning.items.push(["Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox", "http://browsehappy.com/"]);
+      this.menu_browserwarning.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.handleTorBrowserwarningClick = function() {
+      this.menu_torbrowserwarning.items = [];
+      this.menu_torbrowserwarning.items.push(["To protect your anonymity you should use ZeroNet in the Tor browser.", "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
+      this.menu_torbrowserwarning.toggle();
+      return false;
+    };
+
+    Dashboard.prototype.render = function() {
+      var tor_title;
+      if (Page.server_info) {
+        tor_title = this.getTorTitle();
+        return h("div#Dashboard", navigator.userAgent.match(/(\b(MS)?IE\s+|Trident\/7.0)/) ? h("a.port.dashboard-item.browserwarning", {
+          href: "http://browsehappy.com/",
+          onmousedown: this.handleBrowserwarningClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), this.isTorAlways() && (!navigator.userAgent.match(/(Firefox)/) || this.hasWebGl() || (navigator.serviceWorker != null)) ? h("a.port.dashboard-item.torbrowserwarning", {
+          href: "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser",
+          onmousedown: this.handleTorBrowserwarningClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Your browser is not safe")]) : void 0, this.menu_torbrowserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
+          href: "#Update",
+          onmousedown: this.handleNewversionClick,
+          onclick: Page.returnFalse
+        }, "New ZeroNet version: " + Page.latest_version) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
+          "href": "#Donate",
+          onmousedown: this.handleDonateClick,
+          onclick: Page.returnFalse
+        }, [h("div.icon-heart")]), this.menu_donate.render(".menu-donate"), Page.server_info.multiuser ? h("a.port.dashboard-item.multiuser", {
+          href: "#Multiuser",
+          onmousedown: this.handleMultiuserClick,
+          onclick: Page.returnFalse
+        }, [
+          h("span", "User: "), h("span.status", {
+            style: "color: " + (Text.toColor(Page.server_info.master_address))
+          }, Page.server_info.master_address.slice(0, 5) + ".." + Page.server_info.master_address.slice(-4))
+        ]) : void 0, Page.server_info.multiuser ? this.menu_multiuser.render(".menu-multiuser") : void 0, indexOf.call(Page.server_info.plugins, "UiPassword") >= 0 ? h("a.port.dashboard-item.logout", {
+          href: "#Logout",
+          onmousedown: this.handleLogoutClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Logout")]) : void 0, h("a.port.dashboard-item.port", {
+          href: "#Port",
+          classes: {
+            bounce: this.port_checking
+          },
+          onmousedown: this.handlePortClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.tor.dashboard-item.tor", {
+          href: "#Tor",
+          onmousedown: this.handleTorClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"));
+      } else {
+        return h("div#Dashboard");
+      }
+    };
+
+    return Dashboard;
+
+  })(Class);
+
+  window.Dashboard = Dashboard;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
+
+
+(function() {
+  var FeedList,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  FeedList = (function(superClass) {
+    extend(FeedList, superClass);
+
+    function FeedList() {
+      this.onSiteInfo = bind(this.onSiteInfo, this);
+      this.render = bind(this.render, this);
+      this.getClass = bind(this.getClass, this);
+      this.renderSearchStat = bind(this.renderSearchStat, this);
+      this.renderWelcome = bind(this.renderWelcome, this);
+      this.renderFeed = bind(this.renderFeed, this);
+      this.exitAnimation = bind(this.exitAnimation, this);
+      this.enterAnimation = bind(this.enterAnimation, this);
+      this.handleSearchInfoClick = bind(this.handleSearchInfoClick, this);
+      this.handleFilterClick = bind(this.handleFilterClick, this);
+      this.handleSearchKeyup = bind(this.handleSearchKeyup, this);
+      this.handleSearchInput = bind(this.handleSearchInput, this);
+      this.storeNodeSearch = bind(this.storeNodeSearch, this);
+      this.search = bind(this.search, this);
+      this.update = bind(this.update, this);
+      this.displayRows = bind(this.displayRows, this);
+      this.checkScroll = bind(this.checkScroll, this);
+      this.feeds = null;
+      this.searching = null;
+      this.searching_text = null;
+      this.searched = null;
+      this.res = null;
+      this.loading = false;
+      this.filter = null;
+      this.feed_types = {};
+      this.need_update = false;
+      this.updating = false;
+      this.limit = 30;
+      this.query_limit = 20;
+      this.query_day_limit = 3;
+      this.show_stats = false;
+      this.feed_keys = {};
+      Page.on_settings.then((function(_this) {
+        return function() {
+          _this.need_update = true;
+          return document.body.onscroll = function() {
+            return RateLimit(300, function() {
+              return _this.checkScroll();
+            });
+          };
+        };
+      })(this));
+      this;
+    }
+
+    FeedList.prototype.checkScroll = function() {
+      var ref, scroll_top;
+      scroll_top = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if (scroll_top + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((ref = this.feeds) != null ? ref.length : void 0) > 5 && Page.mode === "Sites" && this.limit < 300) {
+        this.limit += 30;
+        this.query_limit += 30;
+        this.query_day_limit += 5;
+        this.log("checkScroll update");
+        this.update();
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    FeedList.prototype.displayRows = function(rows, search) {
+      var i, last_row, len, row, row_group;
+      this.feeds = [];
+      this.feed_keys = {};
+      if (!rows) {
+        return false;
+      }
+      rows.sort(function(a, b) {
+        return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added - (b.type === "mention" ? 1 : 0);
+      });
+      row_group = {};
+      last_row = {};
+      this.feed_types = {};
+      rows.reverse();
+      for (i = 0, len = rows.length; i < len; i++) {
+        row = rows[i];
+        if (last_row.body === row.body && last_row.date_added === row.date_added) {
+          continue;
+        }
+        if (row_group.type === row.type && row.url === row_group.url && row.site === row_group.site) {
+          if (row_group.body_more == null) {
+            row_group.body_more = [];
+            row_group.body_more.push(row.body);
+          } else if (row_group.body_more.length < 3) {
+            row_group.body_more.push(row.body);
+          } else {
+            if (row_group.more == null) {
+              row_group.more = 0;
+            }
+            row_group.more += 1;
+          }
+          row_group.feed_id = row.date_added;
+        } else {
+          if (row.feed_id == null) {
+            row.feed_id = row.date_added;
+          }
+          row.key = row.site + row.type + row.title + row.feed_id;
+          if (this.feed_keys[row.key]) {
+            this.log("Duplicate feed key: " + row.key);
+          } else {
+            this.feeds.push(row);
+          }
+          this.feed_keys[row.key] = true;
+          row_group = row;
+        }
+        this.feed_types[row.type] = true;
+        last_row = row;
+      }
+      return Page.projector.scheduleRender();
+    };
+
+    FeedList.prototype.update = function(cb) {
+      var params;
+      if (this.searching || this.updating) {
+        return false;
+      }
+      if (!Page.server_info || Page.server_info.rev < 1850) {
+        params = [];
+      } else {
+        params = [this.query_limit, this.query_day_limit];
+      }
+      this.logStart("Updating feed");
+      this.updating = true;
+      return Page.cmd("feedQuery", params, (function(_this) {
+        return function(res) {
+          var rows;
+          if (res.rows) {
+            rows = res.rows;
+          } else {
+            rows = res;
+          }
+          _this.res = res;
+          if (rows.length < 10 && _this.day_limit !== null) {
+            _this.limit = 20;
+            _this.day_limit = null;
+            _this.updating = false;
+            _this.update();
+            return false;
+          }
+          _this.displayRows(rows);
+          setTimeout(_this.checkScroll, 100);
+          _this.logEnd("Updating feed");
+          if (cb) {
+            cb();
+          }
+          return _this.updating = false;
+        };
+      })(this));
+    };
+
+    FeedList.prototype.search = function(search, cb) {
+      if (Page.server_info.rev < 1230) {
+        this.displayRows([]);
+        if (cb) {
+          cb();
+        }
+        return;
+      }
+      this.loading = true;
+      return Page.cmd("feedSearch", search, (function(_this) {
+        return function(res) {
+          _this.loading = false;
+          _this.displayRows(res["rows"], search);
+          delete res["rows"];
+          _this.res = res;
+          _this.searched = search;
+          if (cb) {
+            return cb();
+          }
+        };
+      })(this));
+    };
+
+    FeedList.prototype.storeNodeSearch = function(node) {
+      return document.body.onkeypress = (function(_this) {
+        return function(e) {
+          var ref, ref1;
+          if ((ref = e.charCode) === 0 || ref === 32) {
+            return;
+          }
+          if (((ref1 = document.activeElement) != null ? ref1.tagName : void 0) !== "INPUT") {
+            return node.focus();
+          }
+        };
+      })(this);
+    };
+
+    FeedList.prototype.handleSearchInput = function(e) {
+      var delay;
+      if (this.searching && this.searching.length > 3) {
+        delay = 100;
+      } else if (this.searching) {
+        delay = 300;
+      } else {
+        delay = 600;
+      }
+      this.searching = e.target.value;
+      this.searching_text = this.searching.replace(/[^ ]+:.*$/, "").trim();
+      if (Page.server_info.rev < 1230) {
+        this.feeds = [];
+        this.feed_keys = {};
+      }
+      if (e.target.value === "") {
+        delay = 1;
+      }
+      clearInterval(this.input_timer);
+      setTimeout((function(_this) {
+        return function() {
+          return _this.loading = true;
+        };
+      })(this));
+      this.input_timer = setTimeout(((function(_this) {
+        return function() {
+          return RateLimitCb(delay, function(cb_done) {
+            _this.loading = false;
+            if (_this.searching) {
+              return _this.search(_this.searching, function() {
+                return cb_done();
+              });
+            } else {
+              return _this.update(function() {
+                cb_done();
+                if (!_this.searching) {
+                  _this.searching = null;
+                }
+                return _this.searched = null;
+              });
+            }
+          });
+        };
+      })(this)), delay);
+      return false;
+    };
+
+    FeedList.prototype.handleSearchKeyup = function(e) {
+      if (e.keyCode === 27) {
+        e.target.value = "";
+        this.handleSearchInput(e);
+      }
+      return false;
+    };
+
+    FeedList.prototype.handleFilterClick = function(e) {
+      this.filter = e.target.getAttribute("href").replace("#", "");
+      if (this.filter === "all") {
+        this.filter = null;
+      }
+      return false;
+    };
+
+    FeedList.prototype.handleSearchInfoClick = function(e) {
+      this.show_stats = !this.show_stats;
+      return false;
+    };
+
+    FeedList.prototype.formatTitle = function(title) {
+      if (this.searching_text && this.searching_text.length > 1) {
+        return Text.highlight(title, this.searching_text);
+      } else {
+        return title;
+      }
+    };
+
+    FeedList.prototype.formatBody = function(body, type) {
+      var username_formatted, username_match;
+      body = body.replace(/[\n\r]+/, "\n");
+      if (type === "comment" || type === "mention") {
+        username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
+        if (username_match) {
+          if (username_match[2]) {
+            username_formatted = username_match[2] + " › ";
+          } else {
+            username_formatted = username_match[3] + " › ";
+          }
+          body = body.replace(/> \[(.*?)\].*/g, "$1: ");
+          body = body.replace(/^[ ]*>.*/gm, "");
+          body = body.replace(username_match[0], "");
+        } else {
+          username_formatted = "";
+        }
+        body = body.replace(/\n/g, " ");
+        body = body.trim();
+        if (this.searching_text && this.searching_text.length > 1) {
+          body = Text.highlight(body, this.searching_text);
+          if (body[0].length > 60 && body.length > 1) {
+            body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
+          }
+          return [h("b", Text.highlight(username_formatted, this.searching_text)), body];
+        } else {
+          body = body.slice(0, 201);
+          return [h("b", [username_formatted]), body];
+        }
+      } else {
+        body = body.replace(/\n/g, " ");
+        if (this.searching_text && this.searching_text.length > 1) {
+          body = Text.highlight(body, this.searching_text);
+          if (body[0].length > 60) {
+            body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
+          }
+        } else {
+          body = body.slice(0, 201);
+        }
+        return body;
+      }
+    };
+
+    FeedList.prototype.formatType = function(type, title) {
+      if (type === "comment") {
+        return "Comment on";
+      } else if (type === "mention") {
+        if (title) {
+          return "You got mentioned in";
+        } else {
+          return "You got mentioned";
+        }
+      } else {
+        return "";
+      }
+    };
+
+    FeedList.prototype.enterAnimation = function(elem, props) {
+      if (this.searching === null) {
+        return Animation.slideDown.apply(this, arguments);
+      } else {
+        return null;
+      }
+    };
+
+    FeedList.prototype.exitAnimation = function(elem, remove_func, props) {
+      if (this.searching === null) {
+        return Animation.slideUp.apply(this, arguments);
+      } else {
+        return remove_func();
+      }
+    };
+
+    FeedList.prototype.renderFeed = function(feed) {
+      var err, site, type_formatted;
+      if (this.filter && feed.type !== this.filter) {
+        return null;
+      }
+      try {
+        site = Page.site_list.item_list.items_bykey[feed.site];
+        type_formatted = this.formatType(feed.type, feed.title);
+        return h("div.feed." + feed.type, {
+          key: feed.key,
+          enterAnimation: this.enterAnimation,
+          exitAnimation: this.exitAnimation
+        }, [
+          h("div.details", [
+            h("a.site", {
+              href: site.getHref()
+            }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
+          ]), h("div.circle", {
+            style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
+          }), type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
+            href: site.getHref() + feed.url
+          }, this.formatTitle(feed.title)), h("div.body", {
+            key: feed.body,
+            enterAnimation: this.enterAnimation,
+            exitAnimation: this.exitAnimation
+          }, this.formatBody(feed.body, feed.type)), feed.body_more ? feed.body_more.map((function(_this) {
+            return function(body_more) {
+              return h("div.body", {
+                key: body_more,
+                enterAnimation: _this.enterAnimation,
+                exitAnimation: _this.exitAnimation
+              }, _this.formatBody(body_more, feed.type));
+            };
+          })(this)) : void 0, feed.more > 0 ? h("a.more", {
+            href: site.getHref() + feed.url
+          }, ["+" + feed.more + " more"]) : void 0
+        ]);
+      } catch (error) {
+        err = error;
+        this.log(err);
+        return h("div", {
+          key: Time.timestamp()
+        });
+      }
+    };
+
+    FeedList.prototype.renderWelcome = function() {
+      return h("div.welcome", [
+        h("img", {
+          src: "img/logo.svg",
+          height: 150,
+          onerror: "this.src='img/logo.png'; this.onerror=null;"
+        }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
+          h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
+            href: Text.getSiteUrl("Board.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroBoard"]), h("div.description", ["Simple messaging board"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerotalk", {
+            href: Text.getSiteUrl("Talk.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroTalk"]), h("div.description", ["Reddit-like, decentralized forum"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeroblog", {
+            href: Text.getSiteUrl("Blog.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroBlog"]), h("div.description", ["Microblogging platform"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeromail", {
+            href: Text.getSiteUrl("Mail.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroMail"]), h("div.description", ["End-to-end encrypted mailing"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerome", {
+            href: Text.getSiteUrl("Me.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerosites", {
+            href: Text.getSiteUrl("Sites.ZeroNetwork.bit")
+          }, [h("div.title", ["ZeroSites"]), h("div.description", ["Discover more sites"]), h("div.visit", ["Activate \u2501"])])
+        ])
+      ]);
+    };
+
+    FeedList.prototype.renderSearchStat = function(stat) {
+      var site, total_taken;
+      if (stat.taken === 0) {
+        return null;
+      }
+      total_taken = this.res.taken;
+      site = Page.site_list.item_list.items_bykey[stat.site];
+      return h("tr", {
+        key: stat.site + "_" + stat.feed_name,
+        classes: {
+          "slow": stat.taken > total_taken * 0.1,
+          "extra-slow": stat.taken > total_taken * 0.3
+        }
+      }, [
+        h("td.site", h("a.site", {
+          href: site.getHref()
+        }, [site.row.content.title])), h("td.feed_name", stat.feed_name), h("td.taken", (stat.taken != null ? stat.taken + "s" : "n/a "))
+      ]);
+    };
+
+    FeedList.prototype.getClass = function() {
+      if (this.searching !== null) {
+        return "search";
+      } else {
+        return "newsfeed.limit-" + this.limit;
+      }
+    };
+
+    FeedList.prototype.render = function() {
+      var feed_type, ref;
+      if (this.need_update) {
+        RateLimitCb(5000, this.update);
+        this.need_update = false;
+      }
+      if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded" && !this.updating) {
+        if (document.body.scrollTop > 500) {
+          setTimeout((function() {
+            return document.body.className = "loaded";
+          }), 2000);
+        } else {
+          document.body.className = "loaded";
+        }
+      }
+      return h("div#FeedList.FeedContainer", {
+        classes: {
+          faded: Page.mute_list.visible
+        }
+      }, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
+        h("div.feeds-filters", [
+          h("a.feeds-filter", {
+            href: "#all",
+            classes: {
+              active: this.filter === null
+            },
+            onclick: this.handleFilterClick
+          }, "All"), (function() {
+            var results;
+            results = [];
+            for (feed_type in this.feed_types) {
+              results.push(h("a.feeds-filter", {
+                key: feed_type,
+                href: "#" + feed_type,
+                classes: {
+                  active: this.filter === feed_type
+                },
+                onclick: this.handleFilterClick
+              }, feed_type));
+            }
+            return results;
+          }).call(this)
+        ]), h("div.feeds-line"), h("div.feeds-search", {
+          classes: {
+            "searching": this.searching
+          }
+        }, h("div.icon-magnifier"), this.loading ? h("div.loader", {
+          enterAnimation: Animation.show,
+          exitAnimation: Animation.hide
+        }, h("div.arc")) : void 0, h("input", {
+          type: "text",
+          placeholder: "Search in connected sites",
+          value: this.searching,
+          onkeyup: this.handleSearchKeyup,
+          oninput: this.handleSearchInput,
+          afterCreate: this.storeNodeSearch
+        }), ((ref = this.res) != null ? ref.stats : void 0) && !this.loading ? h("a.search-info.nolink", {
+          href: "#ShowStats",
+          enterAnimation: Animation.show,
+          exitAnimation: Animation.hide,
+          onclick: this.handleSearchInfoClick
+        }, (this.searching ? this.res.num + " results " : "") + ("from " + this.res.sites + " sites in " + (this.res.taken.toFixed(2)) + "s")) : void 0, this.show_stats ? h("div.search-info-stats", {
+          enterAnimation: Animation.slideDown,
+          exitAnimation: Animation.slideUp
+        }, [h("table", [h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")), this.res.stats.map(this.renderSearchStat)])]) : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
+          enterAnimation: Animation.show
+        }, [
+          "You need to ", h("a", {
+            href: "#Update",
+            onclick: Page.head.handleUpdateZeronetClick
+          }, "update"), " your ZeroNet client to use the search feature!"
+        ]) : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
+          enterAnimation: Animation.show
+        }, "No results for " + this.searched) : void 0), h("div.FeedList." + this.getClass(), {
+          classes: {
+            loading: this.loading
+          }
+        }, this.feeds.slice(0, +this.limit + 1 || 9e9).map(this.renderFeed))
+      ] : this.renderWelcome());
+    };
+
+    FeedList.prototype.onSiteInfo = function(site_info) {
+      var ref, ref1, ref2;
+      if (((ref = site_info.event) != null ? ref[0] : void 0) === "file_done" && ((ref1 = site_info.event) != null ? ref1[1].endsWith(".json") : void 0) && !((ref2 = site_info.event) != null ? ref2[1].endsWith("content.json") : void 0)) {
+        if (!this.searching) {
+          return this.need_update = true;
+        }
+      }
+    };
+
+    return FeedList;
+
+  })(Class);
+
+  window.FeedList = FeedList;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
+
+
+(function() {
+  var MuteList,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  MuteList = (function(superClass) {
+    extend(MuteList, superClass);
+
+    function MuteList() {
+      this.show = bind(this.show, this);
+      this.render = bind(this.render, this);
+      this.handleMuteRemoveClick = bind(this.handleMuteRemoveClick, this);
+      this.handleHideClick = bind(this.handleHideClick, this);
+      this.update = bind(this.update, this);
+      this.mutes = null;
+      this.visible = false;
+      Page.on_settings.then((function(_this) {
+        return function() {
+          return _this.need_update = true;
+        };
+      })(this));
+      this;
+    }
+
+    MuteList.prototype.update = function() {
+      this.need_update = false;
+      return Page.cmd("MuteList", [], (function(_this) {
+        return function(res) {
+          var auth_address, mute;
+          _this.mutes = [];
+          for (auth_address in res) {
+            mute = res[auth_address];
+            mute.auth_address = auth_address;
+            mute.site = Page.site_list.sites_byaddress[mute.source];
+            _this.mutes.push(mute);
+          }
+          _this.mutes.sort(function(a, b) {
+            return b.date_added - a.date_added;
+          });
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+    };
+
+    MuteList.prototype.handleHideClick = function() {
+      return this.visible = false;
+    };
+
+    MuteList.prototype.handleMuteRemoveClick = function(e) {
+      var mute;
+      mute = e.target.mute;
+      if (mute.removed) {
+        Page.cmd("muteAdd", [mute.auth_address, mute.cert_user_id, mute.reason]);
+      } else {
+        Page.cmd("muteRemove", mute.auth_address);
+      }
+      mute.removed = !mute.removed;
+      return false;
+    };
+
+    MuteList.prototype.render = function() {
+      var max_height;
+      if (this.need_update) {
+        this.update();
+      }
+      if (!this.mutes) {
+        return h("div#MuteList", {
+          classes: {
+            visible: false
+          }
+        }, "Muted");
+      }
+      if (this.visible) {
+        max_height = 100 + this.mutes.length * 70;
+      } else {
+        max_height = 0;
+      }
+      return h("div#MuteList", {
+        classes: {
+          visible: this.visible
+        },
+        style: "max-height: " + max_height + "px"
+      }, [
+        h("a.mute-hide", {
+          href: "#Hide",
+          onclick: this.handleHideClick
+        }, "\u2039 Back to feed"), this.mutes.length === 0 ? h("div.mute-empty", "Your mute list is empty! :)") : [
+          h("div.mute.mute-head", [
+            h("div.mute-col", "Muted user"), h("div.mute-col", {
+              style: "width: 66%"
+            }, "Why?")
+          ]), this.mutes.map((function(_this) {
+            return function(mute) {
+              return h("div.mute", {
+                key: mute.auth_address,
+                classes: {
+                  removed: mute.removed
+                }
+              }, [
+                h("div.mute-col", [h("div.cert_user_id", mute.cert_user_id), h("div.auth_address", mute.auth_address)]), h("div.mute-col", {
+                  style: "width: 66%"
+                }, [
+                  h("div.source", mute.site != null ? mute.site.row.content.title : mute.source), h("div.reason", {
+                    innerHTML: Text.renderMarked(mute.reason)
+                  }), h("div.date_added", " \u2500 " + Time.since(mute.date_added))
+                ]), h("a.action", {
+                  href: "#Unmute",
+                  onclick: _this.handleMuteRemoveClick,
+                  mute: mute
+                }, "×")
+              ]);
+            };
+          })(this))
+        ]
+      ]);
+    };
+
+    MuteList.prototype.show = function() {
+      this.visible = true;
+      this.need_update = true;
+      return Page.projector.scheduleRender();
+    };
+
+    return MuteList;
+
+  })(Class);
+
+  window.MuteList = MuteList;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Site.coffee ---- */
+
+
+(function() {
+  var Site,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  Site = (function(superClass) {
+    extend(Site, superClass);
+
+    function Site(row, item_list) {
+      this.item_list = item_list;
+      this.renderOptionalStats = bind(this.renderOptionalStats, this);
+      this.render = bind(this.render, this);
+      this.handleLimitIncreaseClick = bind(this.handleLimitIncreaseClick, this);
+      this.handleHelpsClick = bind(this.handleHelpsClick, this);
+      this.handleHelpAllClick = bind(this.handleHelpAllClick, this);
+      this.handleHelpClick = bind(this.handleHelpClick, this);
+      this.handleSettingsClick = bind(this.handleSettingsClick, this);
+      this.handleDeleteClick = bind(this.handleDeleteClick, this);
+      this.handleCloneUpgradeClick = bind(this.handleCloneUpgradeClick, this);
+      this.handleCloneClick = bind(this.handleCloneClick, this);
+      this.handlePauseClick = bind(this.handlePauseClick, this);
+      this.handleResumeClick = bind(this.handleResumeClick, this);
+      this.handleCheckfilesClick = bind(this.handleCheckfilesClick, this);
+      this.handleUpdateClick = bind(this.handleUpdateClick, this);
+      this.handleUnfavoriteClick = bind(this.handleUnfavoriteClick, this);
+      this.handleFavoriteClick = bind(this.handleFavoriteClick, this);
+      this.deleted = false;
+      this.show_errors = false;
+      this.message_visible = false;
+      this.message = null;
+      this.message_class = "";
+      this.message_collapsed = false;
+      this.message_timer = null;
+      this.favorite = Page.settings.favorite_sites[row.address];
+      this.key = row.address;
+      this.optional_helps = [];
+      this.optional_helps_disabled = {};
+      this.setRow(row);
+      this.files = new SiteFiles(this);
+      this.menu = new Menu();
+      this.menu_helps = null;
+    }
+
+    Site.prototype.setRow = function(row) {
+      var key, ref, ref1, ref2, val;
+      if (((ref = row.event) != null ? ref[0] : void 0) === "updated" && row.content_updated !== false) {
+        this.setMessage("Updated!", "done");
+      } else if (((ref1 = row.event) != null ? ref1[0] : void 0) === "updating") {
+        this.setMessage("Updating...");
+      } else if (row.tasks > 0) {
+        this.setMessage("Updating: " + (Math.max(row.tasks, row.bad_files)) + " left");
+      } else if (row.bad_files > 0) {
+        if (row.peers <= 1) {
+          this.setMessage("No peers", "error");
+        } else {
+          this.setMessage(row.bad_files + " file update failed", "error");
+        }
+      } else if (row.content_updated === false) {
+        if (row.peers <= 1) {
+          this.setMessage("No peers", "error");
+        } else {
+          this.setMessage("Update failed", "error");
+        }
+      } else if (row.tasks === 0 && ((ref2 = this.row) != null ? ref2.tasks : void 0) > 0) {
+        this.setMessage("Updated!", "done");
+      }
+      if (row.body == null) {
+        row.body = "";
+      }
+      this.optional_helps = (function() {
+        var ref3, results;
+        ref3 = row.settings.optional_help;
+        results = [];
+        for (key in ref3) {
+          val = ref3[key];
+          results.push([key, val]);
+        }
+        return results;
+      })();
+      return this.row = row;
+    };
+
+    Site.prototype.setMessage = function(message, message_class) {
+      this.message_class = message_class != null ? message_class : "";
+      if (message) {
+        this.message = message;
+        this.message_visible = true;
+        if (this.message_class === "error" && !this.show_errors) {
+          this.message_collapsed = true;
+        } else {
+          this.message_collapsed = false;
+        }
+      } else {
+        this.message_visible = false;
+      }
+      clearInterval(this.message_timer);
+      if (this.message_class === "done") {
+        this.message_timer = setTimeout(((function(_this) {
+          return function() {
+            return _this.setMessage("");
+          };
+        })(this)), 5000);
+      }
+      return Page.projector.scheduleRender();
+    };
+
+    Site.prototype.isWorking = function() {
+      var ref;
+      return this.row.tasks > 0 || ((ref = this.row.event) != null ? ref[0] : void 0) === "updating";
+    };
+
+    Site.prototype.handleFavoriteClick = function() {
+      this.favorite = true;
+      this.menu = new Menu();
+      Page.settings.favorite_sites[this.row.address] = true;
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleUnfavoriteClick = function() {
+      this.favorite = false;
+      this.menu = new Menu();
+      delete Page.settings.favorite_sites[this.row.address];
+      Page.saveSettings();
+      Page.site_list.reorder();
+      return false;
+    };
+
+    Site.prototype.handleUpdateClick = function() {
+      Page.cmd("siteUpdate", {
+        "address": this.row.address
+      });
+      this.show_errors = true;
+      return false;
+    };
+
+    Site.prototype.handleCheckfilesClick = function() {
+      Page.cmd("siteUpdate", {
+        "address": this.row.address,
+        "check_files": true,
+        since: 0
+      });
+      this.show_errors = true;
+      return false;
+    };
+
+    Site.prototype.handleResumeClick = function() {
+      Page.cmd("siteResume", {
+        "address": this.row.address
+      });
+      return false;
+    };
+
+    Site.prototype.handlePauseClick = function() {
+      Page.cmd("sitePause", {
+        "address": this.row.address
+      });
+      return false;
+    };
+
+    Site.prototype.handleCloneClick = function() {
+      Page.cmd("siteClone", {
+        "address": this.row.address
+      });
+      return false;
+    };
+
+    Site.prototype.handleCloneUpgradeClick = function() {
+      Page.cmd("wrapperConfirm", ["Are you sure?" + (" Any modifications you made on<br><b>" + this.row.content.title + "</b> site's js/css files will be lost."), "Upgrade"], (function(_this) {
+        return function(confirmed) {
+          return Page.cmd("siteClone", {
+            "address": _this.row.content.cloned_from,
+            "root_inner_path": _this.row.content.clone_root,
+            "target_address": _this.row.address
+          });
+        };
+      })(this));
+      return false;
+    };
+
+    Site.prototype.handleDeleteClick = function() {
+      if (this.row.settings.own) {
+        Page.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
+      } else {
+        if (Page.server_info.rev > 2060) {
+          Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), ["Delete", "Blacklist"]], (function(_this) {
+            return function(confirmed) {
+              if (confirmed === 1) {
+                Page.cmd("siteDelete", {
+                  "address": _this.row.address
+                });
+                _this.item_list.deleteItem(_this);
+                return Page.projector.scheduleRender();
+              } else if (confirmed === 2) {
+                return Page.cmd("wrapperPrompt", ["Blacklist <b>" + _this.row.content.title + "</b>", "text", "Delete and Blacklist", "Reason"], function(reason) {
+                  Page.cmd("siteDelete", {
+                    "address": _this.row.address
+                  });
+                  Page.cmd("blacklistAdd", [_this.row.address, reason]);
+                  _this.item_list.deleteItem(_this);
+                  return Page.projector.scheduleRender();
+                });
+              }
+            };
+          })(this));
+        } else {
+          Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), "Delete"], (function(_this) {
+            return function(confirmed) {
+              if (confirmed) {
+                Page.cmd("siteDelete", {
+                  "address": _this.row.address
+                });
+                _this.item_list.deleteItem(_this);
+                return Page.projector.scheduleRender();
+              }
+            };
+          })(this));
+        }
+      }
+      return false;
+    };
+
+    Site.prototype.handleSettingsClick = function(e) {
+      this.menu.items = [];
+      if (this.favorite) {
+        this.menu.items.push(["Unfavorite", this.handleUnfavoriteClick]);
+      } else {
+        this.menu.items.push(["Favorite", this.handleFavoriteClick]);
+      }
+      this.menu.items.push(["Update", this.handleUpdateClick]);
+      this.menu.items.push(["Check files", this.handleCheckfilesClick]);
+      if (this.row.settings.serving) {
+        this.menu.items.push(["Pause", this.handlePauseClick]);
+      } else {
+        this.menu.items.push(["Resume", this.handleResumeClick]);
+      }
+      if (this.row.content.cloneable === true) {
+        this.menu.items.push(["Clone", this.handleCloneClick]);
+      }
+      if (this.row.settings.own && this.row.content.cloned_from && Page.server_info.rev >= 2080) {
+        this.menu.items.push(["---"]);
+        this.menu.items.push(["Upgrade code", this.handleCloneUpgradeClick]);
+      }
+      this.menu.items.push(["---"]);
+      this.menu.items.push(["Delete", this.handleDeleteClick]);
+      if (this.menu.visible) {
+        this.menu.hide();
+      } else {
+        this.menu.show();
+      }
+      return false;
+    };
+
+    Site.prototype.handleHelpClick = function(directory, title) {
+      if (this.optional_helps_disabled[directory]) {
+        Page.cmd("OptionalHelp", [directory, title, this.row.address]);
+        delete this.optional_helps_disabled[directory];
+      } else {
+        Page.cmd("OptionalHelpRemove", [directory, this.row.address]);
+        this.optional_helps_disabled[directory] = true;
+      }
+      return true;
+    };
+
+    Site.prototype.handleHelpAllClick = function() {
+      if (this.row.settings.autodownloadoptional === true) {
+        return Page.cmd("OptionalHelpAll", [false, this.row.address], (function(_this) {
+          return function() {
+            _this.row.settings.autodownloadoptional = false;
+            return Page.projector.scheduleRender();
+          };
+        })(this));
+      } else {
+        return Page.cmd("OptionalHelpAll", [true, this.row.address], (function(_this) {
+          return function() {
+            _this.row.settings.autodownloadoptional = true;
+            return Page.projector.scheduleRender();
+          };
+        })(this));
+      }
+    };
+
+    Site.prototype.handleHelpsClick = function(e) {
+      var directory, i, len, ref, ref1, title;
+      if (e.target.classList.contains("menu-item")) {
+        return;
+      }
+      if (!this.menu_helps) {
+        this.menu_helps = new Menu();
+      }
+      this.menu_helps.items = [];
+      this.menu_helps.items.push([
+        "Help distribute all new files", this.handleHelpAllClick, ((function(_this) {
+          return function() {
+            return _this.row.settings.autodownloadoptional;
+          };
+        })(this))
+      ]);
+      if (this.optional_helps.length > 0) {
+        this.menu_helps.items.push(["---"]);
+      }
+      ref = this.optional_helps;
+      for (i = 0, len = ref.length; i < len; i++) {
+        ref1 = ref[i], directory = ref1[0], title = ref1[1];
+        this.menu_helps.items.push([
+          title, ((function(_this) {
+            return function() {
+              return _this.handleHelpClick(directory, title);
+            };
+          })(this)), ((function(_this) {
+            return function() {
+              return !_this.optional_helps_disabled[directory];
+            };
+          })(this))
+        ]);
+      }
+      this.menu_helps.toggle();
+      return true;
+    };
+
+    Site.prototype.getHref = function(row) {
+      var has_plugin, href, ref, ref1;
+      has_plugin = (((ref = Page.server_info) != null ? ref.plugins : void 0) != null) && (indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
+      if (has_plugin && ((ref1 = this.row.content) != null ? ref1.domain : void 0)) {
+        href = Text.getSiteUrl(this.row.content.domain);
+      } else {
+        href = Text.getSiteUrl(this.row.address);
+      }
+      if (row != null ? row.inner_path : void 0) {
+        return href + row.inner_path;
+      } else {
+        return href;
+      }
+    };
+
+    Site.prototype.handleLimitIncreaseClick = function() {
+      if (Page.server_info.rev < 3170) {
+        return Page.cmd("wrapperNotification", ["info", "You need ZeroNet Rev3170 to use this command"]);
+      }
+      Page.cmd("as", [this.row.address, "siteSetLimit", this.row.need_limit], (function(_this) {
+        return function(res) {
+          if (res === "ok") {
+            Page.cmd("wrapperNotification", ["done", "Site <b>" + _this.row.content.title + "</b> storage limit modified to <b>" + _this.row.need_limit + "MB</b>", 5000]);
+          } else {
+            Page.cmd("wrapperNotification", ["error", res.error]);
+          }
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+      return false;
+    };
+
+    Site.prototype.render = function() {
+      var now, ref;
+      now = Date.now() / 1000;
+      return h("div.site", {
+        key: this.key,
+        "data-key": this.key,
+        classes: {
+          "modified-lastday": now - this.row.settings.modified < 60 * 60 * 24,
+          "disabled": !this.row.settings.serving && !this.row.demo,
+          "working": this.isWorking()
+        }
+      }, h("div.circle", {
+        style: "color: " + (Text.toColor(this.row.address, 40, 50))
+      }, ["\u2022"]), h("a.inner", {
+        href: this.getHref(),
+        title: ((ref = this.row.content.title) != null ? ref.length : void 0) > 20 ? this.row.content.title : void 0
+      }, [
+        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.settings.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, this.row.need_limit ? h("a.details.needaction", {
+          href: "#Set+limit",
+          onclick: this.handleLimitIncreaseClick
+        }, "Set limit to " + this.row.need_limit + "MB") : void 0, h("div.message", {
+          classes: {
+            visible: this.message_visible,
+            done: this.message_class === 'done',
+            error: this.message_class === 'error',
+            collapsed: this.message_collapsed
+          }
+        }, [this.message])
+      ]), h("a.settings", {
+        href: "#Settings",
+        tabIndex: -1,
+        onmousedown: this.handleSettingsClick,
+        onclick: Page.returnFalse
+      }, ["\u22EE"]), this.menu.render());
+    };
+
+    Site.prototype.renderCircle = function(value, max) {
+      var dashoffset, stroke;
+      if (value < 1) {
+        dashoffset = 75 + (1 - value) * 75;
+      } else {
+        dashoffset = Math.max(0, 75 - ((value - 1) / 9) * 75);
+      }
+      stroke = "hsl(" + (Math.min(555, value * 50)) + ", 100%, 61%)";
+      return h("div.circle", {
+        title: "Upload/Download ratio",
+        innerHTML: "<svg class=\"circle-svg\" width=\"30\" height=\"30\" viewPort=\"0 0 30 30\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n  			<circle r=\"12\" cx=\"15\" cy=\"15\" fill=\"transparent\" class='circle-bg'></circle>\n  			<circle r=\"12\" cx=\"15\" cy=\"15\" fill=\"transparent\" class='circle-fg' style='stroke-dashoffset: " + dashoffset + "; stroke: " + stroke + "'></circle>\n</svg>"
+      });
+    };
+
+    Site.prototype.renderOptionalStats = function() {
+      var ratio, ratio_hue, row;
+      row = this.row;
+      ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1);
+      if (ratio >= 100) {
+        ratio = "\u221E";
+      } else if (ratio >= 10) {
+        ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(0);
+      }
+      ratio_hue = Math.min(555, (row.settings.bytes_sent / row.settings.bytes_recv) * 50);
+      return h("div.site", {
+        key: this.key
+      }, [
+        h("div.title", [
+          h("h3.name", h("a", {
+            href: this.getHref()
+          }, row.content.title)), h("div.size", {
+            title: "Site size limit: " + (Text.formatSize(row.size_limit * 1024 * 1024))
+          }, [
+            "" + (Text.formatSize(row.settings.size)), h("div.bar", h("div.bar-active", {
+              style: "width: " + (100 * (row.settings.size / (row.size_limit * 1024 * 1024))) + "%"
+            }))
+          ]), h("div.plus", "+"), h("div.size.size-optional", {
+            title: "Optional files on site: " + (Text.formatSize(row.settings.size_optional))
+          }, [
+            "" + (Text.formatSize(row.settings.optional_downloaded)), h("span.size-title", "Optional"), h("div.bar", h("div.bar-active", {
+              style: "width: " + (100 * (row.settings.optional_downloaded / row.settings.size_optional)) + "%"
+            }))
+          ]), h("a.helps", {
+            href: "#",
+            onmousedown: this.handleHelpsClick,
+            onclick: Page.returnFalse
+          }, h("div.icon-share"), this.row.settings.autodownloadoptional ? "\u2661" : this.optional_helps.length, h("div.icon-arrow-down"), this.menu_helps ? this.menu_helps.render() : void 0), this.renderCircle(parseFloat((row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1)), 10), h("div.circle-value", {
+            classes: {
+              negative: ratio < 1
+            },
+            style: "color: hsl(" + ratio_hue + ", 70%, 60%)"
+          }, ratio), h("div.transfers", [
+            h("div.up", {
+              "title": "Uploaded"
+            }, "\u22F0 \u00A0" + (Text.formatSize(row.settings.bytes_sent))), h("div.down", {
+              "title": "Downloaded"
+            }, "\u22F1 \u00A0" + (Text.formatSize(row.settings.bytes_recv)))
+          ])
+        ]), this.files.render()
+      ]);
+    };
+
+    return Site;
+
+  })(Class);
+
+  window.Site = Site;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/SiteList.coffee ---- */
+
+
+(function() {
+  var SiteList,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  SiteList = (function(superClass) {
+    extend(SiteList, superClass);
+
+    function SiteList() {
+      this.onSiteInfo = bind(this.onSiteInfo, this);
+      this.render = bind(this.render, this);
+      this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
+      this.handleFilterInput = bind(this.handleFilterInput, this);
+      this.renderMergedSites = bind(this.renderMergedSites, this);
+      this.reorder = bind(this.reorder, this);
+      this.sortRows = bind(this.sortRows, this);
+      this.reorderTimer = bind(this.reorderTimer, this);
+      this.item_list = new ItemList(Site, "address");
+      this.sites = this.item_list.items;
+      this.sites_byaddress = this.item_list.items_bykey;
+      this.inactive_demo_sites = null;
+      this.loaded = false;
+      this.schedule_reorder = false;
+      this.merged_db = {};
+      this.filtering = "";
+      setInterval(this.reorderTimer, 10000);
+      Page.on_settings.then((function(_this) {
+        return function() {
+          _this.update();
+          return Page.cmd("channelJoinAllsite", {
+            "channel": "siteChanged"
+          });
+        };
+      })(this));
+    }
+
+    SiteList.prototype.reorderTimer = function() {
+      if (!this.schedule_reorder) {
+        return;
+      }
+      if (!document.querySelector('.left:hover') && !document.querySelector(".working") && !Page.mode === "Files") {
+        this.reorder();
+        return this.schedule_reorder = false;
+      }
+    };
+
+    SiteList.prototype.sortRows = function(rows) {
+      if (Page.settings.sites_orderby === "modified") {
+        rows.sort(function(a, b) {
+          return b.row.settings.modified - a.row.settings.modified;
+        });
+      } else if (Page.settings.sites_orderby === "addtime") {
+        rows.sort(function(a, b) {
+          return (b.row.settings.added || 0) - (a.row.settings.added || 0);
+        });
+      } else if (Page.settings.sites_orderby === "size") {
+        rows.sort(function(a, b) {
+          return b.row.settings.size - a.row.settings.size;
+        });
+      } else {
+        rows.sort(function(a, b) {
+          return Math.max(b.row.peers, b.row.settings.peers) - Math.max(a.row.peers, a.row.settings.peers);
+        });
+      }
+      return rows;
+    };
+
+    SiteList.prototype.reorder = function() {
+      this.sortRows(this.item_list.items);
+      return Page.projector.scheduleRender();
+    };
+
+    SiteList.prototype.update = function() {
+      Page.cmd("siteList", {}, (function(_this) {
+        return function(site_rows) {
+          var favorite_sites;
+          favorite_sites = Page.settings.favorite_sites;
+          _this.item_list.sync(site_rows);
+          _this.sortRows(_this.item_list.items);
+          if (_this.inactive_demo_sites === null) {
+            _this.updateInactiveDemoSites();
+          }
+          Page.projector.scheduleRender();
+          return _this.loaded = true;
+        };
+      })(this));
+      return this;
+    };
+
+    SiteList.prototype.updateInactiveDemoSites = function() {
+      var demo_site_rows, i, len, results, site_row;
+      demo_site_rows = [
+        {
+          address: "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
+          demo: true,
+          content: {
+            title: "ZeroBoard",
+            domain: "Board.ZeroNetwork.bit"
+          },
+          settings: {}
+        }, {
+          address: "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT",
+          demo: true,
+          content: {
+            title: "ZeroTalk",
+            domain: "Talk.ZeroNetwork.bit"
+          },
+          settings: {}
+        }, {
+          address: "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8",
+          demo: true,
+          content: {
+            title: "ZeroBlog",
+            domain: "Blog.ZeroNetwork.bit"
+          },
+          settings: {}
+        }, {
+          address: "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27",
+          demo: true,
+          content: {
+            title: "ZeroMail",
+            domain: "Mail.ZeroNetwork.bit"
+          },
+          settings: {}
+        }, {
+          address: "1uPLoaDwKzP6MCGoVzw48r4pxawRBdmQc",
+          demo: true,
+          content: {
+            title: "ZeroUp"
+          },
+          settings: {}
+        }, {
+          address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h",
+          demo: true,
+          content: {
+            title: "GIF Time"
+          },
+          settings: {}
+        }, {
+          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB",
+          demo: true,
+          content: {
+            title: "More @ ZeroSites",
+            domain: "Sites.ZeroNetwork.bit"
+          },
+          settings: {}
+        }
+      ];
+      if (Page.server_info.rev >= 1400) {
+        demo_site_rows.push({
+          address: "1MeFqFfFFGQfa1J3gJyYYUvb5Lksczq7nH",
+          demo: true,
+          content: {
+            title: "ZeroMe",
+            domain: "Me.ZeroNetwork.bit"
+          },
+          settings: {}
+        });
+      }
+      this.inactive_demo_sites = [];
+      results = [];
+      for (i = 0, len = demo_site_rows.length; i < len; i++) {
+        site_row = demo_site_rows[i];
+        if (this.filtering && site.row.content.title.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
+          continue;
+        }
+        if (!this.sites_byaddress[site_row.address]) {
+          results.push(this.inactive_demo_sites.push(new Site(site_row)));
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    };
+
+    SiteList.prototype.renderMergedSites = function() {
+      var back, i, len, merged_db, merged_sites, merged_type, name, ref, site;
+      merged_db = {};
+      ref = this.sites_merged;
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        if (!site.row.content.merged_type) {
+          continue;
+        }
+        if (merged_db[name = site.row.content.merged_type] == null) {
+          merged_db[name] = [];
+        }
+        merged_db[site.row.content.merged_type].push(site);
+      }
+      back = [];
+      for (merged_type in merged_db) {
+        merged_sites = merged_db[merged_type];
+        back.push([
+          h("h2.more", {
+            key: "Merged: " + merged_type
+          }, "Merged: " + merged_type), h("div.SiteList.merged.merged-" + merged_type, merged_sites.map(function(item) {
+            return item.render();
+          }))
+        ]);
+      }
+      return back;
+    };
+
+    SiteList.prototype.handleFilterInput = function(e) {
+      return this.filtering = e.target.value;
+    };
+
+    SiteList.prototype.handleFilterKeyup = function(e) {
+      if (e.keyCode === 27) {
+        e.target.value = "";
+        this.handleFilterInput(e);
+      }
+      return false;
+    };
+
+    SiteList.prototype.render = function() {
+      var filter_base, i, len, ref, ref1, site;
+      if (!this.loaded) {
+        return h("div#SiteList");
+      }
+      this.sites_needaction = [];
+      this.sites_favorited = [];
+      this.sites_owned = [];
+      this.sites_connected = [];
+      this.sites_merged = [];
+      ref = this.sites;
+      for (i = 0, len = ref.length; i < len; i++) {
+        site = ref[i];
+        if (this.filtering) {
+          filter_base = site.row.content.title + site.row.content.merged_type;
+          if (filter_base.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
+            continue;
+          }
+        }
+        if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
+          site.row.need_limit = site.row.size_limit * 2;
+          this.sites_needaction.push(site);
+        } else if (site.favorite) {
+          this.sites_favorited.push(site);
+        } else if (site.row.content.merged_type) {
+          this.sites_merged.push(site);
+        } else if ((ref1 = site.row.settings) != null ? ref1.own : void 0) {
+          this.sites_owned.push(site);
+        } else {
+          this.sites_connected.push(site);
+        }
+      }
+      return h("div#SiteList", [
+        this.sites.length > 20 ? h("input.site-filter", {
+          placeholder: "Filter: Site name",
+          spellcheck: false,
+          oninput: this.handleFilterInput,
+          onkeyup: this.handleFilterKeyup,
+          value: this.filtering
+        }) : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+          return item.render();
+        })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
+          return item.render();
+        })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
+          return item.render();
+        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", this.sites_connected.map(function(item) {
+          return item.render();
+        })), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
+          h("h2.more", {
+            key: "More"
+          }, "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
+            return item.render();
+          }))
+        ] : void 0
+      ]);
+    };
+
+    SiteList.prototype.onSiteInfo = function(site_info) {
+      var ref;
+      if ((ref = this.item_list.items_bykey[site_info.address]) != null) {
+        ref.setRow(site_info);
+      }
+      this.schedule_reorder = true;
+      return Page.projector.scheduleRender();
+    };
+
+    return SiteList;
+
+  })(Class);
+
+  window.SiteList = SiteList;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Trigger.coffee ---- */
+
+
+(function() {
+  var Trigger,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  Trigger = (function(superClass) {
+    extend(Trigger, superClass);
+
+    function Trigger() {
+      this.render = bind(this.render, this);
+      this.handleTitleClick = bind(this.handleTitleClick, this);
+      this.active = false;
+    }
+
+    Trigger.prototype.handleTitleClick = function() {
+      this.active = !this.active;
+      if (this.active) {
+        document.getElementById("left").classList.add("trigger-on");
+      } else {
+        document.getElementById("left").classList.remove("trigger-on");
+      }
+      return false;
+    };
+
+    Trigger.prototype.render = function() {
+      return h("div.Trigger", {
+        classes: {
+          "active": this.active
+        }
+      }, [
+        h("a.icon", {
+          "href": "#Trigger",
+          onclick: this.handleTitleClick,
+          ontouchend: ""
+        }, h("div.arrow-right"))
+      ]);
+    };
+
+    return Trigger;
+
+  })(Class);
+
+  window.Trigger = Trigger;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/Chart.coffee ---- */
+
+
+(function() {
+  var Chart,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  Chart = (function(superClass) {
+    extend(Chart, superClass);
+
+    function Chart() {
+      this.render = bind(this.render, this);
+      this.updateChart = bind(this.updateChart, this);
+      this.update = bind(this.update, this);
+      this.initChart = bind(this.initChart, this);
+      this.query = "";
+      this.title = "";
+      this.value = "";
+      this.line_data = [];
+      this.details = [];
+      this.colorize = "cc00ff0a";
+      this.chart_ctx = null;
+      this.chart_type_name = null;
+      this.need_update = false;
+    }
+
+    Chart.prototype.initChart = function(node) {
+      this.chart_canvas = node;
+      return this.chart_ctx = node.getContext("2d");
+    };
+
+    Chart.prototype.update = function() {
+      var query_type_data, type_name;
+      Page.cmd("chartDbQuery", this.getChartQuery(), (function(_this) {
+        return function(res) {
+          var j, len, row;
+          _this.line_data = [];
+          for (j = 0, len = res.length; j < len; j++) {
+            row = res[j];
+            _this.line_data.push(row.value);
+          }
+          return _this.updateChart();
+        };
+      })(this));
+      query_type_data = "SELECT * FROM data\nWHERE\n type_id IN :type_ids AND\n date_added = (SELECT date_added FROM data ORDER BY data_id DESC LIMIT 1)";
+      return Page.cmd("chartDbQuery", [
+        query_type_data, {
+          type_ids: (function() {
+            var j, len, ref, results;
+            ref = this.type_names;
+            results = [];
+            for (j = 0, len = ref.length; j < len; j++) {
+              type_name = ref[j];
+              results.push(Page.page_stats.type_id_db[type_name]);
+            }
+            return results;
+          }).call(this)
+        }
+      ], (function(_this) {
+        return function(res) {
+          var j, len, row, type_data;
+          type_data = {};
+          for (j = 0, len = res.length; j < len; j++) {
+            row = res[j];
+            type_data[Page.page_stats.type_name_db[row.type_id]] = row.value;
+          }
+          _this.details = typeof _this.formatDetails === "function" ? _this.formatDetails(type_data) : void 0;
+          _this.value = typeof _this.formatValue === "function" ? _this.formatValue(type_data) : void 0;
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+    };
+
+    Chart.prototype.updateChart = function() {
+      var data, data_max, data_min, gradient, i, j, len, line_y, ref, step, stroke;
+      this.chart_ctx.clearRect(0, 0, this.chart_canvas.width, this.chart_canvas.height);
+      stroke = this.chart_ctx.createLinearGradient(0, 0, 900, 0);
+      stroke.addColorStop(0, this.chart_stroke[0]);
+      stroke.addColorStop(1, this.chart_stroke[1]);
+      this.chart_ctx.lineWidth = 4;
+      this.chart_ctx.strokeStyle = stroke;
+      this.chart_ctx.fillStyle = '#66666611';
+      gradient = this.chart_ctx.createLinearGradient(0, 200, 0, 400);
+      gradient.addColorStop(0, "#42324599");
+      gradient.addColorStop(1, "#2C2E3700");
+      this.chart_ctx.fillStyle = gradient;
+      this.chart_ctx.beginPath();
+      this.chart_ctx.moveTo(-10, 0);
+      step = 900 / (this.line_data.length - 2);
+      data_max = Math.max.apply(null, this.line_data);
+      data_min = Math.min.apply(null, this.line_data);
+      ref = this.line_data;
+      for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        data = ref[i];
+        line_y = 150 + ((data - data_min) / (data_max - data_min)) * 120;
+        this.chart_ctx.lineTo((i - 1) * step, line_y);
+      }
+      this.chart_ctx.lineTo((i + 1) * step, line_y);
+      this.chart_ctx.lineTo(i * step, 450);
+      this.chart_ctx.lineTo(0, 450);
+      this.chart_ctx.fill();
+      this.chart_ctx.stroke();
+      return this.chart_ctx.shadowBlur = 0;
+    };
+
+    Chart.prototype.render = function() {
+      if (this.need_update) {
+        this.update();
+        this.need_update = false;
+      }
+      return h("div.Chart", {
+        style: "background-image: radial-gradient(at 29% top, #eaaeda05, " + this.colorize + ")"
+      }, [
+        h("div.titles", [
+          h("div.title", this.title), h("div.value", this.value), h("div.details", this.details.map((function(_this) {
+            return function(detail) {
+              return [
+                detail, h("br", {
+                  key: detail
+                })
+              ];
+            };
+          })(this)))
+        ]), h("canvas.canvas", {
+          afterCreate: this.initChart,
+          width: 900,
+          height: 400
+        })
+      ]);
+    };
+
+    return Chart;
+
+  })(Class);
+
+  window.Chart = Chart;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartBig.coffee ---- */
+
+
+(function() {
+  var ChartBig,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  ChartBig = (function(superClass) {
+    extend(ChartBig, superClass);
+
+    function ChartBig() {
+      this.render = bind(this.render, this);
+      this.initChart = bind(this.initChart, this);
+      this.storeCanvasNode = bind(this.storeCanvasNode, this);
+      this.update = bind(this.update, this);
+      var types;
+      this.need_update = false;
+      this.data = {};
+      this.data_max = {};
+      this.data_total = {};
+      types = {};
+    }
+
+    ChartBig.prototype.update = function(cb) {
+      var date_added_from, date_added_to, interval, query, query_group, query_select, step, type, type_ids;
+      if (Page.params.interval === "1w") {
+        interval = 60 * 60 * 24 * 7;
+        step = 60 * 60;
+        query_select = "MAX(date_added) AS date_added, type_id, SUM(value) AS value";
+        query_group = "GROUP BY type_id, strftime('%Y-%m-%d %H', date_added, 'unixepoch', 'localtime')";
+      } else {
+        interval = 60 * 60 * 24;
+        step = 60 * 5;
+        query_select = "*";
+        query_group = "";
+      }
+      if (Page.params.date_added_to) {
+        date_added_to = (new Date(Page.params.date_added_to + " 23:59")).getTime() / 1000;
+        date_added_from = date_added_to - interval;
+      } else {
+        date_added_to = Time.timestamp();
+        date_added_from = Time.timestamp() - interval;
+      }
+      query = "SELECT " + query_select + " FROM data\nWHERE type_id IN :type_ids AND date_added >= :date_added_from AND date_added <= :date_added_to\n" + query_group + "\nORDER BY date_added";
+      type_ids = (function() {
+        var j, len, ref, results;
+        ref = this.types;
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          type = ref[j];
+          results.push(Page.page_stats.type_id_db[type.name]);
+        }
+        return results;
+      }).call(this);
+      return Page.cmd("chartDbQuery", [
+        query, {
+          type_ids: type_ids,
+          date_added_from: date_added_from,
+          date_added_to: date_added_to
+        }
+      ], (function(_this) {
+        return function(res) {
+          var data_date_added, data_found, data_value, dataset, i, j, k, l, len, len1, len2, len3, len4, m, n, row, type_id, type_name;
+          _this.logStart("Parse result");
+          _this.data = {
+            labels: []
+          };
+          _this.data_max = {};
+          _this.data_total = {};
+          for (j = 0, len = type_ids.length; j < len; j++) {
+            type_id = type_ids[j];
+            _this.data[type_id] = {};
+            _this.data_max[Page.page_stats.type_name_db[type_id]] = 0;
+            _this.data_total[Page.page_stats.type_name_db[type_id]] = 0;
+          }
+          for (k = 0, len1 = res.length; k < len1; k++) {
+            row = res[k];
+            type_name = Page.page_stats.type_name_db[row.type_id];
+            _this.data[row.type_id][Math.ceil(row.date_added / step) * step] = row.value;
+            _this.data_max[type_name] = Math.max(row.value, _this.data_max[type_name]);
+            _this.data_total[type_name] += row.value;
+          }
+          _this.configuration.options.scales.yAxes[0].ticks.suggestedMax = Math.max(_this.data_max["file_bytes_sent"], _this.data_max["file_bytes_recv"]);
+          _this.configuration.options.scales.yAxes[0].ticks.suggestedMin = 0 - _this.configuration.options.scales.yAxes[0].ticks.suggestedMax;
+          _this.configuration.options.scales.yAxes[1].ticks.suggestedMax = Math.max(_this.data_max["request_num_sent"], _this.data_max["request_num_recv"]);
+          _this.configuration.options.scales.yAxes[1].ticks.suggestedMin = 0 - _this.configuration.options.scales.yAxes[1].ticks.suggestedMax;
+          for (i = l = 0, len2 = type_ids.length; l < len2; i = ++l) {
+            type_id = type_ids[i];
+            dataset = _this.configuration.data.datasets[_this.types[i].dataset_id];
+            dataset.data.length = 0;
+            dataset.data_i = 0;
+          }
+          _this.configuration.data.labels.length = 0;
+          _this.configuration.data.labels_i = 0;
+          data_date_added = Math.ceil(date_added_from / step) * step;
+          while (data_date_added <= date_added_to) {
+            if (!data_found) {
+              for (i = m = 0, len3 = type_ids.length; m < len3; i = ++m) {
+                type_id = type_ids[i];
+                if (_this.data[type_id][data_date_added]) {
+                  data_found = true;
+                  break;
+                }
+              }
+              if (!data_found) {
+                data_date_added += step;
+                continue;
+              }
+            }
+            for (i = n = 0, len4 = type_ids.length; n < len4; i = ++n) {
+              type_id = type_ids[i];
+              data_value = _this.data[type_id][data_date_added];
+              dataset = _this.configuration.data.datasets[_this.types[i].dataset_id];
+              type = _this.types[i];
+              if (type.negative) {
+                data_value = 0 - data_value;
+              }
+              dataset.data[dataset.data_i] = data_value;
+              dataset.data_i += 1;
+            }
+            _this.configuration.data.labels.push(data_date_added * 1000);
+            _this.configuration.data.labels_i += 1;
+            data_date_added += step;
+          }
+          _this.logEnd("Parse result", "labels: " + _this.configuration.data.labels.length);
+          if (_this.chart) {
+            _this.chart.update();
+          } else {
+            _this.initChart();
+          }
+          if (typeof cb === "function") {
+            cb();
+          }
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+    };
+
+    ChartBig.prototype.storeCanvasNode = function(node) {
+      if (this.chart) {
+        this.chart.clear();
+        this.chart.destroy();
+        this.chart = null;
+      }
+      node.parentNode.style.height = node.getBoundingClientRect().height + "px";
+      this.ctx = node.getContext("2d");
+      this.chart_node = node;
+      return this.configuration != null ? this.configuration : this.configuration = this.getChartConfiguration();
+    };
+
+    ChartBig.prototype.initChart = function() {
+      var timer_resize;
+      this.log("initChart");
+      this.chart = new Chart(this.ctx, this.configuration);
+      setTimeout(((function(_this) {
+        return function() {
+          return _this.chart_node.parentNode.style.height = "";
+        };
+      })(this)), 100);
+      timer_resize = null;
+      return window.addEventListener("resize", (function(_this) {
+        return function() {
+          clearInterval(timer_resize);
+          return setTimeout((function() {
+            return _this.chart.resize();
+          }), 300);
+        };
+      })(this));
+    };
+
+    ChartBig.prototype.testDataAddition = function() {
+      var timer_i;
+      timer_i = 0;
+      return setInterval(((function(_this) {
+        return function() {
+          var data, dataset, i, j, k, len, len1, new_data, new_labels, type_id;
+          new_labels = _this.configuration.data.labels.slice();
+          new_data = _this.configuration.data.datasets[_this.types[0].dataset_id].data.slice();
+          _this.configuration.data.labels = [];
+          timer_i += 1;
+          for (i = j = 0, len = type_ids.length; j < len; i = ++j) {
+            type_id = type_ids[i];
+            dataset = _this.configuration.data.datasets[_this.types[i].dataset_id];
+            dataset.data.push(Math.round(Math.random() * 10));
+            dataset.data.shift();
+          }
+          for (k = 0, len1 = new_data.length; k < len1; k++) {
+            data = new_data[k];
+            _this.configuration.data.datasets[_this.types[0].dataset_id].data.push(data);
+          }
+          _this.configuration.data.labels = new_labels;
+          _this.configuration.data.labels.push(1000 * (Time.timestamp() + (timer_i * 60 * 5)));
+          _this.configuration.data.labels.shift();
+          return _this.chart.update();
+        };
+      })(this)), 5000);
+    };
+
+    ChartBig.prototype.createGradientStroke = function(stops) {
+      var color, gradient, i, j, len;
+      gradient = this.ctx.createLinearGradient(0, 0, 900, 0);
+      for (i = j = 0, len = stops.length; j < len; i = ++j) {
+        color = stops[i];
+        gradient.addColorStop(i * (1 / (stops.length - 1)), color);
+      }
+      return gradient;
+    };
+
+    ChartBig.prototype.createGradientFill = function(stops, mode) {
+      var color, gradient, i, j, len;
+      if (mode == null) {
+        mode = "normal";
+      }
+      if (mode === "lower") {
+        gradient = this.ctx.createLinearGradient(0, 0, 0, 300);
+      } else {
+        gradient = this.ctx.createLinearGradient(0, 50, 0, 200);
+      }
+      for (i = j = 0, len = stops.length; j < len; i = ++j) {
+        color = stops[i];
+        gradient.addColorStop(i * (1 / (stops.length - 1)), color);
+      }
+      return gradient;
+    };
+
+    ChartBig.prototype.getChartConfiguration = function() {
+      var configuration, gradient_fill, gradient_fill_down, gradient_fill_up, gradient_stroke, gradient_stroke_bgline_down, gradient_stroke_bgline_up, gradient_stroke_down, gradient_stroke_up;
+      gradient_stroke = this.createGradientStroke(["#5A46DF", "#8F49AA", "#D64C57"]);
+      gradient_stroke_bgline_up = this.createGradientStroke(["#EEAAFF11", "#EEAAFF33", "#2da3b366"]);
+      gradient_stroke_bgline_down = this.createGradientStroke(["#EEAAFF11", "#EEAAFF33", "#80623f88"]);
+      gradient_stroke_up = this.createGradientStroke(["#2b68d9", "#2f99be", "#1dfc59"]);
+      gradient_stroke_down = this.createGradientStroke(["#bac735", "#c2a548", "#f1294b"]);
+      gradient_fill = this.createGradientFill(["#50455DEE", "#26262C33"]);
+      gradient_fill_up = this.createGradientFill(["#1dfc5922", "#2f373333"]);
+      gradient_fill_down = this.createGradientFill(["#45353533", "#f1294b22"], "lower");
+      configuration = {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              type: 'line',
+              label: "Upload",
+              borderColor: gradient_stroke_up,
+              pointBorderColor: gradient_stroke_up,
+              pointBackgroundColor: gradient_stroke_up,
+              pointHoverBackgroundColor: gradient_stroke_up,
+              pointHoverBorderColor: gradient_stroke_up,
+              pointHoverRadius: 2,
+              pointRadius: 0,
+              steppedLine: true,
+              fill: true,
+              backgroundColor: gradient_fill_up,
+              borderWidth: 1,
+              lineTension: 0,
+              data: []
+            }, {
+              type: 'line',
+              label: "Download",
+              borderColor: gradient_stroke_down,
+              pointBorderColor: gradient_stroke_down,
+              pointBackgroundColor: gradient_stroke_down,
+              pointHoverBackgroundColor: gradient_stroke_down,
+              pointHoverBorderColor: gradient_stroke_down,
+              pointHoverRadius: 2,
+              pointRadius: 0,
+              steppedLine: true,
+              fill: true,
+              backgroundColor: gradient_fill_down,
+              borderWidth: 1,
+              lineTension: 0,
+              data: []
+            }, {
+              type: 'line',
+              label: 'Sent',
+              borderColor: gradient_stroke_bgline_up,
+              backgroundColor: "rgba(255,255,255,0.0)",
+              pointRadius: 0,
+              borderWidth: 1,
+              pointHoverRadius: 2,
+              pointHoverBackgroundColor: gradient_stroke_bgline_up,
+              pointHoverBorderColor: gradient_stroke_bgline_up,
+              fill: true,
+              yAxisID: 'Request',
+              steppedLine: true,
+              lineTension: 0,
+              data: []
+            }, {
+              type: 'line',
+              label: 'Received',
+              borderColor: gradient_stroke_bgline_down,
+              backgroundColor: "rgba(255,255,255,0.0)",
+              pointRadius: 0,
+              borderWidth: 1,
+              pointHoverRadius: 2,
+              pointHoverBackgroundColor: gradient_stroke_bgline_down,
+              pointHoverBorderColor: gradient_stroke_bgline_down,
+              fill: true,
+              yAxisID: 'Request',
+              steppedLine: true,
+              lineTension: 0,
+              data: []
+            }
+          ]
+        },
+        options: {
+          animation: {
+            easing: "easeOutExpo",
+            duration: 2000
+          },
+          legend: {
+            display: false,
+            position: "top",
+            labels: {
+              fontColor: 'white'
+            }
+          },
+          title: {
+            display: false
+          },
+          tooltips: {
+            mode: "index",
+            intersect: false,
+            displayColors: false,
+            xPadding: 10,
+            yPadding: 10,
+            cornerRadius: 0,
+            caretPadding: 10,
+            bodyFontColor: "rgba(255,255,255,0.6)",
+            callbacks: {
+              title: function(tootlip_items, data) {
+                return Time.date(tootlip_items[0].xLabel, "long");
+              },
+              label: function(tootlip_items, data) {
+                if (data.datasets[tootlip_items.datasetIndex].yAxisID === "Request") {
+                  return data.datasets[tootlip_items.datasetIndex].label + ": " + Math.abs(tootlip_items.yLabel) + " requests";
+                } else {
+                  return data.datasets[tootlip_items.datasetIndex].label + ": " + Text.formatSize(Math.abs(tootlip_items.yLabel));
+                }
+              }
+            }
+          },
+          hover: {
+            mode: "index",
+            intersect: false
+          },
+          scales: {
+            yAxes: [
+              {
+                id: 'Transfer',
+                ticks: {
+                  fontColor: "rgba(100,110,132,1)",
+                  fontStyle: "bold",
+                  beginAtZero: true,
+                  suggestedMax: 30000000,
+                  suggestedMin: -30000000,
+                  display: true,
+                  padding: 30,
+                  callback: function(value) {
+                    return Text.formatSize(Math.abs(value));
+                  }
+                },
+                gridLines: {
+                  drawTicks: true,
+                  drawBorder: false,
+                  display: true,
+                  zeroLineColor: "rgba(255,255,255,0.1)",
+                  tickMarkLength: 20,
+                  zeroLineBorderDashOffset: 100,
+                  color: "rgba(255,255,255,0.05)"
+                }
+              }, {
+                id: 'Request',
+                position: "right",
+                ticks: {
+                  beginAtZero: true,
+                  maxTicksLimit: 5,
+                  suggestedMax: 180,
+                  suggestedMin: -180,
+                  display: false
+                },
+                gridLines: {
+                  display: false,
+                  zeroLineColor: "rgba(255,255,255,0)",
+                  drawBorder: false
+                }
+              }
+            ],
+            xAxes: [
+              {
+                type: "time",
+                gridLines: {
+                  color: "rgba(255,255,255,0.1)",
+                  display: false,
+                  offsetGridLines: true,
+                  drawBorder: false
+                },
+                ticks: {
+                  padding: 15,
+                  fontColor: "rgba(100,110,132,1)",
+                  fontStyle: "bold",
+                  callback: (function(_this) {
+                    return function(data_label, index) {
+                      var back, parts;
+                      if (_this.last_data_label == null) {
+                        _this.last_data_label = "None 00 00:00";
+                      }
+                      if (_this.last_data_label.match(/.* /)[0] === data_label.match(/.* /)[0]) {
+                        back = ["", data_label.replace(/.* /, "")];
+                      } else {
+                        parts = data_label.split(" ");
+                        if (parts.length !== 3) {
+                          return data_label;
+                        }
+                        back = [parts[0] + " " + parts[1], parts[2]];
+                      }
+                      _this.last_data_label = data_label;
+                      return back;
+                    };
+                  })(this)
+                },
+                time: {
+                  displayFormats: {
+                    'second': 'MMM DD HH:mm',
+                    'minute': 'MMM DD HH:mm',
+                    'hour': 'MMM DD HH:mm',
+                    'day': 'MMM DD HH:mm',
+                    'week': 'MMM DD HH:mm',
+                    'month': 'MMM DD HH:mm',
+                    'quarter': 'MMM DD HH:mm',
+                    'year': 'MMM DD HH:mm'
+                  }
+                }
+              }
+            ]
+          }
+        }
+      };
+      return configuration;
+    };
+
+    ChartBig.prototype.render = function() {
+      if (this.need_update) {
+        this.update();
+        this.need_update = false;
+      }
+      return h("div.ChartBig", [
+        h("canvas." + Page.params.interval, {
+          width: 1350,
+          height: 450,
+          afterCreate: this.storeCanvasNode,
+          updateAnimation: Animation.show,
+          mode: Page.params.interval
+        })
+      ]);
+    };
+
+    return ChartBig;
+
+  })(Class);
+
+  window.ChartBig = ChartBig;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartLegend.coffee ---- */
+
+
+(function() {
+  var ChartLegend,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  ChartLegend = (function(superClass) {
+    extend(ChartLegend, superClass);
+
+    function ChartLegend() {
+      this.renderItem = bind(this.renderItem, this);
+      this.items_left = [];
+      this.items_right = [];
+    }
+
+    ChartLegend.prototype.renderItem = function(item) {
+      var hidden, value;
+      this.i += 1;
+      if (item.dot == null) {
+        item.dot = "\u25CF";
+      }
+      value = item.getValue();
+      hidden = !value;
+      if (item.post) {
+        value += " " + item.post;
+      }
+      if (item.type === "ratio") {
+        return h("div.legend-item", {
+          classes: {
+            hidden: hidden
+          }
+        }, [
+          h("div.title", item.title), h("div.value", [
+            h("span", {
+              updateAnimation: Animation.show,
+              delay: this.i * 0.1
+            }, Math.round(value * 10) / 10), h("div.dots-container", [
+              h("span.dots.dots-fg", {
+                style: "width: " + (Math.min(value, 5) * 11.5) + "px; color: " + item.color
+              }, item.dot.repeat(5)), h("span.dots.dots-bg", item.dot.repeat(5))
+            ])
+          ])
+        ]);
+      } else {
+        return h("div.legend-item", {
+          classes: {
+            hidden: hidden
+          }
+        }, [
+          h("div.title", [
+            h("span.dot", {
+              style: "color: " + item.color
+            }, item.dot + " "), item.title
+          ]), h("div.value", {
+            updateAnimation: Animation.show,
+            delay: this.i * 0.1
+          }, value)
+        ]);
+      }
+    };
+
+    ChartLegend.prototype.render = function() {
+      this.i = 0;
+      return h("div.ChartLegend", h("div.legend-items.align-left", this.items_left.map(this.renderItem)), h("div.legend-items.align-right", this.items_right.map(this.renderItem)));
+    };
+
+    return ChartLegend;
+
+  })(Class);
+
+  window.ChartLegend = ChartLegend;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartRadar.coffee ---- */
+
+
+(function() {
+  var ChartRadar,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  ChartRadar = (function(superClass) {
+    extend(ChartRadar, superClass);
+
+    function ChartRadar(id) {
+      this.id = id;
+      this.render = bind(this.render, this);
+      this.renderLabel = bind(this.renderLabel, this);
+      this.handleLegendClick = bind(this.handleLegendClick, this);
+      this.initChart = bind(this.initChart, this);
+      this.formatLabel = bind(this.formatLabel, this);
+      this.getChartConfiguration = bind(this.getChartConfiguration, this);
+      this.initCanvas = bind(this.initCanvas, this);
+      this.update = bind(this.update, this);
+      this.configuration = {};
+      this.site_stats = [];
+      this.need_update = false;
+      this.order_by = "site_bw";
+      this.legends = [
+        {
+          id: "site_bw",
+          title: "Transferred data (last 7 days)",
+          color: "#608DECDD"
+        }, {
+          id: "site_size",
+          title: "Site size",
+          color: "#9C27B0DD"
+        }
+      ];
+    }
+
+    ChartRadar.prototype.update = function() {
+      var query, type_ids, type_name;
+      query = "SELECT type_id, site_id, SUM(value) AS sum, value\nFROM data\nWHERE type_id IN :type_ids AND date_added > " + (Time.timestamp() - 60 * 60 * 24 * 7) + "\nGROUP BY type_id, site_id";
+      type_ids = (function() {
+        var j, len, ref, results;
+        ref = ["site_bytes_sent", "site_bytes_recv", "site_size"];
+        results = [];
+        for (j = 0, len = ref.length; j < len; j++) {
+          type_name = ref[j];
+          results.push(Page.page_stats.type_id_db[type_name]);
+        }
+        return results;
+      })();
+      return Page.cmd("chartDbQuery", [
+        query, {
+          type_ids: type_ids
+        }
+      ], (function(_this) {
+        return function(res) {
+          var address, data, i, j, k, len, len1, max_site_bw, max_site_size, ref, row, stat;
+          _this.logStart("Parse result");
+          data = {};
+          for (j = 0, len = res.length; j < len; j++) {
+            row = res[j];
+            address = Page.page_stats.site_address_db[row.site_id];
+            type_name = Page.page_stats.type_name_db[row.type_id];
+            if (data[address] == null) {
+              data[address] = {
+                address: address,
+                site: Page.site_list.sites_byaddress[address]
+              };
+            }
+            if (type_name === "site_size") {
+              data[address][type_name] = row.value;
+            } else {
+              data[address][type_name] = row.sum || 0;
+            }
+          }
+          _this.site_stats = [];
+          for (address in data) {
+            stat = data[address];
+            stat.site_bw = stat.site_bytes_sent + stat.site_bytes_recv;
+            _this.site_stats.push(stat);
+          }
+          _this.site_stats.sort(function(a, b) {
+            return b[_this.order_by] - a[_this.order_by];
+          });
+          if (_this.site_stats.length > 8) {
+            _this.site_stats.length = 8;
+          }
+          max_site_bw = Math.max.apply(null, (function() {
+            var k, len1, ref, results;
+            ref = this.site_stats;
+            results = [];
+            for (k = 0, len1 = ref.length; k < len1; k++) {
+              stat = ref[k];
+              results.push(stat.site_bw);
+            }
+            return results;
+          }).call(_this));
+          max_site_size = Math.max.apply(null, (function() {
+            var k, len1, ref, results;
+            ref = this.site_stats;
+            results = [];
+            for (k = 0, len1 = ref.length; k < len1; k++) {
+              stat = ref[k];
+              results.push(stat.site_size);
+            }
+            return results;
+          }).call(_this));
+          ref = _this.site_stats;
+          for (i = k = 0, len1 = ref.length; k < len1; i = ++k) {
+            stat = ref[i];
+            _this.configuration.data.labels[i] = stat.site.row.content.title;
+            _this.configuration.data.datasets[0].data[i] = Math.log(1 + (stat.site_bw / max_site_bw) * 100);
+            _this.configuration.data.datasets[1].data[i] = Math.log(1 + (stat.site_size / max_site_size) * 100);
+          }
+          _this.logEnd("Parse result", "sites: " + _this.site_stats.length);
+          Page.projector.scheduleRender();
+          if (_this.chart) {
+            return _this.chart.update();
+          } else {
+            return _this.initChart();
+          }
+        };
+      })(this));
+    };
+
+    ChartRadar.prototype.initCanvas = function(node) {
+      if (this.chart) {
+        this.chart.clear();
+        this.chart.destroy();
+        this.chart = null;
+      }
+      this.ctx = node.getContext("2d");
+      return this.configuration = this.getChartConfiguration();
+    };
+
+    ChartRadar.prototype.getChartConfiguration = function() {
+      var fill, fill2, shadowed;
+      fill = this.ctx.createLinearGradient(0, 0, 900, 0);
+      fill.addColorStop(0, "#608DECCC");
+      fill.addColorStop(1, "#9C27B0CC");
+      fill2 = this.ctx.createLinearGradient(0, 0, 900, 0);
+      fill2.addColorStop(0, "#9C27B0DD");
+      fill2.addColorStop(1, "#608DECDD");
+      shadowed = {
+        beforeDatasetsDraw: function(chart, options) {
+          chart.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          return chart.ctx.shadowBlur = 40;
+        },
+        afterDatasetsDraw: function(chart, options) {
+          chart.ctx.shadowColor = 'rgba(0, 0, 0, 0)';
+          return chart.ctx.shadowBlur = 0;
+        }
+      };
+      return {
+        type: 'radar',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Transferred data",
+              backgroundColor: fill,
+              borderColor: "transparent",
+              borderWidth: 0,
+              pointBorderWidth: 0,
+              pointRadius: 0,
+              data: []
+            }, {
+              label: "Site size",
+              backgroundColor: fill2,
+              borderColor: "transparent",
+              borderWidth: 0,
+              pointBorderWidth: 0,
+              pointRadius: 0,
+              data: []
+            }
+          ]
+        },
+        options: {
+          legend: {
+            display: false,
+            position: "bottom",
+            labels: {
+              padding: 5
+            }
+          },
+          scale: {
+            ticks: {
+              display: false,
+              maxTicksLimit: 5,
+              beginAtZero: true
+            },
+            angleLines: {
+              color: "#99999911"
+            },
+            gridLines: {
+              color: "#99999911",
+              tickMarkLength: 1
+            },
+            tooltips: {
+              enabled: true
+            },
+            pointLabels: {
+              fontColor: "rgba(200,210,232,1)",
+              fontSize: 14,
+              fontFamily: "Roboto",
+              fontStyle: "lighter",
+              padding: 10,
+              callback: this.formatLabel
+            }
+          }
+        },
+        plugins: [shadowed]
+      };
+    };
+
+    ChartRadar.prototype.formatLabel = function() {
+      return [""];
+    };
+
+    ChartRadar.prototype.initChart = function() {
+      var timer_resize;
+      this.chart = new Chart(this.ctx, this.configuration);
+      timer_resize = null;
+      return window.addEventListener("resize", (function(_this) {
+        return function() {
+          _this.log("resize");
+          clearInterval(timer_resize);
+          return setTimeout((function() {
+            return _this.chart.resize();
+          }), 300);
+        };
+      })(this));
+    };
+
+    ChartRadar.prototype.handleLegendClick = function(e) {
+      this.order_by = e.currentTarget.getAttribute("href").replace("#", "");
+      this.update();
+      return false;
+    };
+
+    ChartRadar.prototype.renderLabel = function(stat, i) {
+      var left, r, top;
+      if (i % (this.site_stats.length / 2) === 0) {
+        r = 37;
+      } else {
+        r = 40;
+      }
+      left = 50 + r * Math.sin(2 * Math.PI * i / this.site_stats.length);
+      top = 50 - r * Math.cos(2 * Math.PI * i / this.site_stats.length);
+      return h("div.radar-label", {
+        key: stat.address + i,
+        style: "left: " + left + "%; top: " + top + "%",
+        enterAnimation: Animation.show,
+        exitAnimation: Animation.hide
+      }, h("a.title", {
+        href: stat.site.getHref()
+      }, stat.site.row.content.title), " ", h("span.value", " (" + (Text.formatSize(stat[this.order_by]) || 'No data yet') + ")"));
+    };
+
+    ChartRadar.prototype.render = function() {
+      var label_i;
+      if (this.need_update) {
+        this.update();
+        this.need_update = false;
+      }
+      label_i = 0;
+      return h("div.ChartRadar", [
+        h("div.radar-container", [
+          h("div.radar-labels", this.site_stats.map((function(_this) {
+            return function(stat) {
+              var label;
+              label = _this.renderLabel(stat, label_i);
+              label_i += 1;
+              return label;
+            };
+          })(this))), h("div.canvas-container", h("canvas", {
+            width: 600,
+            height: 600,
+            afterCreate: this.initCanvas
+          }))
+        ]), h("div.radar-legends", this.legends.map((function(_this) {
+          return function(legend) {
+            return h("a.radar-legend", {
+              id: legend.id,
+              classes: {
+                active: _this.order_by === legend.id
+              },
+              onclick: _this.handleLegendClick,
+              href: "#" + legend.id
+            }, [
+              h("div.legend-box", {
+                style: "background-color: " + legend.color
+              }), h("span.title", legend.title)
+            ]);
+          };
+        })(this)))
+      ]);
+    };
+
+    return ChartRadar;
+
+  })(Class);
+
+  window.ChartRadar = ChartRadar;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartTimeline.coffee ---- */
+
+
+(function() {
+  var ChartTimeline,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  ChartTimeline = (function(superClass) {
+    extend(ChartTimeline, superClass);
+
+    function ChartTimeline() {
+      this.render = bind(this.render, this);
+      this.update = bind(this.update, this);
+      this.updateChart = bind(this.updateChart, this);
+      this.initChart = bind(this.initChart, this);
+      var i, j;
+      this.items = [];
+      for (i = j = 6; j >= 0; i = --j) {
+        this.items.push({
+          id: i,
+          title: "\u200B",
+          data: "\u200B",
+          value: i,
+          active: false
+        });
+      }
+      this.active_id = 0;
+      this.chart_ctx = null;
+      this.need_update = false;
+      this.line_data = null;
+    }
+
+    ChartTimeline.prototype.initChart = function(node) {
+      this.chart_canvas = node;
+      this.chart_ctx = node.getContext("2d");
+      if (this.line_data) {
+        return this.updateChart();
+      }
+    };
+
+    ChartTimeline.prototype.updateChart = function() {
+      var data, data_last_i, data_max, i, j, len, line_width, line_x, line_y, ref, val;
+      this.chart_ctx.clearRect(0, 0, this.chart_canvas.width, this.chart_canvas.height);
+      this.chart_ctx.lineWidth = 0;
+      this.chart_ctx.fillStyle = '#EDC54B';
+      this.chart_ctx.beginPath();
+      this.chart_ctx.moveTo(-10, 0);
+      data_max = Math.max.apply(null, this.line_data);
+      data_last_i = ((function() {
+        var j, len, ref, results;
+        ref = this.line_data;
+        results = [];
+        for (i = j = 0, len = ref.length; j < len; i = ++j) {
+          val = ref[i];
+          if (val > 0) {
+            results.push(i);
+          }
+        }
+        return results;
+      }).call(this)).pop();
+      line_width = 1400 / this.line_data.length;
+      ref = this.line_data;
+      for (i = j = 0, len = ref.length; j < len; i = ++j) {
+        data = ref[i];
+        line_x = i * line_width;
+        line_y = parseInt(101 - (data / data_max) * 100);
+        this.chart_ctx.lineTo(line_x, line_y);
+        if (i === data_last_i) {
+          break;
+        }
+      }
+      this.chart_ctx.lineTo(line_x, 120);
+      this.chart_ctx.lineTo(0, 120);
+      this.chart_ctx.fill();
+      if (data_last_i > 36) {
+        this.chart_ctx.beginPath();
+        this.chart_ctx.lineWidth = 0;
+        this.chart_ctx.strokeStyle = '#EDC54B';
+        this.chart_ctx.setLineDash([0, 1, 1]);
+        this.chart_ctx.moveTo(line_x, line_y);
+        this.chart_ctx.lineTo(1500, line_y);
+        return this.chart_ctx.stroke();
+      }
+    };
+
+    ChartTimeline.prototype.update = function() {
+      var c, data, date_added_from, date_added_to, day_total, group_steps, interval_step, query, step, type_id;
+      query = "SELECT\nMAX(date_added) AS date_added, AVG(value) AS avg, SUM(value) AS sum\nFROM data\nWHERE type_id = :type_id AND date_added >= :date_added_from AND date_added <= :date_added_to\nGROUP BY strftime('%Y-%m-%d %H', date_added, 'unixepoch', 'localtime')\nORDER BY date_added DESC";
+      if (Page.params.interval === "1w") {
+        c = new Date();
+        c.setDate(c.getDate() - c.getDay() + 7);
+        date_added_to = c.setHours(23, 59, 59, 0) / 1000;
+        interval_step = 60 * 60 * 24 * 7;
+        date_added_from = date_added_to - interval_step * 7;
+        group_steps = 6;
+      } else if (Page.params.interval === "1m") {
+        c = new Date();
+        c.setDate(30);
+        date_added_to = c.setHours(23, 59, 59, 0) / 1000;
+        interval_step = 60 * 60 * 24 * 30;
+        date_added_from = date_added_to - interval_step * 30;
+        group_steps = 24 * 3;
+      } else {
+        date_added_to = (new Date()).setHours(23, 59, 59, 0) / 1000;
+        interval_step = 60 * 60 * 24;
+        date_added_from = date_added_to - interval_step * 7;
+        group_steps = 2;
+      }
+      step = 60 * 60;
+      type_id = Page.page_stats.type_id_db["file_bytes_sent"];
+      data = {};
+      day_total = {};
+      return Page.cmd("chartDbQuery", [
+        query, {
+          type_id: type_id,
+          date_added_from: date_added_from,
+          date_added_to: date_added_to
+        }
+      ], (function(_this) {
+        return function(res) {
+          var data_date_added, data_from, data_to, day_data, day_from, day_name, day_string, day_to, group_step_data, i, j, k, l, len, m, n, ref, row, x;
+          _this.logStart("Parse result");
+          _this.line_data = [];
+          for (j = 0, len = res.length; j < len; j++) {
+            row = res[j];
+            data[Math.ceil(row.date_added / step) * step] = row.sum;
+            day_string = Time.dateIso(row.date_added * 1000);
+            if (day_total[day_string] == null) {
+              day_total[day_string] = 0;
+            }
+            day_total[day_string] += row.sum;
+          }
+          data_date_added = Math.ceil(date_added_from / step) * step;
+          while (data_date_added <= date_added_to) {
+            group_step_data = 0;
+            for (i = k = 0, ref = group_steps; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+              group_step_data += data[data_date_added] || 0;
+              data_date_added += step;
+            }
+            _this.line_data.push(group_step_data);
+          }
+          _this.items = [];
+          for (i = l = 7; l >= 1; i = --l) {
+            data_from = date_added_to - i * interval_step + 1;
+            data_to = data_from + interval_step - 1;
+            if (Page.params.interval === "1w") {
+              day_data = 0;
+              for (x = m = 0; m <= 6; x = ++m) {
+                day_data += day_total[Time.dateIso(data_from + (60 * 60 * 24 * x))] || 0;
+              }
+              day_from = Time.date(data_from, "day");
+              day_to = Time.date(data_from + interval_step - 1, "day");
+              day_to = day_to.replace(day_from.split(" ")[0], "");
+              day_name = day_from + " - " + day_to;
+            } else if (Page.params.interval === "1m") {
+              day_data = 0;
+              for (x = n = 0; n <= 30; x = ++n) {
+                day_data += day_total[Time.dateIso(data_from + (60 * 60 * 24 * x))] || 0;
+              }
+              day_name = Time.date(data_from, "month");
+            } else {
+              day_data = day_total[Time.dateIso(data_from)];
+              day_name = Time.weekDay(data_from);
+            }
+            _this.items.push({
+              id: i,
+              title: day_name,
+              data: day_data,
+              value: data_to
+            });
+          }
+          _this.logEnd("Parse result", "data: " + _this.line_data.length);
+          Page.projector.scheduleRender();
+          return _this.updateChart();
+        };
+      })(this));
+    };
+
+    ChartTimeline.prototype.renderItem = function(item) {
+      var classes, date_added_to;
+      date_added_to = Time.dateIso(item.value);
+      if (item.value >= Time.timestamp()) {
+        date_added_to = "";
+      }
+      classes = {
+        active: (Page.params.date_added_to || "") === date_added_to
+      };
+      return h("a.timeline-item", {
+        key: item.title,
+        enterAnimation: Animation.show,
+        delay: item.id * 0.05,
+        href: Page.createUrl("date_added_to", date_added_to),
+        onclick: Page.handleLinkClick,
+        classes: classes
+      }, h("span.title", item.title), h("span.data", Text.formatSize(item.data) || "0 MB"));
+    };
+
+    ChartTimeline.prototype.render = function() {
+      var ref;
+      if (this.need_update) {
+        this.update();
+        this.need_update = false;
+      }
+      return h("div.ChartTimeline", [
+        h("div.timeline-borders", this.items.map((function(_this) {
+          return function(item) {
+            return h("div.timeline-border", {
+              key: item.id,
+              classes: {
+                active: item.active
+              }
+            });
+          };
+        })(this))), h("canvas.chart", {
+          afterCreate: this.initChart,
+          width: 1400,
+          height: 100,
+          data: (ref = this.line_data) != null ? ref.length : void 0,
+          delay: 0.3,
+          updateAnimation: Animation.show
+        }), h("div.timeline-items", this.items.map((function(_this) {
+          return function(item) {
+            return _this.renderItem(item);
+          };
+        })(this)))
+      ]);
+    };
+
+    return ChartTimeline;
+
+  })(Class);
+
+  window.ChartTimeline = ChartTimeline;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartWorld.coffee ---- */
+
+
+(function() {
+  var ChartWorld,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  ChartWorld = (function(superClass) {
+    extend(ChartWorld, superClass);
+
+    function ChartWorld() {
+      this.render = bind(this.render, this);
+      this.initCanvas = bind(this.initCanvas, this);
+      this.drawPoints = bind(this.drawPoints, this);
+      this.update = bind(this.update, this);
+      this.points = [];
+      this.need_update = false;
+    }
+
+    ChartWorld.prototype.update = function() {
+
+      /*
+      		@points = [
+      			{lat: 0, lon: 0},
+      			{lat: 30, lon: 30},
+      			{lat: 33.137551, lon: 129.902344},
+      			{lat: 0.351560, lon: 115.136719},
+      			{lat: 40.178873, lon: -8.261719},
+      			{lat: 52.482780, lon: -0.878906},
+      			{lat: 47.040182, lon: 19.511719},
+      			{lat: 38.548165, lon: -76.113281},
+      			{lat: 40.446947, lon: -122.871094}
+      			{lat: -16.972741, lon: 46.582031}
+      			{lat: -35.173808, lon: 19.511719}
+      			{lat: -33.431441, lon: 116.542969}
+      			{lat: -45.336702, lon: 168.222656}
+      			{lat: -54.977614, lon: -67.412109}
+      			{lat: 8.928487, lon: -62.314453}
+      			{lat: 65.20515, lon: -14.670696}
+      			{lat: 64.90863, lon: -21.70194625}
+      		]
+      		return false
+       */
+      return Page.cmd("chartGetPeerLocations", [], (function(_this) {
+        return function(res) {
+          var country, country_db, i, item, items, j, len, len1, name, num, num_others, point, ref, ref1;
+          _this.points = res;
+          country_db = {};
+          items = Page.page_stats.country_list.items;
+          items.length = 0;
+          ref = _this.points;
+          for (i = 0, len = ref.length; i < len; i++) {
+            point = ref[i];
+            if (country_db[name = point.country] == null) {
+              country_db[name] = 0;
+            }
+            country_db[point.country] += 1;
+          }
+          for (country in country_db) {
+            num = country_db[country];
+            items.push({
+              title: country,
+              value: num
+            });
+          }
+          items.sort(function(a, b) {
+            return b.value - a.value;
+          });
+          if (items.length > 15) {
+            num_others = 0;
+            ref1 = items.slice(14);
+            for (j = 0, len1 = ref1.length; j < len1; j++) {
+              item = ref1[j];
+              num_others += item.value;
+            }
+            items.length = 14;
+            items.push({
+              title: "Other",
+              value: num_others,
+              type: "other"
+            });
+          }
+          _this.drawPoints();
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+    };
+
+    ChartWorld.prototype.drawPoints = function() {
+      var i, left, len, point, ref, results, top;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      ref = this.points;
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        point = ref[i];
+        left = (47 + (point.lon / 3.65)) * this.canvas.width / 100;
+        top = (59 - (point.lat / 1.52)) * this.canvas.height / 100;
+        results.push(this.ctx.fillRect(left, top, 2, 2));
+      }
+      return results;
+    };
+
+    ChartWorld.prototype.initCanvas = function(node) {
+      this.canvas = node;
+      this.ctx = node.getContext("2d");
+      this.ctx.globalCompositeOperation = 'screen';
+      this.ctx.fillStyle = '#30758e';
+      return this.drawPoints();
+    };
+
+    ChartWorld.prototype.render = function() {
+      if (this.need_update) {
+        this.update();
+        this.need_update = false;
+      }
+      return h("div.ChartWorld", [
+        h("canvas.map-points", {
+          width: 878,
+          height: 371,
+          afterCreate: this.initCanvas
+        }), h("img.map", {
+          src: "img/world.png"
+        })
+      ]);
+    };
+
+    return ChartWorld;
+
+  })(Class);
+
+  window.ChartWorld = ChartWorld;
+
+}).call(this);
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/PageStats.coffee ---- */
+
+
+(function() {
+  var PageStats,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  PageStats = (function(superClass) {
+    extend(PageStats, superClass);
+
+    function PageStats() {
+      this.render = bind(this.render, this);
+      this.loadChartjs = bind(this.loadChartjs, this);
+      this.update = bind(this.update, this);
+      this.handleChartjsLoad = bind(this.handleChartjsLoad, this);
+      this.need_update = false;
+      this.need_load_chartjs = true;
+      this.chartjs_loaded = false;
+      this.chart_timeline = new ChartTimeline();
+      this.chart_big = new ChartBig();
+      this.chart_big.types = [
+        {
+          name: "file_bytes_sent",
+          dataset_id: 0
+        }, {
+          name: "file_bytes_recv",
+          dataset_id: 1,
+          negative: true
+        }, {
+          name: "request_num_sent",
+          dataset_id: 2,
+          negative: true
+        }, {
+          name: "request_num_recv",
+          dataset_id: 3
+        }
+      ];
+      this.chart_legend = new ChartLegend();
+      this.chart_legend.items_left = [
+        {
+          title: "Upload",
+          getValue: ((function(_this) {
+            return function() {
+              return Text.formatSize(_this.chart_big.data_total.file_bytes_sent);
+            };
+          })(this)),
+          color: "#1dfc59"
+        }, {
+          title: "Download",
+          getValue: ((function(_this) {
+            return function() {
+              return Text.formatSize(_this.chart_big.data_total.file_bytes_recv);
+            };
+          })(this)),
+          color: "#c94d47"
+        }, {
+          title: "Ratio",
+          getValue: ((function(_this) {
+            return function() {
+              return _this.chart_big.data_total.file_bytes_sent / _this.chart_big.data_total.file_bytes_recv;
+            };
+          })(this)),
+          type: "ratio",
+          color: "#16ffe9"
+        }
+      ];
+      this.chart_legend.items_right = [
+        {
+          title: "Sent",
+          getValue: ((function(_this) {
+            return function() {
+              return _this.chart_big.data_total.request_num_sent;
+            };
+          })(this)),
+          post: "requests",
+          dot: "\u2500",
+          color: "#2da3b3"
+        }, {
+          title: "Received",
+          getValue: ((function(_this) {
+            return function() {
+              return _this.chart_big.data_total.request_num_recv;
+            };
+          })(this)),
+          post: "requests",
+          dot: "\u2500",
+          color: "#80623f"
+        }
+      ];
+      this.chart_radar = new ChartRadar();
+      this.chart_connections = new Chart();
+      this.chart_connections.title = "Connections";
+      this.chart_connections.type_names = ["peer", "peer_onion", "connection", "connection_onion", "connection_in", "connection_ping_avg", "connection_ping_min"];
+      this.chart_connections.formatValue = function(type_data) {
+        return type_data.connection + " of " + type_data.peer + " peers";
+      };
+      this.chart_connections.formatDetails = function(type_data) {
+        var back;
+        back = [];
+        back.push("Onion: " + type_data.peer_onion + " peers (" + (type_data.connection_onion || 0) + " connections)");
+        back.push("Incoming: " + (Math.round(type_data.connection_in / type_data.connection * 100)) + "%");
+        back.push("Ping avg: " + type_data.connection_ping_avg + "ms (min: " + type_data.connection_ping_min + "ms)");
+        return back;
+      };
+      this.chart_connections.chart_stroke = ["#608DECAA", "#D74C58FF"];
+      this.chart_connections.getChartQuery = function() {
+        return "SELECT * FROM data WHERE type_id = " + Page.page_stats.type_id_db['connection'] + " ORDER BY date_added DESC LIMIT 50";
+      };
+      this.chart_size = new Chart();
+      this.chart_size.title = "Total size";
+      this.chart_size.chart_stroke = ["#F99739AA", "#51B8F2"];
+      this.chart_size.type_names = ["size", "size_optional", "optional_limit", "optional_used", "content"];
+      this.chart_size.formatValue = function(type_data) {
+        return Text.formatSize(type_data.size);
+      };
+      this.chart_size.formatDetails = function(type_data) {
+        var back;
+        back = [];
+        back.push("Content sources: " + type_data.content + " files");
+        back.push("Optional downloaded: " + (Text.formatSize(type_data.optional_used) || '0 MB') + " of " + (Text.formatSize(type_data.size_optional) || '0 MB') + " (limit: " + (Text.formatSize(type_data.optional_limit)) + ")");
+        return back;
+      };
+      this.chart_size.getChartQuery = function() {
+        return "SELECT AVG(value) / 1024 / 1024 AS value FROM data WHERE type_id = " + Page.page_stats.type_id_db['size'] + " GROUP BY ROUND(data_id / 1000) ORDER BY date_added DESC LIMIT 50";
+      };
+      this.chart_world = new ChartWorld();
+      this.country_list = new StatList();
+      this.type_name_db = {};
+      this.type_id_db = {};
+      this.site_address_db = {};
+      this.site_id_db = {};
+      setInterval(((function(_this) {
+        return function() {
+          _this.need_update = true;
+          return Page.projector.scheduleRender();
+        };
+      })(this)), 5 * 60 * 1000);
+    }
+
+    PageStats.prototype.handleChartjsLoad = function() {
+      this.chartjs_loaded = true;
+      return Page.projector.scheduleRender();
+    };
+
+    PageStats.prototype.update = function() {
+      Page.cmd("chartDbQuery", "SELECT * FROM type", (function(_this) {
+        return function(res) {
+          var i, len, results, row;
+          _this.type_id_db = {};
+          _this.type_name_db = {};
+          results = [];
+          for (i = 0, len = res.length; i < len; i++) {
+            row = res[i];
+            _this.type_id_db[row.name] = row.type_id;
+            results.push(_this.type_name_db[row.type_id] = row.name);
+          }
+          return results;
+        };
+      })(this));
+      return Page.cmd("chartDbQuery", "SELECT * FROM site", (function(_this) {
+        return function(res) {
+          var i, len, row, sites;
+          sites = {};
+          _this.sites_by_id = {};
+          for (i = 0, len = res.length; i < len; i++) {
+            row = res[i];
+            _this.site_id_db[row.address] = row.site_id;
+            _this.site_address_db[row.site_id] = row.address;
+          }
+          _this.chart_big.need_update = true;
+          _this.chart_timeline.need_update = true;
+          _this.chart_connections.need_update = true;
+          _this.chart_size.need_update = true;
+          _this.chart_radar.need_update = true;
+          _this.chart_world.need_update = true;
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+    };
+
+    PageStats.prototype.loadChartjs = function() {
+      var e;
+      e = document.createElement("script");
+      e.type = "text/javascript";
+      e.src = "chartjs/chart.bundle.min.js";
+      e.onload = this.handleChartjsLoad;
+      return document.body.appendChild(e);
+    };
+
+    PageStats.prototype.render = function() {
+      var intervals, ref;
+      if (((ref = Page.server_info) != null ? ref.rev : void 0) < 3220) {
+        return h("div#PageStats", h("div.empty", [h("h4", "Need update"), h("small", "You have to update to ZeroNet version 0.6.1 to use this feature.")]));
+      }
+      if (this.need_update) {
+        this.update();
+        this.need_update = false;
+      }
+      if (!this.need_update && document.body.className !== "loaded") {
+        setTimeout((function() {
+          return document.body.className = "loaded";
+        }), 1000);
+      }
+      if (this.need_load_chartjs) {
+        setTimeout(this.loadChartjs, 500);
+        this.need_load_chartjs = false;
+      }
+      intervals = ["1w", "1d"];
+      return h("div#PageStats", [
+        h("div.intervals", intervals.map((function(_this) {
+          return function(interval) {
+            var interval_param;
+            if (interval === "1d") {
+              interval_param = void 0;
+            } else {
+              interval_param = interval;
+            }
+            return h("a.interval", {
+              href: Page.createUrl("interval", interval_param),
+              onclick: Page.handleLinkClick,
+              classes: {
+                active: interval_param === Page.params.interval
+              }
+            }, interval);
+          };
+        })(this))), this.chart_timeline.render(), this.chartjs_loaded ? [this.chart_big.render(), this.chart_legend.render(), this.chart_radar.render(), h("div.Charts", [this.chart_connections.render(), this.chart_size.render()]), this.chart_world.render(), this.country_list.render()] : void 0
+      ]);
+    };
+
+    return PageStats;
+
+  })(Class);
+
+  window.PageStats = PageStats;
+
+}).call(this);
+
+
+
+/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/StatList.coffee ---- */
+
+
+(function() {
+  var StatList,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  StatList = (function(superClass) {
+    extend(StatList, superClass);
+
+    function StatList() {
+      this.render = bind(this.render, this);
+      this.renderItem = bind(this.renderItem, this);
+      this.items = [];
+    }
+
+    StatList.prototype.renderItem = function(item) {
+      return h("div.stat-list-item", {
+        key: item.title,
+        classes: {
+          other: item.type === "other"
+        }
+      }, h("div.title", item.title), h("div.value", item.value + " peers"));
+    };
+
+    StatList.prototype.render = function() {
+      return h("div.StatList", [h("h4", "Top country"), h("div.stat-list-items", this.items.map(this.renderItem))]);
+    };
+
+    return StatList;
+
+  })(Class);
+
+  window.StatList = StatList;
+
+}).call(this);
+
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Animation.coffee ---- */
 
 
@@ -1026,14 +5294,17 @@
     Animation.prototype.show = function(elem, props) {
       var delay, ref;
       delay = ((ref = arguments[arguments.length - 2]) != null ? ref.delay : void 0) * 1000 || 1;
-      elem.className += " animate";
       elem.style.opacity = 0;
+      setTimeout((function() {
+        return elem.className += " animate";
+      }), 1);
       setTimeout((function() {
         return elem.style.opacity = 1;
       }), delay);
       return elem.addEventListener("transitionend", function() {
         elem.classList.remove("animate");
-        return elem.style.opacity = null;
+        elem.style.opacity = null;
+        return elem.removeEventListener("transitionend", arguments.callee, false);
       });
     };
 
@@ -1061,64 +5332,9 @@
 
   })();
 
+  window.reorder_store = {};
+
   window.Animation = new Animation();
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Class.coffee ---- */
-
-
-(function() {
-  var Class,
-    slice = [].slice;
-
-  Class = (function() {
-    function Class() {}
-
-    Class.prototype.trace = true;
-
-    Class.prototype.log = function() {
-      var args;
-      args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-      if (!this.trace) {
-        return;
-      }
-      if (typeof console === 'undefined') {
-        return;
-      }
-      args.unshift("[" + this.constructor.name + "]");
-      console.log.apply(console, args);
-      return this;
-    };
-
-    Class.prototype.logStart = function() {
-      var args, name;
-      name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-      if (!this.trace) {
-        return;
-      }
-      this.logtimers || (this.logtimers = {});
-      this.logtimers[name] = +(new Date);
-      if (args.length > 0) {
-        this.log.apply(this, ["" + name].concat(slice.call(args), ["(started)"]));
-      }
-      return this;
-    };
-
-    Class.prototype.logEnd = function() {
-      var args, ms, name;
-      name = arguments[0], args = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-      ms = +(new Date) - this.logtimers[name];
-      this.log.apply(this, ["" + name].concat(slice.call(args), ["(Done in " + ms + "ms)"]));
-      return this;
-    };
-
-    return Class;
-
-  })();
-
-  window.Class = Class;
 
 }).call(this);
 
@@ -1701,6 +5917,9 @@
 
     Text.prototype.formatSize = function(size) {
       var size_mb;
+      if (!parseInt(size)) {
+        return "";
+      }
       size_mb = size / 1024 / 1024;
       if (size_mb >= 1000) {
         return (size_mb / 1024).toFixed(1) + " GB";
@@ -1758,10 +5977,31 @@
       return back;
     };
 
+    Time.prototype.dateIso = function(timestamp) {
+      var tzoffset;
+      if (timestamp == null) {
+        timestamp = null;
+      }
+      if (!timestamp) {
+        timestamp = window.Time.timestamp();
+      }
+      if (timestamp > 1000000000000) {
+        timestamp = timestamp / 1000;
+      }
+      tzoffset = (new Date()).getTimezoneOffset() * 60;
+      return (new Date((timestamp - tzoffset) * 1000)).toISOString().split("T")[0];
+    };
+
     Time.prototype.date = function(timestamp, format) {
       var display, parts;
+      if (timestamp == null) {
+        timestamp = null;
+      }
       if (format == null) {
         format = "short";
+      }
+      if (!timestamp) {
+        timestamp = window.Time.timestamp();
       }
       if (timestamp > 1000000000000) {
         timestamp = timestamp / 1000;
@@ -1769,10 +6009,21 @@
       parts = (new Date(timestamp * 1000)).toString().split(" ");
       if (format === "short") {
         display = parts.slice(1, 4);
-      } else {
+      } else if (format === "day") {
+        display = parts.slice(1, 3);
+      } else if (format === "month") {
+        display = [parts[1], parts[3]];
+      } else if (format === "long") {
         display = parts.slice(1, 5);
       }
       return display.join(" ").replace(/( [0-9]{4})/, ",$1");
+    };
+
+    Time.prototype.weekDay = function(timestamp) {
+      if (timestamp > 1000000000000) {
+        timestamp = timestamp / 1000;
+      }
+      return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][(new Date(timestamp * 1000)).getDay()];
     };
 
     Time.prototype.timestamp = function(date) {
@@ -1934,1363 +6185,6 @@
   })(Class);
 
   window.ZeroFrame = ZeroFrame;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Bigfiles.coffee ---- */
-
-
-(function() {
-  var Bigfiles,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  Bigfiles = (function(superClass) {
-    extend(Bigfiles, superClass);
-
-    function Bigfiles() {
-      this.render = bind(this.render, this);
-      this.getHref = bind(this.getHref, this);
-      this.updateFiles = bind(this.updateFiles, this);
-      this.files = new SiteFiles(this);
-      this.files.mode = "bigfiles";
-      this.files.limit = 100;
-      this.files.update = this.updateFiles;
-      this.row = {
-        "address": "bigfiles"
-      };
-    }
-
-    Bigfiles.prototype.updateFiles = function(cb) {
-      var orderby;
-      if (Page.server_info.rev < 3090) {
-        return typeof cb === "function" ? cb() : void 0;
-      }
-      orderby = this.files.orderby + (this.files.orderby_desc ? " DESC" : "");
-      return Page.cmd("optionalFileList", {
-        address: "all",
-        filter: "downloaded,bigfile",
-        limit: this.files.limit + 1,
-        orderby: orderby
-      }, (function(_this) {
-        return function(res) {
-          var i, len, row;
-          for (i = 0, len = res.length; i < len; i++) {
-            row = res[i];
-            row.site = Page.site_list.sites_byaddress[row.address];
-          }
-          _this.files.items = res.slice(0, +(_this.files.limit - 1) + 1 || 9e9);
-          _this.files.loaded = true;
-          _this.files.has_more = res.length > _this.files.limit;
-          Page.projector.scheduleRender();
-          return typeof cb === "function" ? cb() : void 0;
-        };
-      })(this));
-    };
-
-    Bigfiles.prototype.getHref = function(row) {
-      return row.inner_path;
-    };
-
-    Bigfiles.prototype.render = function() {
-      if (!this.files.items.length) {
-        return [];
-      }
-      return h("div.Site", [h("div.title", [h("h3.name", "Bigfiles")]), this.files.render()]);
-    };
-
-    return Bigfiles;
-
-  })(Class);
-
-  window.Bigfiles = Bigfiles;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Dashboard.coffee ---- */
-
-
-(function() {
-  var Dashboard,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  Dashboard = (function(superClass) {
-    extend(Dashboard, superClass);
-
-    function Dashboard() {
-      this.render = bind(this.render, this);
-      this.handleTorBrowserwarningClick = bind(this.handleTorBrowserwarningClick, this);
-      this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
-      this.handleNewversionClick = bind(this.handleNewversionClick, this);
-      this.handleLogoutClick = bind(this.handleLogoutClick, this);
-      this.handleDonateClick = bind(this.handleDonateClick, this);
-      this.handleMultiuserClick = bind(this.handleMultiuserClick, this);
-      this.handlePortRecheckClick = bind(this.handlePortRecheckClick, this);
-      this.handlePortClick = bind(this.handlePortClick, this);
-      this.handleDisableAlwaysTorClick = bind(this.handleDisableAlwaysTorClick, this);
-      this.handleEnableAlwaysTorClick = bind(this.handleEnableAlwaysTorClick, this);
-      this.handleTorClick = bind(this.handleTorClick, this);
-      this.menu_newversion = new Menu();
-      this.menu_tor = new Menu();
-      this.menu_port = new Menu();
-      this.menu_multiuser = new Menu();
-      this.menu_donate = new Menu();
-      this.menu_browserwarning = new Menu();
-      this.menu_torbrowserwarning = new Menu();
-      this.port_checking = false;
-      this.has_web_gl = null;
-    }
-
-    Dashboard.prototype.isTorAlways = function() {
-      return Page.server_info.fileserver_ip === "127.0.0.1";
-    };
-
-    Dashboard.prototype.hasWebGl = function() {
-      var canvas, ctx;
-      if (this.has_web_gl === null) {
-        canvas = document.createElement('canvas');
-        ctx = canvas.getContext("webgl");
-        this.has_web_gl = ctx ? true : false;
-        this.log("Webgl:", this.has_web_gl);
-      }
-      return this.has_web_gl;
-    };
-
-    Dashboard.prototype.getTorTitle = function() {
-      var tor_title;
-      tor_title = Page.server_info.tor_status.replace(/\((.*)\)/, "").trim();
-      if (tor_title === "Disabled") {
-        tor_title = _("Disabled");
-      } else if (tor_title === "Error") {
-        tor_title = _("Error");
-      }
-      return tor_title;
-    };
-
-    Dashboard.prototype.handleTorClick = function() {
-      var ref;
-      this.menu_tor.items = [];
-      this.menu_tor.items.push(["Status: " + ((ref = Page.server_info) != null ? ref.tor_status : void 0), "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
-      if (this.getTorTitle() !== "OK") {
-        this.menu_tor.items.push(["How to make Tor connection work?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-make-zeronet-work-with-tor-under-linux"]);
-      }
-      this.menu_tor.items.push(["How to use ZeroNet in Tor Browser?", "http://zeronet.readthedocs.org/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
-      this.menu_tor.items.push(["---"]);
-      if (this.isTorAlways()) {
-        this.menu_tor.items.push(["Disable always Tor mode", this.handleDisableAlwaysTorClick]);
-      } else {
-        this.menu_tor.items.push(["Enable Tor for every connection (slower)", this.handleEnableAlwaysTorClick]);
-      }
-      this.menu_tor.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.handleEnableAlwaysTorClick = function() {
-      return Page.cmd("configSet", ["tor", "always"], (function(_this) {
-        return function(res) {
-          return Page.cmd("wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]);
-        };
-      })(this));
-    };
-
-    Dashboard.prototype.handleDisableAlwaysTorClick = function() {
-      return Page.cmd("configSet", ["tor", null], (function(_this) {
-        return function(res) {
-          return Page.cmd("wrapperNotification", ["done", "Tor always mode disabled, please restart your ZeroNet."]);
-        };
-      })(this));
-    };
-
-    Dashboard.prototype.handlePortClick = function() {
-      this.menu_port.items = [];
-      if (Page.server_info.ip_external) {
-        this.menu_port.items.push(["Nice! Your port " + Page.server_info.fileserver_port + " is opened.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
-      } else if (this.isTorAlways()) {
-        this.menu_port.items.push(["Good, your port is always closed when using ZeroNet in Tor always mode.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
-      } else if (this.getTorTitle() === "OK") {
-        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed, but your Tor gateway is running well.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
-      } else {
-        this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed. You are still fine, but for faster experience try open it.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
-      }
-      this.menu_port.items.push(["---"]);
-      this.menu_port.items.push(["Re-check opened port", this.handlePortRecheckClick]);
-      this.menu_port.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.handlePortRecheckClick = function() {
-      this.port_checking = true;
-      return Page.cmd("serverPortcheck", [], (function(_this) {
-        return function(res) {
-          _this.port_checking = false;
-          return Page.reloadServerInfo();
-        };
-      })(this));
-    };
-
-    Dashboard.prototype.handleMultiuserClick = function() {
-      this.menu_multiuser.items = [];
-      this.menu_multiuser.items.push([
-        "Show your masterseed", (function() {
-          return Page.cmd("userShowMasterSeed");
-        })
-      ]);
-      this.menu_multiuser.items.push([
-        "Logout", (function() {
-          return Page.cmd("userLogout");
-        })
-      ]);
-      this.menu_multiuser.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.handleDonateClick = function() {
-      this.menu_donate.items = [];
-      this.menu_donate.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
-      this.menu_donate.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.handleLogoutClick = function() {
-      return Page.cmd("uiLogout");
-    };
-
-    Dashboard.prototype.handleNewversionClick = function() {
-      this.menu_newversion.items = [];
-      this.menu_newversion.items.push([
-        "Update and restart ZeroNet", (function() {
-          Page.cmd("wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]);
-          return Page.cmd("serverUpdate");
-        })
-      ]);
-      this.menu_newversion.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.handleBrowserwarningClick = function() {
-      this.menu_browserwarning.items = [];
-      this.menu_browserwarning.items.push(["Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox", "http://browsehappy.com/"]);
-      this.menu_browserwarning.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.handleTorBrowserwarningClick = function() {
-      this.menu_torbrowserwarning.items = [];
-      this.menu_torbrowserwarning.items.push(["To protect your anonymity you should use ZeroNet in the Tor browser.", "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser"]);
-      this.menu_torbrowserwarning.toggle();
-      return false;
-    };
-
-    Dashboard.prototype.render = function() {
-      var tor_title;
-      if (Page.server_info) {
-        tor_title = this.getTorTitle();
-        return h("div#Dashboard", navigator.userAgent.match(/(\b(MS)?IE\s+|Trident\/7.0)/) ? h("a.port.dashboard-item.browserwarning", {
-          href: "http://browsehappy.com/",
-          onmousedown: this.handleBrowserwarningClick,
-          onclick: Page.returnFalse
-        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), this.isTorAlways() && (!navigator.userAgent.match(/(Firefox)/) || this.hasWebGl() || (navigator.serviceWorker != null)) ? h("a.port.dashboard-item.torbrowserwarning", {
-          href: "http://zeronet.readthedocs.io/en/latest/faq/#how-to-use-zeronet-in-tor-browser",
-          onmousedown: this.handleTorBrowserwarningClick,
-          onclick: Page.returnFalse
-        }, [h("span", "Your browser is not safe")]) : void 0, this.menu_torbrowserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
-          href: "#Update",
-          onmousedown: this.handleNewversionClick,
-          onclick: Page.returnFalse
-        }, "New ZeroNet version: " + Page.latest_version) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
-          "href": "#Donate",
-          onmousedown: this.handleDonateClick,
-          onclick: Page.returnFalse
-        }, [h("div.icon-heart")]), this.menu_donate.render(".menu-donate"), Page.server_info.multiuser ? h("a.port.dashboard-item.multiuser", {
-          href: "#Multiuser",
-          onmousedown: this.handleMultiuserClick,
-          onclick: Page.returnFalse
-        }, [
-          h("span", "User: "), h("span.status", {
-            style: "color: " + (Text.toColor(Page.server_info.master_address))
-          }, Page.server_info.master_address.slice(0, 5) + ".." + Page.server_info.master_address.slice(-4))
-        ]) : void 0, Page.server_info.multiuser ? this.menu_multiuser.render(".menu-multiuser") : void 0, indexOf.call(Page.server_info.plugins, "UiPassword") >= 0 ? h("a.port.dashboard-item.logout", {
-          href: "#Logout",
-          onmousedown: this.handleLogoutClick,
-          onclick: Page.returnFalse
-        }, [h("span", "Logout")]) : void 0, h("a.port.dashboard-item.port", {
-          href: "#Port",
-          classes: {
-            bounce: this.port_checking
-          },
-          onmousedown: this.handlePortClick,
-          onclick: Page.returnFalse
-        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.tor.dashboard-item.tor", {
-          href: "#Tor",
-          onmousedown: this.handleTorClick,
-          onclick: Page.returnFalse
-        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"));
-      } else {
-        return h("div#Dashboard");
-      }
-    };
-
-    return Dashboard;
-
-  })(Class);
-
-  window.Dashboard = Dashboard;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FeedList.coffee ---- */
-
-
-(function() {
-  var FeedList,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  FeedList = (function(superClass) {
-    extend(FeedList, superClass);
-
-    function FeedList() {
-      this.onSiteInfo = bind(this.onSiteInfo, this);
-      this.render = bind(this.render, this);
-      this.getClass = bind(this.getClass, this);
-      this.renderSearchStat = bind(this.renderSearchStat, this);
-      this.renderWelcome = bind(this.renderWelcome, this);
-      this.renderFeed = bind(this.renderFeed, this);
-      this.exitAnimation = bind(this.exitAnimation, this);
-      this.enterAnimation = bind(this.enterAnimation, this);
-      this.handleSearchInfoClick = bind(this.handleSearchInfoClick, this);
-      this.handleFilterClick = bind(this.handleFilterClick, this);
-      this.handleSearchKeyup = bind(this.handleSearchKeyup, this);
-      this.handleSearchInput = bind(this.handleSearchInput, this);
-      this.storeNodeSearch = bind(this.storeNodeSearch, this);
-      this.search = bind(this.search, this);
-      this.update = bind(this.update, this);
-      this.displayRows = bind(this.displayRows, this);
-      this.checkScroll = bind(this.checkScroll, this);
-      this.feeds = null;
-      this.searching = null;
-      this.searching_text = null;
-      this.searched = null;
-      this.res = null;
-      this.loading = false;
-      this.filter = null;
-      this.feed_types = {};
-      this.need_update = false;
-      this.updating = false;
-      this.limit = 30;
-      this.query_limit = 20;
-      this.query_day_limit = 3;
-      this.show_stats = false;
-      this.feed_keys = {};
-      Page.on_settings.then((function(_this) {
-        return function() {
-          _this.need_update = true;
-          return document.body.onscroll = function() {
-            return RateLimit(300, function() {
-              return _this.checkScroll();
-            });
-          };
-        };
-      })(this));
-      this;
-    }
-
-    FeedList.prototype.checkScroll = function() {
-      var ref, scroll_top;
-      scroll_top = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      if (scroll_top + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((ref = this.feeds) != null ? ref.length : void 0) > 5 && Page.mode === "Sites" && this.limit < 300) {
-        this.limit += 30;
-        this.query_limit += 30;
-        this.query_day_limit += 5;
-        this.log("checkScroll update");
-        this.update();
-        return true;
-      } else {
-        return false;
-      }
-    };
-
-    FeedList.prototype.displayRows = function(rows, search) {
-      var i, last_row, len, row, row_group;
-      this.feeds = [];
-      this.feed_keys = {};
-      if (!rows) {
-        return false;
-      }
-      rows.sort(function(a, b) {
-        return a.date_added + (a.type === "mention" ? 1 : 0) - b.date_added - (b.type === "mention" ? 1 : 0);
-      });
-      row_group = {};
-      last_row = {};
-      this.feed_types = {};
-      rows.reverse();
-      for (i = 0, len = rows.length; i < len; i++) {
-        row = rows[i];
-        if (last_row.body === row.body && last_row.date_added === row.date_added) {
-          continue;
-        }
-        if (row_group.type === row.type && row.url === row_group.url && row.site === row_group.site) {
-          if (row_group.body_more == null) {
-            row_group.body_more = [];
-            row_group.body_more.push(row.body);
-          } else if (row_group.body_more.length < 3) {
-            row_group.body_more.push(row.body);
-          } else {
-            if (row_group.more == null) {
-              row_group.more = 0;
-            }
-            row_group.more += 1;
-          }
-          row_group.feed_id = row.date_added;
-        } else {
-          if (row.feed_id == null) {
-            row.feed_id = row.date_added;
-          }
-          row.key = row.site + row.type + row.title + row.feed_id;
-          if (this.feed_keys[row.key]) {
-            this.log("Duplicate feed key: " + row.key);
-          } else {
-            this.feeds.push(row);
-          }
-          this.feed_keys[row.key] = true;
-          row_group = row;
-        }
-        this.feed_types[row.type] = true;
-        last_row = row;
-      }
-      return Page.projector.scheduleRender();
-    };
-
-    FeedList.prototype.update = function(cb) {
-      var params;
-      if (this.searching || this.updating) {
-        return false;
-      }
-      if (!Page.server_info || Page.server_info.rev < 1850) {
-        params = [];
-      } else {
-        params = [this.query_limit, this.query_day_limit];
-      }
-      this.logStart("Updating feed");
-      this.updating = true;
-      return Page.cmd("feedQuery", params, (function(_this) {
-        return function(res) {
-          var rows;
-          if (res.rows) {
-            rows = res.rows;
-          } else {
-            rows = res;
-          }
-          _this.res = res;
-          if (rows.length < 10 && _this.day_limit !== null) {
-            _this.limit = 20;
-            _this.day_limit = null;
-            _this.updating = false;
-            _this.update();
-            return false;
-          }
-          _this.displayRows(rows);
-          setTimeout(_this.checkScroll, 100);
-          _this.logEnd("Updating feed");
-          if (cb) {
-            cb();
-          }
-          return _this.updating = false;
-        };
-      })(this));
-    };
-
-    FeedList.prototype.search = function(search, cb) {
-      if (Page.server_info.rev < 1230) {
-        this.displayRows([]);
-        if (cb) {
-          cb();
-        }
-        return;
-      }
-      this.loading = true;
-      return Page.cmd("feedSearch", search, (function(_this) {
-        return function(res) {
-          _this.loading = false;
-          _this.displayRows(res["rows"], search);
-          delete res["rows"];
-          _this.res = res;
-          _this.searched = search;
-          if (cb) {
-            return cb();
-          }
-        };
-      })(this));
-    };
-
-    FeedList.prototype.storeNodeSearch = function(node) {
-      return document.body.onkeypress = (function(_this) {
-        return function(e) {
-          var ref, ref1;
-          if ((ref = e.charCode) === 0 || ref === 32) {
-            return;
-          }
-          if (((ref1 = document.activeElement) != null ? ref1.tagName : void 0) !== "INPUT") {
-            return node.focus();
-          }
-        };
-      })(this);
-    };
-
-    FeedList.prototype.handleSearchInput = function(e) {
-      var delay;
-      if (this.searching && this.searching.length > 3) {
-        delay = 100;
-      } else if (this.searching) {
-        delay = 300;
-      } else {
-        delay = 600;
-      }
-      this.searching = e.target.value;
-      this.searching_text = this.searching.replace(/[^ ]+:.*$/, "").trim();
-      if (Page.server_info.rev < 1230) {
-        this.feeds = [];
-        this.feed_keys = {};
-      }
-      if (e.target.value === "") {
-        delay = 1;
-      }
-      clearInterval(this.input_timer);
-      setTimeout((function(_this) {
-        return function() {
-          return _this.loading = true;
-        };
-      })(this));
-      this.input_timer = setTimeout(((function(_this) {
-        return function() {
-          return RateLimitCb(delay, function(cb_done) {
-            _this.loading = false;
-            if (_this.searching) {
-              return _this.search(_this.searching, function() {
-                return cb_done();
-              });
-            } else {
-              return _this.update(function() {
-                cb_done();
-                if (!_this.searching) {
-                  _this.searching = null;
-                }
-                return _this.searched = null;
-              });
-            }
-          });
-        };
-      })(this)), delay);
-      return false;
-    };
-
-    FeedList.prototype.handleSearchKeyup = function(e) {
-      if (e.keyCode === 27) {
-        e.target.value = "";
-        this.handleSearchInput(e);
-      }
-      return false;
-    };
-
-    FeedList.prototype.handleFilterClick = function(e) {
-      this.filter = e.target.getAttribute("href").replace("#", "");
-      if (this.filter === "all") {
-        this.filter = null;
-      }
-      return false;
-    };
-
-    FeedList.prototype.handleSearchInfoClick = function(e) {
-      this.show_stats = !this.show_stats;
-      return false;
-    };
-
-    FeedList.prototype.formatTitle = function(title) {
-      if (this.searching_text && this.searching_text.length > 1) {
-        return Text.highlight(title, this.searching_text);
-      } else {
-        return title;
-      }
-    };
-
-    FeedList.prototype.formatBody = function(body, type) {
-      var username_formatted, username_match;
-      body = body.replace(/[\n\r]+/, "\n");
-      if (type === "comment" || type === "mention") {
-        username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
-        if (username_match) {
-          if (username_match[2]) {
-            username_formatted = username_match[2] + " › ";
-          } else {
-            username_formatted = username_match[3] + " › ";
-          }
-          body = body.replace(/> \[(.*?)\].*/g, "$1: ");
-          body = body.replace(/^[ ]*>.*/gm, "");
-          body = body.replace(username_match[0], "");
-        } else {
-          username_formatted = "";
-        }
-        body = body.replace(/\n/g, " ");
-        body = body.trim();
-        if (this.searching_text && this.searching_text.length > 1) {
-          body = Text.highlight(body, this.searching_text);
-          if (body[0].length > 60 && body.length > 1) {
-            body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
-          }
-          return [h("b", Text.highlight(username_formatted, this.searching_text)), body];
-        } else {
-          body = body.slice(0, 201);
-          return [h("b", [username_formatted]), body];
-        }
-      } else {
-        body = body.replace(/\n/g, " ");
-        if (this.searching_text && this.searching_text.length > 1) {
-          body = Text.highlight(body, this.searching_text);
-          if (body[0].length > 60) {
-            body[0] = "..." + body[0].slice(body[0].length - 50, +(body[0].length - 1) + 1 || 9e9);
-          }
-        } else {
-          body = body.slice(0, 201);
-        }
-        return body;
-      }
-    };
-
-    FeedList.prototype.formatType = function(type, title) {
-      if (type === "comment") {
-        return "Comment on";
-      } else if (type === "mention") {
-        if (title) {
-          return "You got mentioned in";
-        } else {
-          return "You got mentioned";
-        }
-      } else {
-        return "";
-      }
-    };
-
-    FeedList.prototype.enterAnimation = function(elem, props) {
-      if (this.searching === null) {
-        return Animation.slideDown.apply(this, arguments);
-      } else {
-        return null;
-      }
-    };
-
-    FeedList.prototype.exitAnimation = function(elem, remove_func, props) {
-      if (this.searching === null) {
-        return Animation.slideUp.apply(this, arguments);
-      } else {
-        return remove_func();
-      }
-    };
-
-    FeedList.prototype.renderFeed = function(feed) {
-      var err, site, type_formatted;
-      if (this.filter && feed.type !== this.filter) {
-        return null;
-      }
-      try {
-        site = Page.site_list.item_list.items_bykey[feed.site];
-        type_formatted = this.formatType(feed.type, feed.title);
-        return h("div.feed." + feed.type, {
-          key: feed.key,
-          enterAnimation: this.enterAnimation,
-          exitAnimation: this.exitAnimation
-        }, [
-          h("div.details", [
-            h("a.site", {
-              href: site.getHref()
-            }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
-          ]), h("div.circle", {
-            style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
-          }), type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
-            href: site.getHref() + feed.url
-          }, this.formatTitle(feed.title)), h("div.body", {
-            key: feed.body,
-            enterAnimation: this.enterAnimation,
-            exitAnimation: this.exitAnimation
-          }, this.formatBody(feed.body, feed.type)), feed.body_more ? feed.body_more.map((function(_this) {
-            return function(body_more) {
-              return h("div.body", {
-                key: body_more,
-                enterAnimation: _this.enterAnimation,
-                exitAnimation: _this.exitAnimation
-              }, _this.formatBody(body_more, feed.type));
-            };
-          })(this)) : void 0, feed.more > 0 ? h("a.more", {
-            href: site.getHref() + feed.url
-          }, ["+" + feed.more + " more"]) : void 0
-        ]);
-      } catch (error) {
-        err = error;
-        this.log(err);
-        return h("div", {
-          key: Time.timestamp()
-        });
-      }
-    };
-
-    FeedList.prototype.renderWelcome = function() {
-      return h("div.welcome", [
-        h("img", {
-          src: "img/logo.svg",
-          height: 150,
-          onerror: "this.src='img/logo.png'; this.onerror=null;"
-        }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
-          h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
-            href: Text.getSiteUrl("Board.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroBoard"]), h("div.description", ["Simple messaging board"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerotalk", {
-            href: Text.getSiteUrl("Talk.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroTalk"]), h("div.description", ["Reddit-like, decentralized forum"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeroblog", {
-            href: Text.getSiteUrl("Blog.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroBlog"]), h("div.description", ["Microblogging platform"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeromail", {
-            href: Text.getSiteUrl("Mail.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroMail"]), h("div.description", ["End-to-end encrypted mailing"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerome", {
-            href: Text.getSiteUrl("Me.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroMe"]), h("div.description", ["P2P social network"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerosites", {
-            href: Text.getSiteUrl("Sites.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroSites"]), h("div.description", ["Discover more sites"]), h("div.visit", ["Activate \u2501"])])
-        ])
-      ]);
-    };
-
-    FeedList.prototype.renderSearchStat = function(stat) {
-      var site, total_taken;
-      if (stat.taken === 0) {
-        return null;
-      }
-      total_taken = this.res.taken;
-      site = Page.site_list.item_list.items_bykey[stat.site];
-      return h("tr", {
-        key: stat.site + "_" + stat.feed_name,
-        classes: {
-          "slow": stat.taken > total_taken * 0.1,
-          "extra-slow": stat.taken > total_taken * 0.3
-        }
-      }, [
-        h("td.site", h("a.site", {
-          href: site.getHref()
-        }, [site.row.content.title])), h("td.feed_name", stat.feed_name), h("td.taken", (stat.taken != null ? stat.taken + "s" : "n/a "))
-      ]);
-    };
-
-    FeedList.prototype.getClass = function() {
-      if (this.searching !== null) {
-        return "search";
-      } else {
-        return "newsfeed.limit-" + this.limit;
-      }
-    };
-
-    FeedList.prototype.render = function() {
-      var feed_type, ref;
-      if (this.need_update) {
-        RateLimitCb(5000, this.update);
-        this.need_update = false;
-      }
-      if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded" && !this.updating) {
-        if (document.body.scrollTop > 500) {
-          setTimeout((function() {
-            return document.body.className = "loaded";
-          }), 2000);
-        } else {
-          document.body.className = "loaded";
-        }
-      }
-      return h("div#FeedList.FeedContainer", {
-        classes: {
-          faded: Page.mute_list.visible
-        }
-      }, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
-        h("div.feeds-filters", [
-          h("a.feeds-filter", {
-            href: "#all",
-            classes: {
-              active: this.filter === null
-            },
-            onclick: this.handleFilterClick
-          }, "All"), (function() {
-            var results;
-            results = [];
-            for (feed_type in this.feed_types) {
-              results.push(h("a.feeds-filter", {
-                key: feed_type,
-                href: "#" + feed_type,
-                classes: {
-                  active: this.filter === feed_type
-                },
-                onclick: this.handleFilterClick
-              }, feed_type));
-            }
-            return results;
-          }).call(this)
-        ]), h("div.feeds-line"), h("div.feeds-search", {
-          classes: {
-            "searching": this.searching
-          }
-        }, h("div.icon-magnifier"), this.loading ? h("div.loader", {
-          enterAnimation: Animation.show,
-          exitAnimation: Animation.hide
-        }, h("div.arc")) : void 0, h("input", {
-          type: "text",
-          placeholder: "Search in connected sites",
-          value: this.searching,
-          onkeyup: this.handleSearchKeyup,
-          oninput: this.handleSearchInput,
-          afterCreate: this.storeNodeSearch
-        }), ((ref = this.res) != null ? ref.stats : void 0) && !this.loading ? h("a.search-info.nolink", {
-          href: "#ShowStats",
-          enterAnimation: Animation.show,
-          exitAnimation: Animation.hide,
-          onclick: this.handleSearchInfoClick
-        }, (this.searching ? this.res.num + " results " : "") + ("from " + this.res.sites + " sites in " + (this.res.taken.toFixed(2)) + "s")) : void 0, this.show_stats ? h("div.search-info-stats", {
-          enterAnimation: Animation.slideDown,
-          exitAnimation: Animation.slideUp
-        }, [h("table", [h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")), this.res.stats.map(this.renderSearchStat)])]) : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
-          enterAnimation: Animation.show
-        }, [
-          "You need to ", h("a", {
-            href: "#Update",
-            onclick: Page.head.handleUpdateZeronetClick
-          }, "update"), " your ZeroNet client to use the search feature!"
-        ]) : this.feeds.length === 0 && this.searched ? h("div.search-noresult", {
-          enterAnimation: Animation.show
-        }, "No results for " + this.searched) : void 0), h("div.FeedList." + this.getClass(), {
-          classes: {
-            loading: this.loading
-          }
-        }, this.feeds.slice(0, +this.limit + 1 || 9e9).map(this.renderFeed))
-      ] : this.renderWelcome());
-    };
-
-    FeedList.prototype.onSiteInfo = function(site_info) {
-      var ref, ref1, ref2;
-      if (((ref = site_info.event) != null ? ref[0] : void 0) === "file_done" && ((ref1 = site_info.event) != null ? ref1[1].endsWith(".json") : void 0) && !((ref2 = site_info.event) != null ? ref2[1].endsWith("content.json") : void 0)) {
-        if (!this.searching) {
-          return this.need_update = true;
-        }
-      }
-    };
-
-    return FeedList;
-
-  })(Class);
-
-  window.FeedList = FeedList;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/FileList.coffee ---- */
-
-
-(function() {
-  var FileList,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  FileList = (function(superClass) {
-    extend(FileList, superClass);
-
-    function FileList() {
-      this.onSiteInfo = bind(this.onSiteInfo, this);
-      this.render = bind(this.render, this);
-      this.updateAllFiles = bind(this.updateAllFiles, this);
-      this.updateOptionalStats = bind(this.updateOptionalStats, this);
-      this.renderSelectbar = bind(this.renderSelectbar, this);
-      this.renderTotalbar = bind(this.renderTotalbar, this);
-      this.handleLimitInput = bind(this.handleLimitInput, this);
-      this.handleTotalbarMenu = bind(this.handleTotalbarMenu, this);
-      this.handleLimitSetClick = bind(this.handleLimitSetClick, this);
-      this.handleLimitCancelClick = bind(this.handleLimitCancelClick, this);
-      this.handleEditlimitClick = bind(this.handleEditlimitClick, this);
-      this.handleTotalbarOut = bind(this.handleTotalbarOut, this);
-      this.handleTotalbarOver = bind(this.handleTotalbarOver, this);
-      this.handleSelectbarDelete = bind(this.handleSelectbarDelete, this);
-      this.handleSelectbarUnpin = bind(this.handleSelectbarUnpin, this);
-      this.handleSelectbarPin = bind(this.handleSelectbarPin, this);
-      this.handleSelectbarCancel = bind(this.handleSelectbarCancel, this);
-      this.checkSelectedFiles = bind(this.checkSelectedFiles, this);
-      this.getSites = bind(this.getSites, this);
-      this.need_update = true;
-      this.updating_files = 0;
-      this.optional_stats = {
-        limit: "0",
-        free: "0",
-        used: "0"
-      };
-      this.updateOptionalStats();
-      this.hover_totalbar = false;
-      this.menu_totalbar = new Menu();
-      this.editing_limit = false;
-      this.limit = "";
-      this.selected_files_num = 0;
-      this.selected_files_size = 0;
-      this.selected_files_pinned = 0;
-      this.bigfiles = new Bigfiles();
-      this.display_limit = 0;
-      this;
-    }
-
-    FileList.prototype.getSites = function() {
-      var address, back, bigfile_sites, file, i, len, name, ref, site;
-      if (this.bigfiles.files.items.length > 0) {
-        back = [];
-        bigfile_sites = {};
-        ref = this.bigfiles.files.items;
-        for (i = 0, len = ref.length; i < len; i++) {
-          file = ref[i];
-          if (bigfile_sites[name = file.site.row.address] == null) {
-            bigfile_sites[name] = {
-              row: file.site.row,
-              files: {
-                items: [],
-                selected: this.bigfiles.files.selected,
-                update: this.bigfiles.files.update
-              }
-            };
-          }
-          bigfile_sites[file.site.row.address].files.items.push(file);
-        }
-        for (address in bigfile_sites) {
-          site = bigfile_sites[address];
-          back.push(site);
-        }
-        back = back.concat(Page.site_list.sites);
-        return back;
-      } else {
-        return Page.site_list.sites;
-      }
-    };
-
-    FileList.prototype.checkSelectedFiles = function() {
-      var i, len, ref, results, site, site_file;
-      this.selected_files_num = 0;
-      this.selected_files_size = 0;
-      this.selected_files_pinned = 0;
-      ref = this.getSites();
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        results.push((function() {
-          var j, len1, ref1, results1;
-          ref1 = site.files.items;
-          results1 = [];
-          for (j = 0, len1 = ref1.length; j < len1; j++) {
-            site_file = ref1[j];
-            if (!site.files.selected[site_file.inner_path]) {
-              continue;
-            }
-            this.selected_files_num += 1;
-            this.selected_files_size += site_file.size;
-            results1.push(this.selected_files_pinned += site_file.is_pinned);
-          }
-          return results1;
-        }).call(this));
-      }
-      return results;
-    };
-
-    FileList.prototype.handleSelectbarCancel = function() {
-      var i, j, key, len, len1, ref, ref1, ref2, site, site_file, val;
-      ref = this.getSites();
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        ref1 = site.files.items;
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          site_file = ref1[j];
-          ref2 = site.files.selected;
-          for (key in ref2) {
-            val = ref2[key];
-            delete site.files.selected[key];
-          }
-        }
-      }
-      this.checkSelectedFiles();
-      Page.projector.scheduleRender();
-      return false;
-    };
-
-    FileList.prototype.handleSelectbarPin = function() {
-      var i, inner_paths, len, ref, site, site_file;
-      ref = this.getSites();
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        inner_paths = (function() {
-          var j, len1, ref1, results;
-          ref1 = site.files.items;
-          results = [];
-          for (j = 0, len1 = ref1.length; j < len1; j++) {
-            site_file = ref1[j];
-            if (site.files.selected[site_file.inner_path]) {
-              results.push(site_file.inner_path);
-            }
-          }
-          return results;
-        })();
-        if (inner_paths.length > 0) {
-          (function(site) {
-            return Page.cmd("optionalFilePin", [inner_paths, site.row.address], function() {
-              return site.files.update();
-            });
-          })(site);
-        }
-      }
-      return this.handleSelectbarCancel();
-    };
-
-    FileList.prototype.handleSelectbarUnpin = function() {
-      var i, inner_paths, len, ref, site, site_file;
-      ref = this.getSites();
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        inner_paths = (function() {
-          var j, len1, ref1, results;
-          ref1 = site.files.items;
-          results = [];
-          for (j = 0, len1 = ref1.length; j < len1; j++) {
-            site_file = ref1[j];
-            if (site.files.selected[site_file.inner_path]) {
-              results.push(site_file.inner_path);
-            }
-          }
-          return results;
-        })();
-        if (inner_paths.length > 0) {
-          (function(site) {
-            return Page.cmd("optionalFileUnpin", [inner_paths, site.row.address], function() {
-              return site.files.update();
-            });
-          })(site);
-        }
-      }
-      return this.handleSelectbarCancel();
-    };
-
-    FileList.prototype.handleSelectbarDelete = function() {
-      var i, inner_path, inner_paths, j, len, len1, ref, site, site_file;
-      ref = this.getSites();
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        inner_paths = (function() {
-          var j, len1, ref1, results;
-          ref1 = site.files.items;
-          results = [];
-          for (j = 0, len1 = ref1.length; j < len1; j++) {
-            site_file = ref1[j];
-            if (site.files.selected[site_file.inner_path]) {
-              results.push(site_file.inner_path);
-            }
-          }
-          return results;
-        })();
-        if (inner_paths.length > 0) {
-          for (j = 0, len1 = inner_paths.length; j < len1; j++) {
-            inner_path = inner_paths[j];
-            Page.cmd("optionalFileDelete", [inner_path, site.row.address]);
-          }
-          site.files.update();
-        }
-      }
-      Page.site_list.update();
-      return this.handleSelectbarCancel();
-    };
-
-    FileList.prototype.handleTotalbarOver = function() {
-      this.hover_totalbar = true;
-      return Page.projector.scheduleRender();
-    };
-
-    FileList.prototype.handleTotalbarOut = function() {
-      this.hover_totalbar = false;
-      return Page.projector.scheduleRender();
-    };
-
-    FileList.prototype.handleEditlimitClick = function() {
-      this.editing_limit = true;
-      return false;
-    };
-
-    FileList.prototype.handleLimitCancelClick = function() {
-      this.editing_limit = false;
-      return false;
-    };
-
-    FileList.prototype.handleLimitSetClick = function() {
-      var limit;
-      if (this.limit.indexOf("M") > 0 || this.limit.indexOf("m") > 0) {
-        limit = (parseFloat(this.limit) / 1024).toString();
-      } else if (this.limit.indexOf("%") > 0) {
-        limit = parseFloat(this.limit) + "%";
-      } else {
-        limit = parseFloat(this.limit).toString();
-      }
-      this.optional_stats.limit = limit;
-      Page.cmd("optionalLimitSet", limit);
-      this.editing_limit = false;
-      return false;
-    };
-
-    FileList.prototype.handleTotalbarMenu = function() {
-      this.menu_totalbar.items = [];
-      this.menu_totalbar.items.push(["Edit optional files limit", this.handleEditlimitClick]);
-      if (this.menu_totalbar.visible) {
-        this.menu_totalbar.hide();
-      } else {
-        this.menu_totalbar.show();
-      }
-      return false;
-    };
-
-    FileList.prototype.handleLimitInput = function(e) {
-      return this.limit = e.target.value;
-    };
-
-    FileList.prototype.renderTotalbar = function() {
-
-      /*
-      		size_optional = 0
-      		optional_downloaded = 0
-      		for site in Page.site_list.sites
-      			size_optional += site.row.settings.size_optional
-      			optional_downloaded += site.row.settings.optional_downloaded
-       */
-      var limit, percent_limit, percent_optional_downloaded, percent_optional_used, total_space_limited;
-      if (this.editing_limit && parseFloat(this.limit) > 0) {
-        if (this.limit.indexOf("M") > 0 || this.limit.indexOf("m") > 0) {
-          limit = (parseFloat(this.limit) / 1024) + "GB";
-        } else {
-          limit = this.limit;
-        }
-      } else {
-        limit = this.optional_stats.limit;
-      }
-      if (limit.endsWith("%")) {
-        limit = this.optional_stats.free * (parseFloat(limit) / 100);
-      } else {
-        limit = parseFloat(limit) * 1024 * 1024 * 1024;
-      }
-      if (this.optional_stats.free > limit * 1.8 && !this.hover_totalbar) {
-        total_space_limited = limit * 1.8;
-      } else {
-        total_space_limited = this.optional_stats.free;
-      }
-      percent_optional_downloaded = (this.optional_stats.used / limit) * 100;
-      percent_optional_used = percent_optional_downloaded * (limit / total_space_limited);
-      percent_limit = (limit / total_space_limited) * 100;
-      return h("div#FileListDashboard", {
-        classes: {
-          editing: this.editing_limit
-        }
-      }, [
-        h("div.totalbar-edit", [
-          h("span.title", "Optional files limit:"), h("input", {
-            type: "text",
-            value: this.limit,
-            oninput: this.handleLimitInput
-          }), h("a.set", {
-            href: "#",
-            onclick: this.handleLimitSetClick
-          }, "Set"), h("a.cancel", {
-            href: "#",
-            onclick: this.handleLimitCancelClick
-          }, "Cancel")
-        ]), h("a.totalbar-title", {
-          href: "#",
-          title: "Space current used by optional files",
-          onclick: this.handleTotalbarMenu
-        }, "Used: " + (Text.formatSize(this.optional_stats.used)) + " / " + (Text.formatSize(limit)) + " (" + (Math.round(percent_optional_downloaded)) + "%)", h("div.icon-arrow-down")), this.menu_totalbar.render(), h("div.totalbar", {
-          onmouseover: this.handleTotalbarOver,
-          onmouseout: this.handleTotalbarOut
-        }, h("div.totalbar-used", {
-          style: "width: " + percent_optional_used + "%"
-        }), h("div.totalbar-limitbar", {
-          style: "width: " + percent_limit + "%"
-        }), h("div.totalbar-limit", {
-          style: "margin-left: " + percent_limit + "%"
-        }, h("span", {
-          title: "Space allowed to used by optional files"
-        }, Text.formatSize(limit))), h("div.totalbar-hddfree", h("span", {
-          title: "Total free space on your storage"
-        }, [
-          Text.formatSize(this.optional_stats.free), h("div.arrow", {
-            style: this.optional_stats.free > total_space_limited ? "width: 10px" : "width: 0px"
-          }, " \u25B6")
-        ])))
-      ]);
-    };
-
-    FileList.prototype.renderSelectbar = function() {
-      return h("div.selectbar", {
-        classes: {
-          visible: this.selected_files_num > 0
-        }
-      }, [
-        "Selected:", h("span.info", [h("span.num", this.selected_files_num + " files"), h("span.size", "(" + (Text.formatSize(this.selected_files_size)) + ")")]), h("div.actions", [
-          this.selected_files_pinned > this.selected_files_num / 2 ? h("a.action.pin.unpin", {
-            href: "#",
-            onclick: this.handleSelectbarUnpin
-          }, "UnPin") : h("a.action.pin", {
-            href: "#",
-            title: "Don't delete these files automatically",
-            onclick: this.handleSelectbarPin
-          }, "Pin"), h("a.action.delete", {
-            href: "#",
-            onclick: this.handleSelectbarDelete
-          }, "Delete")
-        ]), h("a.cancel.link", {
-          href: "#",
-          onclick: this.handleSelectbarCancel
-        }, "Cancel")
-      ]);
-    };
-
-    FileList.prototype.updateOptionalStats = function() {
-      return Page.cmd("optionalLimitStats", [], (function(_this) {
-        return function(res) {
-          _this.limit = res.limit;
-          if (!_this.limit.endsWith("%")) {
-            _this.limit += " GB";
-          }
-          return _this.optional_stats = res;
-        };
-      })(this));
-    };
-
-    FileList.prototype.updateAllFiles = function() {
-      var used;
-      this.updating_files = 0;
-      used = 0;
-      Page.site_list.sites.map((function(_this) {
-        return function(site) {
-          if (!site.row.settings.size_optional) {
-            return;
-          }
-          _this.updating_files += 1;
-          used += site.row.settings.optional_downloaded;
-          return site.files.update(function() {
-            return _this.updating_files -= 1;
-          });
-        };
-      })(this));
-      this.updating_files += 1;
-      return this.bigfiles.files.update((function(_this) {
-        return function() {
-          return _this.updating_files -= 1;
-        };
-      })(this));
-    };
-
-    FileList.prototype.render = function() {
-      var site, sites, sites_connected, sites_favorited;
-      if (Page.site_list.sites && !this.need_update && this.updating_files === 0 && document.body.className !== "loaded") {
-        document.body.className = "loaded";
-      }
-      if (this.need_update && Page.site_list.sites.length) {
-        this.updateAllFiles();
-        this.need_update = false;
-      }
-      sites = (function() {
-        var i, len, ref, results;
-        ref = Page.site_list.sites;
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          site = ref[i];
-          if (site.row.settings.size_optional) {
-            results.push(site);
-          }
-        }
-        return results;
-      })();
-      sites_favorited = (function() {
-        var i, len, results;
-        results = [];
-        for (i = 0, len = sites.length; i < len; i++) {
-          site = sites[i];
-          if (site.favorite) {
-            results.push(site);
-          }
-        }
-        return results;
-      })();
-      sites_connected = (function() {
-        var i, len, results;
-        results = [];
-        for (i = 0, len = sites.length; i < len; i++) {
-          site = sites[i];
-          if (!site.favorite) {
-            results.push(site);
-          }
-        }
-        return results;
-      })();
-      if (sites.length > 0 && sites[0].files.loaded === false) {
-        if (sites_favorited.length) {
-          sites_favorited = [sites_favorited[0]];
-          sites_connected = [];
-        } else {
-          sites_favorited = [];
-          sites_connected = [sites_connected[0]];
-        }
-      }
-      if (sites.length === 0) {
-        document.body.className = "loaded";
-        return h("div#FileList", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
-      }
-      if (this.display_limit < sites.length) {
-        setTimeout(((function(_this) {
-          return function() {
-            _this.display_limit += 1;
-            return Page.projector.scheduleRender();
-          };
-        })(this)), 1000);
-      }
-      return h("div#FileList", [
-        this.renderSelectbar(), this.renderTotalbar(), this.bigfiles.render(), sites_favorited.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
-          return function(site) {
-            return site.renderOptionalStats();
-          };
-        })(this)), sites_connected.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
-          return function(site) {
-            return site.renderOptionalStats();
-          };
-        })(this))
-      ]);
-    };
-
-    FileList.prototype.onSiteInfo = function(site_info) {
-      var rate_limit, ref, ref1;
-      if (((ref = site_info.event) != null ? ref[0] : void 0) === "peers_added") {
-        return false;
-      }
-      if (site_info.tasks === 0 && ((ref1 = site_info.event) != null ? ref1[0] : void 0) === "file_done") {
-        rate_limit = 1000;
-      } else {
-        rate_limit = 10000;
-      }
-      return RateLimit(rate_limit, (function(_this) {
-        return function() {
-          return _this.need_update = true;
-        };
-      })(this));
-    };
-
-    return FileList;
-
-  })(Class);
-
-  window.FileList = FileList;
 
 }).call(this);
 
@@ -3531,13 +6425,13 @@
             active: Page.mode === "Files"
           },
           onclick: Page.handleLinkClick
-        }, _("Files")), Page.site_info.settings.own ? h("a.mode.stats", {
+        }, _("Files")), h("a.mode.stats", {
           href: "?Stats",
           classes: {
             active: Page.mode === "Stats"
           },
           onclick: Page.handleLinkClick
-        }, _("Stats")) : void 0
+        }, _("Stats"))
       ]));
     };
 
@@ -3546,1213 +6440,6 @@
   })(Class);
 
   window.Head = Head;
-
-}).call(this);
-
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/MuteList.coffee ---- */
-
-
-(function() {
-  var MuteList,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  MuteList = (function(superClass) {
-    extend(MuteList, superClass);
-
-    function MuteList() {
-      this.show = bind(this.show, this);
-      this.render = bind(this.render, this);
-      this.handleMuteRemoveClick = bind(this.handleMuteRemoveClick, this);
-      this.handleHideClick = bind(this.handleHideClick, this);
-      this.update = bind(this.update, this);
-      this.mutes = null;
-      this.visible = false;
-      Page.on_settings.then((function(_this) {
-        return function() {
-          return _this.need_update = true;
-        };
-      })(this));
-      this;
-    }
-
-    MuteList.prototype.update = function() {
-      this.need_update = false;
-      return Page.cmd("MuteList", [], (function(_this) {
-        return function(res) {
-          var auth_address, mute;
-          _this.mutes = [];
-          for (auth_address in res) {
-            mute = res[auth_address];
-            mute.auth_address = auth_address;
-            mute.site = Page.site_list.sites_byaddress[mute.source];
-            _this.mutes.push(mute);
-          }
-          _this.mutes.sort(function(a, b) {
-            return b.date_added - a.date_added;
-          });
-          return Page.projector.scheduleRender();
-        };
-      })(this));
-    };
-
-    MuteList.prototype.handleHideClick = function() {
-      return this.visible = false;
-    };
-
-    MuteList.prototype.handleMuteRemoveClick = function(e) {
-      var mute;
-      mute = e.target.mute;
-      if (mute.removed) {
-        Page.cmd("muteAdd", [mute.auth_address, mute.cert_user_id, mute.reason]);
-      } else {
-        Page.cmd("muteRemove", mute.auth_address);
-      }
-      mute.removed = !mute.removed;
-      return false;
-    };
-
-    MuteList.prototype.render = function() {
-      var max_height;
-      if (this.need_update) {
-        this.update();
-      }
-      if (!this.mutes) {
-        return h("div#MuteList", {
-          classes: {
-            visible: false
-          }
-        }, "Muted");
-      }
-      if (this.visible) {
-        max_height = 100 + this.mutes.length * 70;
-      } else {
-        max_height = 0;
-      }
-      return h("div#MuteList", {
-        classes: {
-          visible: this.visible
-        },
-        style: "max-height: " + max_height + "px"
-      }, [
-        h("a.mute-hide", {
-          href: "#Hide",
-          onclick: this.handleHideClick
-        }, "\u2039 Back to feed"), this.mutes.length === 0 ? h("div.mute-empty", "Your mute list is empty! :)") : [
-          h("div.mute.mute-head", [
-            h("div.mute-col", "Muted user"), h("div.mute-col", {
-              style: "width: 66%"
-            }, "Why?")
-          ]), this.mutes.map((function(_this) {
-            return function(mute) {
-              return h("div.mute", {
-                key: mute.auth_address,
-                classes: {
-                  removed: mute.removed
-                }
-              }, [
-                h("div.mute-col", [h("div.cert_user_id", mute.cert_user_id), h("div.auth_address", mute.auth_address)]), h("div.mute-col", {
-                  style: "width: 66%"
-                }, [
-                  h("div.source", mute.site != null ? mute.site.row.content.title : mute.source), h("div.reason", {
-                    innerHTML: Text.renderMarked(mute.reason)
-                  }), h("div.date_added", " \u2500 " + Time.since(mute.date_added))
-                ]), h("a.action", {
-                  href: "#Unmute",
-                  onclick: _this.handleMuteRemoveClick,
-                  mute: mute
-                }, "×")
-              ]);
-            };
-          })(this))
-        ]
-      ]);
-    };
-
-    MuteList.prototype.show = function() {
-      this.visible = true;
-      this.need_update = true;
-      return Page.projector.scheduleRender();
-    };
-
-    return MuteList;
-
-  })(Class);
-
-  window.MuteList = MuteList;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Site.coffee ---- */
-
-
-(function() {
-  var Site,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  Site = (function(superClass) {
-    extend(Site, superClass);
-
-    function Site(row, item_list) {
-      this.item_list = item_list;
-      this.renderOptionalStats = bind(this.renderOptionalStats, this);
-      this.render = bind(this.render, this);
-      this.handleLimitIncreaseClick = bind(this.handleLimitIncreaseClick, this);
-      this.handleHelpsClick = bind(this.handleHelpsClick, this);
-      this.handleHelpAllClick = bind(this.handleHelpAllClick, this);
-      this.handleHelpClick = bind(this.handleHelpClick, this);
-      this.handleSettingsClick = bind(this.handleSettingsClick, this);
-      this.handleDeleteClick = bind(this.handleDeleteClick, this);
-      this.handleCloneUpgradeClick = bind(this.handleCloneUpgradeClick, this);
-      this.handleCloneClick = bind(this.handleCloneClick, this);
-      this.handlePauseClick = bind(this.handlePauseClick, this);
-      this.handleResumeClick = bind(this.handleResumeClick, this);
-      this.handleCheckfilesClick = bind(this.handleCheckfilesClick, this);
-      this.handleUpdateClick = bind(this.handleUpdateClick, this);
-      this.handleUnfavoriteClick = bind(this.handleUnfavoriteClick, this);
-      this.handleFavoriteClick = bind(this.handleFavoriteClick, this);
-      this.deleted = false;
-      this.show_errors = false;
-      this.message_visible = false;
-      this.message = null;
-      this.message_class = "";
-      this.message_collapsed = false;
-      this.message_timer = null;
-      this.favorite = Page.settings.favorite_sites[row.address];
-      this.key = row.address;
-      this.optional_helps = [];
-      this.optional_helps_disabled = {};
-      this.setRow(row);
-      this.files = new SiteFiles(this);
-      this.menu = new Menu();
-      this.menu_helps = null;
-    }
-
-    Site.prototype.setRow = function(row) {
-      var key, ref, ref1, ref2, val;
-      if (((ref = row.event) != null ? ref[0] : void 0) === "updated" && row.content_updated !== false) {
-        this.setMessage("Updated!", "done");
-      } else if (((ref1 = row.event) != null ? ref1[0] : void 0) === "updating") {
-        this.setMessage("Updating...");
-      } else if (row.tasks > 0) {
-        this.setMessage("Updating: " + (Math.max(row.tasks, row.bad_files)) + " left");
-      } else if (row.bad_files > 0) {
-        if (row.peers <= 1) {
-          this.setMessage("No peers", "error");
-        } else {
-          this.setMessage(row.bad_files + " file update failed", "error");
-        }
-      } else if (row.content_updated === false) {
-        if (row.peers <= 1) {
-          this.setMessage("No peers", "error");
-        } else {
-          this.setMessage("Update failed", "error");
-        }
-      } else if (row.tasks === 0 && ((ref2 = this.row) != null ? ref2.tasks : void 0) > 0) {
-        this.setMessage("Updated!", "done");
-      }
-      if (row.body == null) {
-        row.body = "";
-      }
-      this.optional_helps = (function() {
-        var ref3, results;
-        ref3 = row.settings.optional_help;
-        results = [];
-        for (key in ref3) {
-          val = ref3[key];
-          results.push([key, val]);
-        }
-        return results;
-      })();
-      return this.row = row;
-    };
-
-    Site.prototype.setMessage = function(message, message_class) {
-      this.message_class = message_class != null ? message_class : "";
-      if (message) {
-        this.message = message;
-        this.message_visible = true;
-        if (this.message_class === "error" && !this.show_errors) {
-          this.message_collapsed = true;
-        } else {
-          this.message_collapsed = false;
-        }
-      } else {
-        this.message_visible = false;
-      }
-      clearInterval(this.message_timer);
-      if (this.message_class === "done") {
-        this.message_timer = setTimeout(((function(_this) {
-          return function() {
-            return _this.setMessage("");
-          };
-        })(this)), 5000);
-      }
-      return Page.projector.scheduleRender();
-    };
-
-    Site.prototype.isWorking = function() {
-      var ref;
-      return this.row.tasks > 0 || ((ref = this.row.event) != null ? ref[0] : void 0) === "updating";
-    };
-
-    Site.prototype.handleFavoriteClick = function() {
-      this.favorite = true;
-      this.menu = new Menu();
-      Page.settings.favorite_sites[this.row.address] = true;
-      Page.saveSettings();
-      Page.site_list.reorder();
-      return false;
-    };
-
-    Site.prototype.handleUnfavoriteClick = function() {
-      this.favorite = false;
-      this.menu = new Menu();
-      delete Page.settings.favorite_sites[this.row.address];
-      Page.saveSettings();
-      Page.site_list.reorder();
-      return false;
-    };
-
-    Site.prototype.handleUpdateClick = function() {
-      Page.cmd("siteUpdate", {
-        "address": this.row.address
-      });
-      this.show_errors = true;
-      return false;
-    };
-
-    Site.prototype.handleCheckfilesClick = function() {
-      Page.cmd("siteUpdate", {
-        "address": this.row.address,
-        "check_files": true,
-        since: 0
-      });
-      this.show_errors = true;
-      return false;
-    };
-
-    Site.prototype.handleResumeClick = function() {
-      Page.cmd("siteResume", {
-        "address": this.row.address
-      });
-      return false;
-    };
-
-    Site.prototype.handlePauseClick = function() {
-      Page.cmd("sitePause", {
-        "address": this.row.address
-      });
-      return false;
-    };
-
-    Site.prototype.handleCloneClick = function() {
-      Page.cmd("siteClone", {
-        "address": this.row.address
-      });
-      return false;
-    };
-
-    Site.prototype.handleCloneUpgradeClick = function() {
-      Page.cmd("wrapperConfirm", ["Are you sure?" + (" Any modifications you made on<br><b>" + this.row.content.title + "</b> site's js/css files will be lost."), "Upgrade"], (function(_this) {
-        return function(confirmed) {
-          return Page.cmd("siteClone", {
-            "address": _this.row.content.cloned_from,
-            "root_inner_path": _this.row.content.clone_root,
-            "target_address": _this.row.address
-          });
-        };
-      })(this));
-      return false;
-    };
-
-    Site.prototype.handleDeleteClick = function() {
-      if (this.row.settings.own) {
-        Page.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
-      } else {
-        if (Page.server_info.rev > 2060) {
-          Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), ["Delete", "Blacklist"]], (function(_this) {
-            return function(confirmed) {
-              if (confirmed === 1) {
-                Page.cmd("siteDelete", {
-                  "address": _this.row.address
-                });
-                _this.item_list.deleteItem(_this);
-                return Page.projector.scheduleRender();
-              } else if (confirmed === 2) {
-                return Page.cmd("wrapperPrompt", ["Blacklist <b>" + _this.row.content.title + "</b>", "text", "Delete and Blacklist", "Reason"], function(reason) {
-                  Page.cmd("siteDelete", {
-                    "address": _this.row.address
-                  });
-                  Page.cmd("blacklistAdd", [_this.row.address, reason]);
-                  _this.item_list.deleteItem(_this);
-                  return Page.projector.scheduleRender();
-                });
-              }
-            };
-          })(this));
-        } else {
-          Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), "Delete"], (function(_this) {
-            return function(confirmed) {
-              if (confirmed) {
-                Page.cmd("siteDelete", {
-                  "address": _this.row.address
-                });
-                _this.item_list.deleteItem(_this);
-                return Page.projector.scheduleRender();
-              }
-            };
-          })(this));
-        }
-      }
-      return false;
-    };
-
-    Site.prototype.handleSettingsClick = function(e) {
-      this.menu.items = [];
-      if (this.favorite) {
-        this.menu.items.push(["Unfavorite", this.handleUnfavoriteClick]);
-      } else {
-        this.menu.items.push(["Favorite", this.handleFavoriteClick]);
-      }
-      this.menu.items.push(["Update", this.handleUpdateClick]);
-      this.menu.items.push(["Check files", this.handleCheckfilesClick]);
-      if (this.row.settings.serving) {
-        this.menu.items.push(["Pause", this.handlePauseClick]);
-      } else {
-        this.menu.items.push(["Resume", this.handleResumeClick]);
-      }
-      if (this.row.content.cloneable === true) {
-        this.menu.items.push(["Clone", this.handleCloneClick]);
-      }
-      if (this.row.settings.own && this.row.content.cloned_from && Page.server_info.rev >= 2080) {
-        this.menu.items.push(["---"]);
-        this.menu.items.push(["Upgrade code", this.handleCloneUpgradeClick]);
-      }
-      this.menu.items.push(["---"]);
-      this.menu.items.push(["Delete", this.handleDeleteClick]);
-      if (this.menu.visible) {
-        this.menu.hide();
-      } else {
-        this.menu.show();
-      }
-      return false;
-    };
-
-    Site.prototype.handleHelpClick = function(directory, title) {
-      if (this.optional_helps_disabled[directory]) {
-        Page.cmd("OptionalHelp", [directory, title, this.row.address]);
-        delete this.optional_helps_disabled[directory];
-      } else {
-        Page.cmd("OptionalHelpRemove", [directory, this.row.address]);
-        this.optional_helps_disabled[directory] = true;
-      }
-      return true;
-    };
-
-    Site.prototype.handleHelpAllClick = function() {
-      if (this.row.settings.autodownloadoptional === true) {
-        return Page.cmd("OptionalHelpAll", [false, this.row.address], (function(_this) {
-          return function() {
-            _this.row.settings.autodownloadoptional = false;
-            return Page.projector.scheduleRender();
-          };
-        })(this));
-      } else {
-        return Page.cmd("OptionalHelpAll", [true, this.row.address], (function(_this) {
-          return function() {
-            _this.row.settings.autodownloadoptional = true;
-            return Page.projector.scheduleRender();
-          };
-        })(this));
-      }
-    };
-
-    Site.prototype.handleHelpsClick = function(e) {
-      var directory, i, len, ref, ref1, title;
-      if (e.target.classList.contains("menu-item")) {
-        return;
-      }
-      if (!this.menu_helps) {
-        this.menu_helps = new Menu();
-      }
-      this.menu_helps.items = [];
-      this.menu_helps.items.push([
-        "Help distribute all new files", this.handleHelpAllClick, ((function(_this) {
-          return function() {
-            return _this.row.settings.autodownloadoptional;
-          };
-        })(this))
-      ]);
-      if (this.optional_helps.length > 0) {
-        this.menu_helps.items.push(["---"]);
-      }
-      ref = this.optional_helps;
-      for (i = 0, len = ref.length; i < len; i++) {
-        ref1 = ref[i], directory = ref1[0], title = ref1[1];
-        this.menu_helps.items.push([
-          title, ((function(_this) {
-            return function() {
-              return _this.handleHelpClick(directory, title);
-            };
-          })(this)), ((function(_this) {
-            return function() {
-              return !_this.optional_helps_disabled[directory];
-            };
-          })(this))
-        ]);
-      }
-      this.menu_helps.toggle();
-      return true;
-    };
-
-    Site.prototype.getHref = function(row) {
-      var has_plugin, href, ref, ref1;
-      has_plugin = (((ref = Page.server_info) != null ? ref.plugins : void 0) != null) && (indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
-      if (has_plugin && ((ref1 = this.row.content) != null ? ref1.domain : void 0)) {
-        href = Text.getSiteUrl(this.row.content.domain);
-      } else {
-        href = Text.getSiteUrl(this.row.address);
-      }
-      if (row != null ? row.inner_path : void 0) {
-        return href + row.inner_path;
-      } else {
-        return href;
-      }
-    };
-
-    Site.prototype.handleLimitIncreaseClick = function() {
-      if (Page.server_info.rev < 3170) {
-        return Page.cmd("wrapperNotification", ["info", "You need ZeroNet Rev3170 to use this command"]);
-      }
-      Page.cmd("as", [this.row.address, "siteSetLimit", this.row.need_limit], (function(_this) {
-        return function(res) {
-          if (res === "ok") {
-            Page.cmd("wrapperNotification", ["done", "Site <b>" + _this.row.content.title + "</b> storage limit modified to <b>" + _this.row.need_limit + "MB</b>", 5000]);
-          } else {
-            Page.cmd("wrapperNotification", ["error", res.error]);
-          }
-          return Page.projector.scheduleRender();
-        };
-      })(this));
-      return false;
-    };
-
-    Site.prototype.render = function() {
-      var now, ref;
-      now = Date.now() / 1000;
-      return h("div.site", {
-        key: this.key,
-        "data-key": this.key,
-        classes: {
-          "modified-lastday": now - this.row.settings.modified < 60 * 60 * 24,
-          "disabled": !this.row.settings.serving && !this.row.demo,
-          "working": this.isWorking()
-        }
-      }, h("div.circle", {
-        style: "color: " + (Text.toColor(this.row.address, 40, 50))
-      }, ["\u2022"]), h("a.inner", {
-        href: this.getHref(),
-        title: ((ref = this.row.content.title) != null ? ref.length : void 0) > 20 ? this.row.content.title : void 0
-      }, [
-        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.settings.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, this.row.need_limit ? h("a.details.needaction", {
-          href: "#Set+limit",
-          onclick: this.handleLimitIncreaseClick
-        }, "Set limit to " + this.row.need_limit + "MB") : void 0, h("div.message", {
-          classes: {
-            visible: this.message_visible,
-            done: this.message_class === 'done',
-            error: this.message_class === 'error',
-            collapsed: this.message_collapsed
-          }
-        }, [this.message])
-      ]), h("a.settings", {
-        href: "#Settings",
-        tabIndex: -1,
-        onmousedown: this.handleSettingsClick,
-        onclick: Page.returnFalse
-      }, ["\u22EE"]), this.menu.render());
-    };
-
-    Site.prototype.renderCircle = function(value, max) {
-      var dashoffset, stroke;
-      if (value < 1) {
-        dashoffset = 75 + (1 - value) * 75;
-      } else {
-        dashoffset = Math.max(0, 75 - ((value - 1) / 9) * 75);
-      }
-      stroke = "hsl(" + (Math.min(555, value * 50)) + ", 100%, 61%)";
-      return h("div.circle", {
-        title: "Upload/Download ratio",
-        innerHTML: "<svg class=\"circle-svg\" width=\"30\" height=\"30\" viewPort=\"0 0 30 30\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n  			<circle r=\"12\" cx=\"15\" cy=\"15\" fill=\"transparent\" class='circle-bg'></circle>\n  			<circle r=\"12\" cx=\"15\" cy=\"15\" fill=\"transparent\" class='circle-fg' style='stroke-dashoffset: " + dashoffset + "; stroke: " + stroke + "'></circle>\n</svg>"
-      });
-    };
-
-    Site.prototype.renderOptionalStats = function() {
-      var ratio, ratio_hue, row;
-      row = this.row;
-      ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1);
-      if (ratio >= 100) {
-        ratio = "\u221E";
-      } else if (ratio >= 10) {
-        ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(0);
-      }
-      ratio_hue = Math.min(555, (row.settings.bytes_sent / row.settings.bytes_recv) * 50);
-      return h("div.site", {
-        key: this.key
-      }, [
-        h("div.title", [
-          h("h3.name", h("a", {
-            href: this.getHref()
-          }, row.content.title)), h("div.size", {
-            title: "Site size limit: " + (Text.formatSize(row.size_limit * 1024 * 1024))
-          }, [
-            "" + (Text.formatSize(row.settings.size)), h("div.bar", h("div.bar-active", {
-              style: "width: " + (100 * (row.settings.size / (row.size_limit * 1024 * 1024))) + "%"
-            }))
-          ]), h("div.plus", "+"), h("div.size.size-optional", {
-            title: "Optional files on site: " + (Text.formatSize(row.settings.size_optional))
-          }, [
-            "" + (Text.formatSize(row.settings.optional_downloaded)), h("span.size-title", "Optional"), h("div.bar", h("div.bar-active", {
-              style: "width: " + (100 * (row.settings.optional_downloaded / row.settings.size_optional)) + "%"
-            }))
-          ]), h("a.helps", {
-            href: "#",
-            onmousedown: this.handleHelpsClick,
-            onclick: Page.returnFalse
-          }, h("div.icon-share"), this.row.settings.autodownloadoptional ? "\u2661" : this.optional_helps.length, h("div.icon-arrow-down"), this.menu_helps ? this.menu_helps.render() : void 0), this.renderCircle(parseFloat((row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1)), 10), h("div.circle-value", {
-            classes: {
-              negative: ratio < 1
-            },
-            style: "color: hsl(" + ratio_hue + ", 70%, 60%)"
-          }, ratio), h("div.transfers", [
-            h("div.up", {
-              "title": "Uploaded"
-            }, "\u22F0 \u00A0" + (Text.formatSize(row.settings.bytes_sent))), h("div.down", {
-              "title": "Downloaded"
-            }, "\u22F1 \u00A0" + (Text.formatSize(row.settings.bytes_recv)))
-          ])
-        ]), this.files.render()
-      ]);
-    };
-
-    return Site;
-
-  })(Class);
-
-  window.Site = Site;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteFiles.coffee ---- */
-
-
-(function() {
-  var SiteFiles,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  SiteFiles = (function(superClass) {
-    extend(SiteFiles, superClass);
-
-    function SiteFiles(site1) {
-      this.site = site1;
-      this.update = bind(this.update, this);
-      this.render = bind(this.render, this);
-      this.renderOrderRight = bind(this.renderOrderRight, this);
-      this.renderOrder = bind(this.renderOrder, this);
-      this.handleMoreClick = bind(this.handleMoreClick, this);
-      this.handleOrderbyClick = bind(this.handleOrderbyClick, this);
-      this.handleRowMouseenter = bind(this.handleRowMouseenter, this);
-      this.handleSelectMousedown = bind(this.handleSelectMousedown, this);
-      this.handleSelectEnd = bind(this.handleSelectEnd, this);
-      this.handleSelectClick = bind(this.handleSelectClick, this);
-      this.limit = 10;
-      this.selected = {};
-      this.items = [];
-      this.loaded = false;
-      this.orderby = "time_downloaded";
-      this.mode = "site";
-      this.mode = "single_site";
-      this.orderby_desc = true;
-      this.has_more = false;
-    }
-
-    SiteFiles.prototype.handleSelectClick = function(e) {
-      return false;
-    };
-
-    SiteFiles.prototype.handleSelectEnd = function(e) {
-      document.body.removeEventListener('mouseup', this.handleSelectEnd);
-      return this.select_action = null;
-    };
-
-    SiteFiles.prototype.handleSelectMousedown = function(e) {
-      var inner_path;
-      inner_path = e.target.attributes.inner_path.value;
-      if (this.selected[inner_path]) {
-        delete this.selected[inner_path];
-        this.select_action = "deselect";
-      } else {
-        this.selected[inner_path] = true;
-        this.select_action = "select";
-      }
-      Page.file_list.checkSelectedFiles();
-      document.body.addEventListener('mouseup', this.handleSelectEnd);
-      e.stopPropagation();
-      Page.projector.scheduleRender();
-      return false;
-    };
-
-    SiteFiles.prototype.handleRowMouseenter = function(e) {
-      var inner_path;
-      if (e.buttons && this.select_action) {
-        inner_path = e.target.attributes.inner_path.value;
-        if (this.select_action === "select") {
-          this.selected[inner_path] = true;
-        } else {
-          delete this.selected[inner_path];
-        }
-        Page.file_list.checkSelectedFiles();
-        Page.projector.scheduleRender();
-      }
-      return false;
-    };
-
-    SiteFiles.prototype.handleOrderbyClick = function(e) {
-      var orderby;
-      orderby = e.currentTarget.attributes.orderby.value;
-      if (this.orderby === orderby) {
-        this.orderby_desc = !this.orderby_desc;
-      }
-      this.orderby = orderby;
-      this.update();
-      Page.projector.scheduleRender();
-      return false;
-    };
-
-    SiteFiles.prototype.handleMoreClick = function() {
-      this.limit += 15;
-      this.update();
-      return false;
-    };
-
-    SiteFiles.prototype.renderOrder = function(title, orderby) {
-      return h("a.title.orderby", {
-        href: "#" + orderby,
-        orderby: orderby,
-        onclick: this.handleOrderbyClick,
-        classes: {
-          selected: this.orderby === orderby,
-          desc: this.orderby_desc
-        }
-      }, [title, h("div.icon.icon-arrow-down")]);
-    };
-
-    SiteFiles.prototype.renderOrderRight = function(title, orderby) {
-      return h("a.title.orderby", {
-        href: "#" + orderby,
-        orderby: orderby,
-        onclick: this.handleOrderbyClick,
-        classes: {
-          selected: this.orderby === orderby,
-          desc: this.orderby_desc
-        }
-      }, [h("div.icon.icon-arrow-down"), title]);
-    };
-
-    SiteFiles.prototype.render = function() {
-      var ref;
-      if (!((ref = this.items) != null ? ref.length : void 0)) {
-        return [];
-      }
-      return [
-        h("div.files.files-" + this.mode, {
-          exitAnimation: Animation.slideUpInout
-        }, [
-          h("div.tr.thead", [h("div.td.pre", "."), this.mode === "bigfiles" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
-            return function(file) {
-              var percent, profile_color, site;
-              site = file.site || _this.site;
-              if (file.peer >= 10) {
-                profile_color = "#47d094";
-              } else if (file.peer > 0) {
-                profile_color = "#f5b800";
-              } else {
-                profile_color = "#d1d1d1";
-              }
-              if (_this.mode === "bigfiles") {
-                if (file.pieces == null) {
-                  file.pieces = 0;
-                }
-                if (file.pieces_downloaded == null) {
-                  file.pieces_downloaded = 0;
-                }
-                if (file.pieces === 0 || file.pieces_downloaded === 0) {
-                  percent = 0;
-                } else {
-                  percent = parseInt((file.pieces_downloaded / file.pieces) * 100);
-                }
-              }
-              return h("div.tr", {
-                key: file.inner_path,
-                inner_path: file.inner_path,
-                exitAnimation: Animation.slideUpInout,
-                enterAnimation: Animation.slideDown,
-                classes: {
-                  selected: _this.selected[file.inner_path]
-                },
-                onmouseenter: _this.handleRowMouseenter
-              }, [
-                h("div.td.pre", h("a.checkbox", {
-                  href: "#Select",
-                  onmousedown: _this.handleSelectMousedown,
-                  onclick: _this.handleSelectClick,
-                  inner_path: file.inner_path
-                })), _this.mode === "bigfiles" ? h("div.td.site", h("a.link", {
-                  href: site.getHref()
-                }, site.row.content.title)) : void 0, h("div.td.inner_path", h("a.title.link", {
-                  href: site.getHref(file),
-                  target: "_top"
-                }, file.inner_path.replace(/.*\//, "")), file.is_pinned ? h("span.pinned", {
-                  exitAnimation: Animation.slideUpInout,
-                  enterAnimation: Animation.slideDown
-                }, "Pinned") : void 0), _this.mode === "bigfiles" ? h("div.td.status", h("span.percent", {
-                  title: file.pieces_downloaded + " of " + file.pieces + " pieces downloaded",
-                  style: "box-shadow: inset " + (percent * 0.8) + "px 0px 0px #9ef5cf;"
-                }, percent + "%")) : void 0, h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
-                  h("div.icon.icon-profile", {
-                    style: "color: " + profile_color
-                  }), h("span.num", file.peer)
-                ]), h("div.td.uploaded", h("div.uploaded-text", Text.formatSize(file.uploaded)), h("div.dots-container", [
-                  h("span.dots.dots-bg", {
-                    title: "Ratio: " + ((file.uploaded / file.size).toFixed(1))
-                  }, "\u2022\u2022\u2022\u2022\u2022"), h("span.dots.dots-fg", {
-                    title: "Ratio: " + ((file.uploaded / file.size).toFixed(1)),
-                    style: "width: " + (Math.min(5, file.uploaded / file.size) * 9) + "px"
-                  }, "\u2022\u2022\u2022\u2022\u2022")
-                ])), h("div.td.added", file.time_downloaded ? Time.since(file.time_downloaded) : "n/a")
-              ]);
-            };
-          })(this)))
-        ]), this.has_more ? h("div.more-container", h("a.more", {
-          href: "#More",
-          onclick: this.handleMoreClick
-        }, "More files...")) : void 0
-      ];
-    };
-
-    SiteFiles.prototype.update = function(cb) {
-      var orderby;
-      orderby = this.orderby + (this.orderby_desc ? " DESC" : "");
-      return Page.cmd("optionalFileList", {
-        address: this.site.row.address,
-        limit: this.limit + 1,
-        orderby: orderby
-      }, (function(_this) {
-        return function(res) {
-          _this.items = res.slice(0, +(_this.limit - 1) + 1 || 9e9);
-          _this.loaded = true;
-          _this.has_more = res.length > _this.limit;
-          Page.projector.scheduleRender();
-          return typeof cb === "function" ? cb() : void 0;
-        };
-      })(this));
-    };
-
-    return SiteFiles;
-
-  })(Class);
-
-  window.SiteFiles = SiteFiles;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/SiteList.coffee ---- */
-
-
-(function() {
-  var SiteList,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  SiteList = (function(superClass) {
-    extend(SiteList, superClass);
-
-    function SiteList() {
-      this.onSiteInfo = bind(this.onSiteInfo, this);
-      this.render = bind(this.render, this);
-      this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
-      this.handleFilterInput = bind(this.handleFilterInput, this);
-      this.renderMergedSites = bind(this.renderMergedSites, this);
-      this.reorder = bind(this.reorder, this);
-      this.sortRows = bind(this.sortRows, this);
-      this.reorderTimer = bind(this.reorderTimer, this);
-      this.item_list = new ItemList(Site, "address");
-      this.sites = this.item_list.items;
-      this.sites_byaddress = this.item_list.items_bykey;
-      this.inactive_demo_sites = null;
-      this.loaded = false;
-      this.schedule_reorder = false;
-      this.merged_db = {};
-      this.filtering = "";
-      setInterval(this.reorderTimer, 10000);
-      Page.on_settings.then((function(_this) {
-        return function() {
-          _this.update();
-          return Page.cmd("channelJoinAllsite", {
-            "channel": "siteChanged"
-          });
-        };
-      })(this));
-    }
-
-    SiteList.prototype.reorderTimer = function() {
-      if (!this.schedule_reorder) {
-        return;
-      }
-      if (!document.querySelector('.left:hover') && !document.querySelector(".working") && !Page.mode === "Files") {
-        this.reorder();
-        return this.schedule_reorder = false;
-      }
-    };
-
-    SiteList.prototype.sortRows = function(rows) {
-      if (Page.settings.sites_orderby === "modified") {
-        rows.sort(function(a, b) {
-          return b.row.settings.modified - a.row.settings.modified;
-        });
-      } else if (Page.settings.sites_orderby === "addtime") {
-        rows.sort(function(a, b) {
-          return (b.row.settings.added || 0) - (a.row.settings.added || 0);
-        });
-      } else if (Page.settings.sites_orderby === "size") {
-        rows.sort(function(a, b) {
-          return b.row.settings.size - a.row.settings.size;
-        });
-      } else {
-        rows.sort(function(a, b) {
-          return Math.max(b.row.peers, b.row.settings.peers) - Math.max(a.row.peers, a.row.settings.peers);
-        });
-      }
-      return rows;
-    };
-
-    SiteList.prototype.reorder = function() {
-      this.sortRows(this.item_list.items);
-      return Page.projector.scheduleRender();
-    };
-
-    SiteList.prototype.update = function() {
-      Page.cmd("siteList", {}, (function(_this) {
-        return function(site_rows) {
-          var favorite_sites;
-          favorite_sites = Page.settings.favorite_sites;
-          _this.item_list.sync(site_rows);
-          _this.sortRows(_this.item_list.items);
-          if (_this.inactive_demo_sites === null) {
-            _this.updateInactiveDemoSites();
-          }
-          Page.projector.scheduleRender();
-          return _this.loaded = true;
-        };
-      })(this));
-      return this;
-    };
-
-    SiteList.prototype.updateInactiveDemoSites = function() {
-      var demo_site_rows, i, len, results, site_row;
-      demo_site_rows = [
-        {
-          address: "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
-          demo: true,
-          content: {
-            title: "ZeroBoard",
-            domain: "Board.ZeroNetwork.bit"
-          },
-          settings: {}
-        }, {
-          address: "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT",
-          demo: true,
-          content: {
-            title: "ZeroTalk",
-            domain: "Talk.ZeroNetwork.bit"
-          },
-          settings: {}
-        }, {
-          address: "1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8",
-          demo: true,
-          content: {
-            title: "ZeroBlog",
-            domain: "Blog.ZeroNetwork.bit"
-          },
-          settings: {}
-        }, {
-          address: "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27",
-          demo: true,
-          content: {
-            title: "ZeroMail",
-            domain: "Mail.ZeroNetwork.bit"
-          },
-          settings: {}
-        }, {
-          address: "1uPLoaDwKzP6MCGoVzw48r4pxawRBdmQc",
-          demo: true,
-          content: {
-            title: "ZeroUp"
-          },
-          settings: {}
-        }, {
-          address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h",
-          demo: true,
-          content: {
-            title: "GIF Time"
-          },
-          settings: {}
-        }, {
-          address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB",
-          demo: true,
-          content: {
-            title: "More @ ZeroSites",
-            domain: "Sites.ZeroNetwork.bit"
-          },
-          settings: {}
-        }
-      ];
-      if (Page.server_info.rev >= 1400) {
-        demo_site_rows.push({
-          address: "1MeFqFfFFGQfa1J3gJyYYUvb5Lksczq7nH",
-          demo: true,
-          content: {
-            title: "ZeroMe",
-            domain: "Me.ZeroNetwork.bit"
-          },
-          settings: {}
-        });
-      }
-      this.inactive_demo_sites = [];
-      results = [];
-      for (i = 0, len = demo_site_rows.length; i < len; i++) {
-        site_row = demo_site_rows[i];
-        if (this.filtering && site.row.content.title.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
-          continue;
-        }
-        if (!this.sites_byaddress[site_row.address]) {
-          results.push(this.inactive_demo_sites.push(new Site(site_row)));
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    };
-
-    SiteList.prototype.renderMergedSites = function() {
-      var back, i, len, merged_db, merged_sites, merged_type, name, ref, site;
-      merged_db = {};
-      ref = this.sites_merged;
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        if (!site.row.content.merged_type) {
-          continue;
-        }
-        if (merged_db[name = site.row.content.merged_type] == null) {
-          merged_db[name] = [];
-        }
-        merged_db[site.row.content.merged_type].push(site);
-      }
-      back = [];
-      for (merged_type in merged_db) {
-        merged_sites = merged_db[merged_type];
-        back.push([
-          h("h2.more", {
-            key: "Merged: " + merged_type
-          }, "Merged: " + merged_type), h("div.SiteList.merged.merged-" + merged_type, merged_sites.map(function(item) {
-            return item.render();
-          }))
-        ]);
-      }
-      return back;
-    };
-
-    SiteList.prototype.handleFilterInput = function(e) {
-      return this.filtering = e.target.value;
-    };
-
-    SiteList.prototype.handleFilterKeyup = function(e) {
-      if (e.keyCode === 27) {
-        e.target.value = "";
-        this.handleFilterInput(e);
-      }
-      return false;
-    };
-
-    SiteList.prototype.render = function() {
-      var filter_base, i, len, ref, ref1, site;
-      if (!this.loaded) {
-        return h("div#SiteList");
-      }
-      this.sites_needaction = [];
-      this.sites_favorited = [];
-      this.sites_owned = [];
-      this.sites_connected = [];
-      this.sites_merged = [];
-      ref = this.sites;
-      for (i = 0, len = ref.length; i < len; i++) {
-        site = ref[i];
-        if (this.filtering) {
-          filter_base = site.row.content.title + site.row.content.merged_type;
-          if (filter_base.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
-            continue;
-          }
-        }
-        if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
-          site.row.need_limit = site.row.size_limit * 2;
-          this.sites_needaction.push(site);
-        } else if (site.favorite) {
-          this.sites_favorited.push(site);
-        } else if (site.row.content.merged_type) {
-          this.sites_merged.push(site);
-        } else if ((ref1 = site.row.settings) != null ? ref1.own : void 0) {
-          this.sites_owned.push(site);
-        } else {
-          this.sites_connected.push(site);
-        }
-      }
-      return h("div#SiteList", [
-        this.sites.length > 20 ? h("input.site-filter", {
-          placeholder: "Filter: Site name",
-          spellcheck: false,
-          oninput: this.handleFilterInput,
-          onkeyup: this.handleFilterKeyup,
-          value: this.filtering
-        }) : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
-          return item.render();
-        })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
-          return item.render();
-        })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
-          return item.render();
-        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", this.sites_connected.map(function(item) {
-          return item.render();
-        })), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
-          h("h2.more", {
-            key: "More"
-          }, "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
-            return item.render();
-          }))
-        ] : void 0
-      ]);
-    };
-
-    SiteList.prototype.onSiteInfo = function(site_info) {
-      var ref;
-      if ((ref = this.item_list.items_bykey[site_info.address]) != null) {
-        ref.setRow(site_info);
-      }
-      this.schedule_reorder = true;
-      return Page.projector.scheduleRender();
-    };
-
-    return SiteList;
-
-  })(Class);
-
-  window.SiteList = SiteList;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/StatList.coffee ---- */
-
-
-(function() {
-  var StatList,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  StatList = (function(superClass) {
-    extend(StatList, superClass);
-
-    function StatList() {
-      this.render = bind(this.render, this);
-      this.need_update = true;
-      this;
-    }
-
-    StatList.prototype.render = function() {
-      if (this.need_update && Page.site_list.sites.length) {
-        this.need_update = false;
-      }
-      return h("div#StatList", []);
-    };
-
-    return StatList;
-
-  })(Class);
-
-  window.StatList = StatList;
-
-}).call(this);
-
-
-/* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/Trigger.coffee ---- */
-
-
-(function() {
-  var Trigger,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
-
-  Trigger = (function(superClass) {
-    extend(Trigger, superClass);
-
-    function Trigger() {
-      this.render = bind(this.render, this);
-      this.handleTitleClick = bind(this.handleTitleClick, this);
-      this.active = false;
-    }
-
-    Trigger.prototype.handleTitleClick = function() {
-      this.active = !this.active;
-      if (this.active) {
-        document.getElementById("left").classList.add("trigger-on");
-      } else {
-        document.getElementById("left").classList.remove("trigger-on");
-      }
-      return false;
-    };
-
-    Trigger.prototype.render = function() {
-      return h("div.Trigger", {
-        classes: {
-          "active": this.active
-        }
-      }, [
-        h("a.icon", {
-          "href": "#Trigger",
-          onclick: this.handleTitleClick,
-          ontouchend: ""
-        }, h("div.arrow-right"))
-      ]);
-    };
-
-    return Trigger;
-
-  })(Class);
-
-  window.Trigger = Trigger;
 
 }).call(this);
 
@@ -4791,7 +6478,7 @@
       this.latest_version = "0.6.0";
       this.mode = "Sites";
       this.change_timer = null;
-      return document.body.id = "Page" + this.mode;
+      return document.body.id = "Body" + this.mode;
     };
 
     ZeroHello.prototype.addRenderer = function(node, renderer) {
@@ -4811,29 +6498,32 @@
 
     ZeroHello.prototype.setProjectorMode = function(mode) {
       this.log("setProjectorMode", mode);
+      if (this.mode === mode) {
+        return;
+      }
       this.detachRenderers();
       if (mode === "Files") {
-        this.addRenderer($("#FileList"), this.file_list.render);
+        this.addRenderer($("#PageFiles"), this.page_files.render);
+        this.page_files.need_update = true;
       } else if (mode === "Stats") {
-        this.addRenderer($("#StatList"), this.stat_list.render);
+        this.addRenderer($("#PageStats"), this.page_stats.render);
+        this.page_stats.need_update = true;
       } else {
         mode = "Sites";
         this.addRenderer($("#FeedList"), this.feed_list.render);
         this.addRenderer($("#SiteList"), this.site_list.render);
       }
-      if (this.mode !== mode) {
-        this.mode = mode;
-        return setTimeout((function() {
-          document.body.id = "Page" + mode;
-          if (this.change_timer) {
-            clearInterval(this.change_timer);
-          }
-          document.body.classList.add("changing");
-          return this.change_timer = setTimeout((function() {
-            return document.body.classList.remove("changing");
-          }), 400);
-        }), 60);
-      }
+      this.mode = mode;
+      return setTimeout((function() {
+        document.body.id = "Body" + mode;
+        if (this.change_timer) {
+          clearInterval(this.change_timer);
+        }
+        document.body.classList.add("changing");
+        return this.change_timer = setTimeout((function() {
+          return document.body.classList.remove("changing");
+        }), 400);
+      }), 60);
     };
 
     ZeroHello.prototype.createProjector = function() {
@@ -4843,8 +6533,8 @@
       this.renderers = [];
       this.site_list = new SiteList();
       this.feed_list = new FeedList();
-      this.file_list = new FileList();
-      this.stat_list = new StatList();
+      this.page_files = new PageFiles();
+      this.page_stats = new PageStats();
       this.head = new Head();
       this.dashboard = new Dashboard();
       this.mute_list = new MuteList();
@@ -4873,7 +6563,13 @@
     ZeroHello.prototype.route = function(query) {
       this.params = Text.parseQuery(query);
       this.log("Route", this.params);
-      return this.setProjectorMode(this.params.url);
+      this.setProjectorMode(this.params.url);
+      if (this.mode === "Stats") {
+        this.page_stats.need_update = true;
+      } else if (this.mode === "Files") {
+        this.page_files.need_update = true;
+      }
+      return this.projector.scheduleRender();
     };
 
     ZeroHello.prototype.createUrl = function(key, val) {
@@ -4893,7 +6589,7 @@
 
     ZeroHello.prototype.setUrl = function(url, mode) {
       if (mode == null) {
-        mode = "push";
+        mode = "replace";
       }
       url = url.replace(/.*?\?/, "");
       this.log("setUrl", this.history_state["url"], "->", url);
@@ -4919,8 +6615,6 @@
         this.cmd("wrapperReplaceState", [this.history_state, null]);
         window.scroll(window.pageXOffset, 0);
         this.history_state["scrollTop"] = 0;
-        this.on_loaded.resolved = false;
-        document.body.className = "";
         this.setUrl(e.currentTarget.search);
         return false;
       }
@@ -5028,7 +6722,7 @@
       }
       this.site_list.onSiteInfo(site_info);
       this.feed_list.onSiteInfo(site_info);
-      this.file_list.onSiteInfo(site_info);
+      this.page_files.onSiteInfo(site_info);
       return this.on_site_info.resolve();
     };
 
