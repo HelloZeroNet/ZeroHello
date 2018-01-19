@@ -15,7 +15,7 @@ class ZeroHello extends ZeroFrame
 		@latest_version = "0.6.0"
 		@mode = "Sites"
 		@change_timer = null
-		document.body.id = "Page#{@mode}"
+		document.body.id = "Body#{@mode}"
 
 	addRenderer: (node, renderer) ->
 		@projector.replace(node, renderer)
@@ -28,30 +28,34 @@ class ZeroHello extends ZeroFrame
 
 	setProjectorMode: (mode) ->
 		@log "setProjectorMode", mode
+		if @mode == mode
+			return
+
 		@detachRenderers()
 		if mode == "Files"
-			@addRenderer($("#FileList"), @file_list.render)
+			@addRenderer($("#PageFiles"), @page_files.render)
+			@page_files.need_update = true
 		else if mode == "Stats"
-			@addRenderer($("#StatList"), @stat_list.render)
+			@addRenderer($("#PageStats"), @page_stats.render)
+			@page_stats.need_update = true
 		else
 			mode = "Sites"
 			@addRenderer($("#FeedList"), @feed_list.render)
 			@addRenderer($("#SiteList"), @site_list.render)
 
-		if @mode != mode
-			@mode = mode
-			setTimeout ( ->
-				# Delayed to avoid loosing anmation because of dom re-creation
-				document.body.id = "Page#{mode}"
+		@mode = mode
+		setTimeout ( ->
+			# Delayed to avoid loosing anmation because of dom re-creation
+			document.body.id = "Body#{mode}"
 
-				if @change_timer
-					clearInterval @change_timer
-				document.body.classList.add("changing")
-				@change_timer = setTimeout ( ->
-					document.body.classList.remove("changing")
-				), 400
+			if @change_timer
+				clearInterval @change_timer
+			document.body.classList.add("changing")
+			@change_timer = setTimeout ( ->
+				document.body.classList.remove("changing")
+			), 400
 
-			), 60
+		), 60
 
 
 	createProjector: ->
@@ -61,8 +65,8 @@ class ZeroHello extends ZeroFrame
 
 		@site_list = new SiteList()
 		@feed_list = new FeedList()
-		@file_list = new FileList()
-		@stat_list = new StatList()
+		@page_files = new PageFiles()
+		@page_stats = new PageStats()
 		@head = new Head()
 		@dashboard = new Dashboard()
 		@mute_list = new MuteList()

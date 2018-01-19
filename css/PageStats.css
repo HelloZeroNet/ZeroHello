@@ -1,0 +1,83 @@
+#PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px; position: relative; }
+
+.intervals { margin-top: -69px; padding-right: 21px; float: right; }
+.interval {
+	text-decoration: none; color: #ffffff7d; text-transform: uppercase; margin-left: 20px; display: inline-block; padding: 3px 0px ;
+	font-size: 14px; font-weight: lighter; border-bottom: 2px solid transparent; transition: all 0.3s
+}
+.interval:hover { color: #ffffffAA; border-bottom-color: #ffffffAA; transition: none }
+.interval.active { color: white; border-bottom-color: white; }
+
+.ChartTimeline { margin-bottom: 20px; backface-visibility: hidden; }
+.timeline-items { background: radial-gradient(closest-corner at 39% 36%, #aecfea21, #0000ff00); }
+.timeline-item, .timeline-border {
+	display: inline-block; width: 14%; background-color: #a8acfb0d; margin-right: 1px; transition: all 0.3s;
+	padding: 15px; padding-bottom: 100px; box-sizing: border-box; color: white; text-decoration: none; vertical-align: top;
+}
+.timeline-item:hover { background-color: #3f404d; transition: none; }
+.timeline-item.active { background-color: white; color: black; padding-bottom: 130px; margin-top: -30px; box-shadow: 30px 0px 95px -31px black; transition: all 0.3s !important }
+.timeline-item .title { text-transform: uppercase; font-size: 80%; opacity: 0.6; letter-spacing: 1px; }
+.timeline-item .data { font-size: 150%; display: block; margin-top: 15px; font-weight: lighter; }
+
+.ChartTimeline .chart {
+	width: 100%; height: 100px; position: absolute; margin-bottom: -185px;
+	z-index: 999; position: relative; padding-right: 20px; box-sizing: border-box; pointer-events: none;
+}
+
+.timeline-borders { height: 100px; height: 180px; margin-bottom: -201px; pointer-events: none; transform: translateX(1px); z-index: 1000; position: relative; overflow: hidden }
+.timeline-border { background-color: transparent; border-right: 1px solid #1e2527; height: 185px }
+.timeline-border.active { box-shadow: 5px 108px 144px 0px #000000CC; }
+
+.ChartLegend { text-align: right; margin-right: 20px; margin-bottom: 40px }
+.legend-items { width: 40%; display: inline-block; box-sizing: border-box }
+.legend-items.align-left { text-align: left; padding-left: 100px; width: 60% }
+.legend-item { display: inline-block; min-width: 30%; font-weight: lighter; line-height: 170%; margin-top: 50px; margin-right: 8px; opacity: 1; transition: all 0.3s }
+.legend-item.hidden { opacity: 0 }
+.legend-item .title { text-transform: uppercase; color: #9f9fb7; font-size: 90%; letter-spacing: 1px; font-weight: normal; }
+.legend-item .value { font-size: 120% }
+.legend-item .dot { vertical-align: 1px; }
+.legend-item .dots-container { display: inline-block; margin-left: 10px; text-align: left; }
+.legend-item .dots-fg { color: #16ffe9; display: inline-block; overflow: hidden; position: absolute; transition: all 0.3s }
+.legend-item .dots-bg { color: #777; }
+
+.ChartRadar { width: 50%; box-sizing: border-box; display: inline-block; vertical-align: top }
+.ChartRadar .canvas-container { padding: 15%; }
+.ChartRadar .radar-container { position: relative; }
+.radar-labels { width: 100%; height: 100%; position: absolute; top: 0px; }
+.radar-label { position: absolute; transform: translateY(-50%); width: 100px; margin-left: -50px; text-align: center; }
+.radar-label .title { text-decoration: none; color: white; }
+.radar-label .title:hover { text-decoration: underline }
+.radar-label .value { font-size: 80%; opacity: 0.5; white-space: nowrap; }
+
+.radar-legends { text-align: center }
+.radar-legend {
+	display: inline-block; margin: 0px 16px; font-size: 73%; text-transform: uppercase;
+	letter-spacing: 1px; color: #FFFFFFDD; padding: 7px 12px; transition: all 0.3s; text-decoration: none
+}
+.radar-legend:hover { transition: none; background-color: #b485bf2e; }
+.radar-legend .title { text-decoration: none; color: white }
+.radar-legend.active { background-color: #b485bf1e; }
+.radar-legend .legend-box { display: inline-block; width: 30px; height: 8px; margin-right: 6px; }
+
+.Charts { width: 50%; display: inline-block; box-sizing: border-box; padding: 1.5%; margin-top: 47px; }
+.Chart { margin-bottom: 20px; position: relative; background-image: radial-gradient(at 29% top, #eaaeda05, #cc00ff0a) }
+.Chart .canvas { width: 100%; display: block; }
+.Chart .titles { position: absolute; padding: 4%; height: 100%; box-sizing: border-box; width: 100%; }
+.Chart .titles .title { font-weight: lighter; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
+.Chart .titles .value { font-size: 140%; font-weight: lighter; margin: 4px 0px; text-transform: uppercase; }
+.Chart .titles .details { bottom: 6%; position: absolute; color: #16ffe9; line-height: 23px; font-size: 12px; font-family: monospace }
+
+.ChartWorld { margin-top: 110px; position: relative; width: 65%; display: inline-block; vertical-align: top }
+.ChartWorld .map { opacity: 0.4; width: 100%; }
+.ChartWorld .map-points { position: absolute; width: 100%; z-index: 999; }
+/*.ChartWorld .map-point {
+	position: absolute; width: 3px; height: 3px; background-color: #30758e;
+	margin-left: -9px; margin-top: -9px; mix-blend-mode: screen;
+}*/
+
+.StatList { width: 35%; display: inline-block; margin-top: 55px; padding: 1.5%; box-sizing: border-box; }
+.StatList h4 { text-transform: uppercase; color: #9f9fb7; font-size: 90%; letter-spacing: 1px; font-weight: normal; margin-bottom: 20px }
+.stat-list-item { clear: both; font-size: 90%; font-weight: lighter; line-height: 170%; }
+.stat-list-item .title { float: left }
+.stat-list-item .value { float: right; opacity: 0.8 }
+.stat-list-item.other { opacity: 0.5 }

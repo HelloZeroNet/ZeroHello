@@ -32,26 +32,28 @@ a:hover { text-decoration: none }
 #SiteList .SiteList { width: 400px }
 #SiteList .details { transition: all 0.6s }
 #FeedList { transition: all 0.3s; height: 100%; }
-.FileList-container { width: 0px; float: left; }
-#FileList { transition: all 0.3s; opacity: 1; width: 100%; width: 100vw; transform: none; max-height: 100%; padding-right: 10px; box-sizing: border-box; padding-bottom: 50px; }
-#FileList .files { transition: all 0.3s; opacity: 1; transform: none }
+.PageFiles-container, .PageStats-container { width: 0px; float: left; }
+#PageFiles, #PageStats { transition: all 0.3s; opacity: 1; width: 100%; width: 100vw; transform: none; max-height: 100%; padding-right: 10px; box-sizing: border-box; padding-bottom: 50px; }
+#PageFiles .files { transition: all 0.3s; opacity: 1; transform: none }
 .left { transition: 0.6s all cubic-bezier(0.785, 0.135, 0.15, 0.86); overflow: hidden; }
 body.changing { overflow-y: scroll; }
 
 /* PageSites */
-#PageSites #FileList, #PageStats #FileList, body.changing #FileList { opacity: 0; transform: translateY(30px); pointer-events: none; overflow: hidden; }
-#PageSites #FileList, #PageStats #FileList { max-height: 0px }
-#PageSites #FileList .files, #PageStats #FileList .files, body.changing #FileList .files { opacity: 0; transform: translateY(30px); pointer-events: none; }
+#BodySites #PageStats, #BodyFiles #PageStats, body.changing #PageStats { opacity: 0; transform: translateY(30px); pointer-events: none; overflow: hidden; }
+#BodySites #PageFiles, #BodyStats #PageFiles, body.changing #PageFiles { opacity: 0; transform: translateY(30px); pointer-events: none; overflow: hidden; }
+#BodySites #PageFiles, #BodyStats #PageFiles { max-height: 0px }
+#BodySites #PageStats, #BodyFiles #PageStats { max-height: 0px }
+#BodySites #PageFiles .files, #BodyStats #PageFiles .files, body.changing #PageFiles .files { opacity: 0; transform: translateY(30px); pointer-events: none; }
 
 /* PageFiles */
-#PageFiles #SiteList, #PageStats #SiteList { opacity: 0; visibility: hidden; transform: translateX(-20px); height: 0px; pointer-events: none; }
-#PageFiles #SiteList .details, #PageStats #SiteList .details { transform: translateX(180px); }
-#PageFiles #FeedList, #PageStats #FeedList { visibility: hidden; height: 0px; pointer-events: none; overflow: hidden }
-#PageFiles #Head .settings, #PageStats #Head .settings { opacity: 0; visibility: hidden; overflow: hidden }
-#PageFiles .left, #PageStats .left { width: 100%; background-image: linear-gradient(220deg, #372d56 0px, #162761 2000px); }
-#PageFiles .left .logo, #PageStats .left .logo { background-color: #162150 }
-#PageFiles .right, #PageStats .right { height: 0px }
+#BodyFiles #SiteList, #BodyStats #SiteList { opacity: 0; visibility: hidden; transform: translateX(-20px); height: 0px; pointer-events: none; }
+#BodyFiles #SiteList .details, #BodyStats #SiteList .details { transform: translateX(180px); }
+#BodyFiles #FeedList, #BodyStats #FeedList { visibility: hidden; height: 0px; pointer-events: none; overflow: hidden }
+#BodyFiles #Head .settings, #BodyStats #Head .settings { opacity: 0; visibility: hidden; overflow: hidden }
+#BodyFiles .left, #BodyStats .left { width: 100%; background-image: linear-gradient(220deg, #372d56 0px, #162761 2000px); }
+#BodyFiles .left .logo, #BodyStats .left .logo { background-color: #162150 }
+#BodyFiles .right, #BodyStats .right { height: 0px }
 
 /* PageStats */
-#PageStats .left { background-image: linear-gradient(180deg, hsl(252, 61%, 16%) 0px, hsla(226, 59%, 6%, 1) 1260px) }
-#PageStats .left .logo { background-color: rgba(0,0,0,0) }
+#BodyStats .left { /*background-image: linear-gradient(60deg, #272a38 0px, #1E2527 1260px);*/ min-height: 1260px; background-image: linear-gradient(60deg, #442f40 0px, #12252b 1260px) }
+#BodyStats .left .logo { background-color: rgba(0,0,0,0) }

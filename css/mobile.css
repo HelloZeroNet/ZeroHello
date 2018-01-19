@@ -101,16 +101,16 @@ margin-top: 5px;
 #FileList .files .tbody .td.inner_path {
 overflow: hidden;
 }
-#PageFiles .left {
+#BodyFiles .left {
 position: absolute;
 }
-#PageFiles .left, #FileList {
+#BodyFiles .left, #FilePage {
 min-width: 800px;
 }
-#PageFiles .right {
+#BodyFiles .right {
 display: none;
 }
-#PageSites .left #Head .modes {
+#BodySites .left #Head .modes {
 padding-left: 29px;
 background-color: #2a333c;
 box-shadow: 0px -8px 0px 22px #2a333c;
@@ -128,13 +128,13 @@ font-size: 35px;
 border-left: none !important;
 margin-left: 0px;
 }
-#PageSites .left {
+#BodySites .left {
 left: -350px;
 }
-#PageSites .left.trigger-on {
+#BodySites .left.trigger-on {
 left: 0px;
 }
-#Trigger {
+#BodySites #Trigger {
 display: block;
 position: fixed;
 left: 0px;
@@ -146,7 +146,7 @@ transform: rotateZ(0deg);
 box-shadow: 0px 0px 15px #737d8c;
 background-color: rgba(255, 255, 255, 0.75);
 }
-#PageFiles #Trigger {
+#BodyFiles #Trigger, #BodyStats #Trigger {
 display: none;
 }
 #Trigger .icon {
