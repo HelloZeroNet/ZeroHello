@@ -109,14 +109,17 @@ class Animation
 
 	show: (elem, props) ->
 		delay = arguments[arguments.length-2]?.delay*1000 or 1
-		elem.className += " animate"
 		elem.style.opacity = 0
+		setTimeout (->
+			elem.className += " animate"
+		), 1
 		setTimeout (->
 			elem.style.opacity = 1
 		), delay
 		elem.addEventListener "transitionend", ->
 			elem.classList.remove("animate")
 			elem.style.opacity = null
+			elem.removeEventListener "transitionend", arguments.callee, false
 
 	hide: (elem, remove_func, props) ->
 		delay = arguments[arguments.length-2]?.delay*1000 or 1
@@ -131,6 +134,5 @@ class Animation
 	addVisibleClass: (elem, props) ->
 		setTimeout ->
 			elem.classList.add("visible")
-
 
 window.Animation = new Animation()
