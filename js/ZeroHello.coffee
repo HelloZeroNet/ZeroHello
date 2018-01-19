@@ -193,7 +193,7 @@ class ZeroHello extends ZeroFrame
 			@site_info = site_info
 		@site_list.onSiteInfo(site_info)
 		@feed_list.onSiteInfo(site_info)
-		@file_list.onSiteInfo(site_info)
+		@page_files.onSiteInfo(site_info)
 		@on_site_info.resolve()
 
 	setServerInfo: (server_info) ->
