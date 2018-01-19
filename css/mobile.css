@@ -11,7 +11,7 @@ background-color: #f7f8f9;
 .left, .SiteList .site {
 width: 350px;
 }
-.left {
+#BodySites .left {
 background: #2A333C;
 position: fixed;
 transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1);
@@ -21,7 +21,7 @@ border-bottom: 1px solid #2A333C;
 font-size: 90%;
 line-height: 180%;
 }
-.left #Head {
+#BodySites .left #Head {
 position: absolute;
 width: 100%;
 z-index: 10;
@@ -41,7 +41,7 @@ top: 92px;
 bottom: 0px;
 padding-top: 40px;
 }
-.left #FileList {
+.left #FilePage {
 height: auto;
 position: relative;
 top: 92px;
@@ -98,7 +98,7 @@ box-sizing: border-box;
 float: right;
 margin-top: 5px;
 }
-#FileList .files .tbody .td.inner_path {
+#FilePage .files .tbody .td.inner_path {
 overflow: hidden;
 }
 #BodyFiles .left {
