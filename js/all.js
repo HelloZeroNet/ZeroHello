@@ -4721,10 +4721,15 @@
       return h("div.ChartTimeline", [
         h("div.timeline-borders", this.items.map((function(_this) {
           return function(item) {
+            var date_added_to;
+            date_added_to = Time.dateIso(item.value);
+            if (item.value >= Time.timestamp()) {
+              date_added_to = "";
+            }
             return h("div.timeline-border", {
               key: item.id,
               classes: {
-                active: item.active
+                active: (Page.params.date_added_to || "") === date_added_to
               }
             });
           };
@@ -4750,6 +4755,7 @@
   window.ChartTimeline = ChartTimeline;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartWorld.coffee ---- */
@@ -5129,7 +5135,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/StatList.coffee ---- */
 
 
@@ -5331,8 +5336,6 @@
     return Animation;
 
   })();
-
-  window.reorder_store = {};
 
   window.Animation = new Animation();
 

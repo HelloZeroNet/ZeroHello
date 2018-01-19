@@ -143,7 +143,10 @@ class ChartTimeline extends Class
 
 		h("div.ChartTimeline", [
 			h("div.timeline-borders", @items.map (item) =>
-				h("div.timeline-border", {key: item.id, classes: {active: item.active}})
+				date_added_to = Time.dateIso(item.value)
+				if item.value >= Time.timestamp()
+					date_added_to = ""
+				h("div.timeline-border", {key: item.id, classes: {active: (Page.params.date_added_to or "") == date_added_to }})
 			),
 			h("canvas.chart", {afterCreate: @initChart, width: 1400, height: 100, data: @line_data?.length, delay: 0.3, updateAnimation: Animation.show}),
 			h("div.timeline-items", @items.map (item) =>
