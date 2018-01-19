@@ -18,17 +18,36 @@ class Time
 		back = back.replace(/^1 ([a-z]+)s/, "1 $1") # 1 days ago fix
 		return back
 
+	dateIso: (timestamp=null) ->
+		if not timestamp
+			timestamp = window.Time.timestamp()
 
-	date: (timestamp, format="short") ->
 		if timestamp > 1000000000000  # In ms
 			timestamp = timestamp/1000
-		parts = (new Date(timestamp*1000)).toString().split(" ")
+		tzoffset = (new Date()).getTimezoneOffset() * 60
+		return (new Date((timestamp - tzoffset) * 1000)).toISOString().split("T")[0]
+
+	date: (timestamp=null, format="short") ->
+		if not timestamp
+			timestamp = window.Time.timestamp()
+
+		if timestamp > 1000000000000  # In ms
+			timestamp = timestamp/1000
+		parts = (new Date(timestamp * 1000)).toString().split(" ")
 		if format == "short"
 			display = parts.slice(1, 4)
-		else
+		else if format == "day"
+			display = parts.slice(1, 3)
+		else if format == "month"
+			display = [parts[1], parts[3]]
+		else if format == "long"
 			display = parts.slice(1, 5)
 		return display.join(" ").replace(/( [0-9]{4})/, ",$1")
 
+	weekDay: (timestamp) ->
+		if timestamp > 1000000000000  # In ms
+			timestamp = timestamp/1000
+		return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][ (new Date(timestamp * 1000)).getDay() ]
 
 	timestamp: (date="") ->
 		if date == "now" or date == ""
