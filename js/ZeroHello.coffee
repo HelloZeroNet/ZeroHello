@@ -109,7 +109,7 @@ class ZeroHello extends ZeroFrame
 			params[key] = val
 		return "?"+Text.encodeQuery(params)
 
-	setUrl: (url, mode="push") ->
+	setUrl: (url, mode="replace") ->
 		url = url.replace(/.*?\?/, "")
 		@log "setUrl", @history_state["url"], "->", url
 		if @history_state["url"] == url
@@ -133,9 +133,6 @@ class ZeroHello extends ZeroFrame
 
 			window.scroll(window.pageXOffset, 0)
 			@history_state["scrollTop"] = 0
-
-			@on_loaded.resolved = false
-			document.body.className = ""
 
 			@setUrl e.currentTarget.search
 			return false
