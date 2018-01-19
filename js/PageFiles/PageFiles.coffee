@@ -1,4 +1,4 @@
-class FileList extends Class
+class PageFiles extends Class
 	constructor: ->
 		@need_update = true
 		@updating_files = 0
@@ -158,7 +158,7 @@ class FileList extends Class
 		percent_optional_used = percent_optional_downloaded * (limit/total_space_limited)
 		percent_limit = (limit/total_space_limited) * 100
 
-		h("div#FileListDashboard", {classes: {editing: @editing_limit}}, [
+		h("div#PageFilesDashboard", {classes: {editing: @editing_limit}}, [
 			h("div.totalbar-edit", [
 				h("span.title", "Optional files limit:"),
 				h("input", {type: "text", value: @limit, oninput: @handleLimitInput}),
@@ -244,7 +244,7 @@ class FileList extends Class
 
 		if sites.length == 0
 			document.body.className = "loaded"
-			return h("div#FileList",
+			return h("div#PageFiles",
 				@renderSelectbar()
 				@renderTotalbar()
 				h("div.empty", [
@@ -260,7 +260,7 @@ class FileList extends Class
 				Page.projector.scheduleRender()
 			), 1000
 
-		h("div#FileList", [
+		h("div#PageFiles", [
 			@renderSelectbar()
 			@renderTotalbar()
 			@bigfiles.render()
@@ -280,4 +280,4 @@ class FileList extends Class
 		RateLimit rate_limit, =>
 			@need_update = true
 
-window.FileList = FileList
+window.PageFiles = PageFiles
