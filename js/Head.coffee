@@ -121,7 +121,7 @@ class Head extends Class
 			h("div.modes", [
 				h("a.mode.sites", {href: "?", classes: {active: Page.mode == "Sites"}, onclick: Page.handleLinkClick}, _("Sites"))
 				h("a.mode.files", {href: "?Files", classes: {active: Page.mode == "Files"}, onclick: Page.handleLinkClick}, _("Files"))
-				if Page.site_info.settings.own then h("a.mode.stats", {href: "?Stats", classes: {active: Page.mode == "Stats"}, onclick: Page.handleLinkClick}, _("Stats"))
+				h("a.mode.stats", {href: "?Stats", classes: {active: Page.mode == "Stats"}, onclick: Page.handleLinkClick}, _("Stats"))
 			])
 		)
 
