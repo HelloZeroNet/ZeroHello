@@ -133,6 +133,8 @@ class Text
 		return back
 
 	formatSize: (size) ->
+		if not parseInt(size)
+			return ""
 		size_mb = size/1024/1024
 		if size_mb >= 1000
 			return (size_mb/1024).toFixed(1)+" GB"
