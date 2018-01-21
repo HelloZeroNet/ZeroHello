@@ -164,7 +164,7 @@ class ChartRadar extends Class
 			r = 40
 		left = 50 + r * Math.sin(2 * Math.PI * i / @site_stats.length)
 		top = 50 - r * Math.cos(2 * Math.PI * i / @site_stats.length)
-		h("div.radar-label", {key: stat.address + i, style: "left: #{left}%; top: #{top}%", enterAnimation: Animation.show, exitAnimation: Animation.hide},
+		h("div.radar-label", {key: stat.address + i, style: "left: #{left}%; top: #{top}%", enterAnimation: Animation.show, exitAnimation: Animation.hide, delay: i*0.05},
 			h("a.title", {href: stat.site.getHref()}, stat.site.row.content.title)
 			" "
 			h("span.value", " (#{Text.formatSize(stat[@order_by]) or 'No data yet'})")
