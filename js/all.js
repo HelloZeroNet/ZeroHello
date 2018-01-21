@@ -1616,7 +1616,7 @@
         this.selected[inner_path] = true;
         this.select_action = "select";
       }
-      Page.file_list.checkSelectedFiles();
+      Page.page_files.checkSelectedFiles();
       document.body.addEventListener('mouseup', this.handleSelectEnd);
       e.stopPropagation();
       Page.projector.scheduleRender();
@@ -1632,7 +1632,7 @@
         } else {
           delete this.selected[inner_path];
         }
-        Page.file_list.checkSelectedFiles();
+        Page.page_files.checkSelectedFiles();
         Page.projector.scheduleRender();
       }
       return false;
@@ -1786,6 +1786,7 @@
   window.SiteFiles = SiteFiles;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Dashboard.coffee ---- */
@@ -3990,7 +3991,7 @@
             bodyFontColor: "rgba(255,255,255,0.6)",
             callbacks: {
               title: function(tootlip_items, data) {
-                return Time.date(tootlip_items[0].xLabel, "long");
+                return Time.date(tootlip_items[0].xLabel, "long").replace(/:00$/, "");
               },
               label: function(tootlip_items, data) {
                 if (data.datasets[tootlip_items.datasetIndex].yAxisID === "Request") {
@@ -4458,7 +4459,8 @@
         key: stat.address + i,
         style: "left: " + left + "%; top: " + top + "%",
         enterAnimation: Animation.show,
-        exitAnimation: Animation.hide
+        exitAnimation: Animation.hide,
+        delay: i * 0.05
       }, h("a.title", {
         href: stat.site.getHref()
       }, stat.site.row.content.title), " ", h("span.value", " (" + (Text.formatSize(stat[this.order_by]) || 'No data yet') + ")"));
@@ -4755,7 +4757,6 @@
   window.ChartTimeline = ChartTimeline;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartWorld.coffee ---- */
