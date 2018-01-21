@@ -25,7 +25,7 @@ class SiteFiles extends Class
 		else
 			@selected[inner_path] = true
 			@select_action = "select"
-		Page.file_list.checkSelectedFiles()
+		Page.page_files.checkSelectedFiles()
 		document.body.addEventListener('mouseup', @handleSelectEnd)
 		e.stopPropagation()
 		Page.projector.scheduleRender()
@@ -38,7 +38,7 @@ class SiteFiles extends Class
 				@selected[inner_path] = true
 			else
 				delete @selected[inner_path]
-			Page.file_list.checkSelectedFiles()
+			Page.page_files.checkSelectedFiles()
 			Page.projector.scheduleRender()
 		return false
 
