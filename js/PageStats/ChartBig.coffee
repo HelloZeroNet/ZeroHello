@@ -280,7 +280,7 @@ class ChartBig extends Class
 					bodyFontColor: "rgba(255,255,255,0.6)",
 					callbacks: {
 						title: (tootlip_items, data) ->
-							Time.date(tootlip_items[0].xLabel, "long")
+							Time.date(tootlip_items[0].xLabel, "long").replace(/:00$/, "")
 
 						label: (tootlip_items, data) ->
 							if data.datasets[tootlip_items.datasetIndex].yAxisID == "Request"
