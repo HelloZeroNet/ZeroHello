@@ -26,6 +26,7 @@ class PageStats extends Class
 
 		@chart_radar = new ChartRadar()
 
+		# Chart connections
 		@chart_connections = new Chart()
 		@chart_connections.title = "Connections"
 		@chart_connections.type_names = ["peer", "peer_onion", "connection", "connection_onion", "connection_in", "connection_ping_avg", "connection_ping_min"]
@@ -41,8 +42,10 @@ class PageStats extends Class
 		@chart_connections.getChartQuery = ->
 			"SELECT * FROM data WHERE type_id = #{Page.page_stats.type_id_db['connection']} ORDER BY date_added DESC LIMIT 50"
 
+		# Chart size
 		@chart_size = new Chart()
-		@chart_size.title = "Total size"
+		@chart_size.getTitle = ->
+			h("a", {href: Page.createUrl("bigchart", "size"), onclick: Page.handleLinkClick}, "Total size")
 		@chart_size.chart_stroke = ["#F99739AA", "#51B8F2"]
 		@chart_size.type_names = ["size", "size_optional", "optional_limit", "optional_used", "content"]
 		@chart_size.formatValue = (type_data) ->
