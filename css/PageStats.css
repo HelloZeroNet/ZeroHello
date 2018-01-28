@@ -1,4 +1,4 @@
-#PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px; position: relative; }
+#PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px !important; position: relative;  }
 
 .intervals { margin-top: -69px; padding-right: 21px; float: right; }
 .interval {
