@@ -14,11 +14,15 @@ class Chart extends Class
 		@chart_canvas = node
 		@chart_ctx = node.getContext("2d")
 
+	getTitle: =>
+		@title
+
 	update: =>
 		Page.cmd "chartDbQuery", @getChartQuery(), (res) =>
 			@line_data = []
 			for row in res
 				@line_data.push(row.value)
+			@line_data.reverse()
 			@updateChart()
 
 		query_type_data = """
@@ -60,7 +64,7 @@ class Chart extends Class
 		data_max = Math.max.apply(null, @line_data)
 		data_min = Math.min.apply(null, @line_data)
 		for data, i in @line_data
-			line_y = 150 + ((data - data_min) / (data_max - data_min)) * 120
+			line_y = 250 - ((data - data_min) / (data_max - data_min)) * 120
 			@chart_ctx.lineTo((i - 1) * step, line_y)
 		@chart_ctx.lineTo((i + 1) * step, line_y)
 		@chart_ctx.lineTo(i * step, 450)
@@ -77,7 +81,7 @@ class Chart extends Class
 
 		h("div.Chart", {style: "background-image: radial-gradient(at 29% top, #eaaeda05, #{@colorize})"}, [
 			h("div.titles", [
-				h("div.title", @title)
+				h("div.title", @getTitle())
 				h("div.value", @value)
 				h("div.details", @details.map (detail) =>
 					[detail, h("br", key: detail)]
