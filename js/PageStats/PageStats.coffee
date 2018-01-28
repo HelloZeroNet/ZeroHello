@@ -53,7 +53,7 @@ class PageStats extends Class
 			back.push "Optional downloaded: #{Text.formatSize(type_data.optional_used) or '0 MB'} of #{Text.formatSize(type_data.size_optional) or '0 MB'} (limit: #{Text.formatSize(type_data.optional_limit)})"
 			return back
 		@chart_size.getChartQuery = ->
-			"SELECT AVG(value) / 1024 / 1024 AS value FROM data WHERE type_id = #{Page.page_stats.type_id_db['size']} GROUP BY ROUND(data_id / 1000) ORDER BY date_added DESC LIMIT 50"
+			"SELECT CAST(value AS FLOAT) / 1024 / 1024 AS value FROM data WHERE type_id = #{Page.page_stats.type_id_db['size']} GROUP BY ROUND(date_added / 1000) ORDER BY date_added DESC LIMIT 50"
 
 		@chart_world = new ChartWorld()
 		@country_list = new StatList()
