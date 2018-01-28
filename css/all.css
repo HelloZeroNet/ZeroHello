@@ -435,7 +435,7 @@
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/PageStats.css ---- */
 
 
-#PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px; position: relative; }
+#PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px !important; position: relative;  }
 
 .intervals { margin-top: -69px; padding-right: 21px; float: right; }
 .interval {
@@ -464,6 +464,7 @@
 .timeline-borders { height: 100px; height: 180px; margin-bottom: -201px; pointer-events: none; -webkit-transform: translateX(1px); -moz-transform: translateX(1px); -o-transform: translateX(1px); -ms-transform: translateX(1px); transform: translateX(1px) ; z-index: 1000; position: relative; overflow: hidden }
 .timeline-border { background-color: transparent; border-right: 1px solid #1e2527; height: 185px }
 .timeline-border.active { -webkit-box-shadow: 5px 108px 144px 0px #000000CC; -moz-box-shadow: 5px 108px 144px 0px #000000CC; -o-box-shadow: 5px 108px 144px 0px #000000CC; -ms-box-shadow: 5px 108px 144px 0px #000000CC; box-shadow: 5px 108px 144px 0px #000000CC ; }
+.timeline-border:last-child.active { -webkit-box-shadow: -45px 108px 100px -37px #000000CC ; -moz-box-shadow: -45px 108px 100px -37px #000000CC ; -o-box-shadow: -45px 108px 100px -37px #000000CC ; -ms-box-shadow: -45px 108px 100px -37px #000000CC ; box-shadow: -45px 108px 100px -37px #000000CC  }
 
 .ChartLegend { text-align: right; margin-right: 20px; margin-bottom: 40px }
 .legend-items { width: 40%; display: inline-block; -webkit-box-sizing: border-box ; -moz-box-sizing: border-box ; -o-box-sizing: border-box ; -ms-box-sizing: border-box ; box-sizing: border-box  }
@@ -500,6 +501,7 @@
 .Chart { margin-bottom: 20px; position: relative; background-image: radial-gradient(at 29% top, #eaaeda05, #cc00ff0a) }
 .Chart .canvas { width: 100%; display: block; }
 .Chart .titles { position: absolute; padding: 4%; height: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; width: 100%; }
+.Chart .titles a { color: white; text-decoration: none }
 .Chart .titles .title { font-weight: lighter; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
 .Chart .titles .value { font-size: 140%; font-weight: lighter; margin: 4px 0px; text-transform: uppercase; }
 .Chart .titles .details { bottom: 6%; position: absolute; color: #16ffe9; line-height: 23px; font-size: 12px; font-family: monospace }
