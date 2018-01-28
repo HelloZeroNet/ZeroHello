@@ -64,6 +64,7 @@
 .Chart { margin-bottom: 20px; position: relative; background-image: radial-gradient(at 29% top, #eaaeda05, #cc00ff0a) }
 .Chart .canvas { width: 100%; display: block; }
 .Chart .titles { position: absolute; padding: 4%; height: 100%; box-sizing: border-box; width: 100%; }
+.Chart .titles a { color: white; text-decoration: none }
 .Chart .titles .title { font-weight: lighter; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
 .Chart .titles .value { font-size: 140%; font-weight: lighter; margin: 4px 0px; text-transform: uppercase; }
 .Chart .titles .details { bottom: 6%; position: absolute; color: #16ffe9; line-height: 23px; font-size: 12px; font-family: monospace }
