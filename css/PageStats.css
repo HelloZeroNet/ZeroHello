@@ -27,6 +27,7 @@
 .timeline-borders { height: 100px; height: 180px; margin-bottom: -201px; pointer-events: none; transform: translateX(1px); z-index: 1000; position: relative; overflow: hidden }
 .timeline-border { background-color: transparent; border-right: 1px solid #1e2527; height: 185px }
 .timeline-border.active { box-shadow: 5px 108px 144px 0px #000000CC; }
+.timeline-border:last-child.active { box-shadow: -45px 108px 100px -37px #000000CC }
 
 .ChartLegend { text-align: right; margin-right: 20px; margin-bottom: 40px }
 .legend-items { width: 40%; display: inline-block; box-sizing: border-box }
