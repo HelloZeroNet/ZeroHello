@@ -125,7 +125,7 @@ class Text
 
 	highlight: (text, search) ->
 		if not text
-			return ""
+			return [""]
 		parts = text.split(RegExp(search, "i"))
 		back = []
 		for part, i in parts

@@ -2194,6 +2194,7 @@
         }
         return;
       }
+      this.log("Searching for", search);
       this.loading = true;
       return Page.cmd("feedSearch", search, (function(_this) {
         return function(res) {
@@ -2377,41 +2378,49 @@
     };
 
     FeedList.prototype.renderFeed = function(feed) {
-      var site, type_formatted;
+      var err, site, type_formatted;
       if (this.filter && feed.type !== this.filter) {
         return null;
       }
-      site = Page.site_list.item_list.items_bykey[feed.site];
-      type_formatted = this.formatType(feed.type, feed.title);
-      return h("div.feed." + feed.type, {
-        key: feed.key,
-        enterAnimation: this.enterAnimation,
-        exitAnimation: this.exitAnimation
-      }, [
-        h("div.details", [
-          h("a.site", {
-            href: site.getHref()
-          }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
-        ]), h("div.circle", {
-          style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
-        }), type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
-          href: site.getHref() + feed.url
-        }, this.formatTitle(feed.title)), h("div.body", {
-          key: feed.body,
+      try {
+        site = Page.site_list.item_list.items_bykey[feed.site];
+        type_formatted = this.formatType(feed.type, feed.title);
+        return h("div.feed." + feed.type, {
+          key: feed.key,
           enterAnimation: this.enterAnimation,
           exitAnimation: this.exitAnimation
-        }, this.formatBody(feed.body, feed.type)), feed.body_more ? feed.body_more.map((function(_this) {
-          return function(body_more) {
-            return h("div.body", {
-              key: body_more,
-              enterAnimation: _this.enterAnimation,
-              exitAnimation: _this.exitAnimation
-            }, _this.formatBody(body_more, feed.type));
-          };
-        })(this)) : void 0, feed.more > 0 ? h("a.more", {
-          href: site.getHref() + feed.url
-        }, ["+" + feed.more + " more"]) : void 0
-      ]);
+        }, [
+          h("div.details", [
+            h("a.site", {
+              href: site.getHref()
+            }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
+          ]), h("div.circle", {
+            style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
+          }), type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
+            href: site.getHref() + feed.url
+          }, this.formatTitle(feed.title)), h("div.body", {
+            key: feed.body,
+            enterAnimation: this.enterAnimation,
+            exitAnimation: this.exitAnimation
+          }, this.formatBody(feed.body, feed.type)), feed.body_more ? feed.body_more.map((function(_this) {
+            return function(body_more) {
+              return h("div.body", {
+                key: body_more,
+                enterAnimation: _this.enterAnimation,
+                exitAnimation: _this.exitAnimation
+              }, _this.formatBody(body_more, feed.type));
+            };
+          })(this)) : void 0, feed.more > 0 ? h("a.more", {
+            href: site.getHref() + feed.url
+          }, ["+" + feed.more + " more"]) : void 0
+        ]);
+      } catch (error) {
+        err = error;
+        this.log(err);
+        return h("div", {
+          key: Time.timestamp()
+        });
+      }
     };
 
     FeedList.prototype.renderWelcome = function() {
@@ -4617,7 +4626,6 @@
         interval_step = 60 * 60 * 24 * 7;
         date_added_from = date_added_to - interval_step * 7;
         group_steps = 6;
-        this.log(date_added_from, date_added_to);
       } else if (Page.params.interval === "1m") {
         c = new Date();
         c.setDate(30);
@@ -5917,7 +5925,7 @@
     Text.prototype.highlight = function(text, search) {
       var back, i, j, len, part, parts;
       if (!text) {
-        return "";
+        return [""];
       }
       parts = text.split(RegExp(search, "i"));
       back = [];

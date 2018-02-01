@@ -110,6 +110,7 @@ class FeedList extends Class
 			@displayRows([])
 			if cb then cb()
 			return
+		@log "Searching for", search
 		@loading = true
 		Page.cmd "feedSearch", search, (res) =>
 			@loading = false
