@@ -59,11 +59,12 @@ class ChartTimeline extends Class
 
 		if Page.params.interval == "1w"
 			c = new Date()
-			c.setDate(c.getDate() - c.getDay() + 7)
+			c.setDate(c.getDate() - (c.getDay() or 7) + 7)
 			date_added_to = c.setHours(23,59,59,0) / 1000
 			interval_step = 60 * 60 * 24 * 7
 			date_added_from = date_added_to - interval_step * 7
 			group_steps = 6
+
 		else if Page.params.interval == "1m"
 			c = new Date()
 			c.setDate(30)
