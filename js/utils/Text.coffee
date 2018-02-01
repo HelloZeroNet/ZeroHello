@@ -124,6 +124,8 @@ class Text
 		return back.join("&")
 
 	highlight: (text, search) ->
+		if not text
+			return ""
 		parts = text.split(RegExp(search, "i"))
 		back = []
 		for part, i in parts
