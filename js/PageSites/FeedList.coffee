@@ -183,7 +183,10 @@ class FeedList extends Class
 		if @searching_text and @searching_text.length > 1
 			return Text.highlight(title, @searching_text)
 		else
-			return title
+			if title
+				return title
+			else
+				return ""
 
 	formatBody: (body, type) ->
 		body = body.replace(/[\n\r]+/, "\n")  # Remove empty lines
@@ -322,6 +325,8 @@ class FeedList extends Class
 
 		total_taken = @res.taken
 		site = Page.site_list.item_list.items_bykey[stat.site]
+		if not site
+			return []
 
 		h("tr", {key: stat.site + "_" + stat.feed_name, classes: {"slow": stat.taken > total_taken * 0.1, "extra-slow": stat.taken > total_taken * 0.3}}, [
 			h("td.site", h("a.site", {href: site.getHref()}, [site.row.content.title])),
