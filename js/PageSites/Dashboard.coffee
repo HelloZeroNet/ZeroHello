@@ -136,6 +136,9 @@ class Dashboard extends Class
 				# Update
 				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")
+				else if Page.server_info.rev < Page.latest_rev
+					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important fix: rev#{Page.latest_rev}")
+
 				@menu_newversion.render(".menu-newversion")
 
 				# Donate

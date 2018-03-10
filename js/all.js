@@ -1981,7 +1981,11 @@
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
-        }, "New ZeroNet version: " + Page.latest_version) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
+        }, "New ZeroNet version: " + Page.latest_version) : Page.server_info.rev < Page.latest_rev ? h("a.newversion.dashboard-item", {
+          href: "#Update",
+          onmousedown: this.handleNewversionClick,
+          onclick: Page.returnFalse
+        }, "New important fix: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
           "href": "#Donate",
           onmousedown: this.handleDonateClick,
           onclick: Page.returnFalse
@@ -2575,7 +2579,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
@@ -3412,7 +3415,7 @@
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
         if (this.filtering) {
-          filter_base = site.row.content.title + site.row.content.merged_type;
+          filter_base = site.row.content.title + site.row.content.merged_type + site.row.address;
           if (filter_base.toLowerCase().indexOf(this.filtering.toLowerCase()) === -1) {
             continue;
           }
@@ -6501,7 +6504,8 @@
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
-      this.latest_version = "0.6.1";
+      this.latest_version = "0.6.2";
+      this.latest_rev = 3351;
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Body" + this.mode;
