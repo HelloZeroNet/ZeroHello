@@ -98,6 +98,7 @@ class Dashboard extends Class
 			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
 			Page.cmd "serverUpdate"
 		)]
+		@menu_newversion.items.push ["Details of the update", Text.getSiteUrl("Blog.ZeroNetwork.bit") ]
 
 		@menu_newversion.toggle()
 		return false

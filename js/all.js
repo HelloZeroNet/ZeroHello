@@ -1947,6 +1947,7 @@
           return Page.cmd("serverUpdate");
         })
       ]);
+      this.menu_newversion.items.push(["Details of the update", Text.getSiteUrl("Blog.ZeroNetwork.bit")]);
       this.menu_newversion.toggle();
       return false;
     };
