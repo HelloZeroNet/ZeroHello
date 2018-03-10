@@ -115,7 +115,7 @@ class SiteList extends Class
 
 		for site in @sites
 			if @filtering
-				filter_base = site.row.content.title + site.row.content.merged_type
+				filter_base = site.row.content.title + site.row.content.merged_type + site.row.address
 				if filter_base.toLowerCase().indexOf(@filtering.toLowerCase()) == -1
 					continue
 
