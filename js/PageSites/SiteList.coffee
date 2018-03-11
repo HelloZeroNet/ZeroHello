@@ -103,6 +103,11 @@ class SiteList extends Class
 			@handleFilterInput(e)
 		return false
 
+	handleFilterClear: (e) =>
+		e.target.value = ""
+		@handleFilterInput(e)
+		return false
+
 	render: =>
 		if not @loaded
 			return h("div#SiteList")
@@ -134,6 +139,8 @@ class SiteList extends Class
 		h("div#SiteList", [
 			if @sites.length > 20
 				h("input.site-filter", {placeholder: "Filter: Site name", spellcheck: false, oninput: @handleFilterInput, onkeyup: @handleFilterKeyup, value: @filtering})
+			if @filtering
+				h("a.filter-clear", {href: "#clear", onclick: @handleFilterClear}, "\u00D7")
 			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
 			h("div.SiteList.needaction", @sites_needaction.map (item) ->
 				item.render()

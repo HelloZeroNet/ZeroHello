@@ -29,6 +29,7 @@
 }*/
 
 .FeedContainer a:active { background-color: rgba(0,0,0,0.05); outline: 2px solid rgba(0,0,0,0.05) }
+.FeedContainer a.nolink:active { background-color: initial; outline: initial }
 .FeedContainer.faded { opacity: 0.2 }
 
 .feeds-filters { margin-top: -25px; margin-left: 25px; max-width: 100% }
@@ -40,9 +41,12 @@
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; transition: all 0.3s; border-radius: 30px }
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
+.search-clear { position: absolute; right: -37px; margin-top: -33px; text-decoration: none; color: #AAA; font-size: 14px; background-color: #F6F6F6; width: 25px; text-align: center; height: 25px; border-radius: 20px; line-height: 25px; }
 .search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 
-.search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; text-decoration: none }
+.search-info { right: -30px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; text-decoration: none; transition: all 0.3s }
+.loading .search-info { opacity: 0 }
+.searched .search-info { right: 0px; }
 .search-info-stats { padding-left: 30px; padding-top: 10px; }
 .search-info-stats td, .search-info-stats th { padding: 5px 11px; font-family: monospace; font-size: 12px; border-bottom: 1px solid #EEE; text-align: left }
 .search-info-stats .taken { text-align: right }
