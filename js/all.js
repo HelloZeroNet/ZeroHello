@@ -2049,6 +2049,7 @@
       this.renderFeed = bind(this.renderFeed, this);
       this.exitAnimation = bind(this.exitAnimation, this);
       this.enterAnimation = bind(this.enterAnimation, this);
+      this.handleSearchClear = bind(this.handleSearchClear, this);
       this.handleSearchInfoClick = bind(this.handleSearchInfoClick, this);
       this.handleFilterClick = bind(this.handleFilterClick, this);
       this.handleSearchKeyup = bind(this.handleSearchKeyup, this);
@@ -2297,6 +2298,12 @@
       return false;
     };
 
+    FeedList.prototype.handleSearchClear = function(e) {
+      e.target.value = "";
+      this.handleSearchInput(e);
+      return false;
+    };
+
     FeedList.prototype.formatTitle = function(title) {
       if (this.searching_text && this.searching_text.length > 1) {
         return Text.highlight(title, this.searching_text);
@@ -2527,7 +2534,9 @@
           }).call(this)
         ]), h("div.feeds-line"), h("div.feeds-search", {
           classes: {
-            "searching": this.searching
+            "searching": this.searching,
+            "searched": this.searched,
+            "loading": this.loading
           }
         }, h("div.icon-magnifier"), this.loading ? h("div.loader", {
           enterAnimation: Animation.show,
@@ -2539,7 +2548,12 @@
           onkeyup: this.handleSearchKeyup,
           oninput: this.handleSearchInput,
           afterCreate: this.storeNodeSearch
-        }), ((ref = this.res) != null ? ref.stats : void 0) && !this.loading ? h("a.search-info.nolink", {
+        }), this.searched && !this.loading ? h("a.search-clear.nolink", {
+          href: "#clear",
+          onclick: this.handleSearchClear,
+          enterAnimation: Animation.show,
+          exitAnimation: Animation.hide
+        }, "\u00D7") : void 0, ((ref = this.res) != null ? ref.stats : void 0) ? h("a.search-info.nolink", {
           href: "#ShowStats",
           enterAnimation: Animation.show,
           exitAnimation: Animation.hide,
@@ -2580,6 +2594,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
@@ -3198,6 +3213,7 @@
     function SiteList() {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
+      this.handleFilterClear = bind(this.handleFilterClear, this);
       this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
       this.handleFilterInput = bind(this.handleFilterInput, this);
       this.renderMergedSites = bind(this.renderMergedSites, this);
@@ -3402,6 +3418,12 @@
       return false;
     };
 
+    SiteList.prototype.handleFilterClear = function(e) {
+      e.target.value = "";
+      this.handleFilterInput(e);
+      return false;
+    };
+
     SiteList.prototype.render = function() {
       var filter_base, i, len, ref, ref1, site;
       if (!this.loaded) {
@@ -3441,7 +3463,10 @@
           oninput: this.handleFilterInput,
           onkeyup: this.handleFilterKeyup,
           value: this.filtering
-        }) : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+        }) : void 0, this.filtering ? h("a.filter-clear", {
+          href: "#clear",
+          onclick: this.handleFilterClear
+        }, "\u00D7") : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
