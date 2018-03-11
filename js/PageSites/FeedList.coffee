@@ -180,6 +180,11 @@ class FeedList extends Class
 		@show_stats = not @show_stats
 		return false
 
+	handleSearchClear: (e) =>
+		e.target.value = ""
+		@handleSearchInput(e)
+		return false
+
 	formatTitle: (title) ->
 		if @searching_text and @searching_text.length > 1
 			return Text.highlight(title, @searching_text)
@@ -363,12 +368,14 @@ class FeedList extends Class
 							h("a.feeds-filter", {key: feed_type, href: "#" + feed_type, classes: {active: @filter == feed_type}, onclick: @handleFilterClick}, feed_type)
 					])
 					h("div.feeds-line"),
-					h("div.feeds-search", {classes: {"searching": @searching}},
+					h("div.feeds-search", {classes: {"searching": @searching, "searched": @searched, "loading": @loading}},
 						h("div.icon-magnifier"),
 						if @loading
 							h("div.loader", {enterAnimation: Animation.show, exitAnimation: Animation.hide}, h("div.arc"))
 						h("input", {type: "text", placeholder: "Search in connected sites", value: @searching, onkeyup: @handleSearchKeyup, oninput: @handleSearchInput, afterCreate: @storeNodeSearch}),
-						if @res?.stats and not @loading
+						if @searched and not @loading
+							h("a.search-clear.nolink", {href: "#clear", onclick: @handleSearchClear, enterAnimation: Animation.show, exitAnimation: Animation.hide}, "\u00D7")
+						if @res?.stats
 							h("a.search-info.nolink",
 								{href: "#ShowStats", enterAnimation: Animation.show, exitAnimation: Animation.hide, onclick: @handleSearchInfoClick},
 								(if @searching then "#{@res.num} results " else "") + "from #{@res.sites} sites in #{@res.taken.toFixed(2)}s"
