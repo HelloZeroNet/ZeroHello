@@ -34,11 +34,12 @@
 	" peers, without any central server.": " 个节点驱动，没有任何中心化的服务器。",
 	"Some sites we created:": "我们创建的一些站点：",
 	"Simple messaging board": "简单的消息版",
-	"Reddit-like, decentralized forum": "类似于 Reddit 的，分布式的论坛",
+	"Reddit-like, decentralized forum": "类似于 Reddit 的分布式论坛",
 	"Activate \\u2501": "激活 \\u2501",
 	"Microblogging platform": "轻量化博客平台",
 	"End-to-end encrypted mailing": "端对端加密邮件",
 	"P2P social network": "P2P 社交网络",
+	"Discover more sites": "发现更多站点",
 
 	"You need to update your ZeroNet client to use this feature": "你需要更新你的 ZeroNet 客户端来使用这个特性",
 	"Update all sites": "更新所有站点",
