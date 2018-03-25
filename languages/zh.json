@@ -125,8 +125,11 @@
 	"Optional": "可选的",
 	"Help distribute all new files": "帮助分发所有新文件",
 	"Upload/Download ratio": "上传/下载率",
-
+	
+	"Bigfiles": "大文件",
+	"Site": "站点",
 	"Optional file": "可选文件",
+	"Status": "状态",
 	"Size": "大小",
 	"Peers": "节点数",
 	"Uploaded": "已上传",
@@ -151,7 +154,8 @@
 	"Site size": "站点大小",
 	"Connections": "连接情况",
 	"Total size": "总大小",
-	"Top country": "热门国家",	
+	"Top country": "热门国家",
+	" peers": " 节点",
 
 	"More files...": "更多文件...",
 
