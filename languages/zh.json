@@ -95,7 +95,7 @@
 	"Delete": "删除",
 	"Sorry, you can't delete your own site.<br>Please remove the directory manually.": "抱歉，你不能删除你自己拥有的站点。<br>请手动删除站点目录。",
 
-	"Search in connected sites": "在已连接的站点中搜索",
+	"Search in connected sites": "在连接的站点中搜索",
 	" results from ": " 个结果 来自 ",
 	"No results for ": "没有结果对应 ",
 	" sites in ": " 个站点 用时 ",
