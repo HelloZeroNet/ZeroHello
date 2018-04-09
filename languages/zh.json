@@ -95,6 +95,7 @@
 	"Check files": "检查文件",
 	"Delete": "删除",
 	"Blacklist": "黑名单",
+	"Blacklist <b>": "拉黑 <b>",
 	"Blacklist this site": "拉黑此站点",
 	"Reason": "原因",
 	"Delete and Blacklist": "删除并拉黑",
