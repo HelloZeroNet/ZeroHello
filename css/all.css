@@ -159,7 +159,7 @@
 .SiteList .site.disabled .inner { color: white; opacity: 0.3 }
 .SiteList .site:last-child { border-bottom: none }
 .SiteList .site .circle { pointer-events: none; position: absolute; margin-top: 17px; margin-left: 27px; font-size: 12px; font-family: Verdana; }
-.SiteList .site .inner { color: #C2CBDB; text-decoration: none; display: block; padding: 15px 25px; padding-left: 45px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+.SiteList .site .inner { color: #C2CBDB; text-decoration: none; display: block; padding: 15px 25px; padding-left: 45px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; white-space: normal; }
 .SiteList .site .inner:hover { background-color: rgba(173,136,183,0.08); -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; color: white }
 .SiteList .site .inner:active, .SiteList .site .inner:focus { background-color: rgba(173,136,183,0.2); -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; color: white; outline: none }
 .SiteList .site .inner .title { max-width: 157px; overflow: hidden; display: inline-block; white-space: nowrap; text-overflow: ellipsis; margin-bottom: -4px }
@@ -533,7 +533,7 @@
 	width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; min-height: 100%; border-top: 94px solid #EDF2F5; -webkit-perspective: 2000px; -moz-perspective: 2000px; -o-perspective: 2000px; -ms-perspective: 2000px; perspective: 2000px ;
 }
 
-#Dashboard { position: absolute; right: 80px; top: -83px; }
+#Dashboard { position: absolute; right: 80px; top: -83px; white-space: nowrap; }
 #Dashboard .dashboard-item {
 	text-decoration: none; margin: 5px; padding: 10px 20px; -webkit-border-radius: 40px; -moz-border-radius: 40px; -o-border-radius: 40px; -ms-border-radius: 40px; border-radius: 40px ; display: inline-block;
 	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: 600; background-color: white;
@@ -553,6 +553,8 @@
 #Dashboard .dashboard-item.donate:hover .icon-heart { -webkit-transform: scale(1.2) ; -moz-transform: scale(1.2) ; -o-transform: scale(1.2) ; -ms-transform: scale(1.2) ; transform: scale(1.2)  }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
 #Dashboard .torbrowserwarning { color: #e91e63 }
+#Dashboard .tracker-status { text-align: right; width: 600px; display: inline-block; float: right; margin-top: -20px }
+
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; content: "";
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; -webkit-border-radius: 60px; -moz-border-radius: 60px; -o-border-radius: 60px; -ms-border-radius: 60px; border-radius: 60px ; position: absolute; margin-left: -32px; margin-top: -2px;
@@ -675,7 +677,7 @@
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/ZeroHello.css ---- */
 
 
-body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px; -webkit-font-smoothing: subpixel-antialiased; }
+body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', Arial, 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px; -webkit-font-smoothing: subpixel-antialiased; }
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
@@ -734,6 +736,7 @@ body.changing { overflow-y: scroll; }
 /* PageStats */
 #BodyStats .left { /*background-image: -webkit-linear-gradient(60deg, #272a38 0px, #1E2527 1260px);background-image: -moz-linear-gradient(60deg, #272a38 0px, #1E2527 1260px);background-image: -o-linear-gradient(60deg, #272a38 0px, #1E2527 1260px);background-image: -ms-linear-gradient(60deg, #272a38 0px, #1E2527 1260px);background-image: linear-gradient(60deg, #272a38 0px, #1E2527 1260px);*/ min-height: 1260px; background-image: linear-gradient(60deg, #442f40 0px, #12252b 1260px) }
 #BodyStats .left .logo { background-color: rgba(0,0,0,0) }
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/fonts.css ---- */
@@ -882,6 +885,7 @@ bottom: 0px;
 padding-top: 40px;
 }
 .left #SiteList .details {
+top: 15px;
 position: absolute;
 right: 30px;
 }

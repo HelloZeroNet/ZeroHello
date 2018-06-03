@@ -1,8 +1,9 @@
 class Dashboard extends Class
 	constructor: ->
 		@menu_newversion = new Menu()
-		@menu_tor = new Menu()
 		@menu_port = new Menu()
+		@menu_tor = new Menu()
+		@menu_trackers = new Menu()
 		@menu_multiuser = new Menu()
 		@menu_donate = new Menu()
 		@menu_browserwarning = new Menu()
@@ -27,6 +28,25 @@ class Dashboard extends Class
 		if tor_title == "Disabled" then tor_title = _("Disabled")
 		else if tor_title == "Error" then tor_title = _("Error")
 		return tor_title
+
+	tagTrackersTitle: ->
+		num_ok = 0
+		num_total = 0
+		status_db = {announcing: [], error: [], announced: []}
+		for key, val of Page.announcer_info?.stats
+			if val.status == "announced"
+				num_ok += 1
+			num_total += 1
+		title = "#{num_ok}/#{num_total} OK"
+
+		if num_total == 0
+			return h("span.status", "Waiting...")
+		else if num_ok > num_total / 2
+			return h("span.status.status-ok", title)
+		else if num_ok > 0
+			return h("span.status.status-warning", title)
+		else
+			return h("span.status.status-error", title)
 
 	handleTorClick: =>
 		@menu_tor.items = []
@@ -116,6 +136,21 @@ class Dashboard extends Class
 		@menu_torbrowserwarning.toggle()
 		return false
 
+	handleTrackersClick: =>
+		@menu_trackers.items = []
+		for tracker_url, stat of Page.announcer_info?.stats
+			tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1")
+			success_percent = parseInt((stat.num_success/stat.num_request)*100)
+			status = stat.status.capitalize()
+			if status == "Announced" and stat.time_request and stat.time_status
+				request_taken = stat.time_status - stat.time_request
+				status += " in #{request_taken.toFixed(2)}s"
+			title = [tracker_name, h("span.tracker-status", {title: stat.last_error}, "#{status} (#{success_percent}% success)")]
+			@menu_trackers.items.push [title, "#"]
+		@menu_trackers.toggle()
+		return false
+
+
 	render: =>
 		if Page.server_info
 			tor_title = @getTorTitle()
@@ -138,7 +173,7 @@ class Dashboard extends Class
 				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")
 				else if Page.server_info.rev < Page.latest_rev
-					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important fix: rev#{Page.latest_rev}")
+					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important update: rev#{Page.latest_rev}")
 
 				@menu_newversion.render(".menu-newversion")
 
@@ -164,7 +199,7 @@ class Dashboard extends Class
 					])
 
 				# Port open status
-				h("a.port.dashboard-item.port", {href: "#Port", classes: {bounce: @port_checking}, onmousedown: @handlePortClick, onclick: Page.returnFalse}, [
+				h("a.dashboard-item.port", {href: "#Port", classes: {bounce: @port_checking}, onmousedown: @handlePortClick, onclick: Page.returnFalse}, [
 					h("span", "Port: "),
 					if @port_checking
 						h("span.status", "Checking")
@@ -180,8 +215,9 @@ class Dashboard extends Class
 						h("span.status.status-bad", "Closed")
 				]),
 				@menu_port.render(".menu-port"),
+
 				# Tor status
-				h("a.tor.dashboard-item.tor", {href: "#Tor", onmousedown: @handleTorClick, onclick: Page.returnFalse}, [
+				h("a.dashboard-item.tor", {href: "#Tor", onmousedown: @handleTorClick, onclick: Page.returnFalse}, [
 					h("span", "Tor: "),
 					if tor_title == "OK"
 						if @isTorAlways()
@@ -192,6 +228,14 @@ class Dashboard extends Class
 						h("span.status.status-warning", tor_title)
 				]),
 				@menu_tor.render(".menu-tor")
+
+				# Announcer status
+				if Page.announcer_info
+					h("a.dashboard-item.trackers", {href: "#Trackers", onmousedown: @handleTrackersClick, onclick: Page.returnFalse}, [
+						h("span", "Trackers: "),
+						@tagTrackersTitle()
+					])
+				@menu_trackers.render(".menu-trackers")
 			)
 		else
 			h("div#Dashboard")

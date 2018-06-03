@@ -1803,6 +1803,7 @@
 
     function Dashboard() {
       this.render = bind(this.render, this);
+      this.handleTrackersClick = bind(this.handleTrackersClick, this);
       this.handleTorBrowserwarningClick = bind(this.handleTorBrowserwarningClick, this);
       this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
       this.handleNewversionClick = bind(this.handleNewversionClick, this);
@@ -1815,8 +1816,9 @@
       this.handleEnableAlwaysTorClick = bind(this.handleEnableAlwaysTorClick, this);
       this.handleTorClick = bind(this.handleTorClick, this);
       this.menu_newversion = new Menu();
-      this.menu_tor = new Menu();
       this.menu_port = new Menu();
+      this.menu_tor = new Menu();
+      this.menu_trackers = new Menu();
       this.menu_multiuser = new Menu();
       this.menu_donate = new Menu();
       this.menu_browserwarning = new Menu();
@@ -1849,6 +1851,35 @@
         tor_title = _("Error");
       }
       return tor_title;
+    };
+
+    Dashboard.prototype.tagTrackersTitle = function() {
+      var key, num_ok, num_total, ref, ref1, ref2, status_db, title, val;
+      num_ok = 0;
+      num_total = 0;
+      status_db = {
+        announcing: [],
+        error: [],
+        announced: []
+      };
+      ref1 = (ref = Page.announcer_info) != null ? ref.stats : void 0;
+      for (key in ref1) {
+        val = ref1[key];
+        if ((ref2 = val.status) === "announcing" || ref2 === "announced") {
+          num_ok += 1;
+        }
+        num_total += 1;
+      }
+      title = num_ok + "/" + num_total + " OK";
+      if (num_total === 0) {
+        return h("span.status", "Waiting...");
+      } else if (num_ok > num_total / 2) {
+        return h("span.status.status-ok", title);
+      } else if (num_ok > 0) {
+        return h("span.status.status-warning", title);
+      } else {
+        return h("span.status.status-error", title);
+      }
     };
 
     Dashboard.prototype.handleTorClick = function() {
@@ -1966,6 +1997,30 @@
       return false;
     };
 
+    Dashboard.prototype.handleTrackersClick = function() {
+      var ref, ref1, request_taken, stat, status, success_percent, title, tracker_name, tracker_url;
+      this.menu_trackers.items = [];
+      ref1 = (ref = Page.announcer_info) != null ? ref.stats : void 0;
+      for (tracker_url in ref1) {
+        stat = ref1[tracker_url];
+        tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1");
+        success_percent = parseInt((stat.num_success / stat.num_request) * 100);
+        status = stat.status.capitalize();
+        if (status === "Announced" && stat.time_request && stat.time_status) {
+          request_taken = stat.time_status - stat.time_request;
+          status += " in " + (request_taken.toFixed(2)) + "s";
+        }
+        title = [
+          tracker_name, h("span.tracker-status", {
+            title: stat.last_error
+          }, status + " (" + success_percent + "% success)")
+        ];
+        this.menu_trackers.items.push([title, "#"]);
+      }
+      this.menu_trackers.toggle();
+      return false;
+    };
+
     Dashboard.prototype.render = function() {
       var tor_title;
       if (Page.server_info) {
@@ -1986,7 +2041,7 @@
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
-        }, "New important fix: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
+        }, "New important update: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
           "href": "#Donate",
           onmousedown: this.handleDonateClick,
           onclick: Page.returnFalse
@@ -2002,18 +2057,22 @@
           href: "#Logout",
           onmousedown: this.handleLogoutClick,
           onclick: Page.returnFalse
-        }, [h("span", "Logout")]) : void 0, h("a.port.dashboard-item.port", {
+        }, [h("span", "Logout")]) : void 0, h("a.dashboard-item.port", {
           href: "#Port",
           classes: {
             bounce: this.port_checking
           },
           onmousedown: this.handlePortClick,
           onclick: Page.returnFalse
-        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.tor.dashboard-item.tor", {
+        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.dashboard-item.tor", {
           href: "#Tor",
           onmousedown: this.handleTorClick,
           onclick: Page.returnFalse
-        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"));
+        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"), Page.announcer_info ? h("a.dashboard-item.trackers", {
+          href: "#Trackers",
+          onmousedown: this.handleTrackersClick,
+          onclick: Page.returnFalse
+        }, [h("span", "Trackers: "), this.tagTrackersTitle()]) : void 0, this.menu_trackers.render(".menu-trackers"));
       } else {
         return h("div#Dashboard");
       }
@@ -2026,6 +2085,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -2594,7 +2654,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
@@ -5623,6 +5682,10 @@
     return s === '' || this.slice(-s.length) === s;
   };
 
+  String.prototype.capitalize = function() {
+    return this[0].toUpperCase() + this.slice(1);
+  };
+
   String.prototype.repeat = function(count) {
     return new Array(count + 1).join(this);
   };
@@ -6129,6 +6192,7 @@
       this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
       this.onRequest = bind(this.onRequest, this);
       this.onMessage = bind(this.onMessage, this);
+      this.handleBeforeunload = bind(this.handleBeforeunload, this);
       this.url = url;
       this.waiting_cb = {};
       this.wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1");
@@ -6142,17 +6206,34 @@
       return this;
     };
 
+    ZeroFrame.prototype.handleBeforeunload = function(e) {
+      this.log("beforeunload save scrollTop", window.pageYOffset);
+      this.history_state["scrollTop"] = window.pageYOffset;
+      return this.cmd("wrapperReplaceState", [this.history_state, null]);
+
+      /*
+      		message = {"cmd": "wrapperReplaceState", "params": [@history_state, null]}
+      		message.wrapper_nonce = @wrapper_nonce
+      		message.id = @next_message_id
+      		@next_message_id += 1
+      		@target.postMessage(message, "*")
+      		window.removeEventListener "beforeunload", @handleBeforeunload
+       */
+
+      /*console.log document.activeElement
+      		if document.activeElement.href
+      			setTimeout (->
+      				window.top.location = document.activeElement.href
+      				console.log "Going to", document.activeElement.href
+      			), 1
+       */
+    };
+
     ZeroFrame.prototype.connect = function() {
       this.target = window.parent;
       window.addEventListener("message", this.onMessage, false);
       this.cmd("innerReady");
-      window.addEventListener("beforeunload", (function(_this) {
-        return function(e) {
-          _this.log("save scrollTop", window.pageYOffset);
-          _this.history_state["scrollTop"] = window.pageYOffset;
-          return _this.cmd("wrapperReplaceState", [_this.history_state, null]);
-        };
-      })(this));
+      window.addEventListener("beforeunload", this.handleBeforeunload);
       return this.cmd("wrapperGetState", [], (function(_this) {
         return function(state) {
           if (state != null) {
@@ -6514,6 +6595,7 @@
     extend(ZeroHello, superClass);
 
     function ZeroHello() {
+      this.reloadAnnouncerInfo = bind(this.reloadAnnouncerInfo, this);
       this.reloadServerInfo = bind(this.reloadServerInfo, this);
       this.reloadSiteInfo = bind(this.reloadSiteInfo, this);
       this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
@@ -6525,13 +6607,14 @@
       this.params = {};
       this.site_info = null;
       this.server_info = null;
+      this.announcer_info = null;
       this.address = null;
       this.on_site_info = new Promise();
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
       this.latest_version = "0.6.2";
-      this.latest_rev = 3351;
+      this.latest_rev = 3404;
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Body" + this.mode;
@@ -6741,8 +6824,8 @@
     };
 
     ZeroHello.prototype.onOpenWebsocket = function(e) {
-      this.reloadSiteInfo();
-      return this.reloadServerInfo();
+      this.reloadServerInfo();
+      return this.reloadSiteInfo();
     };
 
     ZeroHello.prototype.reloadSiteInfo = function() {
@@ -6754,10 +6837,19 @@
       })(this));
     };
 
-    ZeroHello.prototype.reloadServerInfo = function() {
+    ZeroHello.prototype.reloadServerInfo = function(cb) {
       return this.cmd("serverInfo", {}, (function(_this) {
         return function(server_info) {
-          return _this.setServerInfo(server_info);
+          _this.setServerInfo(server_info);
+          return typeof cb === "function" ? cb(server_info) : void 0;
+        };
+      })(this));
+    };
+
+    ZeroHello.prototype.reloadAnnouncerInfo = function(cb) {
+      return this.cmd("announcerInfo", {}, (function(_this) {
+        return function(announcer_info) {
+          return _this.setAnnouncerInfo(announcer_info);
         };
       })(this));
     };
@@ -6767,14 +6859,20 @@
         return this.setSiteInfo(params);
       } else if (cmd === "setServerInfo") {
         return this.setServerInfo(params);
+      } else if (cmd === "setAnnouncerInfo") {
+        return this.setAnnouncerInfo(params);
       } else {
         return this.log("Unknown command", params);
       }
     };
 
     ZeroHello.prototype.setSiteInfo = function(site_info) {
+      var ref;
       if (site_info.address === this.address) {
         this.site_info = site_info;
+        if (((ref = this.server_info) != null ? ref.rev : void 0) > 3460) {
+          this.reloadAnnouncerInfo();
+        }
       }
       this.site_list.onSiteInfo(site_info);
       this.feed_list.onSiteInfo(site_info);
@@ -6784,6 +6882,11 @@
 
     ZeroHello.prototype.setServerInfo = function(server_info) {
       this.server_info = server_info;
+      return this.projector.scheduleRender();
+    };
+
+    ZeroHello.prototype.setAnnouncerInfo = function(announcer_info) {
+      this.announcer_info = announcer_info;
       return this.projector.scheduleRender();
     };
 
