@@ -35,7 +35,7 @@
 .SiteList .site.disabled .inner { color: white; opacity: 0.3 }
 .SiteList .site:last-child { border-bottom: none }
 .SiteList .site .circle { pointer-events: none; position: absolute; margin-top: 17px; margin-left: 27px; font-size: 12px; font-family: Verdana; }
-.SiteList .site .inner { color: #C2CBDB; text-decoration: none; display: block; padding: 15px 25px; padding-left: 45px; transition: all 0.3s }
+.SiteList .site .inner { color: #C2CBDB; text-decoration: none; display: block; padding: 15px 25px; padding-left: 45px; transition: all 0.3s; white-space: normal; }
 .SiteList .site .inner:hover { background-color: rgba(173,136,183,0.08); transition: none; color: white }
 .SiteList .site .inner:active, .SiteList .site .inner:focus { background-color: rgba(173,136,183,0.2); transition: none; color: white; outline: none }
 .SiteList .site .inner .title { max-width: 157px; overflow: hidden; display: inline-block; white-space: nowrap; text-overflow: ellipsis; margin-bottom: -4px }

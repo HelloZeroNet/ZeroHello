@@ -5,6 +5,7 @@ class ZeroHello extends ZeroFrame
 		@params = {}
 		@site_info = null
 		@server_info = null
+		@announcer_info = null
 		@address = null
 
 		@on_site_info = new Promise()
@@ -13,7 +14,7 @@ class ZeroHello extends ZeroFrame
 		@settings = null
 
 		@latest_version = "0.6.2"
-		@latest_rev = 3351
+		@latest_rev = 3404
 		@mode = "Sites"
 		@change_timer = null
 		document.body.id = "Body#{@mode}"
@@ -173,17 +174,22 @@ class ZeroHello extends ZeroFrame
 
 
 	onOpenWebsocket: (e) =>
-		@reloadSiteInfo()
 		@reloadServerInfo()
+		@reloadSiteInfo()
 
 	reloadSiteInfo: =>
 		@cmd "siteInfo", {}, (site_info) =>
 			@address = site_info.address
 			@setSiteInfo(site_info)
 
-	reloadServerInfo: =>
+	reloadServerInfo: (cb) =>
 		@cmd "serverInfo", {}, (server_info) =>
 			@setServerInfo(server_info)
+			cb?(server_info)
+
+	reloadAnnouncerInfo: (cb) =>
+		@cmd "announcerInfo", {}, (announcer_info) =>
+			@setAnnouncerInfo(announcer_info)
 
 	# Parse incoming requests from UiWebsocket server
 	onRequest: (cmd, params) ->
@@ -191,12 +197,16 @@ class ZeroHello extends ZeroFrame
 			@setSiteInfo(params)
 		else if cmd == "setServerInfo"
 			@setServerInfo(params)
+		else if cmd == "setAnnouncerInfo"
+			@setAnnouncerInfo(params)
 		else
 			@log "Unknown command", params
 
 	setSiteInfo: (site_info) ->
 		if site_info.address == @address
 			@site_info = site_info
+			if @server_info?.rev > 3460
+				@reloadAnnouncerInfo()
 		@site_list.onSiteInfo(site_info)
 		@feed_list.onSiteInfo(site_info)
 		@page_files.onSiteInfo(site_info)
@@ -204,6 +214,10 @@ class ZeroHello extends ZeroFrame
 
 	setServerInfo: (server_info) ->
 		@server_info = server_info
+		@projector.scheduleRender()
+
+	setAnnouncerInfo: (announcer_info) ->
+		@announcer_info = announcer_info
 		@projector.scheduleRender()
 
 	# Simple return false to avoid link clicks
