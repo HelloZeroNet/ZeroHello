@@ -60,7 +60,7 @@ class Head extends Class
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
 		@menu_settings.items.push ["---"]
-		@menu_settings.items.push [[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], @handleManageMutesClick]
+		@menu_settings.items.push [[h("div.icon-mute", ""), "Manage muted users"], @handleManageMutesClick]
 		@menu_settings.items.push ["Show data directory", @handleBackupClick]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
