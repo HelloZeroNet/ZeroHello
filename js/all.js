@@ -1854,7 +1854,7 @@
     };
 
     Dashboard.prototype.tagTrackersTitle = function() {
-      var key, num_ok, num_total, ref, ref1, ref2, status_db, title, val;
+      var key, num_ok, num_total, ref, ref1, status_db, title, val;
       num_ok = 0;
       num_total = 0;
       status_db = {
@@ -1865,7 +1865,7 @@
       ref1 = (ref = Page.announcer_info) != null ? ref.stats : void 0;
       for (key in ref1) {
         val = ref1[key];
-        if ((ref2 = val.status) === "announcing" || ref2 === "announced") {
+        if (val.status === "announced") {
           num_ok += 1;
         }
         num_total += 1;
@@ -2085,7 +2085,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -2671,22 +2670,25 @@
     function MuteList() {
       this.show = bind(this.show, this);
       this.render = bind(this.render, this);
+      this.renderIncludes = bind(this.renderIncludes, this);
+      this.renderSiteblocks = bind(this.renderSiteblocks, this);
+      this.renderMutes = bind(this.renderMutes, this);
+      this.storeNode = bind(this.storeNode, this);
+      this.afterUpdate = bind(this.afterUpdate, this);
+      this.handleIncludeRemoveClick = bind(this.handleIncludeRemoveClick, this);
       this.handleMuteRemoveClick = bind(this.handleMuteRemoveClick, this);
       this.handleHideClick = bind(this.handleHideClick, this);
       this.update = bind(this.update, this);
       this.mutes = null;
+      this.includes = null;
       this.visible = false;
-      Page.on_settings.then((function(_this) {
-        return function() {
-          return _this.need_update = true;
-        };
-      })(this));
-      this;
+      this.max_height = 0;
+      this.updated = false;
     }
 
     MuteList.prototype.update = function() {
       this.need_update = false;
-      return Page.cmd("MuteList", [], (function(_this) {
+      Page.cmd("MuteList", [], (function(_this) {
         return function(res) {
           var auth_address, mute;
           _this.mutes = [];
@@ -2699,13 +2701,57 @@
           _this.mutes.sort(function(a, b) {
             return b.date_added - a.date_added;
           });
+          if (!_this.max_height) {
+            _this.max_height = 100;
+          }
+          _this.updated = true;
+          return Page.projector.scheduleRender();
+        };
+      })(this));
+      return Page.cmd("FilterIncludeList", {
+        all_sites: true,
+        filters: true
+      }, (function(_this) {
+        return function(res) {
+          var address, auth_address, i, include, len, mute, mutes, ref, ref1, siteblock, siteblocks;
+          _this.includes = [];
+          for (i = 0, len = res.length; i < len; i++) {
+            include = res[i];
+            include.site = Page.site_list.sites_byaddress[include.address];
+            mutes = [];
+            if (include.mutes != null) {
+              ref = include.mutes;
+              for (auth_address in ref) {
+                mute = ref[auth_address];
+                mute.auth_address = auth_address;
+                mutes.push(mute);
+              }
+            }
+            include.mutes = mutes;
+            siteblocks = [];
+            if (include.siteblocks != null) {
+              ref1 = include.siteblocks;
+              for (address in ref1) {
+                siteblock = ref1[address];
+                siteblock.address = address;
+                siteblocks.push(siteblock);
+              }
+            }
+            include.siteblocks = siteblocks;
+            _this.includes.push(include);
+          }
+          _this.includes.sort(function(a, b) {
+            return b.date_added - a.date_added;
+          });
+          _this.updated = true;
           return Page.projector.scheduleRender();
         };
       })(this));
     };
 
     MuteList.prototype.handleHideClick = function() {
-      return this.visible = false;
+      this.visible = false;
+      return this.max_height = 0;
     };
 
     MuteList.prototype.handleMuteRemoveClick = function(e) {
@@ -2720,8 +2766,121 @@
       return false;
     };
 
+    MuteList.prototype.handleIncludeRemoveClick = function(e) {
+      var include;
+      include = e.target.include;
+      if (include.removed) {
+        Page.cmd("filterIncludeAdd", [include.inner_path, include.description, include.address]);
+      } else {
+        Page.cmd("filterIncludeRemove", {
+          inner_path: include.inner_path,
+          address: include.address
+        });
+      }
+      include.removed = !include.removed;
+      return false;
+    };
+
+    MuteList.prototype.afterUpdate = function() {
+      this.updated = false;
+      if (this.node) {
+        this.max_height = this.node.offsetHeight + 100;
+        return Page.projector.scheduleRender();
+      }
+    };
+
+    MuteList.prototype.storeNode = function(node) {
+      return this.node = node;
+    };
+
+    MuteList.prototype.renderMutes = function(mutes, mode) {
+      if (mode == null) {
+        mode = "mutes";
+      }
+      return h("div.mutes", [
+        h("div.mute.mute-head", [
+          h("div.mute-col", "Muted user"), h("div.mute-col", {
+            style: "width: 66%"
+          }, "Why?")
+        ]), mutes.map((function(_this) {
+          return function(mute) {
+            return h("div.mute", {
+              key: mute.auth_address,
+              classes: {
+                removed: mute.removed
+              }
+            }, [
+              h("div.mute-col", [h("div.cert_user_id", mute.cert_user_id), h("div.auth_address", mute.auth_address)]), h("div.mute-col", {
+                style: "width: 66%"
+              }, [
+                h("div.source", mute.site != null ? mute.site.row.content.title : mute.source), h("div.reason", {
+                  innerHTML: Text.renderMarked(mute.reason)
+                }), h("div.date_added", " \u2500 " + Time.since(mute.date_added))
+              ]), mode === "mutes" ? h("a.action", {
+                href: "#Unmute",
+                onclick: _this.handleMuteRemoveClick,
+                mute: mute
+              }, "×") : void 0
+            ]);
+          };
+        })(this))
+      ]);
+    };
+
+    MuteList.prototype.renderSiteblocks = function(siteblocks) {
+      return h("div.siteblocks", [
+        h("div.mute.mute-head", [
+          h("div.mute-col", "Blocked site"), h("div.mute-col", {
+            style: "width: 66%"
+          }, "Why?")
+        ]), siteblocks.map((function(_this) {
+          return function(siteblock) {
+            return h("div.mute", {
+              key: siteblock.address,
+              classes: {
+                removed: siteblock.removed
+              }
+            }, [
+              h("div.mute-col", [h("div.cert_user_id", siteblock.name), h("div.auth_address", siteblock.address)]), h("div.mute-col", {
+                style: "width: 66%"
+              }, [
+                h("div.reason", {
+                  innerHTML: Text.renderMarked(siteblock.reason)
+                }), h("div.date_added", " \u2500 " + Time.since(siteblock.date_added))
+              ])
+            ]);
+          };
+        })(this))
+      ]);
+    };
+
+    MuteList.prototype.renderIncludes = function() {
+      return h("div.includes", [
+        this.includes.map((function(_this) {
+          return function(include) {
+            return h("div.include", {
+              key: include.address + include.inner_path,
+              classes: {
+                removed: include.removed
+              }
+            }, [
+              h("h2", h("a.site", {
+                href: include.site.getHref()
+              }, include.site.row.content.title), " \u203A ", h("a.inner_path", {
+                href: "#"
+              }, include.inner_path)), h("a.action", {
+                href: "#Remove+include",
+                onclick: _this.handleIncludeRemoveClick,
+                include: include
+              }, "×"), include.mutes.length ? _this.renderMutes(include.mutes, "includes") : void 0, include.siteblocks.length ? _this.renderSiteblocks(include.siteblocks) : void 0
+            ]);
+          };
+        })(this))
+      ]);
+    };
+
     MuteList.prototype.render = function() {
-      var max_height;
+      var ref, ref1;
       if (this.need_update) {
         this.update();
       }
@@ -2732,54 +2891,33 @@
           }
         }, "Muted");
       }
-      if (this.visible) {
-        max_height = 100 + this.mutes.length * 70;
-      } else {
-        max_height = 0;
+      if (this.updated) {
+        this.updated = false;
+        setTimeout(this.afterUpdate);
       }
       return h("div#MuteList", {
         classes: {
           visible: this.visible
         },
-        style: "max-height: " + max_height + "px"
+        style: "max-height: " + this.max_height + "px"
       }, [
         h("a.mute-hide", {
           href: "#Hide",
           onclick: this.handleHideClick
-        }, "\u2039 Back to feed"), this.mutes.length === 0 ? h("div.mute-empty", "Your mute list is empty! :)") : [
-          h("div.mute.mute-head", [
-            h("div.mute-col", "Muted user"), h("div.mute-col", {
-              style: "width: 66%"
-            }, "Why?")
-          ]), this.mutes.map((function(_this) {
-            return function(mute) {
-              return h("div.mute", {
-                key: mute.auth_address,
-                classes: {
-                  removed: mute.removed
-                }
-              }, [
-                h("div.mute-col", [h("div.cert_user_id", mute.cert_user_id), h("div.auth_address", mute.auth_address)]), h("div.mute-col", {
-                  style: "width: 66%"
-                }, [
-                  h("div.source", mute.site != null ? mute.site.row.content.title : mute.source), h("div.reason", {
-                    innerHTML: Text.renderMarked(mute.reason)
-                  }), h("div.date_added", " \u2500 " + Time.since(mute.date_added))
-                ]), h("a.action", {
-                  href: "#Unmute",
-                  onclick: _this.handleMuteRemoveClick,
-                  mute: mute
-                }, "×")
-              ]);
-            };
-          })(this))
-        ]
+        }, "\u2039 Back to feed"), ((ref = this.mutes) != null ? ref.length : void 0) === 0 && ((ref1 = this.includes) != null ? ref1.length : void 0) === 0 ? h("div.mute-empty", "Your mute list is empty! :)") : h("div", {
+          afterCreate: this.storeNode
+        }, [this.mutes.length > 0 ? this.renderMutes(this.mutes) : void 0, this.includes ? this.renderIncludes() : void 0])
       ]);
     };
 
     MuteList.prototype.show = function() {
       this.visible = true;
-      this.need_update = true;
+      Page.site_list.on_loaded.then((function(_this) {
+        return function() {
+          _this.log("sitelistloaded");
+          return _this.need_update = true;
+        };
+      })(this));
       return Page.projector.scheduleRender();
     };
 
@@ -2790,6 +2928,7 @@
   window.MuteList = MuteList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Site.coffee ---- */
@@ -3284,6 +3423,7 @@
       this.sites_byaddress = this.item_list.items_bykey;
       this.inactive_demo_sites = null;
       this.loaded = false;
+      this.on_loaded = new Promise();
       this.schedule_reorder = false;
       this.merged_db = {};
       this.filtering = "";
@@ -3345,7 +3485,9 @@
             _this.updateInactiveDemoSites();
           }
           Page.projector.scheduleRender();
-          return _this.loaded = true;
+          _this.loaded = true;
+          _this.log("loaded");
+          return _this.on_loaded.resolve();
         };
       })(this));
       return this;
@@ -6192,7 +6334,6 @@
       this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
       this.onRequest = bind(this.onRequest, this);
       this.onMessage = bind(this.onMessage, this);
-      this.handleBeforeunload = bind(this.handleBeforeunload, this);
       this.url = url;
       this.waiting_cb = {};
       this.wrapper_nonce = document.location.href.replace(/.*wrapper_nonce=([A-Za-z0-9]+).*/, "$1");
@@ -6206,34 +6347,17 @@
       return this;
     };
 
-    ZeroFrame.prototype.handleBeforeunload = function(e) {
-      this.log("beforeunload save scrollTop", window.pageYOffset);
-      this.history_state["scrollTop"] = window.pageYOffset;
-      return this.cmd("wrapperReplaceState", [this.history_state, null]);
-
-      /*
-      		message = {"cmd": "wrapperReplaceState", "params": [@history_state, null]}
-      		message.wrapper_nonce = @wrapper_nonce
-      		message.id = @next_message_id
-      		@next_message_id += 1
-      		@target.postMessage(message, "*")
-      		window.removeEventListener "beforeunload", @handleBeforeunload
-       */
-
-      /*console.log document.activeElement
-      		if document.activeElement.href
-      			setTimeout (->
-      				window.top.location = document.activeElement.href
-      				console.log "Going to", document.activeElement.href
-      			), 1
-       */
-    };
-
     ZeroFrame.prototype.connect = function() {
       this.target = window.parent;
       window.addEventListener("message", this.onMessage, false);
       this.cmd("innerReady");
-      window.addEventListener("beforeunload", this.handleBeforeunload);
+      window.addEventListener("beforeunload", (function(_this) {
+        return function(e) {
+          _this.log("save scrollTop", window.pageYOffset);
+          _this.history_state["scrollTop"] = window.pageYOffset;
+          return _this.cmd("wrapperReplaceState", [_this.history_state, null]);
+        };
+      })(this));
       return this.cmd("wrapperGetState", [], (function(_this) {
         return function(state) {
           if (state != null) {
@@ -6459,7 +6583,7 @@
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
-      this.menu_settings.items.push([[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], this.handleManageMutesClick]);
+      this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage muted users"], this.handleManageMutesClick]);
       this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);

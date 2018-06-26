@@ -257,26 +257,37 @@
 .mute { padding: 10px 40px; border-top: 1px solid #EEE; padding-right: 60px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 .mute.removed { opacity: 0.5; background-color: #EEE }
 .mute.mute-head { font-weight: lighter; border-top: none }
-.mute .mute-col { display: inline-block; width: 32%; max-width: 400px; margin-right: 10px; overflow: hidden; margin-right: 5px }
+.mute .mute-col { display: inline-block; width: 32%; max-width: 400px; margin-right: 10px; overflow: hidden; margin-right: 5px; vertical-align: top; white-space: normal; }
 .mute .cert_user_id { font-size: 18px; color: #2b333d; }
 .mute .auth_address { color: #99a3a7; font-size: 13px; font-family: monospace; overflow: hidden; padding-right: 25px; text-overflow: ellipsis; }
 .mute .reason { font-size: 13px; color: #99a3a7; display: inline; }
 .mute .reason p { display: inline }
 .mute .reason a { color: inherit; }
 .mute .date_added { font-size: 13px; display: inline; color: #99a3a7; font-weight: lighter; }
-.mute .action {
+
+#MuteList .action {
 	display: inline-block; font-size: 24px; vertical-align: 10px; color: #999; font-weight: lighter; text-decoration: none;
 	-webkit-transition: all 0.6s; -moz-transition: all 0.6s; -o-transition: all 0.6s; -ms-transition: all 0.6s; transition: all 0.6s ; padding: 0px 20px; padding-bottom: 5px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; transform: rotateZ(0deg)
 }
-.mute.removed .action { -webkit-transform: rotateZ(45deg); -moz-transform: rotateZ(45deg); -o-transform: rotateZ(45deg); -ms-transform: rotateZ(45deg); transform: rotateZ(45deg) ; }
-.mute .action:hover { color: red; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
-.mute .action:focus { -webkit-transition: all 0.6s ; -moz-transition: all 0.6s ; -o-transition: all 0.6s ; -ms-transition: all 0.6s ; transition: all 0.6s  }
+#MuteList .removed .action { -webkit-transform: rotateZ(45deg); -moz-transform: rotateZ(45deg); -o-transform: rotateZ(45deg); -ms-transform: rotateZ(45deg); transform: rotateZ(45deg) ; }
+#MuteList .action:hover { color: red; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
+#MuteList .action:focus { -webkit-transition: all 0.6s ; -moz-transition: all 0.6s ; -o-transition: all 0.6s ; -ms-transition: all 0.6s ; transition: all 0.6s  }
 
 .mute-hide { color: #797e85; text-transform: uppercase; padding: 30px 26px; display: inline-block; text-decoration: none; letter-spacing: 2px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 .mute-hide:hover { color: #000 }
 .mute-hide:hover { opacity: 1; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
 .mute-hide:active { background-color: #F0F0F0; outline: 5px #F0F0F0; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
 .mute-hide:focus { -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+
+#MuteList .include { margin-top: 50px; padding-left: 40px; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+#MuteList .include.removed { opacity: 0.5; background-color: #EEE }
+#MuteList .include h2 { padding: 10px 0px; font-size: 24px; display: inline-block; }
+#MuteList .include h2:before { content: "\203A"; position: absolute; margin-left: -20px; -webkit-transform: rotate(90deg) scaleY(0.8); -moz-transform: rotate(90deg) scaleY(0.8); -o-transform: rotate(90deg) scaleY(0.8); -ms-transform: rotate(90deg) scaleY(0.8); transform: rotate(90deg) scaleY(0.8) ; }
+#MuteList .include h2 a { color: #333; text-decoration: none; }
+#MuteList .include h2 a:hover { border-bottom: 1px solid #EEE; }
+#MuteList .include h2 .inner_path { font-size: 19px; }
+#MuteList .include .mute { padding: 10px 0px;  }
+#MuteList .include .action { vertical-align: 0px;  }
 
 
 
@@ -829,6 +840,12 @@ body.changing { overflow-y: scroll; }
 	display: inline-block; width: 16px; height: 16px; background-repeat: no-repeat;
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAOVBMVEUAAAC9w8e9w8e9w8e9w8e/xMi9w8e9w8e+w8e9w8e9w8e9w8e9w8e9w8e9w8e+w8e/xMi9w8e9w8fvY4+KAAAAEnRSTlMASPv3WQbwOTCkt4/psX4YDMWr+RRCAAAAUUlEQVQY06XLORKAMAxDUTs7kA3d/7AYGju0UfffjIgoHkxm0vB5bZyxKHx9eX0FJw0Y4bcXKQ4/CTtS5yqp5GFFOjGpVGl00k1pNDIb3Nv9AHC7BOZC4ZjvAAAAAElFTkSuQmCC+d0ckOwyAMRVGHUOO0gUyd+P8f7WApz4Iki9wFmyOEATrXLZcFp5LrGogPOxKp6zfFf9fZ1/I/cY7YZSS3U6S3XFZJmGBwL+FuJX/F1K0wUUlZyZGlXgXESthTEs4B8fh7xoVUDPGYJnsfkCRarKAgz8cAKbpD6pqDPz3XB8K6HdUEeN9NAAAAAElFTkSuQmCC');
 }
+.icon-mute {width: 7px; height: 6px; background: currentColor; margin: 7px 0 0 0px; position: relative; display: inline-block; margin-right: 17px; vertical-align: 2px; opacity: 0.8; }
+.icon-mute:after {
+	content: ''; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent currentColor transparent transparent; border-width: 7px 8px 7px 11px; left: -11px; top: -4px;
+}
+.icon-mute:before {content: '\00D7'; position: absolute; margin-left: 11px; top: -3px; font-size: 11px; }
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/mobile.css ---- */
