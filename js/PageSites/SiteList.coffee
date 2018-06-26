@@ -5,6 +5,7 @@ class SiteList extends Class
 		@sites_byaddress = @item_list.items_bykey
 		@inactive_demo_sites = null
 		@loaded = false
+		@on_loaded = new Promise()
 		@schedule_reorder = false
 		@merged_db = {}
 		@filtering = ""
@@ -54,6 +55,8 @@ class SiteList extends Class
 				@updateInactiveDemoSites()
 			Page.projector.scheduleRender()
 			@loaded = true
+			@log "loaded"
+			@on_loaded.resolve()
 		@
 
 	updateInactiveDemoSites: ->
