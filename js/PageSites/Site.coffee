@@ -148,6 +148,7 @@ class Site extends Class
 			@menu.items.push ["Pause", @handlePauseClick]
 		else
 			@menu.items.push ["Resume", @handleResumeClick]
+		@menu.items.push ["Save as .zip", "/ZeroNet-Internal/Zip?address=#{@row.address}"]
 		if @row.content.cloneable == true
 			@menu.items.push ["Clone", @handleCloneClick]
 		if @row.settings.own and @row.content.cloned_from and Page.server_info.rev >= 2080
