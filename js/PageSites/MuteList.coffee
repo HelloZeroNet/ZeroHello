@@ -5,6 +5,10 @@ class MuteList extends Class
 		@visible = false
 		@max_height = 0
 		@updated = false
+		@siteblocks_serving = []
+		Page.site_list.on_loaded.then =>
+			@updateFilterIncludes()
+		@
 
 	update: =>
 		@need_update = false
@@ -24,7 +28,11 @@ class MuteList extends Class
 			@updated = true
 			Page.projector.scheduleRender()
 
+		@updateFilterIncludes()
+
+	updateFilterIncludes: =>
 		Page.cmd "FilterIncludeList", {all_sites: true, filters: true}, (res) =>
+			@siteblocks_serving = []
 			@includes = []
 			for include in res
 				include.site = Page.site_list.sites_byaddress[include.address]
@@ -41,6 +49,10 @@ class MuteList extends Class
 					for address, siteblock of include.siteblocks
 						siteblock.address = address
 						siteblocks.push(siteblock)
+
+						if Page.site_list.sites_byaddress[address]
+							siteblock.site = Page.site_list.sites_byaddress[address]
+							@siteblocks_serving.push(siteblock)
 				include.siteblocks = siteblocks
 
 				@includes.push(include)

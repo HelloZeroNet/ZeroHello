@@ -340,6 +340,16 @@ class FeedList extends Class
 			h("td.taken", (if stat.taken? then stat.taken + "s" else "n/a "))
 		])
 
+	renderNotifications: =>
+		h("div.notifications", [
+			Page.mute_list.siteblocks_serving.map (siteblock) =>
+				h("div.notification", [
+					"You are serving a blocked site: ",
+					h("a.site", {href: siteblock.site.getHref()}, siteblock.site.row.content.title),
+					h("span.reason", [h("b", "Reason: "), siteblock.reason])
+				])
+		])
+
 	getClass: =>
 		if @searching != null
 			return "search"
@@ -358,6 +368,8 @@ class FeedList extends Class
 				document.body.className = "loaded"
 
 		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
+			if Page.mute_list.siteblocks_serving.length > 0
+				@renderNotifications()
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null
