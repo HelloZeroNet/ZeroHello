@@ -63,9 +63,9 @@ class MuteList extends Class
 			@updated = true
 			Page.projector.scheduleRender()
 
-
 	handleHideClick: =>
 		@visible = false
+		@updateFilterIncludes()
 		@max_height = 0
 
 	handleMuteRemoveClick: (e) =>
@@ -92,7 +92,7 @@ class MuteList extends Class
 
 	afterUpdate: =>
 		@updated = false
-		if @node
+		if @node and @visible
 			@max_height = @node.offsetHeight + 100
 			Page.projector.scheduleRender()
 
@@ -181,7 +181,6 @@ class MuteList extends Class
 	show: =>
 		@visible = true
 		Page.site_list.on_loaded.then =>
-			@log "sitelistloaded"
 			@need_update = true
 		Page.projector.scheduleRender()
 
