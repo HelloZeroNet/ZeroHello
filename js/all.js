@@ -2103,6 +2103,7 @@
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
       this.getClass = bind(this.getClass, this);
+      this.renderNotifications = bind(this.renderNotifications, this);
       this.renderSearchStat = bind(this.renderSearchStat, this);
       this.renderWelcome = bind(this.renderWelcome, this);
       this.renderFeed = bind(this.renderFeed, this);
@@ -2541,6 +2542,20 @@
       ]);
     };
 
+    FeedList.prototype.renderNotifications = function() {
+      return h("div.notifications", [
+        Page.mute_list.siteblocks_serving.map((function(_this) {
+          return function(siteblock) {
+            return h("div.notification", [
+              "You are serving a blocked site: ", h("a.site", {
+                href: siteblock.site.getHref()
+              }, siteblock.site.row.content.title), h("span.reason", [h("b", "Reason: "), siteblock.reason])
+            ]);
+          };
+        })(this))
+      ]);
+    };
+
     FeedList.prototype.getClass = function() {
       if (this.searching !== null) {
         return "search";
@@ -2568,7 +2583,7 @@
         classes: {
           faded: Page.mute_list.visible
         }
-      }, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
+      }, Page.mute_list.siteblocks_serving.length > 0 ? this.renderNotifications() : void 0, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
         h("div.feeds-filters", [
           h("a.feeds-filter", {
             href: "#all",
@@ -2678,12 +2693,20 @@
       this.handleIncludeRemoveClick = bind(this.handleIncludeRemoveClick, this);
       this.handleMuteRemoveClick = bind(this.handleMuteRemoveClick, this);
       this.handleHideClick = bind(this.handleHideClick, this);
+      this.updateFilterIncludes = bind(this.updateFilterIncludes, this);
       this.update = bind(this.update, this);
       this.mutes = null;
       this.includes = null;
       this.visible = false;
       this.max_height = 0;
       this.updated = false;
+      this.siteblocks_serving = [];
+      Page.site_list.on_loaded.then((function(_this) {
+        return function() {
+          return _this.updateFilterIncludes();
+        };
+      })(this));
+      this;
     }
 
     MuteList.prototype.update = function() {
@@ -2708,12 +2731,17 @@
           return Page.projector.scheduleRender();
         };
       })(this));
+      return this.updateFilterIncludes();
+    };
+
+    MuteList.prototype.updateFilterIncludes = function() {
       return Page.cmd("FilterIncludeList", {
         all_sites: true,
         filters: true
       }, (function(_this) {
         return function(res) {
           var address, auth_address, i, include, len, mute, mutes, ref, ref1, siteblock, siteblocks;
+          _this.siteblocks_serving = [];
           _this.includes = [];
           for (i = 0, len = res.length; i < len; i++) {
             include = res[i];
@@ -2735,6 +2763,10 @@
                 siteblock = ref1[address];
                 siteblock.address = address;
                 siteblocks.push(siteblock);
+                if (Page.site_list.sites_byaddress[address]) {
+                  siteblock.site = Page.site_list.sites_byaddress[address];
+                  _this.siteblocks_serving.push(siteblock);
+                }
               }
             }
             include.siteblocks = siteblocks;
@@ -2751,6 +2783,7 @@
 
     MuteList.prototype.handleHideClick = function() {
       this.visible = false;
+      this.updateFilterIncludes();
       return this.max_height = 0;
     };
 
@@ -2783,7 +2816,7 @@
 
     MuteList.prototype.afterUpdate = function() {
       this.updated = false;
-      if (this.node) {
+      if (this.node && this.visible) {
         this.max_height = this.node.offsetHeight + 100;
         return Page.projector.scheduleRender();
       }
@@ -2914,7 +2947,6 @@
       this.visible = true;
       Page.site_list.on_loaded.then((function(_this) {
         return function() {
-          _this.log("sitelistloaded");
           return _this.need_update = true;
         };
       })(this));
@@ -3173,6 +3205,7 @@
       } else {
         this.menu.items.push(["Resume", this.handleResumeClick]);
       }
+      this.menu.items.push(["Save as .zip", "/ZeroNet-Internal/Zip?address=" + this.row.address]);
       if (this.row.content.cloneable === true) {
         this.menu.items.push(["Clone", this.handleCloneClick]);
       }
