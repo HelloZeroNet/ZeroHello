@@ -575,7 +575,7 @@
 .FeedContainer a.nolink:active { background-color: initial; outline: initial }
 .FeedContainer.faded { opacity: 0.2 }
 
-.FeedContainer .notifications { margin-bottom: 40px; z-index: 999; position: relative; }
+.FeedContainer .notifications { margin-bottom: 40px; position: relative; }
 .FeedContainer .notification { padding: 25px; background-color: #e7eff5; font-weight: lighter; background: -webkit-linear-gradient(75deg, #ede7f0,#e9eef5);background: -moz-linear-gradient(75deg, #ede7f0,#e9eef5);background: -o-linear-gradient(75deg, #ede7f0,#e9eef5);background: -ms-linear-gradient(75deg, #ede7f0,#e9eef5);background: linear-gradient(75deg, #ede7f0,#e9eef5); }
 .FeedContainer .notification .site { color: #4c4c4c; font-weight: bold; margin-right: 15px; }
 .FeedContainer .notification .reason { display:inline-block; background-color: #ffffff; padding: 5px 15px; }
@@ -605,7 +605,7 @@
 .search-info-stats .extra-slow .taken { background-color: #FFE9E2 }
 .search-info-stats .slow .taken { color: #FF5722 }
 
-.feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px }
+.feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px; z-index: -1; }
 /*.loader { background: url("../img/loading-ring.gif") no-repeat; width: 28px; height: 28px; position: absolute; right: -30px; top: -30px }*/
 .FeedList { margin-top: 50px; position: relative; max-width: 820px; overflow: hidden }
 .FeedList.loading { opacity: 0.5; -webkit-transition: all 1s ease-out ; -moz-transition: all 1s ease-out ; -o-transition: all 1s ease-out ; -ms-transition: all 1s ease-out ; transition: all 1s ease-out  }

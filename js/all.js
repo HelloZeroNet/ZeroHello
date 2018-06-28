@@ -2783,7 +2783,11 @@
 
     MuteList.prototype.handleHideClick = function() {
       this.visible = false;
-      this.updateFilterIncludes();
+      setTimeout(((function(_this) {
+        return function() {
+          return _this.updateFilterIncludes();
+        };
+      })(this)), 1000);
       return this.max_height = 0;
     };
 
@@ -3166,7 +3170,7 @@
                   Page.cmd("siteDelete", {
                     "address": _this.row.address
                   });
-                  Page.cmd("blacklistAdd", [_this.row.address, reason]);
+                  Page.cmd("siteblockAdd", [_this.row.address, reason]);
                   _this.item_list.deleteItem(_this);
                   return Page.projector.scheduleRender();
                 });
@@ -3426,6 +3430,7 @@
   window.Site = Site;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/SiteList.coffee ---- */
@@ -3784,7 +3789,6 @@
   window.Trigger = Trigger;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/Chart.coffee ---- */
@@ -6500,7 +6504,7 @@
       this.handleModeClick = bind(this.handleModeClick, this);
       this.handleShutdownZeronetClick = bind(this.handleShutdownZeronetClick, this);
       this.handleUpdateZeronetClick = bind(this.handleUpdateZeronetClick, this);
-      this.handleManageMutesClick = bind(this.handleManageMutesClick, this);
+      this.handleManageBlocksClick = bind(this.handleManageBlocksClick, this);
       this.handleTorClick = bind(this.handleTorClick, this);
       this.handleOrderbyClick = bind(this.handleOrderbyClick, this);
       this.handleUpdateAllClick = bind(this.handleUpdateAllClick, this);
@@ -6616,7 +6620,7 @@
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
-      this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage muted users"], this.handleManageMutesClick]);
+      this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage blocked users and sites"], this.handleManageBlocksClick]);
       this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
@@ -6655,7 +6659,7 @@
       return true;
     };
 
-    Head.prototype.handleManageMutesClick = function() {
+    Head.prototype.handleManageBlocksClick = function() {
       if (Page.server_info.rev < 1880) {
         return Page.cmd("wrapperNotification", ["info", "You need ZeroNet 0.5.2 to use this feature."]);
       }
