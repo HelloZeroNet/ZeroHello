@@ -577,8 +577,12 @@
 
 .FeedContainer .notifications { margin-bottom: 40px; z-index: 999; position: relative; }
 .FeedContainer .notification { padding: 25px; background-color: #e7eff5; font-weight: lighter; background: -webkit-linear-gradient(75deg, #ede7f0,#e9eef5);background: -moz-linear-gradient(75deg, #ede7f0,#e9eef5);background: -o-linear-gradient(75deg, #ede7f0,#e9eef5);background: -ms-linear-gradient(75deg, #ede7f0,#e9eef5);background: linear-gradient(75deg, #ede7f0,#e9eef5); }
-.FeedContainer .notification .site { color: #4c4c4c; font-weight: bold; }
-.FeedContainer .notification .reason { margin-left: 15px; background-color: #ffffff; padding: 5px 15px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; -ms-border-radius: 20px; border-radius: 20px ; }
+.FeedContainer .notification .site { color: #4c4c4c; font-weight: bold; margin-right: 15px; }
+.FeedContainer .notification .reason { display:inline-block; background-color: #ffffff; padding: 5px 15px; }
+.FeedContainer .notification .reason:before {
+	content: ""; display: inline-block; margin-left: -33px; position: absolute;
+	border: 12px solid transparent; border-right: white 12px solid;
+}
 
 .feeds-filters { margin-top: -25px; margin-left: 25px; max-width: 100% }
 .feeds-filter { padding: 5px 15px; color: #5d5d5d; text-transform: uppercase; font-size: 13px; text-decoration: none; margin-right: 5px; opacity: 0.6; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; border-bottom: 2px solid rgba(0,0,0,0); display: inline-block }
