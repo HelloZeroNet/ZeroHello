@@ -60,7 +60,7 @@ class Head extends Class
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
 		@menu_settings.items.push ["---"]
-		@menu_settings.items.push [[h("div.icon-mute", ""), "Manage muted users"], @handleManageMutesClick]
+		@menu_settings.items.push [[h("div.icon-mute", ""), "Manage blocked users and sites"], @handleManageBlocksClick]
 		@menu_settings.items.push ["Show data directory", @handleBackupClick]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
@@ -84,7 +84,7 @@ class Head extends Class
 	handleTorClick: =>
 		return true
 
-	handleManageMutesClick: =>
+	handleManageBlocksClick: =>
 		if Page.server_info.rev < 1880
 			return Page.cmd "wrapperNotification", ["info", "You need ZeroNet 0.5.2 to use this feature."]
 
