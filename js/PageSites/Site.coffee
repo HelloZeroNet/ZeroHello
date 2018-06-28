@@ -125,7 +125,7 @@ class Site extends Class
 					else if confirmed == 2
 						Page.cmd "wrapperPrompt", ["Blacklist <b>#{@row.content.title}</b>", "text", "Delete and Blacklist", "Reason"], (reason) =>
 							Page.cmd "siteDelete", {"address": @row.address}
-							Page.cmd "blacklistAdd", [@row.address, reason]
+							Page.cmd "siteblockAdd", [@row.address, reason]
 							@item_list.deleteItem(@)
 							Page.projector.scheduleRender()
 			else
