@@ -65,7 +65,9 @@ class MuteList extends Class
 
 	handleHideClick: =>
 		@visible = false
-		@updateFilterIncludes()
+		setTimeout (=>
+			@updateFilterIncludes()
+		), 1000
 		@max_height = 0
 
 	handleMuteRemoveClick: (e) =>
