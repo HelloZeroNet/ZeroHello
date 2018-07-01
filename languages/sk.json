@@ -61,6 +61,8 @@
 	"Pause": "Pozastaviť",
 	"Check files": "Kontrola súborov",
 	"Delete": "Vymazať",
+	"Save as .zip": "Uložiť ako .zip",
+
 	"Sorry, you can't delete your own site.<br>Please remove the directory manually.": "Prepáčte, nieje možné vymazať vašu vlastnú stránku<br>Prosím vymažte zložku stránky manuálne.",
 
 	"Search in connected sites": "Vyhľadávať v pripojených stránkach",
