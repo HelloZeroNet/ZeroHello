@@ -340,13 +340,21 @@ class FeedList extends Class
 			h("td.taken", (if stat.taken? then stat.taken + "s" else "n/a "))
 		])
 
+	handleNotificationHideClick: (e) =>
+		address = e.target.getAttribute("address")
+		Page.settings.siteblocks_ignore[address] = true
+		Page.mute_list.update()
+		Page.saveSettings()
+		return false
+
 	renderNotifications: =>
-		h("div.notifications", [
+		h("div.notifications", {classes: {empty: Page.mute_list.siteblocks_serving.length == 0}}, [
 			Page.mute_list.siteblocks_serving.map (siteblock) =>
-				h("div.notification", [
+				h("div.notification", {key: siteblock.address, enterAnimation: Animation.show, exitAnimation: Animation.slideUpInout}, [
 					"You are serving a blocked site: ",
 					h("a.site", {href: siteblock.site.getHref()}, siteblock.site.row.content.title),
-					h("span.reason", [h("b", "Reason: "), siteblock.reason])
+					h("span.reason", [h("b", "Reason: "), siteblock.reason]),
+					h("a.hide", {href: "#Hide", onclick: @handleNotificationHideClick, address: siteblock.address}, "\u00D7")
 				])
 		])
 
@@ -368,8 +376,7 @@ class FeedList extends Class
 				document.body.className = "loaded"
 
 		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
-			if Page.mute_list.siteblocks_serving.length > 0
-				@renderNotifications()
+			if Page.mute_list.updated then @renderNotifications()
 			if @feeds == null or not Page.site_list.loaded
 				h("div.loading")
 			else if @feeds.length > 0 or @searching != null

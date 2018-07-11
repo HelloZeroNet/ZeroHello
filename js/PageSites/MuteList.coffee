@@ -50,7 +50,7 @@ class MuteList extends Class
 						siteblock.address = address
 						siteblocks.push(siteblock)
 
-						if Page.site_list.sites_byaddress[address]
+						if Page.site_list.sites_byaddress[address] and not Page.settings.siteblocks_ignore[address]
 							siteblock.site = Page.site_list.sites_byaddress[address]
 							@siteblocks_serving.push(siteblock)
 				include.siteblocks = siteblocks

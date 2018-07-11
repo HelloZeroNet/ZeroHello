@@ -153,6 +153,7 @@ class ZeroHello extends ZeroFrame
 					@settings = res
 					@settings.sites_orderby ?= "peers"
 					@settings.favorite_sites ?= {}
+					@settings.siteblocks_ignore ?= {}
 					@on_settings.resolve(@settings)
 
 	loadLocalStorage: ->

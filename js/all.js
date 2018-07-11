@@ -2104,6 +2104,7 @@
       this.render = bind(this.render, this);
       this.getClass = bind(this.getClass, this);
       this.renderNotifications = bind(this.renderNotifications, this);
+      this.handleNotificationHideClick = bind(this.handleNotificationHideClick, this);
       this.renderSearchStat = bind(this.renderSearchStat, this);
       this.renderWelcome = bind(this.renderWelcome, this);
       this.renderFeed = bind(this.renderFeed, this);
@@ -2542,14 +2543,35 @@
       ]);
     };
 
+    FeedList.prototype.handleNotificationHideClick = function(e) {
+      var address;
+      address = e.target.getAttribute("address");
+      Page.settings.siteblocks_ignore[address] = true;
+      Page.mute_list.update();
+      Page.saveSettings();
+      return false;
+    };
+
     FeedList.prototype.renderNotifications = function() {
-      return h("div.notifications", [
+      return h("div.notifications", {
+        classes: {
+          empty: Page.mute_list.siteblocks_serving.length === 0
+        }
+      }, [
         Page.mute_list.siteblocks_serving.map((function(_this) {
           return function(siteblock) {
-            return h("div.notification", [
+            return h("div.notification", {
+              key: siteblock.address,
+              enterAnimation: Animation.show,
+              exitAnimation: Animation.slideUpInout
+            }, [
               "You are serving a blocked site: ", h("a.site", {
                 href: siteblock.site.getHref()
-              }, siteblock.site.row.content.title), h("span.reason", [h("b", "Reason: "), siteblock.reason])
+              }, siteblock.site.row.content.title), h("span.reason", [h("b", "Reason: "), siteblock.reason]), h("a.hide", {
+                href: "#Hide",
+                onclick: _this.handleNotificationHideClick,
+                address: siteblock.address
+              }, "\u00D7")
             ]);
           };
         })(this))
@@ -2583,7 +2605,7 @@
         classes: {
           faded: Page.mute_list.visible
         }
-      }, Page.mute_list.siteblocks_serving.length > 0 ? this.renderNotifications() : void 0, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
+      }, Page.mute_list.updated ? this.renderNotifications() : void 0, this.feeds === null || !Page.site_list.loaded ? h("div.loading") : this.feeds.length > 0 || this.searching !== null ? [
         h("div.feeds-filters", [
           h("a.feeds-filter", {
             href: "#all",
@@ -2668,6 +2690,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
@@ -2763,7 +2786,7 @@
                 siteblock = ref1[address];
                 siteblock.address = address;
                 siteblocks.push(siteblock);
-                if (Page.site_list.sites_byaddress[address]) {
+                if (Page.site_list.sites_byaddress[address] && !Page.settings.siteblocks_ignore[address]) {
                   siteblock.site = Page.site_list.sites_byaddress[address];
                   _this.siteblocks_serving.push(siteblock);
                 }
@@ -3430,7 +3453,6 @@
   window.Site = Site;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/SiteList.coffee ---- */
@@ -6621,6 +6643,10 @@
       this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage blocked users and sites"], this.handleManageBlocksClick]);
+      if (Page.server_info.rev >= 3520) {
+        this.menu_settings.items.push([[h("div.icon-gear", "\u2699"), "Configuration"], "/Config"]);
+      }
+      this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
       this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
@@ -6924,7 +6950,7 @@
       return this.on_site_info.then((function(_this) {
         return function() {
           return _this.cmd("userGetSettings", [], function(res) {
-            var base1, base2;
+            var base1, base2, base3;
             if (!res || res.error) {
               return _this.loadLocalStorage();
             } else {
@@ -6934,6 +6960,9 @@
               }
               if ((base2 = _this.settings).favorite_sites == null) {
                 base2.favorite_sites = {};
+              }
+              if ((base3 = _this.settings).siteblocks_ignore == null) {
+                base3.siteblocks_ignore = {};
               }
               return _this.on_settings.resolve(_this.settings);
             }
