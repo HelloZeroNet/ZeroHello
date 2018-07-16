@@ -1854,7 +1854,7 @@
     };
 
     Dashboard.prototype.tagTrackersTitle = function() {
-      var key, num_ok, num_total, ref, ref1, status_db, title, val;
+      var key, num_ok, num_total, stats, status_db, title, val;
       num_ok = 0;
       num_total = 0;
       status_db = {
@@ -1862,15 +1862,19 @@
         error: [],
         announced: []
       };
-      ref1 = (ref = Page.announcer_info) != null ? ref.stats : void 0;
-      for (key in ref1) {
-        val = ref1[key];
+      if (Page.announcer_stats) {
+        stats = Page.announcer_stats;
+      } else {
+        stats = Page.announcer_info;
+      }
+      for (key in stats) {
+        val = stats[key];
         if (val.status === "announced") {
           num_ok += 1;
         }
         num_total += 1;
       }
-      title = num_ok + "/" + num_total + " OK";
+      title = num_ok + "/" + num_total;
       if (num_total === 0) {
         return h("span.status", "Waiting...");
       } else if (num_ok > num_total / 2) {
@@ -1998,11 +2002,16 @@
     };
 
     Dashboard.prototype.handleTrackersClick = function() {
-      var ref, ref1, request_taken, stat, status, success_percent, title, tracker_name, tracker_url;
+      var request_taken, stat, stats, status, success_percent, title, title_text, tracker_name, tracker_url;
+      if (Page.announcer_stats) {
+        stats = Page.announcer_stats;
+        Page.reloadAnnouncerStats();
+      } else {
+        stats = Page.announcer_info;
+      }
       this.menu_trackers.items = [];
-      ref1 = (ref = Page.announcer_info) != null ? ref.stats : void 0;
-      for (tracker_url in ref1) {
-        stat = ref1[tracker_url];
+      for (tracker_url in stats) {
+        stat = stats[tracker_url];
         tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1");
         success_percent = parseInt((stat.num_success / stat.num_request) * 100);
         status = stat.status.capitalize();
@@ -2010,9 +2019,13 @@
           request_taken = stat.time_status - stat.time_request;
           status += " in " + (request_taken.toFixed(2)) + "s";
         }
+        title_text = "Requests: " + stat.num_request;
+        if (stat.last_error) {
+          title_text += ", Last error: " + stat.last_error + " (" + (Time.since(stat.time_last_error)) + ")";
+        }
         title = [
           tracker_name, h("span.tracker-status", {
-            title: stat.last_error
+            title: title_text
           }, status + " (" + success_percent + "% success)")
         ];
         this.menu_trackers.items.push([title, "#"]);
@@ -2068,7 +2081,7 @@
           href: "#Tor",
           onmousedown: this.handleTorClick,
           onclick: Page.returnFalse
-        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"), Page.announcer_info ? h("a.dashboard-item.trackers", {
+        }, [h("span", "Tor: "), tor_title === "OK" ? this.isTorAlways() ? h("span.status.status-ok", "Always") : h("span.status.status-ok", "Available") : h("span.status.status-warning", tor_title)]), this.menu_tor.render(".menu-tor"), Page.announcer_info || Page.announcer_stats ? h("a.dashboard-item.trackers", {
           href: "#Trackers",
           onmousedown: this.handleTrackersClick,
           onclick: Page.returnFalse
@@ -2085,6 +2098,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -2690,7 +2704,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
@@ -6782,6 +6795,7 @@
     extend(ZeroHello, superClass);
 
     function ZeroHello() {
+      this.reloadAnnouncerStats = bind(this.reloadAnnouncerStats, this);
       this.reloadAnnouncerInfo = bind(this.reloadAnnouncerInfo, this);
       this.reloadServerInfo = bind(this.reloadServerInfo, this);
       this.reloadSiteInfo = bind(this.reloadSiteInfo, this);
@@ -6795,6 +6809,7 @@
       this.site_info = null;
       this.server_info = null;
       this.announcer_info = null;
+      this.announcer_stats = null;
       this.address = null;
       this.on_site_info = new Promise();
       this.on_settings = new Promise();
@@ -7039,7 +7054,18 @@
     ZeroHello.prototype.reloadAnnouncerInfo = function(cb) {
       return this.cmd("announcerInfo", {}, (function(_this) {
         return function(announcer_info) {
-          return _this.setAnnouncerInfo(announcer_info);
+          _this.setAnnouncerInfo(announcer_info);
+          return typeof cb === "function" ? cb() : void 0;
+        };
+      })(this));
+    };
+
+    ZeroHello.prototype.reloadAnnouncerStats = function(cb) {
+      return this.cmd("announcerStats", {}, (function(_this) {
+        return function(announcer_stats) {
+          _this.announcer_stats = announcer_stats;
+          Page.projector.scheduleRender();
+          return typeof cb === "function" ? cb() : void 0;
         };
       })(this));
     };
@@ -7057,10 +7083,12 @@
     };
 
     ZeroHello.prototype.setSiteInfo = function(site_info) {
-      var ref;
+      var ref, ref1;
       if (site_info.address === this.address) {
         this.site_info = site_info;
-        if (((ref = this.server_info) != null ? ref.rev : void 0) > 3460) {
+        if (((ref = this.server_info) != null ? ref.rev : void 0) > 3530) {
+          this.reloadAnnouncerStats();
+        } else if (((ref1 = this.server_info) != null ? ref1.rev : void 0) > 3460) {
           this.reloadAnnouncerInfo();
         }
       }
@@ -7076,7 +7104,7 @@
     };
 
     ZeroHello.prototype.setAnnouncerInfo = function(announcer_info) {
-      this.announcer_info = announcer_info;
+      this.announcer_info = announcer_info.stats;
       return this.projector.scheduleRender();
     };
 

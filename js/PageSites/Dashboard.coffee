@@ -33,11 +33,15 @@ class Dashboard extends Class
 		num_ok = 0
 		num_total = 0
 		status_db = {announcing: [], error: [], announced: []}
-		for key, val of Page.announcer_info?.stats
+		if Page.announcer_stats
+			stats = Page.announcer_stats
+		else
+			stats = Page.announcer_info
+		for key, val of stats
 			if val.status == "announced"
 				num_ok += 1
 			num_total += 1
-		title = "#{num_ok}/#{num_total} OK"
+		title = "#{num_ok}/#{num_total}"
 
 		if num_total == 0
 			return h("span.status", "Waiting...")
@@ -137,15 +141,23 @@ class Dashboard extends Class
 		return false
 
 	handleTrackersClick: =>
+		if Page.announcer_stats
+			stats = Page.announcer_stats
+			Page.reloadAnnouncerStats()
+		else
+			stats = Page.announcer_info
 		@menu_trackers.items = []
-		for tracker_url, stat of Page.announcer_info?.stats
+		for tracker_url, stat of stats
 			tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1")
 			success_percent = parseInt((stat.num_success/stat.num_request)*100)
 			status = stat.status.capitalize()
 			if status == "Announced" and stat.time_request and stat.time_status
 				request_taken = stat.time_status - stat.time_request
 				status += " in #{request_taken.toFixed(2)}s"
-			title = [tracker_name, h("span.tracker-status", {title: stat.last_error}, "#{status} (#{success_percent}% success)")]
+			title_text = "Requests: #{stat.num_request}"
+			if stat.last_error
+				title_text += ", Last error: #{stat.last_error} (#{Time.since(stat.time_last_error)})"
+			title = [tracker_name, h("span.tracker-status", {title: title_text}, "#{status} (#{success_percent}% success)")]
 			@menu_trackers.items.push [title, "#"]
 		@menu_trackers.toggle()
 		return false
@@ -230,7 +242,7 @@ class Dashboard extends Class
 				@menu_tor.render(".menu-tor")
 
 				# Announcer status
-				if Page.announcer_info
+				if Page.announcer_info or Page.announcer_stats
 					h("a.dashboard-item.trackers", {href: "#Trackers", onmousedown: @handleTrackersClick, onclick: Page.returnFalse}, [
 						h("span", "Trackers: "),
 						@tagTrackersTitle()

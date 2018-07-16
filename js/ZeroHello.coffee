@@ -6,6 +6,7 @@ class ZeroHello extends ZeroFrame
 		@site_info = null
 		@server_info = null
 		@announcer_info = null
+		@announcer_stats = null
 		@address = null
 
 		@on_site_info = new Promise()
@@ -191,6 +192,13 @@ class ZeroHello extends ZeroFrame
 	reloadAnnouncerInfo: (cb) =>
 		@cmd "announcerInfo", {}, (announcer_info) =>
 			@setAnnouncerInfo(announcer_info)
+			cb?()
+
+	reloadAnnouncerStats: (cb) =>
+		@cmd "announcerStats", {}, (announcer_stats) =>
+			@announcer_stats = announcer_stats
+			Page.projector.scheduleRender()
+			cb?()
 
 	# Parse incoming requests from UiWebsocket server
 	onRequest: (cmd, params) ->
@@ -206,7 +214,9 @@ class ZeroHello extends ZeroFrame
 	setSiteInfo: (site_info) ->
 		if site_info.address == @address
 			@site_info = site_info
-			if @server_info?.rev > 3460
+			if @server_info?.rev > 3530
+				@reloadAnnouncerStats()
+			else if @server_info?.rev > 3460
 				@reloadAnnouncerInfo()
 		@site_list.onSiteInfo(site_info)
 		@feed_list.onSiteInfo(site_info)
@@ -218,7 +228,7 @@ class ZeroHello extends ZeroFrame
 		@projector.scheduleRender()
 
 	setAnnouncerInfo: (announcer_info) ->
-		@announcer_info = announcer_info
+		@announcer_info = announcer_info.stats
 		@projector.scheduleRender()
 
 	# Simple return false to avoid link clicks
