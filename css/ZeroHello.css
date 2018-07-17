@@ -12,7 +12,7 @@ a:hover { text-decoration: none }
 .servedby { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 .head, .topright { display: none }
 
-.emoji { font-family: "Segoe UI Symbol", "Symbola" }
+.emoji { font-family: "Segoe UI Symbol", "Symbola", "EmojiSymbols"; }
 
 /* Bottom */
 

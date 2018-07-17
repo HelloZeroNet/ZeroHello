@@ -37,7 +37,8 @@
 	display: inline-block; margin-right: 17px; vertical-align: 2px; opacity: 0.8; line-height: 12px;
 }
 .icon-mute:after {
-	content: ''; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent currentColor transparent transparent; border-width: 7px 8px 7px 11px; left: -11px; top: -4px;
+	content: ''; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent currentColor transparent transparent;
+	border-width: 7px 8px 7px 12px; left: -11px; top: -4px;
 }
 .icon-mute:before {content: '\00D7'; position: absolute; margin-left: 11px; top: -3px; font-size: 11px; }
 .icon-gear { display: inline-block; width: 25px; }
