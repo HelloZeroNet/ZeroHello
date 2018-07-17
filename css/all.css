@@ -223,7 +223,6 @@
 }
 
 .menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s ; border-bottom: none; font-weight: normal; }
-.menu-item .emoji { opacity: 0.6 }
 .menu-item-separator { margin-top: 3px; margin-bottom: 3px; border-top: 1px solid #eee }
 
 .menu-item.noaction { cursor: default }
@@ -714,7 +713,7 @@ a:hover { text-decoration: none }
 .servedby { background-color: #AF3BFF; display: inline-block; padding: 10px; margin-left: -25px; color: white }
 .head, .topright { display: none }
 
-.emoji { font-family: "Segoe UI Symbol", "Symbola" }
+.emoji { font-family: "Segoe UI Symbol", "Symbola", "EmojiSymbols"; }
 
 /* Bottom */
 
@@ -857,7 +856,8 @@ body.changing { overflow-y: scroll; }
 	display: inline-block; margin-right: 17px; vertical-align: 2px; opacity: 0.8; line-height: 12px;
 }
 .icon-mute:after {
-	content: ''; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent currentColor transparent transparent; border-width: 7px 8px 7px 11px; left: -11px; top: -4px;
+	content: ''; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent currentColor transparent transparent;
+	border-width: 7px 8px 7px 12px; left: -11px; top: -4px;
 }
 .icon-mute:before {content: '\00D7'; position: absolute; margin-left: 11px; top: -3px; font-size: 11px; }
 .icon-gear { display: inline-block; width: 25px; }

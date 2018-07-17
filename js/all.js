@@ -2100,7 +2100,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
 
 
@@ -3206,7 +3205,7 @@
                   Page.cmd("siteDelete", {
                     "address": _this.row.address
                   });
-                  Page.cmd("siteblockAdd", [_this.row.address, reason]);
+                  Page.cmd("blacklistAdd", [_this.row.address, reason]);
                   _this.item_list.deleteItem(_this);
                   return Page.projector.scheduleRender();
                 });
@@ -4578,17 +4577,21 @@
         }
       ], (function(_this) {
         return function(res) {
-          var address, data, i, j, k, len, len1, max_site_bw, max_site_size, ref, row, stat;
+          var address, data, i, j, k, len, len1, max_site_bw, max_site_size, ref, row, site, stat;
           _this.logStart("Parse result");
           data = {};
           for (j = 0, len = res.length; j < len; j++) {
             row = res[j];
             address = Page.page_stats.site_address_db[row.site_id];
             type_name = Page.page_stats.type_name_db[row.type_id];
+            site = Page.site_list.sites_byaddress[address];
+            if (!site) {
+              continue;
+            }
             if (data[address] == null) {
               data[address] = {
                 address: address,
-                site: Page.site_list.sites_byaddress[address]
+                site: site
               };
             }
             if (type_name === "site_size") {
@@ -4829,6 +4832,7 @@
   window.ChartRadar = ChartRadar;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartTimeline.coffee ---- */
@@ -6657,7 +6661,7 @@
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage blocked users and sites"], this.handleManageBlocksClick]);
       if (Page.server_info.rev >= 3520) {
-        this.menu_settings.items.push([[h("div.icon-gear", "\u2699"), "Configuration"], "/Config"]);
+        this.menu_settings.items.push([[h("div.icon-gear.emoji", "\u2699"), "Configuration"], "/Config"]);
       }
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
