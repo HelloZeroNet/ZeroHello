@@ -25,7 +25,10 @@ class ChartRadar extends Class
 			for row in res
 				address = Page.page_stats.site_address_db[row.site_id]
 				type_name = Page.page_stats.type_name_db[row.type_id]
-				data[address] ?= {address: address, site: Page.site_list.sites_byaddress[address]}
+				site = Page.site_list.sites_byaddress[address]
+				if not site
+					continue
+				data[address] ?= {address: address, site: site}
 				if type_name == "site_size"
 					data[address][type_name] = row.value
 				else
