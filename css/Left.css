@@ -53,7 +53,6 @@
 	text-transform: uppercase; padding: 5px 0px; background-color: #7DA1BF; color: white; max-width: 0px; overflow: hidden; height: 23px; box-sizing: border-box; /* af3bff */
 	display: inline-block; margin-left: 5px; z-index: 99;
 }
-/*.SiteList .site .message.error:before { content: "🔔"; display: block; width: 32px; height: 32px }*/
 
 .SiteList .site.working { background: transparent url(../img/loading-circle.gif) no-repeat 22px; backface-visibility: hidden; }
 .SiteList .site .message.done { background-color: #26c281 }

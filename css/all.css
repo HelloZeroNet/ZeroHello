@@ -177,7 +177,6 @@
 	text-transform: uppercase; padding: 5px 0px; background-color: #7DA1BF; color: white; max-width: 0px; overflow: hidden; height: 23px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; /* af3bff */
 	display: inline-block; margin-left: 5px; z-index: 99;
 }
-/*.SiteList .site .message.error:before { content: "🔔"; display: block; width: 32px; height: 32px }*/
 
 .SiteList .site.working { background: transparent url(../img/loading-circle.gif) no-repeat 22px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; }
 .SiteList .site .message.done { background-color: #26c281 }
@@ -880,6 +879,9 @@ background-color: #f7f8f9;
 .left, .SiteList .site {
 width: 350px;
 }
+.left, .SiteList .site.working {
+background-position-x: 6px !important;
+}
 #BodySites .left {
 background: #2A333C;
 position: fixed;
@@ -923,13 +925,13 @@ position: absolute;
 right: 30px;
 }
 .SiteList .site .inner {
-padding-left: 20px;
+padding-left: 29px;
 }
 .SiteList .site .inner .title {
 max-width: 140px;
 }
 .SiteList .site .circle {
-margin-left: 7px;
+margin-left: 11px;
 }
 .FeedList {
 margin-top: 10px;
