@@ -4834,7 +4834,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/ChartTimeline.coffee ---- */
 
 
@@ -6661,7 +6660,7 @@
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage blocked users and sites"], this.handleManageBlocksClick]);
       if (Page.server_info.rev >= 3520) {
-        this.menu_settings.items.push([[h("div.icon-gear.emoji", "\u2699"), "Configuration"], "/Config"]);
+        this.menu_settings.items.push([[h("div.icon-gear.emoji", "\u2699\uFE0E"), "Configuration"], "/Config"]);
       }
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
@@ -6782,6 +6781,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */

@@ -61,7 +61,7 @@ class Head extends Class
 		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [[h("div.icon-mute", ""), "Manage blocked users and sites"], @handleManageBlocksClick]
-		if Page.server_info.rev >= 3520 then @menu_settings.items.push [[h("div.icon-gear.emoji", "\u2699"), "Configuration"], "/Config"]
+		if Page.server_info.rev >= 3520 then @menu_settings.items.push [[h("div.icon-gear.emoji", "\u2699\uFE0E"), "Configuration"], "/Config"]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Show data directory", @handleBackupClick]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]

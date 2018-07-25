@@ -3,9 +3,13 @@
  "background-color": "#F2F4F6",
  "description": "New ZeroHello",
  "files": {
+  "chartjs/chart.bundle.min.js": {
+   "sha512": "f8b84bec9157a76d7fa620998264edf84d7efe94ce472f6c3c60268346d4081a",
+   "size": 208221
+  },
   "css/all.css": {
-   "sha512": "5e050b8e7b4519d0dd38cdae7ef89a3685962ed9ee8fb17156aeb0294f56d3d7",
-   "size": 213242
+   "sha512": "b9fe3c601dec18e4de32950ea8499a32d65e44c312744cfcf91a543c9cd9d3ba",
+   "size": 229767
   },
   "img/loading-circle.gif": {
    "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
@@ -16,101 +20,117 @@
    "size": 11379
   },
   "img/logo.svg": {
-   "sha512": "27b72d6dbd7bfacc0f10f28ee85feaa4fa6aa8905a459701486cedbafe394643",
-   "size": 1002
+   "sha512": "ff770c076d196585cfa08d77bf0299c2c48a71b2ba61a84bc9ae0062cabab6d4",
+   "size": 1001
+  },
+  "img/logo_big.png": {
+   "sha512": "81884a41736056c54274a7332f233b872fdf9e298b6dda91d655cc7105221682",
+   "size": 11379
+  },
+  "img/world.png": {
+   "sha512": "2741b5107146c26ec6ff4de4f5b2219c848cbd7405e03718c2dca2b2c0acc15f",
+   "size": 13735
   },
   "index.html": {
-   "sha512": "a0935cbbdda1bea1f1389b868e35a0e3cf41e958d0628d26f3319455d49e2fae",
-   "size": 1128
+   "sha512": "997d6ceaccb0a013f7ac10cd7b44ffbcc25339843854eb6407c8ba86629b5667",
+   "size": 1216
   },
   "js/all.js": {
-   "sha512": "ad966de118debefaf2a3d6af3ce60d9a3397e75388686d76ce29043f356decae",
-   "size": 194499
+   "sha512": "92b2233aa90ffe8e78009587f8a29d3e72e1b72fe37376a86127c52ea433945c",
+   "size": 278126
   },
   "languages/da.json": {
-   "sha512": "aec7f0efc03710ad27013facfebdc4c2e3b938ebcf67e257fa2fb432c47b6842",
-   "size": 4113
+   "sha512": "a11d1da29b791c2de8a926d5c9177011dc00ab569a2b1fc8b435e5615658827f",
+   "size": 4011
   },
   "languages/es.json": {
-   "sha512": "a81c72a1590ec62cf8568afabfd836e0c5b85838ba094ba5680e6a8343636d1f",
-   "size": 4454
+   "sha512": "1281c97a6319d13aa0896cbadc8d5c33c465b54fd8b7701515ceefc64a1ebb0e",
+   "size": 4354
   },
   "languages/fr.json": {
-   "sha512": "3109ca01da26f48b348f9357fade68a4296c6bd348ba6c361badd5c56ef33ba3",
-   "size": 4456
+   "sha512": "d1aae78afcdc6a93d3923abcb2f6d4738570452d8f79beea33b8476179b07579",
+   "size": 4354
   },
   "languages/hu.json": {
-   "sha512": "cfd6bc4ea98cdd70fee230266cd3e7c610696115d0718e13f53215eb3ec85a54",
-   "size": 4556
+   "sha512": "2d9a53a395a590273c8a20dfb2bc2d4db74aadbcae6dcf5a8cf1872ead9b25b8",
+   "size": 4454
   },
   "languages/it.json": {
-   "sha512": "000555110d34a97bb16b07dcb1a147ff1311069b2ee6b9a3538b53d345d08a28",
-   "size": 4778
+   "sha512": "d60cd479712d4a18d9ddab7775a5592f6295610d697f8d1df2523f081a27ea61",
+   "size": 4667
+  },
+  "languages/jp.json": {
+   "sha512": "ad621ae4090da223abbca967c87174d13f3819e9dabc193061e6b9fccd8575b6",
+   "size": 4737
   },
   "languages/nl.json": {
-   "sha512": "c46f2358348b69bf68ec3a30e5c20dfb3342ea5bd3e44a012ba6a04e1b0bc361",
-   "size": 4654
+   "sha512": "49ce3f99d856bb5ff4c495676c9bfc70de9343e6c1a4d61e3c0195f6835ff1dd",
+   "size": 4553
   },
   "languages/pl.json": {
    "sha512": "7af9a32eb1cc223b3065fff2591c99a44f33a38fd035c75737108ffb524e62b8",
    "size": 4718
   },
   "languages/pt-br.json": {
-   "sha512": "c6ca0da11c11abd8c963c7bcd1b7dee0bcfafb04b813c7ce23c3e16c3fd7a015",
-   "size": 4411
+   "sha512": "9b4fbca511abb27373c17d47670f8887de4cfb82a9da42f236525ae33562cb57",
+   "size": 4311
   },
   "languages/pt.json": {
-   "sha512": "a5e03e01a2ba455e55ca71ca03ed9d81896776fd4b169a0fffd0764783f70024",
-   "size": 4415
+   "sha512": "b770f5efc812d27e9054cf6665917fd18fdb75ba2719d9200dd628e3b869770a",
+   "size": 4315
   },
   "languages/ru.json": {
-   "sha512": "4984d9ce37128e92c8dbbd62da14cde959d5af14ca259f768a658e727316da9c",
-   "size": 5623
+   "sha512": "e6b9c5f1c465d9d1f514cc2f245c09a640bd680c41a24001ac9d79756366c121",
+   "size": 5521
+  },
+  "languages/sk.json": {
+   "sha512": "e443c8696ec967fe3fa8facb73d30a3c19f0fb8845765fd0169d7cf2fa1425f8",
+   "size": 6385
   },
   "languages/sl.json": {
-   "sha512": "5c53c665fba3ae39c76b51364ddd33089881a66851c52ddcd00e4da5052d9835",
-   "size": 4368
+   "sha512": "722398f7c26146a1ac79830b21c9633aacfd3319dcbe009feab4a1915c5ebe2f",
+   "size": 4266
   },
   "languages/tr.json": {
-   "sha512": "e530b594388b11b54dd1ad718482e675a953f122c6d0d4bc12b20762411ae546",
-   "size": 4474
+   "sha512": "7b6a8eb77e686f2228f94198eb1aad95b87e79987ffa455c4e88ed7e34777f8f",
+   "size": 4371
   },
   "languages/uk.json": {
-   "sha512": "883442a0615410dd8556182acd363219b77219342dd73f9c5d433563e89d6827",
-   "size": 5792
+   "sha512": "26b2b1a0a14cc9277335cc054b2aa1082407cc15d8d25c91381d51c75cdba04d",
+   "size": 7738
   },
   "languages/zh-tw.json": {
-   "sha512": "2fbf6b485f85e6a8ee66ef7c09a04ec0a059e7948f153aa56dab254710b2374e",
-   "size": 6884
+   "sha512": "6baee6b1b7040ae07966d8546de62285331d94c3540a165a70dedf2abc52608a",
+   "size": 6746
   },
   "languages/zh.json": {
-   "sha512": "c90a6b55ab4c37c408a12ffff52b28cc8357cb25f68194e7c0a13a55edcf45e2",
-   "size": 7162
+   "sha512": "20c101ebe5b9c0766c57b41e0d1ec6f2d859a4a53584a90e485a8ea70b4279d2",
+   "size": 8291
   },
   "template-new/content.json-default": {
    "sha512": "7e6068f0105c5f6a0e1237baa1dfbbb353b40042c7ccedc306c6f88a446469aa",
    "size": 474
   },
   "template-new/index.html": {
-   "sha512": "b47188737048fb958728dd1eb429f4f786e061db1e1f6529b4db58b60150f261",
-   "size": 1112
+   "sha512": "542f7724432a22ceb8821b4241af4d36cfd81e101b72d425c6c59e148856537e",
+   "size": 1114
   },
   "template-new/js/ZeroFrame.js": {
-   "sha512": "9e08432de4399d65511bcfa2e1e8aa67e375ee2b2245232cee7602c686aa03a4",
-   "size": 3823
+   "sha512": "42125c7aa72496455e044e3fd940e0f05db86824c781381edb7a70f71a5f0882",
+   "size": 3370
   }
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1508323294,
+ "modified": 1531871148,
  "postmessage_nonce_security": true,
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "Gyd/i8Wj3L2hboDldjFWfq0liH0t3ohAEdpvCaOfwBLrF/aVQXOeu9ef9J0uREQh9XdSuLQ6YxTTa4eKtOWvI2I="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HMBh/MfwWQSrhXjbhLEjMF6EfraF1m/Z7wJV6FV/a/PYBJhyYoF1BXw1Pymj8lj6fSdRQ6y7/TmiQl/0e2Cfnnc="
  },
  "signs_required": 1,
  "title": "ZeroHello",
  "translate": ["js/all.js"],
  "viewport": "width=device-width, initial-scale=0.8",
- "zeronet_version": "0.6.0"
+ "zeronet_version": "0.6.3"
 }
