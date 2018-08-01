@@ -41,7 +41,7 @@
 	"P2P social network": "P2P 社交网络",
 	"Discover more sites": "发现更多站点",
 
-	"You need to update your ZeroNet client to use this feature": "你需要更新你的 ZeroNet 客户端来使用这个特性",
+	"You need to update your ZeroNet client to use this feature": "你需要更新你的ZeroNet客户端来使用这个特性",
 	"Update all sites": "更新所有站点",
 	"Order sites by peers": "根据站点节点数排序",
 	"Order sites by update time": "根据站点更新时间排序",
@@ -50,6 +50,8 @@
 	"Language: ": "语言: ",
 	"Create new, empty site": "新建空站点",
 	"Manage muted users": "管理已屏蔽用户",
+	"Manage blocked users and sites": "管理已屏蔽的用户和站点",
+	"Configuration": "配置",
 	"Show data directory": "打开数据文件夹",
 	"Backup <b>users.json</b> file to keep your identity safe.": "备份 <b>users.json</b> 文件以确保妥善保管你的身份信息。",
 	"Version ": "版本 ",
