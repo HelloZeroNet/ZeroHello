@@ -8,6 +8,7 @@ class Dashboard extends Class
 		@menu_donate = new Menu()
 		@menu_browserwarning = new Menu()
 		@menu_torbrowserwarning = new Menu()
+		@menu_timecorrection = new Menu()
 
 		@port_checking = false
 		@has_web_gl = null
@@ -70,6 +71,9 @@ class Dashboard extends Class
 	handleEnableAlwaysTorClick: =>
 		Page.cmd "configSet", ["tor", "always"], (res) =>
 			Page.cmd "wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]
+			Page.cmd "wrapperConfirm", ["Restart ZeroNet client?", "Restart now"], (res) =>
+				if res
+					Page.cmd("serverShutdown", {restart: true})
 
 	handleDisableAlwaysTorClick: =>
 		Page.cmd "configSet", ["tor", null], (res) =>
@@ -140,6 +144,15 @@ class Dashboard extends Class
 		@menu_torbrowserwarning.toggle()
 		return false
 
+	handleTimecorrectionClick: =>
+		@menu_timecorrection.items = []
+		@menu_timecorrection.items.push ["Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen.", "https://time.is"]
+		@menu_timecorrection.items.push ["---"]
+		@menu_timecorrection.items.push ["Restart ZeroNet client and re-check system time", => Page.cmd("serverShutdown", {restart: true})]
+		@menu_timecorrection.toggle()
+		return false
+
+
 	handleTrackersClick: =>
 		if Page.announcer_stats
 			stats = Page.announcer_stats
@@ -188,6 +201,13 @@ class Dashboard extends Class
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important update: rev#{Page.latest_rev}")
 
 				@menu_newversion.render(".menu-newversion")
+
+				# Time out of sync
+				@menu_timecorrection.render(".menu-timecorrection.menu-left")
+				if Math.abs(Page.server_info.timecorrection) > 30
+					h("a.timecorrection.dashboard-item", {href: "#Time+correction", onmousedown: @handleTimecorrectionClick, onclick: Page.returnFalse},
+						["Time out of sync: ", h("span.status-warning", (0 - Page.server_info.timecorrection.toFixed(2)) + "s")]
+					)
 
 				# Donate
 				h("a.port.dashboard-item.donate", {"href": "#Donate", onmousedown: @handleDonateClick, onclick: Page.returnFalse}, [h("div.icon-heart")]),

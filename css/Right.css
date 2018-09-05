@@ -24,6 +24,7 @@
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
 #Dashboard .torbrowserwarning { color: #e91e63 }
 #Dashboard .tracker-status { text-align: right; width: 600px; display: inline-block; float: right; margin-top: -20px }
+#Dashboard .menu-timecorrection { white-space: normal; max-width: 500px; }
 
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; backface-visibility: hidden; content: "";

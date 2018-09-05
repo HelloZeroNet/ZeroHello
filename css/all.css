@@ -216,6 +216,8 @@
 	-webkit-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); -moz-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); -o-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); -ms-box-shadow: 0px 2px 8px rgba(0,0,0,0.3); box-shadow: 0px 2px 8px rgba(0,0,0,0.3) ; -webkit-border-radius: 2px; -moz-border-radius: 2px; -o-border-radius: 2px; -ms-border-radius: 2px; border-radius: 2px ; opacity: 0; -webkit-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; -moz-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; -o-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; -ms-transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out; transition: opacity 0.2s ease-out, transform 1s ease-out, max-height 0.2s ease-in-out ; z-index: 99;
 	display: inline-block; z-index: 999; transform-style: preserve-3d;
 }
+.menu.menu-left { -webkit-transform: translate(0%, -30px); -moz-transform: translate(0%, -30px); -o-transform: translate(0%, -30px); -ms-transform: translate(0%, -30px); transform: translate(0%, -30px) ; }
+.menu.menu-left.visible { -webkit-transform: translate(0%, 0px); -moz-transform: translate(0%, 0px); -o-transform: translate(0%, 0px); -ms-transform: translate(0%, 0px); transform: translate(0%, 0px) ; }
 .menu.visible {
 	opacity: 1; -webkit-transform: translate(-100%, 0px); -moz-transform: translate(-100%, 0px); -o-transform: translate(-100%, 0px); -ms-transform: translate(-100%, 0px); transform: translate(-100%, 0px) ; pointer-events: all;
 	-webkit-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); -moz-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); -o-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); -ms-transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1); transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1) ;
@@ -239,6 +241,7 @@
 }
 .menu-radio a:hover, .menu-radio a.selected { -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; background-color: #AF3BFF; color: white }
 .menu-radio a.long { font-size: 11px }
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/MuteList.css ---- */
@@ -563,6 +566,7 @@
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
 #Dashboard .torbrowserwarning { color: #e91e63 }
 #Dashboard .tracker-status { text-align: right; width: 600px; display: inline-block; float: right; margin-top: -20px }
+#Dashboard .menu-timecorrection { white-space: normal; max-width: 500px; }
 
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; content: "";

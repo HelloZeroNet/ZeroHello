@@ -1804,6 +1804,7 @@
     function Dashboard() {
       this.render = bind(this.render, this);
       this.handleTrackersClick = bind(this.handleTrackersClick, this);
+      this.handleTimecorrectionClick = bind(this.handleTimecorrectionClick, this);
       this.handleTorBrowserwarningClick = bind(this.handleTorBrowserwarningClick, this);
       this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
       this.handleNewversionClick = bind(this.handleNewversionClick, this);
@@ -1823,6 +1824,7 @@
       this.menu_donate = new Menu();
       this.menu_browserwarning = new Menu();
       this.menu_torbrowserwarning = new Menu();
+      this.menu_timecorrection = new Menu();
       this.port_checking = false;
       this.has_web_gl = null;
     }
@@ -1907,7 +1909,14 @@
     Dashboard.prototype.handleEnableAlwaysTorClick = function() {
       return Page.cmd("configSet", ["tor", "always"], (function(_this) {
         return function(res) {
-          return Page.cmd("wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]);
+          Page.cmd("wrapperNotification", ["done", "Tor always mode enabled, please restart your ZeroNet to make it work.<br>For your privacy switch to Tor browser and start a new profile by renaming the data directory."]);
+          return Page.cmd("wrapperConfirm", ["Restart ZeroNet client?", "Restart now"], function(res) {
+            if (res) {
+              return Page.cmd("serverShutdown", {
+                restart: true
+              });
+            }
+          });
         };
       })(this));
     };
@@ -2001,6 +2010,23 @@
       return false;
     };
 
+    Dashboard.prototype.handleTimecorrectionClick = function() {
+      this.menu_timecorrection.items = [];
+      this.menu_timecorrection.items.push(["Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen.", "https://time.is"]);
+      this.menu_timecorrection.items.push(["---"]);
+      this.menu_timecorrection.items.push([
+        "Restart ZeroNet client and re-check system time", (function(_this) {
+          return function() {
+            return Page.cmd("serverShutdown", {
+              restart: true
+            });
+          };
+        })(this)
+      ]);
+      this.menu_timecorrection.toggle();
+      return false;
+    };
+
     Dashboard.prototype.handleTrackersClick = function() {
       var request_taken, stat, stats, status, success_percent, title, title_text, tracker_name, tracker_url;
       if (Page.announcer_stats) {
@@ -2054,7 +2080,11 @@
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
-        }, "New important update: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), h("a.port.dashboard-item.donate", {
+        }, "New important update: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), this.menu_timecorrection.render(".menu-timecorrection.menu-left"), Math.abs(Page.server_info.timecorrectiona) > 0.30 ? h("a.timecorrection.dashboard-item", {
+          href: "#Time+correction",
+          onmousedown: this.handleTimecorrectionClick,
+          onclick: Page.returnFalse
+        }, ["Time out of sync: ", h("span.status-warning", (0 - Page.server_info.timecorrection.toFixed(2)) + "s")]) : void 0, h("a.port.dashboard-item.donate", {
           "href": "#Donate",
           onmousedown: this.handleDonateClick,
           onclick: Page.returnFalse
@@ -2098,6 +2128,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -5900,7 +5931,11 @@
   };
 
   String.prototype.capitalize = function() {
-    return this[0].toUpperCase() + this.slice(1);
+    if (this.length) {
+      return this[0].toUpperCase() + this.slice(1);
+    } else {
+      return "";
+    }
   };
 
   String.prototype.repeat = function(count) {
@@ -6781,7 +6816,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
