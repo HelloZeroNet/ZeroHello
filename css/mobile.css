@@ -3,9 +3,23 @@ display: none;
 }
 
 @media screen and (max-width: 970px) {
+#Dashboard {
+white-space: normal;
+text-align: right;
+}
+#Dashboard .dashboard-item {
+margin-top: 0px;
+padding: 8px 18px;
+}
+.feeds-filters {
+margin-top: 15px
+}
+#Dashboard .menu-item {
+text-align: left;
+}
 .right {
-width: 100%;
-border-left: 350px solid #2A333C !important;
+width: calc(100% - 350px);
+left: 350px;
 background-color: #f7f8f9;
 }
 .left, .SiteList .site {
@@ -129,11 +143,13 @@ font-size: 35px;
 
 @media screen and (max-width: 799px) {
 .right {
-border-left: none !important;
+left: 0px;
+width: 100%;
 margin-left: 0px;
 }
 #BodySites .left {
 left: -350px;
+z-index: 1;
 }
 #BodySites .left.trigger-on {
 left: 0px;
@@ -191,6 +207,8 @@ left: 100%;
 top: -15px;
 font-size: 80%;
 line-height: 180%;
+transform: translate(-100%, -30px);
+white-space: nowrap;
 }
 .menu-item .emoji {
 display: none;
@@ -198,11 +216,6 @@ display: none;
 }
 
 @media screen and (max-width: 500px) {
-#Dashboard {
-width: 98%;right: 0px;
-}
-#Dashboard .dashboard-item {
-}
 .welcome .site {
 width: 100%;
 }
