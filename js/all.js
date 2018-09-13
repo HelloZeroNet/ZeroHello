@@ -2080,7 +2080,7 @@
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
-        }, "New important update: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), this.menu_timecorrection.render(".menu-timecorrection.menu-left"), Math.abs(Page.server_info.timecorrectiona) > 0.30 ? h("a.timecorrection.dashboard-item", {
+        }, "New important update: rev" + Page.latest_rev) : void 0, this.menu_newversion.render(".menu-newversion"), this.menu_timecorrection.render(".menu-timecorrection.menu-left"), Math.abs(Page.server_info.timecorrection) > 30 ? h("a.timecorrection.dashboard-item", {
           href: "#Time+correction",
           onmousedown: this.handleTimecorrectionClick,
           onclick: Page.returnFalse
@@ -2100,14 +2100,14 @@
           href: "#Logout",
           onmousedown: this.handleLogoutClick,
           onclick: Page.returnFalse
-        }, [h("span", "Logout")]) : void 0, h("a.dashboard-item.port", {
+        }, [h("span", "Logout")]) : void 0, this.menu_port.render(".menu-port.menu-left"), h("a.dashboard-item.port", {
           href: "#Port",
           classes: {
             bounce: this.port_checking
           },
           onmousedown: this.handlePortClick,
           onclick: Page.returnFalse
-        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), this.menu_port.render(".menu-port"), h("a.dashboard-item.tor", {
+        }, [h("span", "Port: "), this.port_checking ? h("span.status", "Checking") : Page.server_info.ip_external === null ? h("span.status", "Checking") : Page.server_info.ip_external === true ? h("span.status.status-ok", "Opened") : this.isTorAlways ? h("span.status.status-ok", "Closed") : tor_title === "OK" ? h("span.status.status-warning", "Closed") : h("span.status.status-bad", "Closed")]), h("a.dashboard-item.tor", {
           href: "#Tor",
           onmousedown: this.handleTorClick,
           onclick: Page.returnFalse
@@ -2128,7 +2128,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -5769,7 +5768,8 @@
 
 (function() {
   var Menu,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Menu = (function() {
     function Menu() {
@@ -5906,16 +5906,21 @@
   window.Menu = Menu;
 
   document.body.addEventListener("mouseup", function(e) {
+    var menu_node, menu_parents, ref, ref1;
     if (!window.visible_menu || !window.visible_menu.node) {
       return false;
     }
-    if (e.target !== window.visible_menu.node.parentNode && e.target.parentNode !== window.visible_menu.node && e.target.parentNode !== window.visible_menu.node.parentNode && e.target.parentNode !== window.visible_menu.node && e.target.parentNode.parentNode !== window.visible_menu.node.parentNode) {
+    menu_node = window.visible_menu.node;
+    menu_parents = [menu_node, menu_node.parentNode];
+    console.log(menu_parents, e.target);
+    if ((ref = e.target.parentNode, indexOf.call(menu_parents, ref) < 0) && (ref1 = e.target.parentNode.parentNode, indexOf.call(menu_parents, ref1) < 0)) {
       window.visible_menu.hide();
       return Page.projector.scheduleRender();
     }
   });
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
@@ -6901,7 +6906,7 @@
         document.body.classList.add("changing");
         return this.change_timer = setTimeout((function() {
           return document.body.classList.remove("changing");
-        }), 400);
+        }), 800);
       }), 60);
     };
 
