@@ -231,6 +231,7 @@ class Dashboard extends Class
 					])
 
 				# Port open status
+				@menu_port.render(".menu-port.menu-left"),
 				h("a.dashboard-item.port", {href: "#Port", classes: {bounce: @port_checking}, onmousedown: @handlePortClick, onclick: Page.returnFalse}, [
 					h("span", "Port: "),
 					if @port_checking
@@ -246,7 +247,6 @@ class Dashboard extends Class
 					else
 						h("span.status.status-bad", "Closed")
 				]),
-				@menu_port.render(".menu-port"),
 
 				# Tor status
 				h("a.dashboard-item.tor", {href: "#Tor", onmousedown: @handleTorClick, onclick: Page.returnFalse}, [
