@@ -56,7 +56,7 @@ class ZeroHello extends ZeroFrame
 			document.body.classList.add("changing")
 			@change_timer = setTimeout ( ->
 				document.body.classList.remove("changing")
-			), 400
+			), 800
 
 		), 60
 

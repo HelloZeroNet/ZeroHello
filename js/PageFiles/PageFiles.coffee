@@ -224,8 +224,8 @@ class PageFiles extends Class
 			@updating_files -= 1
 
 	render: =>
-		if Page.site_list.sites and not @need_update and @updating_files == 0and document.body.className != "loaded"
-			document.body.className = "loaded"
+		if Page.site_list.sites and not @need_update and @updating_files == 0 and document.body.className != "loaded"
+			document.body.classList.add("loaded")
 		if @need_update and Page.site_list.sites.length
 			@updateAllFiles()
 			@need_update = false
@@ -243,7 +243,7 @@ class PageFiles extends Class
 				sites_connected = [sites_connected[0]]
 
 		if sites.length == 0
-			document.body.className = "loaded"
+			document.body.classList.add("loaded")
 			return h("div#PageFiles",
 				@renderSelectbar()
 				@renderTotalbar()

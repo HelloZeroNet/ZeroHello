@@ -371,9 +371,9 @@ class FeedList extends Class
 
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded" and not @updating
 			if document.body.scrollTop > 500  # Scrolled down wait until next render
-				setTimeout (-> document.body.className = "loaded"), 2000
+				setTimeout (-> document.body.classList.add("loaded")), 2000
 			else
-				document.body.className = "loaded"
+				document.body.classList.add("loaded")
 
 		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
 			if Page.mute_list.updated then @renderNotifications()

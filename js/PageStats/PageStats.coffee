@@ -120,7 +120,7 @@ class PageStats extends Class
 			@need_update = false
 
 		if not @need_update and document.body.className != "loaded"
-			setTimeout ( -> document.body.className = "loaded" ), 1000
+			setTimeout ( -> document.body.classList.add("loaded") ), 1000
 
 		if @need_load_chartjs
 			setTimeout @loadChartjs, 500

@@ -1462,7 +1462,7 @@
     PageFiles.prototype.render = function() {
       var site, sites, sites_connected, sites_favorited;
       if (Page.site_list.sites && !this.need_update && this.updating_files === 0 && document.body.className !== "loaded") {
-        document.body.className = "loaded";
+        document.body.classList.add("loaded");
       }
       if (this.need_update && Page.site_list.sites.length) {
         this.updateAllFiles();
@@ -1512,7 +1512,7 @@
         }
       }
       if (sites.length === 0) {
-        document.body.className = "loaded";
+        document.body.classList.add("loaded");
         return h("div#PageFiles", this.renderSelectbar(), this.renderTotalbar(), h("div.empty", [h("h4", "Hello newcomer!"), h("small", "You have not downloaded any optional files yet")]));
       }
       if (this.display_limit < sites.length) {
@@ -2265,9 +2265,12 @@
       if (!Page.server_info || Page.server_info.rev < 1850) {
         params = [];
       } else {
-        params = [this.query_limit, this.query_day_limit];
+        params = {
+          limit: this.query_limit,
+          day_limit: this.query_day_limit
+        };
       }
-      this.logStart("Updating feed");
+      this.logStart("Updating feed", params);
       this.updating = true;
       return Page.cmd("feedQuery", params, (function(_this) {
         return function(res) {
@@ -2278,9 +2281,10 @@
             rows = res;
           }
           _this.res = res;
-          if (rows.length < 10 && _this.day_limit !== null) {
-            _this.limit = 20;
-            _this.day_limit = null;
+          if (rows.length < 10 && _this.query_day_limit !== null) {
+            _this.log("Too few results, query without day limit");
+            _this.query_limit = 20;
+            _this.query_day_limit = null;
             _this.updating = false;
             _this.update();
             return false;
@@ -2638,10 +2642,10 @@
       if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded" && !this.updating) {
         if (document.body.scrollTop > 500) {
           setTimeout((function() {
-            return document.body.className = "loaded";
+            return document.body.classList.add("loaded");
           }), 2000);
         } else {
-          document.body.className = "loaded";
+          document.body.classList.add("loaded");
         }
       }
       return h("div#FeedList.FeedContainer", {
@@ -3235,7 +3239,7 @@
                   Page.cmd("siteDelete", {
                     "address": _this.row.address
                   });
-                  Page.cmd("blacklistAdd", [_this.row.address, reason]);
+                  Page.cmd("siteblockAdd", [_this.row.address, reason]);
                   _this.item_list.deleteItem(_this);
                   return Page.projector.scheduleRender();
                 });
@@ -5452,7 +5456,7 @@
       }
       if (!this.need_update && document.body.className !== "loaded") {
         setTimeout((function() {
-          return document.body.className = "loaded";
+          return document.body.classList.add("loaded");
         }), 1000);
       }
       if (this.need_load_chartjs) {
@@ -5920,7 +5924,6 @@
   });
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/utils/Prototypes.coffee ---- */
