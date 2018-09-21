@@ -81,8 +81,8 @@ class FeedList extends Class
 		if not Page.server_info or Page.server_info.rev < 1850
 			params = []
 		else
-			params = [@query_limit, @query_day_limit]
-		@logStart "Updating feed"
+			params = {limit: @query_limit, day_limit: @query_day_limit}
+		@logStart "Updating feed", params
 		@updating = true
 		Page.cmd "feedQuery", params, (res) =>
 			if res.rows
@@ -91,10 +91,10 @@ class FeedList extends Class
 				rows = res
 			@res = res
 
-			if rows.length < 10 and @day_limit != null
-				# Query without day limit if too few result
-				@limit = 20
-				@day_limit = null
+			if rows.length < 10 and @query_day_limit != null
+				@log "Too few results, query without day limit"
+				@query_limit = 20
+				@query_day_limit = null
 				@updating = false
 				@update()
 				return false
