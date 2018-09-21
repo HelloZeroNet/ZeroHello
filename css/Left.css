@@ -2,6 +2,10 @@
 	width: 400px; position: absolute; box-sizing: border-box; min-height: 100%; padding-top: 0px; z-index: 1; backface-visibility: hidden;
 	color: white; background-color: #232A31; background-image: linear-gradient(352deg, #322641, #2A333C); /* linear-gradient(352deg, #232A31, #2A333C);*/
 }
+body:after {
+	width: 400px; position: fixed; height: 100%; background-color: #322641;
+	display: block; z-index: -1; left: 0px; top: 0px; content: "";
+}
 .left h2 { text-transform: uppercase; font-size: 13px; font-weight: 500; padding: 10px; padding-left: 45px; opacity: 0.4; letter-spacing: 1px; margin-top: 40px; }
 .left .logo { background-color: #1E2429; padding: 20px; margin-bottom: 30px; display: block; text-decoration: none; color: white; transition: all 0.3s }
 .left .logo span { vertical-align: 39%; font-size: 27px; font-family: 'Text Me One'; }
