@@ -6861,8 +6861,8 @@
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
-      this.latest_version = "0.6.2";
-      this.latest_rev = 3404;
+      this.latest_version = "0.6.3";
+      this.latest_rev = 3612;
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Body" + this.mode;
