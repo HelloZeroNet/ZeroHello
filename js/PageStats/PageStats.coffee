@@ -49,7 +49,7 @@ class PageStats extends Class
 		@chart_size.chart_stroke = ["#F99739AA", "#51B8F2"]
 		@chart_size.type_names = ["size", "size_optional", "optional_limit", "optional_used", "content"]
 		@chart_size.formatValue = (type_data) ->
-			return Text.formatSize(type_data.size)
+			return Text.formatSize(type_data.size) + " in #{Page.site_list.sites.length} sites"
 		@chart_size.formatDetails = (type_data) ->
 			back = []
 			back.push "Content sources: #{type_data.content} files"
