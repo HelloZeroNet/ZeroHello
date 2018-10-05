@@ -120,6 +120,7 @@ class SiteList extends Class
 		@sites_owned = []
 		@sites_connected = []
 		@sites_merged = []
+		num_found = 0
 
 		for site in @sites
 			if @filtering
@@ -138,12 +139,16 @@ class SiteList extends Class
 				@sites_owned.push site
 			else
 				@sites_connected.push site
+			num_found += 1
 
 		h("div#SiteList", [
-			if @sites.length > 20
+			if @sites.length > 10
 				h("input.site-filter", {placeholder: "Filter: Site name", spellcheck: false, oninput: @handleFilterInput, onkeyup: @handleFilterKeyup, value: @filtering})
 			if @filtering
-				h("a.filter-clear", {href: "#clear", onclick: @handleFilterClear}, "\u00D7")
+				[
+					h("span.filter-num", {updateAnimation: Animation.show, enterAnimation: Animation.show, exitAnimation: Animation.hide}, "(found #{num_found} of #{@sites.length} sites)")
+					h("a.filter-clear", {href: "#clear", onclick: @handleFilterClear}, "\u00D7")
+				]
 			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
 			h("div.SiteList.needaction", @sites_needaction.map (item) ->
 				item.render()
