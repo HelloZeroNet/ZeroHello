@@ -163,6 +163,9 @@ class Dashboard extends Class
 		for tracker_url, stat of stats
 			tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1")
 			success_percent = parseInt((stat.num_success/stat.num_request)*100)
+			if isNaN(success_percent)
+				success_percent = "?"
+
 			status = stat.status.capitalize()
 			if status == "Announced" and stat.time_request and stat.time_status
 				request_taken = stat.time_status - stat.time_request
