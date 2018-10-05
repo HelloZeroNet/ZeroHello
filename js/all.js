@@ -2040,6 +2040,9 @@
         stat = stats[tracker_url];
         tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1");
         success_percent = parseInt((stat.num_success / stat.num_request) * 100);
+        if (isNaN(success_percent)) {
+          success_percent = "?";
+        }
         status = stat.status.capitalize();
         if (status === "Announced" && stat.time_request && stat.time_status) {
           request_taken = stat.time_status - stat.time_request;
@@ -3731,7 +3734,7 @@
     };
 
     SiteList.prototype.render = function() {
-      var filter_base, i, len, ref, ref1, site;
+      var filter_base, i, len, num_found, ref, ref1, site;
       if (!this.loaded) {
         return h("div#SiteList");
       }
@@ -3740,6 +3743,7 @@
       this.sites_owned = [];
       this.sites_connected = [];
       this.sites_merged = [];
+      num_found = 0;
       ref = this.sites;
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
@@ -3761,18 +3765,25 @@
         } else {
           this.sites_connected.push(site);
         }
+        num_found += 1;
       }
       return h("div#SiteList", [
-        this.sites.length > 20 ? h("input.site-filter", {
+        this.sites.length > 10 ? h("input.site-filter", {
           placeholder: "Filter: Site name",
           spellcheck: false,
           oninput: this.handleFilterInput,
           onkeyup: this.handleFilterKeyup,
           value: this.filtering
-        }) : void 0, this.filtering ? h("a.filter-clear", {
-          href: "#clear",
-          onclick: this.handleFilterClear
-        }, "\u00D7") : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+        }) : void 0, this.filtering ? [
+          h("span.filter-num", {
+            updateAnimation: Animation.show,
+            enterAnimation: Animation.show,
+            exitAnimation: Animation.hide
+          }, "(found " + num_found + " of " + this.sites.length + " sites)"), h("a.filter-clear", {
+            href: "#clear",
+            onclick: this.handleFilterClear
+          }, "\u00D7")
+        ] : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
@@ -5369,7 +5380,7 @@
       this.chart_size.chart_stroke = ["#F99739AA", "#51B8F2"];
       this.chart_size.type_names = ["size", "size_optional", "optional_limit", "optional_used", "content"];
       this.chart_size.formatValue = function(type_data) {
-        return Text.formatSize(type_data.size);
+        return Text.formatSize(type_data.size) + (" in " + Page.site_list.sites.length + " sites");
       };
       this.chart_size.formatDetails = function(type_data) {
         var back;
@@ -5492,6 +5503,7 @@
   window.PageStats = PageStats;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/StatList.coffee ---- */
@@ -5916,7 +5928,6 @@
     }
     menu_node = window.visible_menu.node;
     menu_parents = [menu_node, menu_node.parentNode];
-    console.log(menu_parents, e.target);
     if ((ref = e.target.parentNode, indexOf.call(menu_parents, ref) < 0) && (ref1 = e.target.parentNode.parentNode, indexOf.call(menu_parents, ref1) < 0)) {
       window.visible_menu.hide();
       return Page.projector.scheduleRender();
@@ -6862,7 +6873,7 @@
       this.on_loaded = new Promise();
       this.settings = null;
       this.latest_version = "0.6.3";
-      this.latest_rev = 3612;
+      this.latest_rev = 3616;
       this.mode = "Sites";
       this.change_timer = null;
       return document.body.id = "Body" + this.mode;

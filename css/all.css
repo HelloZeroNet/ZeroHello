@@ -154,7 +154,12 @@ body:after {
 	padding: 13px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; color: white; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; font-family: Roboto; font-size: 16px;
 }
 .left .site-filter:focus { border-color: #6c7884; outline: none }
+.left .filter-num {
+	padding-right: 34px; font-weight: bold; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; font-size: 11px; text-transform: uppercase; color: #7E8186;
+	pointer-events: none; width: 300px; display: inline-block; margin-left: -300px; text-align: right; vertical-align: 2px;
+}
 .left .filter-clear { color: white; text-decoration: none; margin-left: -41px; opacity: 0.5; padding: 16px; }
+.left .filter-clear:hover { opacity: 1; }
 
 .SiteList { margin-bottom: 40px; }
 .SiteList .site { border-bottom: 1px solid #3D444B; position: relative; white-space: nowrap; }
