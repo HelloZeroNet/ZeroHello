@@ -31,8 +31,8 @@ body:after {
 }
 .left .site-filter:focus { border-color: #6c7884; outline: none }
 .left .filter-num {
-	position: absolute; width: 100%; left: 0px; text-align: right; padding-top: 45px; padding-right: 64px; font-weight: bold;
-	box-sizing: border-box; font-size: 11px; text-transform: uppercase; color: #7E8186; pointer-events: none;
+	padding-right: 34px; font-weight: bold; box-sizing: border-box; font-size: 11px; text-transform: uppercase; color: #7E8186;
+	pointer-events: none; width: 300px; display: inline-block; margin-left: -300px; text-align: right; vertical-align: 2px;
 }
 .left .filter-clear { color: white; text-decoration: none; margin-left: -41px; opacity: 0.5; padding: 16px; }
 .left .filter-clear:hover { opacity: 1; }
