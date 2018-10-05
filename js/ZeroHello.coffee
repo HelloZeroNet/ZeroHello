@@ -15,7 +15,7 @@ class ZeroHello extends ZeroFrame
 		@settings = null
 
 		@latest_version = "0.6.3"
-		@latest_rev = 3612
+		@latest_rev = 3616
 		@mode = "Sites"
 		@change_timer = null
 		document.body.id = "Body#{@mode}"
