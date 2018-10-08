@@ -215,6 +215,10 @@ body:after {
 .SiteList.needaction .site .details.needaction:hover { background-color: #fcff2b; -webkit-transition: none !important ; -moz-transition: none !important ; -o-transition: none !important ; -ms-transition: none !important ; transition: none !important  }
 .SiteList.needaction .site .details.needaction:active { -webkit-transform: translateY(1px); -moz-transform: translateY(1px); -o-transform: translateY(1px); -ms-transform: translateY(1px); transform: translateY(1px) ; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
 
+.site-list-more {
+	display: block; text-align: center; text-transform: uppercase; color: #AAA; padding-top: 15px;
+	padding-bottom: 8px; font-size: 11px; -webkit-box-shadow: inset 0px 17px 35px -15px #21212b; -moz-box-shadow: inset 0px 17px 35px -15px #21212b; -o-box-shadow: inset 0px 17px 35px -15px #21212b; -ms-box-shadow: inset 0px 17px 35px -15px #21212b; box-shadow: inset 0px 17px 35px -15px #21212b ; letter-spacing: 1px;
+}
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/Menu.css ---- */

@@ -90,3 +90,8 @@ body:after {
 }
 .SiteList.needaction .site .details.needaction:hover { background-color: #fcff2b; transition: none !important }
 .SiteList.needaction .site .details.needaction:active { transform: translateY(1px); transition: none }
+
+.site-list-more {
+	display: block; text-align: center; text-transform: uppercase; color: #AAA; padding-top: 15px;
+	padding-bottom: 8px; font-size: 11px; box-shadow: inset 0px 17px 35px -15px #21212b; letter-spacing: 1px;
+}

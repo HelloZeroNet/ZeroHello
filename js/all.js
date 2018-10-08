@@ -3519,6 +3519,7 @@
     function SiteList() {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
+      this.handleSiteListMoreClick = bind(this.handleSiteListMoreClick, this);
       this.handleFilterClear = bind(this.handleFilterClear, this);
       this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
       this.handleFilterInput = bind(this.handleFilterInput, this);
@@ -3536,6 +3537,7 @@
       this.merged_db = {};
       this.filtering = "";
       setInterval(this.reorderTimer, 10000);
+      this.limit = 100;
       Page.on_settings.then((function(_this) {
         return function() {
           _this.update();
@@ -3733,6 +3735,12 @@
       return false;
     };
 
+    SiteList.prototype.handleSiteListMoreClick = function(e) {
+      this.limit += 1000;
+      Page.projector.scheduleRender();
+      return false;
+    };
+
     SiteList.prototype.render = function() {
       var filter_base, i, len, num_found, ref, ref1, site;
       if (!this.loaded) {
@@ -3789,9 +3797,14 @@
           return item.render();
         })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
           return item.render();
-        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", this.sites_connected.map(function(item) {
-          return item.render();
-        })), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
+        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", [
+          this.sites_connected.slice(0, +(this.limit - 1) + 1 || 9e9).map(function(item) {
+            return item.render();
+          }), this.sites_connected.length > this.limit ? h("a.site-list-more", {
+            href: "#Show+more+connected+sites",
+            onclick: this.handleSiteListMoreClick
+          }, "Show more") : void 0
+        ]), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
           h("h2.more", {
             key: "More"
           }, "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
@@ -3817,6 +3830,7 @@
   window.SiteList = SiteList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Trigger.coffee ---- */
@@ -5503,7 +5517,6 @@
   window.PageStats = PageStats;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageStats/StatList.coffee ---- */

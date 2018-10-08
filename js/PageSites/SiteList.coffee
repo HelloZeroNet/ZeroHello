@@ -10,6 +10,7 @@ class SiteList extends Class
 		@merged_db = {}
 		@filtering = ""
 		setInterval(@reorderTimer, 10000)
+		@limit = 100
 
 		Page.on_settings.then =>
 			@update()
@@ -111,6 +112,11 @@ class SiteList extends Class
 		@handleFilterInput(e)
 		return false
 
+	handleSiteListMoreClick: (e) =>
+		@limit += 1000
+		Page.projector.scheduleRender()
+		return false
+
 	render: =>
 		if not @loaded
 			return h("div#SiteList")
@@ -162,9 +168,12 @@ class SiteList extends Class
 				item.render()
 			),
 			if @sites_connected.length > 0 then h("h2.connected", "Connected sites:"),
-			h("div.SiteList.connected", @sites_connected.map (item) ->
-				item.render()
-			),
+			h("div.SiteList.connected", [
+				@sites_connected[0..@limit - 1].map (item) ->
+					item.render()
+				if @sites_connected.length > @limit
+					h("a.site-list-more", {href: "#Show+more+connected+sites", onclick: @handleSiteListMoreClick}, "Show more")
+			])
 			@renderMergedSites()
 			if @inactive_demo_sites != null and @inactive_demo_sites.length > 0
 				[
