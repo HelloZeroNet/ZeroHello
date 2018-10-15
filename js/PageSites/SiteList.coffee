@@ -45,7 +45,11 @@ class SiteList extends Class
 		Page.projector.scheduleRender()
 
 	update: ->
-		Page.cmd "siteList", {}, (site_rows) =>
+		if Page.server_info.rev >= 3660
+			args = {connecting_sites: true}
+		else
+			args = {}
+		Page.cmd "siteList", args, (site_rows) =>
 			favorite_sites = Page.settings.favorite_sites
 
 			@item_list.sync(site_rows)
@@ -125,6 +129,7 @@ class SiteList extends Class
 		@sites_favorited = []
 		@sites_owned = []
 		@sites_connected = []
+		@sites_connecting = []
 		@sites_merged = []
 		num_found = 0
 
@@ -143,8 +148,10 @@ class SiteList extends Class
 				@sites_merged.push site
 			else if site.row.settings?.own
 				@sites_owned.push site
-			else
+			else if site.row.content.title
 				@sites_connected.push site
+			else
+				@sites_connecting.push site
 			num_found += 1
 
 		h("div#SiteList", [
@@ -165,6 +172,10 @@ class SiteList extends Class
 			),
 			if @sites_owned.length > 0 then h("h2.owned", "Owned sites:"),
 			h("div.SiteList.owned", @sites_owned.map (item) ->
+				item.render()
+			),
+			if @sites_connecting.length > 0 then h("h2.connecting", "Connecting sites:"),
+			h("div.SiteList.connecting", @sites_connecting.map (item) ->
 				item.render()
 			),
 			if @sites_connected.length > 0 then h("h2.connected", "Connected sites:"),
