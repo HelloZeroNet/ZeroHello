@@ -3228,7 +3228,13 @@
       if (this.row.settings.own) {
         Page.cmd("wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]);
       } else {
-        if (Page.server_info.rev > 2060) {
+        if (!this.row.content.title) {
+          Page.cmd("siteDelete", {
+            "address": this.row.address
+          });
+          this.item_list.deleteItem(this);
+          Page.projector.scheduleRender();
+        } else if (Page.server_info.rev > 2060) {
           Page.cmd("wrapperConfirm", ["Are you sure?" + (" <b>" + this.row.content.title + "</b>"), ["Delete", "Blacklist"]], (function(_this) {
             return function(confirmed) {
               if (confirmed === 1) {
@@ -3414,7 +3420,7 @@
         href: this.getHref(),
         title: ((ref = this.row.content.title) != null ? ref.length : void 0) > 20 ? this.row.content.title : void 0
       }, [
-        h("span.title", [this.row.content.title]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.settings.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, this.row.need_limit ? h("a.details.needaction", {
+        h("span.title", [this.row.content.title || this.row.address]), h("div.details", [h("span.modified", [h("div.icon-clock"), Page.settings.sites_orderby === "size" ? h("span.value", [(this.row.settings.size / 1024 / 1024 + (this.row.settings.size_optional != null) / 1024 / 1024).toFixed(1), "MB"]) : h("span.value", [Time.since(this.row.settings.modified)])]), h("span.peers", [h("div.icon-profile"), h("span.value", [Math.max((this.row.settings.peers ? this.row.settings.peers : 0), this.row.peers)])])]), this.row.demo ? h("div.details.demo", "Activate \u00BB") : void 0, this.row.need_limit ? h("a.details.needaction", {
           href: "#Set+limit",
           onclick: this.handleLimitIncreaseClick
         }, "Set limit to " + this.row.need_limit + "MB") : void 0, h("div.message", {
@@ -3585,7 +3591,15 @@
     };
 
     SiteList.prototype.update = function() {
-      Page.cmd("siteList", {}, (function(_this) {
+      var args;
+      if (Page.server_info.rev >= 3660) {
+        args = {
+          connecting_sites: true
+        };
+      } else {
+        args = {};
+      }
+      Page.cmd("siteList", args, (function(_this) {
         return function(site_rows) {
           var favorite_sites;
           favorite_sites = Page.settings.favorite_sites;
@@ -3750,6 +3764,7 @@
       this.sites_favorited = [];
       this.sites_owned = [];
       this.sites_connected = [];
+      this.sites_connecting = [];
       this.sites_merged = [];
       num_found = 0;
       ref = this.sites;
@@ -3770,8 +3785,10 @@
           this.sites_merged.push(site);
         } else if ((ref1 = site.row.settings) != null ? ref1.own : void 0) {
           this.sites_owned.push(site);
-        } else {
+        } else if (site.row.content.title) {
           this.sites_connected.push(site);
+        } else {
+          this.sites_connecting.push(site);
         }
         num_found += 1;
       }
@@ -3796,6 +3813,8 @@
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
         })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
+          return item.render();
+        })), this.sites_connecting.length > 0 ? h("h2.connecting", "Connecting sites:") : void 0, h("div.SiteList.connecting", this.sites_connecting.map(function(item) {
           return item.render();
         })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", [
           this.sites_connected.slice(0, +(this.limit - 1) + 1 || 9e9).map(function(item) {
@@ -5803,8 +5822,10 @@
   Menu = (function() {
     function Menu() {
       this.render = bind(this.render, this);
+      this.getStyle = bind(this.getStyle, this);
       this.renderItem = bind(this.renderItem, this);
       this.handleClick = bind(this.handleClick, this);
+      this.getDirection = bind(this.getDirection, this);
       this.storeNode = bind(this.storeNode, this);
       this.toggle = bind(this.toggle, this);
       this.hide = bind(this.hide, this);
@@ -5813,6 +5834,7 @@
       this.items = [];
       this.node = null;
       this.height = 0;
+      this.direction = "bottom";
     }
 
     Menu.prototype.show = function() {
@@ -5821,7 +5843,8 @@
         ref.hide();
       }
       this.visible = true;
-      return window.visible_menu = this;
+      window.visible_menu = this;
+      return this.direction = this.getDirection();
     };
 
     Menu.prototype.hide = function() {
@@ -5851,12 +5874,21 @@
         setTimeout(((function(_this) {
           return function() {
             node.className += " visible";
-            return node.style.maxHeight = _this.height + "px";
+            return node.attributes.style.value = _this.getStyle();
           };
         })(this)), 20);
         node.style.maxHeight = "none";
         this.height = node.offsetHeight;
-        return node.style.maxHeight = "0px";
+        node.style.maxHeight = "0px";
+        return this.direction = this.getDirection();
+      }
+    };
+
+    Menu.prototype.getDirection = function() {
+      if (this.node && this.node.parentNode.getBoundingClientRect().top + this.height + 60 > document.body.clientHeight) {
+        return "top";
+      } else {
+        return "bottom";
       }
     };
 
@@ -5907,22 +5939,32 @@
       }
     };
 
+    Menu.prototype.getStyle = function() {
+      var max_height, style;
+      if (this.visible) {
+        max_height = this.height;
+      } else {
+        max_height = 0;
+      }
+      style = "max-height: " + max_height + "px";
+      if (this.direction === "top") {
+        style += ";margin-top: " + (0 - this.height - 50) + "px";
+      } else {
+        style += ";margin-top: 0px";
+      }
+      return style;
+    };
+
     Menu.prototype.render = function(class_name) {
-      var max_height;
       if (class_name == null) {
         class_name = "";
       }
       if (this.visible || this.node) {
-        if (this.visible) {
-          max_height = this.height;
-        } else {
-          max_height = 0;
-        }
         return h("div.menu" + class_name, {
           classes: {
             "visible": this.visible
           },
-          style: "max-height: " + max_height + "px",
+          style: this.getStyle(),
           afterCreate: this.storeNode
         }, this.items.map(this.renderItem));
       }
