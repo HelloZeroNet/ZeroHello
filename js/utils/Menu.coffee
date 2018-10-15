@@ -4,11 +4,13 @@ class Menu
 		@items = []
 		@node = null
 		@height = 0
+		@direction = "bottom"
 
 	show: =>
 		window.visible_menu?.hide()
 		@visible = true
 		window.visible_menu = @
+		@direction = @getDirection()
 
 	hide: =>
 		@visible = false
@@ -32,11 +34,18 @@ class Menu
 			node.className = node.className.replace("visible", "")
 			setTimeout (=>
 				node.className += " visible"
-				node.style.maxHeight = @height + "px"
+				node.attributes.style.value = @getStyle()
 			), 20
 			node.style.maxHeight = "none"
 			@height = node.offsetHeight
 			node.style.maxHeight = "0px"
+			@direction = @getDirection()
+
+	getDirection: =>
+		if @node and @node.parentNode.getBoundingClientRect().top + @height + 60 > document.body.clientHeight
+			return "top"
+		else
+			return "bottom"
 
 	handleClick: (e) =>
 		keep_menu = false
@@ -64,13 +73,21 @@ class Menu
 				onclick = @handleClick
 			h("a.menu-item", {href: href, onclick: onclick, "data-title": title, key: title, classes: {"selected": selected, "noaction": (cb == null)}}, title)
 
+	getStyle: =>
+		if @visible
+			max_height = @height
+		else
+			max_height = 0
+		style = "max-height: #{max_height}px"
+		if @direction == "top"
+			style += ";margin-top: #{0 - @height - 50}px"
+		else
+			style += ";margin-top: 0px"
+		return style
+
 	render: (class_name="") =>
 		if @visible or @node
-			if @visible
-				max_height = @height
-			else
-				max_height = 0
-			h("div.menu#{class_name}", {classes: {"visible": @visible}, style: "max-height: #{max_height}px", afterCreate: @storeNode}, @items.map(@renderItem))
+			h("div.menu#{class_name}", {classes: {"visible": @visible}, style: @getStyle(), afterCreate: @storeNode}, @items.map(@renderItem))
 
 window.Menu = Menu
 
