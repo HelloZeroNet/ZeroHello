@@ -116,7 +116,11 @@ class Site extends Class
 		if @row.settings.own
 			Page.cmd "wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]
 		else
-			if Page.server_info.rev > 2060
+			if not @row.content.title
+				Page.cmd "siteDelete", {"address": @row.address}
+				@item_list.deleteItem(@)
+				Page.projector.scheduleRender()
+			else if Page.server_info.rev > 2060
 				Page.cmd "wrapperConfirm", ["Are you sure?" + " <b>#{@row.content.title}</b>", ["Delete", "Blacklist"]], (confirmed) =>
 					if confirmed == 1
 						Page.cmd "siteDelete", {"address": @row.address}
