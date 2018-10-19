@@ -3546,9 +3546,11 @@
       this.limit = 100;
       Page.on_settings.then((function(_this) {
         return function() {
-          _this.update();
-          return Page.cmd("channelJoinAllsite", {
-            "channel": "siteChanged"
+          return Page.on_server_info.then(function() {
+            _this.update();
+            return Page.cmd("channelJoinAllsite", {
+              "channel": "siteChanged"
+            });
           });
         };
       })(this));
@@ -3849,7 +3851,6 @@
   window.SiteList = SiteList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Trigger.coffee ---- */
@@ -5885,7 +5886,7 @@
     };
 
     Menu.prototype.getDirection = function() {
-      if (this.node && this.node.parentNode.getBoundingClientRect().top + this.height + 60 > document.body.clientHeight) {
+      if (this.node && this.node.parentNode.getBoundingClientRect().top + this.height + 60 > document.body.clientHeight && this.node.parentNode.getBoundingClientRect().top - this.height > 0) {
         return "top";
       } else {
         return "bottom";
@@ -5900,7 +5901,7 @@
         item = ref[i];
         title = item[0], cb = item[1], selected = item[2];
         if (title === e.target.textContent || e.target["data-title"] === title) {
-          keep_menu = cb(item);
+          keep_menu = typeof cb === "function" ? cb(item) : void 0;
           break;
         }
       }
@@ -6658,6 +6659,8 @@
       this.handleSettingsClick = bind(this.handleSettingsClick, this);
       this.handleBackupClick = bind(this.handleBackupClick, this);
       this.handleCreateSiteClick = bind(this.handleCreateSiteClick, this);
+      this.renderMenuTheme = bind(this.renderMenuTheme, this);
+      this.handleThemeClick = bind(this.handleThemeClick, this);
       this.renderMenuLanguage = bind(this.renderMenuLanguage, this);
       this.handleLanguageClick = bind(this.handleLanguageClick, this);
       this.menu_settings = new Menu();
@@ -6704,6 +6707,52 @@
                 long: lang.length > 2
               }
             }, lang), " "
+          ]);
+        }
+        return results;
+      }).call(this));
+    };
+
+    Head.prototype.handleThemeClick = function(e) {
+      var theme;
+      if (Page.server_info.rev < 3670) {
+        return Page.cmd("wrapperNotification", ["info", "You need ZeroNet 0.6.4 to change the interface's theme"]);
+      }
+      theme = e.target.hash.replace("#", "");
+      Page.cmd("userGetGlobalSettings", [], function(user_settings) {
+        user_settings.theme = theme;
+        Page.server_info.user_settings = user_settings;
+        document.getElementById("style-live").innerHTML = "* { transition: all 0.5s ease-in-out }";
+        document.body.className = document.body.className.replace(/theme-[a-z]+/, "");
+        document.body.className += " theme-" + theme;
+        Page.cmd("userSetGlobalSettings", [user_settings]);
+        return setTimeout((function() {
+          return document.getElementById("style-live").innerHTML = "";
+        }), 2000);
+      });
+      return false;
+    };
+
+    Head.prototype.renderMenuTheme = function() {
+      var ref, theme, theme_selected, themes;
+      themes = ["light", "dark"];
+      theme_selected = (ref = Page.server_info.user_settings) != null ? ref.theme : void 0;
+      if (!theme_selected) {
+        theme_selected = "light";
+      }
+      return h("div.menu-radio.menu-themes", h("div", "Theme: "), (function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = themes.length; i < len; i++) {
+          theme = themes[i];
+          results.push([
+            h("a", {
+              href: "#" + theme,
+              onclick: this.handleThemeClick,
+              classes: {
+                selected: theme_selected === theme
+              }
+            }, theme), " "
           ]);
         }
         return results;
@@ -6762,6 +6811,8 @@
           };
         })(this)), orderby === "size"
       ]);
+      this.menu_settings.items.push(["---"]);
+      this.menu_settings.items.push([this.renderMenuTheme(), null]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([this.renderMenuLanguage(), null]);
       this.menu_settings.items.push(["---"]);
@@ -6892,6 +6943,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
 
 
@@ -6924,6 +6976,7 @@
       this.announcer_stats = null;
       this.address = null;
       this.on_site_info = new Promise();
+      this.on_server_info = new Promise();
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
@@ -7212,7 +7265,8 @@
 
     ZeroHello.prototype.setServerInfo = function(server_info) {
       this.server_info = server_info;
-      return this.projector.scheduleRender();
+      this.projector.scheduleRender();
+      return this.on_server_info.resolve();
     };
 
     ZeroHello.prototype.setAnnouncerInfo = function(announcer_info) {
