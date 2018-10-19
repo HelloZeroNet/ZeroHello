@@ -11,6 +11,9 @@ text-align: right;
 margin-top: 0px;
 padding: 8px 18px;
 }
+#Dashboard .dashboard-item.donate {
+padding: 8px 17px;
+}
 .feeds-filters {
 margin-top: 15px
 }
