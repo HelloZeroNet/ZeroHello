@@ -42,7 +42,7 @@ class Menu
 			@direction = @getDirection()
 
 	getDirection: =>
-		if @node and @node.parentNode.getBoundingClientRect().top + @height + 60 > document.body.clientHeight
+		if @node and @node.parentNode.getBoundingClientRect().top + @height + 60 > document.body.clientHeight and @node.parentNode.getBoundingClientRect().top - @height > 0
 			return "top"
 		else
 			return "bottom"
@@ -52,7 +52,7 @@ class Menu
 		for item in @items
 			[title, cb, selected] = item
 			if title == e.target.textContent or e.target["data-title"] == title
-				keep_menu = cb(item)
+				keep_menu = cb?(item)
 				break
 		if keep_menu != true and cb != null
 			@hide()
