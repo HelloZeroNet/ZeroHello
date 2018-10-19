@@ -13,8 +13,9 @@ class SiteList extends Class
 		@limit = 100
 
 		Page.on_settings.then =>
-			@update()
-			Page.cmd "channelJoinAllsite", {"channel": "siteChanged"}
+			Page.on_server_info.then =>
+				@update()
+				Page.cmd "channelJoinAllsite", {"channel": "siteChanged"}
 
 	reorderTimer: =>
 		if not @schedule_reorder
