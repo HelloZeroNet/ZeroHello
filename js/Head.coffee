@@ -31,6 +31,36 @@ class Head extends Class
 				]
 		)
 
+	handleThemeClick: (e) =>
+		if Page.server_info.rev < 3670
+			return Page.cmd "wrapperNotification", ["info", "You need ZeroNet 0.6.4 to change the interface's theme"]
+		theme = e.target.hash.replace("#", "")
+		Page.cmd "userGetGlobalSettings", [], (user_settings) ->
+			user_settings.theme = theme
+			Page.server_info.user_settings = user_settings
+			document.getElementById("style-live").innerHTML = "* { transition: all 0.5s ease-in-out }"
+			document.body.className = document.body.className.replace(/theme-[a-z]+/, "")
+			document.body.className += " theme-#{theme}"
+			Page.cmd "userSetGlobalSettings", [user_settings]
+			setTimeout ( ->
+				document.getElementById("style-live").innerHTML = ""
+			), 2000
+		return false
+
+	renderMenuTheme: =>
+		themes = ["light", "dark"]
+		theme_selected = Page.server_info.user_settings?.theme
+		if not theme_selected then theme_selected = "light"
+
+		h("div.menu-radio.menu-themes",
+			h("div", "Theme: "),
+			for theme in themes
+				[
+					h("a", {href: "#" + theme, onclick: @handleThemeClick, classes: {selected: theme_selected == theme}}, theme),
+					" "
+				]
+		)
+
 	handleCreateSiteClick: =>
 		if Page.server_info.rev < 1770
 			return Page.cmd "wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]
@@ -55,6 +85,8 @@ class Head extends Class
 		@menu_settings.items.push ["Order sites by update time", ( => @handleOrderbyClick("modified") ), (orderby == "modified")]
 		@menu_settings.items.push ["Order sites by add time", ( => @handleOrderbyClick("addtime") ), (orderby == "addtime")]
 		@menu_settings.items.push ["Order sites by size", ( => @handleOrderbyClick("size") ), (orderby == "size")]
+		@menu_settings.items.push ["---"]
+		@menu_settings.items.push [@renderMenuTheme(), null ]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
