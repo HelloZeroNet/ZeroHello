@@ -10,6 +10,7 @@ class ZeroHello extends ZeroFrame
 		@address = null
 
 		@on_site_info = new Promise()
+		@on_server_info = new Promise()
 		@on_settings = new Promise()
 		@on_loaded = new Promise()
 		@settings = null
@@ -226,6 +227,7 @@ class ZeroHello extends ZeroFrame
 	setServerInfo: (server_info) ->
 		@server_info = server_info
 		@projector.scheduleRender()
+		@on_server_info.resolve()
 
 	setAnnouncerInfo: (announcer_info) ->
 		@announcer_info = announcer_info.stats
