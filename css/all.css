@@ -126,7 +126,7 @@
 
 .left {
 	width: 400px; position: absolute; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box ; min-height: 100%; padding-top: 0px; z-index: 1; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ;
-	color: white; background-color: #232A31; background-image: -webkit-linear-gradient(352deg, #322641, #2A333C);background-image: -moz-linear-gradient(352deg, #322641, #2A333C);background-image: -o-linear-gradient(352deg, #322641, #2A333C);background-image: -ms-linear-gradient(352deg, #322641, #2A333C);background-image: linear-gradient(352deg, #322641, #2A333C); /* linear-gradient(352deg, #232A31, #2A333C);*/
+	color: white; background-color: #232A31; background-image: -webkit-linear-gradient(352deg, #322641, #2A333C);background-image: -moz-linear-gradient(352deg, #322641, #2A333C);background-image: -o-linear-gradient(352deg, #322641, #2A333C);background-image: -ms-linear-gradient(352deg, #322641, #2A333C);background-image: -webkit-gradient(352deg, #322641, #2A333C);background-image: linear-gradient(352deg, #322641, #2A333C); /* linear-gradient(352deg, #232A31, #2A333C);*/
 }
 body:after {
 	width: 400px; position: fixed; height: 100%; background-color: #322641;
