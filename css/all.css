@@ -649,7 +649,7 @@ body:after {
 .FeedList .feed .body {
 	color: #8A8A8A; line-height: 24px; font-size: 15px;
 	margin-top: 9px; white-space: pre-line; max-height: 3em; text-overflow: ellipsis; overflow: hidden; position: relative;
-	-webkit-line-clamp: 2; -webkit-box-orient: vertical; -ms-box-orient: vertical; display: -webkit-box;
+	-webkit-line-clamp: 2; -webkit-box-orient: vertical; -ms-box-orient: vertical; -moz-box-orient: vertical; display: -webkit-box;
 }
 .FeedList .feed .body b { color: #666 }
 /*.FeedList .feed .body:before { content:''; width: 100%; height: 100%; position: absolute; left: 0; top: 0; background: linear-gradient(transparent 46px, transparent 0px, white 94%) }*/
