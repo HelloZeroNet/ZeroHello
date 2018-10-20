@@ -79,12 +79,14 @@
   left: -6px;
   -webkit-transform-origin: 29px 29px;
       -ms-transform-origin: 29px 29px;
+       -o-transform-origin: 29px 29px;
           transform-origin: 29px 29px;
 }
 .loader .arc::after {
   left: 27px;
   -webkit-transform-origin: 0 29px;
       -ms-transform-origin: 0 29px;
+     -moz-transform-origin: 0 29px;
           transform-origin: 0 29px;
   -webkit-animation-delay: 0.5s;
           -webkit-animation-delay: 0.5s; -moz-animation-delay: 0.5s; -o-animation-delay: 0.5s; -ms-animation-delay: 0.5s; animation-delay: 0.5s ;
@@ -647,7 +649,7 @@ body:after {
 .FeedList .feed .body {
 	color: #8A8A8A; line-height: 24px; font-size: 15px;
 	margin-top: 9px; white-space: pre-line; max-height: 3em; text-overflow: ellipsis; overflow: hidden; position: relative;
-	-webkit-line-clamp: 2; -webkit-box-orient: vertical; display: -webkit-box;
+	-webkit-line-clamp: 2; -webkit-box-orient: vertical; -ms-box-orient: vertical; display: -webkit-box;
 }
 .FeedList .feed .body b { color: #666 }
 /*.FeedList .feed .body:before { content:''; width: 100%; height: 100%; position: absolute; left: 0; top: 0; background: linear-gradient(transparent 46px, transparent 0px, white 94%) }*/
