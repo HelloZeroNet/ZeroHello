@@ -14,6 +14,12 @@
 .theme-dark .search-info-stats td, .theme-dark .search-info-stats th { border-bottom-color: #555f69; color: white; }
 .theme-dark .search-info-stats td a { color: #82d9f4 }
 
+.theme-dark .menu { background-color: #383b40; outline: 1px solid #4a4a4a; }
+.theme-dark .menu-item { color: #eaf0f5; }
+.theme-dark .menu-item:not(.noaction):hover { background-color: #524d56; color: white; }
+.theme-dark .menu-item-separator { border-top: 1px solid #505050; }
+.theme-dark .menu-radio a { background-color: #414141; color: #b9b9b9; }
+
 @media screen and (max-width: 970px) {
 .theme-dark .FeedList .feed .details { border-top: 1px solid #4d565e; border-bottom: none; padding-top: 20px }
 .theme-dark .right { background-color: #383f46; }
