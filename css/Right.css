@@ -101,7 +101,7 @@
 .welcome { text-align: center; margin-top: 50px; max-width: 1170px }
 .welcome h1 {
 	font-size: 400%; color: #7C7DBC; margin-top: 20px;
-	background: -webkit-linear-gradient(left, #64E6E3, #965FF9 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+	background: -webkit-linear-gradient(left, #64E6E3, #965FF9 70%);background: -webkit-gradient(left, #64E6E3, #965FF9 70%);background: -moz-linear-gradient(left, #64E6E3, #965FF9 70%);background: -o-linear-gradient(left, #64E6E3, #965FF9 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 /*.welcome h1 .zeronet {  color: #9B63D0; }*/
 .welcome h2 { font-size: 20px; margin: 8px; text-transform: uppercase; opacity: 0.7; }
