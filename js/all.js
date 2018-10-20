@@ -6750,7 +6750,8 @@
               href: "#" + theme,
               onclick: this.handleThemeClick,
               classes: {
-                selected: theme_selected === theme
+                selected: theme_selected === theme,
+                long: true
               }
             }, theme), " "
           ]);

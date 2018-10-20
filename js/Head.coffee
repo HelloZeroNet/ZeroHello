@@ -56,7 +56,7 @@ class Head extends Class
 			h("div", "Theme: "),
 			for theme in themes
 				[
-					h("a", {href: "#" + theme, onclick: @handleThemeClick, classes: {selected: theme_selected == theme}}, theme),
+					h("a", {href: "#" + theme, onclick: @handleThemeClick, classes: {selected: theme_selected == theme, long: true}}, theme),
 					" "
 				]
 		)
