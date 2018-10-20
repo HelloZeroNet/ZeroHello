@@ -4,7 +4,7 @@
 .theme-dark .FeedList .feed .site { color: #f5faff }
 .theme-dark .FeedList .feed .title { color: #f5faff }
 .theme-dark .FeedList .feed .circle { background-color: #383f46 }
-.theme-dark .FeedList .feed .more { border-top-color: #535d66; background: linear-gradient(#424a52 0%, #383f46 50%) }
+.theme-dark .FeedList .feed .more { border-top-color: #535d66; background: linear-gradient(#404643 0%, #30363c 50%); }
 .theme-dark .FeedList .feed .body { color: #c3c3c3 }
 .theme-dark .FeedList .feed .body b { color: #87e2ff; }
 .theme-dark .feeds-filter { color: #c6ced7 }
