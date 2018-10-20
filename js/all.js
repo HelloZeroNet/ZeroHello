@@ -6723,12 +6723,14 @@
         user_settings.theme = theme;
         Page.server_info.user_settings = user_settings;
         document.getElementById("style-live").innerHTML = "* { transition: all 0.5s ease-in-out }";
-        document.body.className = document.body.className.replace(/theme-[a-z]+/, "");
-        document.body.className += " theme-" + theme;
         Page.cmd("userSetGlobalSettings", [user_settings]);
         return setTimeout((function() {
-          return document.getElementById("style-live").innerHTML = "";
-        }), 2000);
+          document.body.className = document.body.className.replace(/theme-[a-z]+/, "");
+          document.body.className += " theme-" + theme;
+          return setTimeout((function() {
+            return document.getElementById("style-live").innerHTML = "";
+          }), 1000);
+        }), 300);
       });
       return false;
     };
