@@ -785,11 +785,11 @@ body.changing .left { z-index: 1 !important; }
 .theme-dark { background-color: #383f46 }
 .theme-dark .right { border-top-color: #2c2b32; background-color: #30363c; }
 .theme-dark .feeds-line { border-right-color: #52585f }
-.theme-dark .FeedList .feed .site { color: #f5faff }
-.theme-dark .FeedList .feed .title { color: #f5faff }
+.theme-dark .FeedList .feed .site { color: #fff }
+.theme-dark .FeedList .feed .title { color: #fff }
 .theme-dark .FeedList .feed .circle { background-color: #383f46 }
 .theme-dark .FeedList .feed .more { border-top-color: #535d66; background: -webkit-linear-gradient(#404643 0%, #30363c 50%);background: -moz-linear-gradient(#404643 0%, #30363c 50%);background: -o-linear-gradient(#404643 0%, #30363c 50%);background: -ms-linear-gradient(#404643 0%, #30363c 50%);background: linear-gradient(#404643 0%, #30363c 50%); }
-.theme-dark .FeedList .feed .body { color: #c3c3c3 }
+.theme-dark .FeedList .feed .body { color: #dadada }
 .theme-dark .FeedList .feed .body b { color: #87e2ff; }
 .theme-dark .feeds-filter { color: #c6ced7 }
 .theme-dark #Dashboard .dashboard-item { background-color: #383f46; color: rgba(255, 255, 255, 0.6) }
