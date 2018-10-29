@@ -52,8 +52,6 @@
 	"Order sites by size": "根据站点大小排序",
 	"You need ZeroNet 0.6.4 to change the interface's theme": "为使用主题特性, 你至少需要更新到ZeroNet 0.6.4",
 	"Theme: ": "主题: ",
-	"light": "日间",
-	"dark": "夜间",
 	"Language: ": "语言: ",
 	"Create new, empty site": "新建空站点",
 	"Manage muted users": "管理已屏蔽用户",
