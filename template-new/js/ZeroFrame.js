@@ -1,6 +1,7 @@
 // Version 1.0.0 - Initial release
 // Version 1.1.0 (2017-08-02) - Added cmdp function that returns promise instead of using callback
 // Version 1.2.0 (2017-08-02) - Added Ajax monkey patch to emulate XMLHttpRequest over ZeroFrame API
+// Version 1.3.0 (2018-12-05) - Added monkey patch for fetch API
 
 const CMD_INNER_READY = 'innerReady'
 const CMD_RESPONSE = 'response'
@@ -115,5 +116,12 @@ class ZeroFrame {
             return this.realOpen(method, url, async)
         }
         XMLHttpRequest.prototype.open = newOpen
+
+        window.realFetch = window.fetch
+        var newFetch = function (url) {
+            url += "?ajax_key=" + page.ajax_key
+            return window.realFetch(url)
+        }
+        window.fetch = newFetch
     }
 }
