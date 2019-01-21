@@ -129,6 +129,7 @@ class SiteList extends Class
 		@sites_needaction = []
 		@sites_favorited = []
 		@sites_owned = []
+		@sites_recent = []
 		@sites_connected = []
 		@sites_connecting = []
 		@sites_merged = []
@@ -149,6 +150,8 @@ class SiteList extends Class
 				@sites_merged.push site
 			else if site.row.settings?.own
 				@sites_owned.push site
+			else if site.row.settings?.downloaded > Time.timestamp() - 60 * 60 * 24
+				@sites_recent.push site
 			else if site.row.content.title
 				@sites_connected.push site
 			else
@@ -163,6 +166,10 @@ class SiteList extends Class
 					h("span.filter-num", {updateAnimation: Animation.show, enterAnimation: Animation.show, exitAnimation: Animation.hide}, "(found #{num_found} of #{@sites.length} sites)")
 					h("a.filter-clear", {href: "#clear", onclick: @handleFilterClear}, "\u00D7")
 				]
+			if @sites_recent.length > 0 then h("h2.recent", "Recently downloaded:"),
+			h("div.SiteList.recent", @sites_recent.map (item) ->
+				item.render()
+			),
 			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
 			h("div.SiteList.needaction", @sites_needaction.map (item) ->
 				item.render()
