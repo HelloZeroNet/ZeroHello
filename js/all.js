@@ -1691,7 +1691,7 @@
         }, [
           h("div.tr.thead", [h("div.td.pre", "."), this.mode === "bigfiles" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
             return function(file) {
-              var percent, profile_color, site;
+              var percent, percent_bg, percent_title, profile_color, site, status;
               site = file.site || _this.site;
               if (file.peer >= 10) {
                 profile_color = "#47d094";
@@ -1712,6 +1712,14 @@
                 } else {
                   percent = parseInt((file.pieces_downloaded / file.pieces) * 100);
                 }
+                if (file.is_downloading || percent === 100) {
+                  status = "";
+                  percent_bg = "#9ef5cf";
+                } else {
+                  status = "paused";
+                  percent_bg = "#f5f49e";
+                }
+                percent_title = percent + "% " + status;
               }
               return h("div.tr", {
                 key: file.inner_path,
@@ -1736,10 +1744,14 @@
                 }, file.inner_path.replace(/.*\//, "")), file.is_pinned ? h("span.pinned", {
                   exitAnimation: Animation.slideUpInout,
                   enterAnimation: Animation.slideDown
-                }, "Pinned") : void 0), _this.mode === "bigfiles" ? h("div.td.status", h("span.percent", {
+                }, "Pinned") : void 0), _this.mode === "bigfiles" ? h("div.td.status", {
+                  classes: {
+                    "downloading": file.is_downloading
+                  }
+                }, h("span.percent", {
                   title: file.pieces_downloaded + " of " + file.pieces + " pieces downloaded",
-                  style: "box-shadow: inset " + (percent * 0.8) + "px 0px 0px #9ef5cf;"
-                }, percent + "%")) : void 0, h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
+                  style: "box-shadow: inset " + (percent * 0.8) + "px 0px 0px " + percent_bg + ";"
+                }, percent_title)) : void 0, h("div.td.size", Text.formatSize(file.size)), h("div.td.peer", [
                   h("div.icon.icon-profile", {
                     style: "color: " + profile_color
                   }), h("span.num", file.peer)
@@ -1786,6 +1798,7 @@
   window.SiteFiles = SiteFiles;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Dashboard.coffee ---- */
@@ -2342,13 +2355,16 @@
     };
 
     FeedList.prototype.handleSearchInput = function(e) {
-      var delay;
-      if (this.searching && this.searching.length > 3) {
-        delay = 100;
-      } else if (this.searching) {
-        delay = 300;
+      var delay, ref;
+      if (((ref = this.searching) != null ? ref.length : void 0) > 3) {
+        delay = 400;
       } else {
-        delay = 600;
+        delay = 800;
+      }
+      if (Page.site_list.sites.length > 300) {
+        delay = delay * 3;
+      } else if (Page.site_list.sites.length > 100) {
+        delay = delay * 2;
       }
       this.searching = e.target.value;
       this.searching_text = this.searching.replace(/[^ ]+:.*$/, "").trim();
@@ -2357,6 +2373,9 @@
         this.feed_keys = {};
       }
       if (e.target.value === "") {
+        delay = 1;
+      }
+      if (e.keyCode === 13) {
         delay = 1;
       }
       clearInterval(this.input_timer);
@@ -2391,6 +2410,9 @@
     FeedList.prototype.handleSearchKeyup = function(e) {
       if (e.keyCode === 27) {
         e.target.value = "";
+        this.handleSearchInput(e);
+      }
+      if (e.keyCode === 13) {
         this.handleSearchInput(e);
       }
       return false;
@@ -3758,13 +3780,14 @@
     };
 
     SiteList.prototype.render = function() {
-      var filter_base, i, len, num_found, ref, ref1, site;
+      var filter_base, i, len, num_found, ref, ref1, ref2, site;
       if (!this.loaded) {
         return h("div#SiteList");
       }
       this.sites_needaction = [];
       this.sites_favorited = [];
       this.sites_owned = [];
+      this.sites_recent = [];
       this.sites_connected = [];
       this.sites_connecting = [];
       this.sites_merged = [];
@@ -3787,6 +3810,8 @@
           this.sites_merged.push(site);
         } else if ((ref1 = site.row.settings) != null ? ref1.own : void 0) {
           this.sites_owned.push(site);
+        } else if (((ref2 = site.row.settings) != null ? ref2.downloaded : void 0) > Time.timestamp() - 60 * 60 * 24) {
+          this.sites_recent.push(site);
         } else if (site.row.content.title) {
           this.sites_connected.push(site);
         } else {
@@ -3810,7 +3835,9 @@
             href: "#clear",
             onclick: this.handleFilterClear
           }, "\u00D7")
-        ] : void 0, this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
+        ] : void 0, this.sites_recent.length > 0 ? h("h2.recent", "Recently downloaded:") : void 0, h("div.SiteList.recent", this.sites_recent.map(function(item) {
+          return item.render();
+        })), this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
           return item.render();
         })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
           return item.render();
@@ -6946,7 +6973,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/ZeroHello.coffee ---- */
 
 
@@ -6983,7 +7009,7 @@
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
-      this.latest_version = "0.6.3";
+      this.latest_version = "0.6.4";
       this.latest_rev = 3616;
       this.mode = "Sites";
       this.change_timer = null;
