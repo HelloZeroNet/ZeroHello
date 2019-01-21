@@ -81,6 +81,7 @@
 	"Running out of size limit:": "超出站点大小限制：",
 	"Favorited sites:": "收藏的站点:",
 	"Owned sites:": "拥有的站点:",
+	"Connecting sites:": "连接中的站点",
 	"Connected sites:": "连接的站点:",
 	"Show more": "展示更多",
 	"Merged: ": "聚合在：",
@@ -102,6 +103,7 @@
 	"Upgrade code": "升级代码",
 	"Resume": "恢复",
 	"Pause": "暂停",
+	"Save as .zip": "打包成ZIP文件",
 	"Check files": "检查文件",
 	"Delete": "删除",
 	"Blacklist": "黑名单",
@@ -184,7 +186,7 @@
 	"Content sources: ": "数据文件: ",
 	"Optional downloaded: ": "已下载可选文件: ",
 	" (limit: ": " (限制: ",
-	"Top country": "国家排行榜",
+	"Top country": "热门地区",
 
 	"More files...": "更多文件...",
 
