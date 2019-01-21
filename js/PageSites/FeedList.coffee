@@ -149,6 +149,10 @@ class FeedList extends Class
 
 		if e.target.value == ""  # No delay when returning to newsfeed
 			delay = 1
+
+		if e.keyCode == 13  # Enter
+			delay = 1
+
 		clearInterval @input_timer
 		setTimeout =>
 			@loading = true
@@ -172,6 +176,8 @@ class FeedList extends Class
 	handleSearchKeyup: (e) =>
 		if e.keyCode == 27 # Esc
 			e.target.value = ""
+			@handleSearchInput(e)
+		if e.keyCode == 13 # Enter
 			@handleSearchInput(e)
 		return false
 
