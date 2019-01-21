@@ -133,6 +133,13 @@ class FeedList extends Class
 			delay = 400
 		else
 			delay = 800
+
+		# More delay for heavy clients
+		if Page.site_list.sites.length > 300
+			delay = delay * 3
+		else if Page.site_list.sites.length > 100
+			delay = delay * 2
+
 		@searching = e.target.value
 		@searching_text = @searching.replace(/[^ ]+:.*$/, "").trim()
 
