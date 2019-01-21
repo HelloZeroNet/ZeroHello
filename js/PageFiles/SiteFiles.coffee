@@ -112,6 +112,15 @@ class SiteFiles extends Class
 						else
 							percent = parseInt((file.pieces_downloaded / file.pieces) * 100)
 
+						if file.is_downloading or percent == 100
+							status = ""
+							percent_bg = "#9ef5cf"
+						else
+							status = "paused"
+							percent_bg = "#f5f49e"
+
+						percent_title = "#{percent}% #{status}"
+
 					h("div.tr", {key: file.inner_path, inner_path: file.inner_path, exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown, classes: {selected: @selected[file.inner_path]}, onmouseenter: @handleRowMouseenter}, [
 						h("div.td.pre",
 							h("a.checkbox", {
@@ -129,8 +138,8 @@ class SiteFiles extends Class
 								h("span.pinned", {exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown}, "Pinned")
 						),
 						if @mode == "bigfiles"
-							h("div.td.status",
-								h("span.percent", {title: "#{file.pieces_downloaded} of #{file.pieces} pieces downloaded", style: "box-shadow: inset #{percent * 0.8}px 0px 0px #9ef5cf;"}, "#{percent}%")
+							h("div.td.status", {classes: {"downloading": file.is_downloading}}
+								h("span.percent", {title: "#{file.pieces_downloaded} of #{file.pieces} pieces downloaded", style: "box-shadow: inset #{percent * 0.8}px 0px 0px #{percent_bg};"}, percent_title)
 							)
 						h("div.td.size", Text.formatSize(file.size)),
 						h("div.td.peer", [
