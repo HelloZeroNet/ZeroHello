@@ -129,12 +129,10 @@ class FeedList extends Class
 				node.focus()
 
 	handleSearchInput: (e) =>
-		if @searching and @searching.length > 3
-			delay = 100
-		else if @searching
-			delay = 300
+		if @searching?.length > 3
+			delay = 400
 		else
-			delay = 600
+			delay = 800
 		@searching = e.target.value
 		@searching_text = @searching.replace(/[^ ]+:.*$/, "").trim()
 
