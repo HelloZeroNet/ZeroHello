@@ -1,6 +1,6 @@
 .right {
 	position: relative; padding-right: 0px; background-color: white; left: 400px;
-	width: calc(100% - 400px); box-sizing: border-box; min-height: 100%; border-top: 93px solid #EDF2F5; perspective: 2000px;
+	width: calc(100% - 400px); box-sizing: border-box; min-height: 100%; border-top: 94px solid #EDF2F5; perspective: 2000px;
 }
 
 #Dashboard { position: absolute; right: 80px; top: -83px; white-space: nowrap; }
@@ -9,10 +9,11 @@
 	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: 600; background-color: white;
 }
 #Dashboard .dashboard-item:active { transform: translateY(1px); }
-#Dashboard .dashboard-item .status-ok { color: #2ecc71; }
-#Dashboard .dashboard-item .status-warning { color: #E7A43C; }
-#Dashboard .dashboard-item .status-bad { color: #e74c3c; }
-#Dashboard .dashboard-item .status { transition: all 0.3s }
+#Dashboard .status-ok { color: #2ecc71; }
+#Dashboard .status-warning { color: #E7A43C; }
+#Dashboard .status-bad { color: #e74c3c; }
+#Dashboard .status-disabled { color: #aaa; }
+#Dashboard .status { transition: all 0.3s }
 #Dashboard .dashboard-item.multiuser .status { text-transform: none }
 #Dashboard .menu { top: 47px }
 #Dashboard .menu-tor .menu-item { white-space: nowrap; }
@@ -26,6 +27,10 @@
 #Dashboard .menu-timecorrection { white-space: normal; max-width: 300px; }
 #Dashboard .menu-port { white-space: normal; max-width: 500px; }
 
+#Dashboard .menu .status {
+	text-transform: uppercase; text-transform: uppercase; font-weight: bold;
+	border: 1px solid; padding: 2px 5px; margin: 0px 5px; font-size: 75%; vertical-align: 1px;
+}
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; backface-visibility: hidden; content: "";
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; border-radius: 60px; position: absolute; margin-left: -32px; margin-top: -2px;

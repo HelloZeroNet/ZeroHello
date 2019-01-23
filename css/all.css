@@ -555,7 +555,7 @@ body:after {
 
 .right {
 	position: relative; padding-right: 0px; background-color: white; left: 400px;
-	width: calc(100% - 400px); -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; min-height: 100%; border-top: 93px solid #EDF2F5; -webkit-perspective: 2000px; -moz-perspective: 2000px; -o-perspective: 2000px; -ms-perspective: 2000px; perspective: 2000px ;
+	width: calc(100% - 400px); -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; min-height: 100%; border-top: 94px solid #EDF2F5; -webkit-perspective: 2000px; -moz-perspective: 2000px; -o-perspective: 2000px; -ms-perspective: 2000px; perspective: 2000px ;
 }
 
 #Dashboard { position: absolute; right: 80px; top: -83px; white-space: nowrap; }
@@ -564,10 +564,11 @@ body:after {
 	color: rgba(45, 47, 62, 0.72); text-transform: uppercase; font-size: 13px; font-weight: 600; background-color: white;
 }
 #Dashboard .dashboard-item:active { -webkit-transform: translateY(1px); -moz-transform: translateY(1px); -o-transform: translateY(1px); -ms-transform: translateY(1px); transform: translateY(1px) ; }
-#Dashboard .dashboard-item .status-ok { color: #2ecc71; }
-#Dashboard .dashboard-item .status-warning { color: #E7A43C; }
-#Dashboard .dashboard-item .status-bad { color: #e74c3c; }
-#Dashboard .dashboard-item .status { -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+#Dashboard .status-ok { color: #2ecc71; }
+#Dashboard .status-warning { color: #E7A43C; }
+#Dashboard .status-bad { color: #e74c3c; }
+#Dashboard .status-disabled { color: #aaa; }
+#Dashboard .status { -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 #Dashboard .dashboard-item.multiuser .status { text-transform: none }
 #Dashboard .menu { top: 47px }
 #Dashboard .menu-tor .menu-item { white-space: nowrap; }
@@ -581,6 +582,10 @@ body:after {
 #Dashboard .menu-timecorrection { white-space: normal; max-width: 300px; }
 #Dashboard .menu-port { white-space: normal; max-width: 500px; }
 
+#Dashboard .menu .status {
+	text-transform: uppercase; text-transform: uppercase; font-weight: bold;
+	border: 1px solid; padding: 2px 5px; margin: 0px 5px; font-size: 75%; vertical-align: 1px;
+}
 /*#Dash .port_checking .status:after {
 	background: transparent url(../img/loading-circle.gif) no-repeat center center; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; content: "";
 	display: inline-block; background-color: rgb(45, 47, 62); width: 25px; height: 25px; -webkit-border-radius: 60px; -moz-border-radius: 60px; -o-border-radius: 60px; -ms-border-radius: 60px; border-radius: 60px ; position: absolute; margin-left: -32px; margin-top: -2px;
@@ -607,7 +612,7 @@ body:after {
 .feeds-filter.active { opacity: 1; border-bottom: 2px solid #ae4dff }
 .feeds-filter:hover { -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; opacity: 1 }
 
-.feeds-search { max-width: 820px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; padding-left: 190px; margin-top: 30px; position: relative; margin-right: 60px }
+.feeds-search { max-width: 820px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; padding-left: 190px; margin-top: 30px; position: relative; margin-right: 50px }
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; -webkit-border-radius: 30px ; -moz-border-radius: 30px ; -o-border-radius: 30px ; -ms-border-radius: 30px ; border-radius: 30px  }
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
@@ -622,6 +627,14 @@ body:after {
 .search-info-stats .taken { text-align: right }
 .search-info-stats .extra-slow .taken { background-color: #FFE9E2 }
 .search-info-stats .slow .taken { color: #FF5722 }
+
+.search-help {
+	text-align: right; font-size: 13px; padding-top: 8px; position: absolute; width: 100%;
+	margin-left: -152px; color: #AAA; opacity: 0; pointer-events: none; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ;
+}
+.search-help code { background-color: #FEFEFE; padding: 2px 5px; border: 1px solid #EEE; font-family: monospace; font-size: 85%; -webkit-border-radius: 5px; -moz-border-radius: 5px; -o-border-radius: 5px; -ms-border-radius: 5px; border-radius: 5px ; }
+.feeds-search input:focus ~ .search-help { opacity: 1; }
+
 
 .feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px; z-index: -1; }
 /*.loader { background: url("../img/loading-ring.gif") no-repeat; width: 28px; height: 28px; position: absolute; right: -30px; top: -30px }*/
@@ -783,7 +796,7 @@ body.changing .left { z-index: 1 !important; }
 
 
 .theme-dark { background-color: #383f46 }
-.theme-dark .right { border-top-color: #22272d; background-color: #252b33; }
+.theme-dark .right { border-top-color: #2c2b32; background-color: #30363c; }
 .theme-dark .feeds-line { border-right-color: #52585f }
 .theme-dark .FeedList .feed .site { color: #fff }
 .theme-dark .FeedList .feed .title { color: #fff }
@@ -800,7 +813,7 @@ body.changing .left { z-index: 1 !important; }
 
 .theme-dark .menu { background-color: #383b40; outline: 1px solid #4a4a4a; }
 .theme-dark .menu-item { color: #eaf0f5; }
-.theme-dark .menu-item:not(.noaction):hover { background-color: #45444b; color: white; }
+.theme-dark .menu-item:not(.noaction):hover { background-color: #524d56; color: white; }
 .theme-dark .menu-item-separator { border-top: 1px solid #505050; }
 .theme-dark .menu-radio a { background-color: #414141; color: #b9b9b9; }
 

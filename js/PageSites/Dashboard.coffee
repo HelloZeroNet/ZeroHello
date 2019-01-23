@@ -89,7 +89,16 @@ class Dashboard extends Class
 			@menu_port.items.push ["Your port #{Page.server_info.fileserver_port} is closed, but your Tor gateway is running well.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]
 		else
 			@menu_port.items.push ["Your port #{Page.server_info.fileserver_port} is closed. You are still fine, but for faster experience try open it.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]
-
+		if Page.server_info.port_opened
+			@menu_port.items.push ["---"]
+			port_opened = Page.server_info.port_opened
+			format = {
+				true: h("span.status.status-ok", "Opened"),
+				false: h("span.status.status-warning","Closed"),
+				null: h("span.status.status-disabled","Unsupported")
+				undefined: h("span.status.status-disabled","Checking...")
+			}
+			@menu_port.items.push [["IPv4: ", format[port_opened.ipv4], ", IPv6: ", format[port_opened.ipv6]], null]
 		@menu_port.items.push ["---"]
 		@menu_port.items.push ["Re-check opened port", @handlePortRecheckClick]
 
