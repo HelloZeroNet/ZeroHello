@@ -1800,7 +1800,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Dashboard.coffee ---- */
 
 
@@ -1943,6 +1942,7 @@
     };
 
     Dashboard.prototype.handlePortClick = function() {
+      var format, port_opened;
       this.menu_port.items = [];
       if (Page.server_info.ip_external) {
         this.menu_port.items.push(["Nice! Your port " + Page.server_info.fileserver_port + " is opened.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
@@ -1952,6 +1952,17 @@
         this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed, but your Tor gateway is running well.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
       } else {
         this.menu_port.items.push(["Your port " + Page.server_info.fileserver_port + " is closed. You are still fine, but for faster experience try open it.", "http://zeronet.readthedocs.org/en/latest/faq/#do-i-need-to-have-a-port-opened"]);
+      }
+      if (Page.server_info.port_opened) {
+        this.menu_port.items.push(["---"]);
+        port_opened = Page.server_info.port_opened;
+        format = {
+          "true": h("span.status.status-ok", "Opened"),
+          "false": h("span.status.status-warning", "Closed"),
+          "null": h("span.status.status-disabled", "Unsupported"),
+          undefined: h("span.status.status-disabled", "Checking...")
+        };
+        this.menu_port.items.push([["IPv4: ", format[port_opened.ipv4], ", IPv6: ", format[port_opened.ipv6]], null]);
       }
       this.menu_port.items.push(["---"]);
       this.menu_port.items.push(["Re-check opened port", this.handlePortRecheckClick]);
@@ -2146,6 +2157,7 @@
 }).call(this);
 
 
+
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
 
 
@@ -2161,6 +2173,7 @@
     function FeedList() {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
+      this.renderSearchHelp = bind(this.renderSearchHelp, this);
       this.getClass = bind(this.getClass, this);
       this.renderNotifications = bind(this.renderNotifications, this);
       this.handleNotificationHideClick = bind(this.handleNotificationHideClick, this);
@@ -2658,6 +2671,10 @@
       }
     };
 
+    FeedList.prototype.renderSearchHelp = function() {
+      return h("div.search-help", ["Tip: Search in specific site using ", h("code", "anything site:SiteName")]);
+    };
+
     FeedList.prototype.render = function() {
       var feed_type, ref;
       if (this.need_update) {
@@ -2729,7 +2746,7 @@
         }, (this.searching ? this.res.num + " results " : "") + ("from " + this.res.sites + " sites in " + (this.res.taken.toFixed(2)) + "s")) : void 0, this.show_stats ? h("div.search-info-stats", {
           enterAnimation: Animation.slideDown,
           exitAnimation: Animation.slideUp
-        }, [h("table", [h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")), this.res.stats.map(this.renderSearchStat)])]) : void 0, Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
+        }, [h("table", [h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")), this.res.stats.map(this.renderSearchStat)])]) : void 0, this.renderSearchHelp(), Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
           enterAnimation: Animation.show
         }, [
           "You need to ", h("a", {

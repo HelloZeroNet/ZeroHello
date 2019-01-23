@@ -375,6 +375,12 @@ class FeedList extends Class
 		else
 			return "newsfeed.limit-#{@limit}"
 
+	renderSearchHelp: =>
+		h("div.search-help", [
+			"Tip: Search in specific site using ",
+			h("code", "anything site:SiteName")
+		])
+
 	render: =>
 		if @need_update
 			RateLimitCb(5000, @update)
@@ -417,6 +423,7 @@ class FeedList extends Class
 									@res.stats.map @renderSearchStat
 								])
 							])
+						@renderSearchHelp()
 						if Page.server_info.rev < 1230 and @searching
 							h("div.search-noresult", {enterAnimation: Animation.show}, ["You need to ", h("a", {href: "#Update", onclick: Page.head.handleUpdateZeronetClick}, "update"), " your ZeroNet client to use the search feature!"])
 						else if @feeds.length == 0 and @searched
