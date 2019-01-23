@@ -78,6 +78,7 @@
 	"Filter: Site name": "筛选器: 站点名",
 	"(found ": "(找到 ",
 	" sites)": " 站点)",
+	"Recently downloaded:": "最近下载的站点:",
 	"Running out of size limit:": "超出站点大小限制：",
 	"Favorited sites:": "收藏的站点:",
 	"Owned sites:": "拥有的站点:",
@@ -114,6 +115,8 @@
 	"Sorry, you can't delete your own site.<br>Please remove the directory manually.": "抱歉，你不能删除你自己拥有的站点。<br>请手动删除站点文件夹。",
 
 	"Search in connected sites": "在连接的站点中搜索",
+	"Tip: Search in specific site using ": "小提示:在指定站点中搜索请使用格式 ",
+	"anything site:SiteName": "搜索内容 site:站点名",
 	" results from ": " 个结果 来自 ",
 	"No results for ": "没有结果对应 ",
 	" sites in ": " 个站点 用时 ",
