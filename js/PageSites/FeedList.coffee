@@ -27,9 +27,15 @@ class FeedList extends Class
 		if scroll_top + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 and not @updating and @feeds?.length > 5 and Page.mode == "Sites" and @limit < 300
 			@limit += 30
 			@query_limit += 30
-			@query_day_limit += 5
+			if @query_day_limit != null
+				@query_day_limit += 5
+				if @query_day_limit > 30
+					@query_day_limit = null
 			@log "checkScroll update"
-			@update()
+			if @searching
+				@search(@searching)
+			else
+				@update()
 			return true
 		else
 			return false
@@ -92,7 +98,7 @@ class FeedList extends Class
 			@res = res
 
 			if rows.length < 10 and @query_day_limit != null
-				@log "Too few results, query without day limit"
+				@log "Only #{res.rows.length} results, query without day limit"
 				@query_limit = 20
 				@query_day_limit = null
 				@updating = false
@@ -110,13 +116,29 @@ class FeedList extends Class
 			@displayRows([])
 			if cb then cb()
 			return
-		@log "Searching for", search
+
+		if not Page.server_info or Page.server_info.rev < 381
+			params = search
+		else
+			params = {search: search, limit: @query_limit * 3, day_limit: @query_day_limit * 10 or null}
+
+		@log "Searching for", params
 		@loading = true
-		Page.cmd "feedSearch", search, (res) =>
+		Page.projector.scheduleRender()
+		Page.cmd "feedSearch", params, (res) =>
 			@loading = false
+
+			if res.rows.length < 10 and @query_day_limit != null
+				@log "Only #{res.rows.length} results, search without day limit"
+				@query_limit = 30
+				@query_day_limit = null
+				@search(search, cb)
+				return false
+
 			@displayRows(res["rows"], search)
 			delete res["rows"]
 			@res = res
+
 			@searched = search
 			if cb then cb()
 
@@ -155,12 +177,15 @@ class FeedList extends Class
 
 		clearInterval @input_timer
 		setTimeout =>
-			@loading = true
+			@waiting = true
 
 		# Delay calls to reduce server load
 		@input_timer = setTimeout ( =>
 			RateLimitCb delay, (cb_done) =>
-				@loading = false
+				@limit = 30
+				@query_limit = 20
+				@query_day_limit = 3
+				@waiting = false
 				if @searching
 					@search @searching, =>
 						cb_done()
@@ -404,7 +429,7 @@ class FeedList extends Class
 							h("a.feeds-filter", {key: feed_type, href: "#" + feed_type, classes: {active: @filter == feed_type}, onclick: @handleFilterClick}, feed_type)
 					])
 					h("div.feeds-line"),
-					h("div.feeds-search", {classes: {"searching": @searching, "searched": @searched, "loading": @loading}},
+					h("div.feeds-search", {classes: {"searching": @searching, "searched": @searched, "loading": @loading or @waiting}},
 						h("div.icon-magnifier"),
 						if @loading
 							h("div.loader", {enterAnimation: Animation.show, exitAnimation: Animation.hide}, h("div.arc"))
@@ -429,7 +454,7 @@ class FeedList extends Class
 						else if @feeds.length == 0 and @searched
 							h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
 					),
-					h("div.FeedList."+@getClass(), {classes: {loading: @loading}}, @feeds[0..@limit].map(@renderFeed))
+					h("div.FeedList."+@getClass(), {classes: {loading: @loading or @waiting}}, @feeds[0..@limit].map(@renderFeed))
 				]
 			else
 				@renderWelcome()

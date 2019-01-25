@@ -2157,7 +2157,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
 
 
@@ -2226,9 +2225,18 @@
       if (scroll_top + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && ((ref = this.feeds) != null ? ref.length : void 0) > 5 && Page.mode === "Sites" && this.limit < 300) {
         this.limit += 30;
         this.query_limit += 30;
-        this.query_day_limit += 5;
+        if (this.query_day_limit !== null) {
+          this.query_day_limit += 5;
+          if (this.query_day_limit > 30) {
+            this.query_day_limit = null;
+          }
+        }
         this.log("checkScroll update");
-        this.update();
+        if (this.searching) {
+          this.search(this.searching);
+        } else {
+          this.update();
+        }
         return true;
       } else {
         return false;
@@ -2311,7 +2319,7 @@
           }
           _this.res = res;
           if (rows.length < 10 && _this.query_day_limit !== null) {
-            _this.log("Too few results, query without day limit");
+            _this.log("Only " + res.rows.length + " results, query without day limit");
             _this.query_limit = 20;
             _this.query_day_limit = null;
             _this.updating = false;
@@ -2330,6 +2338,7 @@
     };
 
     FeedList.prototype.search = function(search, cb) {
+      var params;
       if (Page.server_info.rev < 1230) {
         this.displayRows([]);
         if (cb) {
@@ -2337,11 +2346,28 @@
         }
         return;
       }
-      this.log("Searching for", search);
+      if (!Page.server_info || Page.server_info.rev < 381) {
+        params = search;
+      } else {
+        params = {
+          search: search,
+          limit: this.query_limit * 3,
+          day_limit: this.query_day_limit * 10 || null
+        };
+      }
+      this.log("Searching for", params);
       this.loading = true;
-      return Page.cmd("feedSearch", search, (function(_this) {
+      Page.projector.scheduleRender();
+      return Page.cmd("feedSearch", params, (function(_this) {
         return function(res) {
           _this.loading = false;
+          if (res.rows.length < 10 && _this.query_day_limit !== null) {
+            _this.log("Only " + res.rows.length + " results, search without day limit");
+            _this.query_limit = 30;
+            _this.query_day_limit = null;
+            _this.search(search, cb);
+            return false;
+          }
           _this.displayRows(res["rows"], search);
           delete res["rows"];
           _this.res = res;
@@ -2394,13 +2420,16 @@
       clearInterval(this.input_timer);
       setTimeout((function(_this) {
         return function() {
-          return _this.loading = true;
+          return _this.waiting = true;
         };
       })(this));
       this.input_timer = setTimeout(((function(_this) {
         return function() {
           return RateLimitCb(delay, function(cb_done) {
-            _this.loading = false;
+            _this.limit = 30;
+            _this.query_limit = 20;
+            _this.query_day_limit = 3;
+            _this.waiting = false;
             if (_this.searching) {
               return _this.search(_this.searching, function() {
                 return cb_done();
@@ -2721,7 +2750,7 @@
           classes: {
             "searching": this.searching,
             "searched": this.searched,
-            "loading": this.loading
+            "loading": this.loading || this.waiting
           }
         }, h("div.icon-magnifier"), this.loading ? h("div.loader", {
           enterAnimation: Animation.show,
@@ -2757,7 +2786,7 @@
           enterAnimation: Animation.show
         }, "No results for " + this.searched) : void 0), h("div.FeedList." + this.getClass(), {
           classes: {
-            loading: this.loading
+            loading: this.loading || this.waiting
           }
         }, this.feeds.slice(0, +this.limit + 1 || 9e9).map(this.renderFeed))
       ] : this.renderWelcome());
@@ -2779,6 +2808,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
