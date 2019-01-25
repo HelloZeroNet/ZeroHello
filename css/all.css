@@ -310,7 +310,7 @@ body:after {
 
 /* Dashboard */
 
-#PageFilesDashboard { margin-right: 1.5%; margin-top: -20px; float: right; position: relative; }
+#PageFilesDashboard { margin-right: 1.5%; margin-top: 20px; float: right; position: relative; }
 .totalbar-title {
 	font-size: 13px; padding-bottom: 7px; text-transform: uppercase;
 	font-weight: bold; letter-spacing: 1px; -webkit-transform: scaleX(0.8); -moz-transform: scaleX(0.8); -o-transform: scaleX(0.8); -ms-transform: scaleX(0.8); transform: scaleX(0.8) ; transform-origin: left; display: inline-block; text-decoration: none; color: white;
