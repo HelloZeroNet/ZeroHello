@@ -622,7 +622,7 @@ body:after {
 .search-clear { position: absolute; right: -37px; margin-top: -33px; text-decoration: none; color: #AAA; font-size: 14px; background-color: #F6F6F6; width: 25px; text-align: center; height: 25px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; -ms-border-radius: 20px; border-radius: 20px ; line-height: 25px; }
 .search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 
-.search-info { right: -30px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; text-decoration: none; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+.search-info { right: -30px; color: #AAA; position: absolute; font-size: 13px; margin-top: -20px; text-decoration: none; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 .loading .search-info { opacity: 0 }
 .searched .search-info { right: 0px; }
 .search-info-stats { padding-left: 30px; padding-top: 10px; }
