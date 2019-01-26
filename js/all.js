@@ -1999,7 +1999,7 @@
 
     Dashboard.prototype.handleDonateClick = function() {
       this.menu_donate.items = [];
-      this.menu_donate.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
+      this.menu_donate.items.push(["Help to keep this project alive", "https://127.0.0.1:43110/1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1/help_zeronet/donate/"]);
       this.menu_donate.toggle();
       return false;
     };
