@@ -26,7 +26,7 @@ class Bigfiles extends Class
 		if not @files.items.length
 			return []
 
-		h("div.Site", [
+		h("div.site", [
 			h("div.title", [h("h3.name", "Bigfiles")])
 			@files.render()
 		])
