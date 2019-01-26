@@ -32,7 +32,7 @@ class FeedList extends Class
 				if @query_day_limit > 30
 					@query_day_limit = null
 			@log "checkScroll update"
-			if @searching
+			if @searching and Page.server_info.rev >= 3817
 				@search(@searching)
 			else
 				@update()
@@ -117,7 +117,7 @@ class FeedList extends Class
 			if cb then cb()
 			return
 
-		if not Page.server_info or Page.server_info.rev < 381
+		if not Page.server_info or Page.server_info.rev < 3817
 			params = search
 		else
 			params = {search: search, limit: @query_limit * 3, day_limit: @query_day_limit * 10 or null}

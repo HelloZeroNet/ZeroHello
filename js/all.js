@@ -1046,7 +1046,7 @@
       if (!this.files.items.length) {
         return [];
       }
-      return h("div.Site", [h("div.title", [h("h3.name", "Bigfiles")]), this.files.render()]);
+      return h("div.site", [h("div.title", [h("h3.name", "Bigfiles")]), this.files.render()]);
     };
 
     return Bigfiles;
@@ -1056,6 +1056,7 @@
   window.Bigfiles = Bigfiles;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageFiles/PageFiles.coffee ---- */
@@ -2232,7 +2233,7 @@
           }
         }
         this.log("checkScroll update");
-        if (this.searching) {
+        if (this.searching && Page.server_info.rev >= 3817) {
           this.search(this.searching);
         } else {
           this.update();
@@ -2346,7 +2347,7 @@
         }
         return;
       }
-      if (!Page.server_info || Page.server_info.rev < 381) {
+      if (!Page.server_info || Page.server_info.rev < 3817) {
         params = search;
       } else {
         params = {
@@ -2808,7 +2809,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
