@@ -310,7 +310,7 @@ body:after {
 
 /* Dashboard */
 
-#PageFilesDashboard { margin-right: 1.5%; margin-top: 20px; float: right; position: relative; }
+#PageFilesDashboard { margin-right: 1.5%; margin-top: -20px; float: right; position: relative; }
 .totalbar-title {
 	font-size: 13px; padding-bottom: 7px; text-transform: uppercase;
 	font-weight: bold; letter-spacing: 1px; -webkit-transform: scaleX(0.8); -moz-transform: scaleX(0.8); -o-transform: scaleX(0.8); -ms-transform: scaleX(0.8); transform: scaleX(0.8) ; transform-origin: left; display: inline-block; text-decoration: none; color: white;
@@ -375,6 +375,8 @@ body:after {
 #PageFiles .files .tr.selected .td { background-color: #fffbdb; border-top-color: #ece8c2 }
 
 #PageFiles .site + .site .files { transition-delay: 0.1s }
+#PageFiles > .site { clear: both; }
+#PageFiles > .site > .title { padding-left: 40px; }
 #PageFiles .files {
 	width: 97%; margin: auto; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; color: #555; position: relative; z-index: 1;
 	border-collapse: collapse; font-size: 14px; -webkit-box-shadow: 0px 9px 60px -15px black; -moz-box-shadow: 0px 9px 60px -15px black; -o-box-shadow: 0px 9px 60px -15px black; -ms-box-shadow: 0px 9px 60px -15px black; box-shadow: 0px 9px 60px -15px black ;
@@ -419,7 +421,7 @@ body:after {
 
 /* Title */
 
-#PageFiles h3 { padding-left: 40px; padding-top: 50px; padding-bottom: 10px; display: inline-block; margin-right: 10px }
+#PageFiles h3 { padding-top: 50px; padding-bottom: 10px; display: inline-block; margin-right: 10px }
 #PageFiles .title .size {
 	display: inline-block; margin-left: 10px; margin-right: 10px; font-size: 18px;
 	color: #24ff7d; line-height: 21px; vertical-align: 5px; font-weight: lighter;
@@ -457,6 +459,7 @@ body:after {
 
 #PageFiles .dots { font-size: 27px; vertical-align: 0px; line-height: 11px; margin-left: 8px; color: rgb(236, 236, 236); display: inline-block; overflow: hidden; width: 45px; }
 #PageFiles .dots-fg { margin-left: -45px; color: #47d094;; width: 32px; }
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/PageStats.css ---- */
@@ -796,7 +799,7 @@ body.changing .left { z-index: 1 !important; }
 
 
 .theme-dark { background-color: #383f46 }
-.theme-dark .right { border-top-color: #2c2b32; background-color: #30363c; }
+.theme-dark .right { border-top-color: #22272d; background-color: #252b33; }
 .theme-dark .feeds-line { border-right-color: #52585f }
 .theme-dark .FeedList .feed .site { color: #fff }
 .theme-dark .FeedList .feed .title { color: #fff }
@@ -813,7 +816,7 @@ body.changing .left { z-index: 1 !important; }
 
 .theme-dark .menu { background-color: #383b40; outline: 1px solid #4a4a4a; }
 .theme-dark .menu-item { color: #eaf0f5; }
-.theme-dark .menu-item:not(.noaction):hover { background-color: #524d56; color: white; }
+.theme-dark .menu-item:not(.noaction):hover { background-color: #45444b; color: white; }
 .theme-dark .menu-item-separator { border-top: 1px solid #505050; }
 .theme-dark .menu-radio a { background-color: #414141; color: #b9b9b9; }
 
@@ -1150,6 +1153,7 @@ white-space: nowrap;
 .menu-item .emoji {
 display: none;
 }
+#PageFilesDashboard { margin-top: 40px }
 }
 
 @media screen and (max-width: 500px) {

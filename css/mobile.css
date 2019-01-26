@@ -216,6 +216,7 @@ white-space: nowrap;
 .menu-item .emoji {
 display: none;
 }
+#PageFilesDashboard { margin-top: 40px }
 }
 
 @media screen and (max-width: 500px) {

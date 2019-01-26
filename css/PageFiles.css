@@ -1,6 +1,6 @@
 /* Dashboard */
 
-#PageFilesDashboard { margin-right: 1.5%; margin-top: 20px; float: right; position: relative; }
+#PageFilesDashboard { margin-right: 1.5%; margin-top: -20px; float: right; position: relative; }
 .totalbar-title {
 	font-size: 13px; padding-bottom: 7px; text-transform: uppercase;
 	font-weight: bold; letter-spacing: 1px; transform: scaleX(0.8); transform-origin: left; display: inline-block; text-decoration: none; color: white;
@@ -65,6 +65,8 @@
 #PageFiles .files .tr.selected .td { background-color: #fffbdb; border-top-color: #ece8c2 }
 
 #PageFiles .site + .site .files { transition-delay: 0.1s }
+#PageFiles > .site { clear: both; }
+#PageFiles > .site > .title { padding-left: 40px; }
 #PageFiles .files {
 	width: 97%; margin: auto; box-sizing: border-box; color: #555; position: relative; z-index: 1;
 	border-collapse: collapse; font-size: 14px; box-shadow: 0px 9px 60px -15px black;
@@ -109,7 +111,7 @@
 
 /* Title */
 
-#PageFiles h3 { padding-left: 40px; padding-top: 50px; padding-bottom: 10px; display: inline-block; margin-right: 10px }
+#PageFiles h3 { padding-top: 50px; padding-bottom: 10px; display: inline-block; margin-right: 10px }
 #PageFiles .title .size {
 	display: inline-block; margin-left: 10px; margin-right: 10px; font-size: 18px;
 	color: #24ff7d; line-height: 21px; vertical-align: 5px; font-weight: lighter;
