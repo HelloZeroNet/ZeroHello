@@ -55,10 +55,10 @@ class Dashboard extends Class
 
 	handleTorClick: =>
 		@menu_tor.items = []
-		@menu_tor.items.push ["Status: #{Page.server_info?.tor_status}", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#how-to-make-zeronet-work-with-tor-under-linux"]
+		@menu_tor.items.push ["Status: #{Page.server_info?.tor_status}", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-make-zeronet-work-with-tor-under-linux"]
 		if @getTorTitle() != "OK"
-			@menu_tor.items.push ["How to make Tor connection work?", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#how-to-make-zeronet-work-with-tor-under-linux"]
-		@menu_tor.items.push ["How to use ZeroNet in Tor Browser?", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#how-to-use-zeronet-in-tor-browser"]
+			@menu_tor.items.push ["How to make Tor connection work?", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-make-zeronet-work-with-tor-under-linux"]
+		@menu_tor.items.push ["How to use ZeroNet in Tor Browser?", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser"]
 		@menu_tor.items.push ["---"]
 		if @isTorAlways()
 			@menu_tor.items.push ["Disable always Tor mode", @handleDisableAlwaysTorClick]
@@ -82,13 +82,13 @@ class Dashboard extends Class
 	handlePortClick: =>
 		@menu_port.items = []
 		if Page.server_info.ip_external
-			@menu_port.items.push ["Nice! Your port #{Page.server_info.fileserver_port} is opened.", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#do-i-need-to-have-a-port-opened"]
+			@menu_port.items.push ["Nice! Your port #{Page.server_info.fileserver_port} is opened.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#do-i-need-to-have-a-port-opened"]
 		else if @isTorAlways()
-			@menu_port.items.push ["Good, your port is always closed when using ZeroNet in Tor always mode.", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#do-i-need-to-have-a-port-opened"]
+			@menu_port.items.push ["Good, your port is always closed when using ZeroNet in Tor always mode.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#do-i-need-to-have-a-port-opened"]
 		else if @getTorTitle() == "OK"
-			@menu_port.items.push ["Your port #{Page.server_info.fileserver_port} is closed, but your Tor gateway is running well.", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#do-i-need-to-have-a-port-opened"]
+			@menu_port.items.push ["Your port #{Page.server_info.fileserver_port} is closed, but your Tor gateway is running well.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#do-i-need-to-have-a-port-opened"]
 		else
-			@menu_port.items.push ["Your port #{Page.server_info.fileserver_port} is closed. You are still fine, but for faster experience try open it.", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#do-i-need-to-have-a-port-opened"]
+			@menu_port.items.push ["Your port #{Page.server_info.fileserver_port} is closed. You are still fine, but for faster experience try open it.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#do-i-need-to-have-a-port-opened"]
 		if Page.server_info.port_opened
 			@menu_port.items.push ["---"]
 			port_opened = Page.server_info.port_opened
@@ -121,7 +121,7 @@ class Dashboard extends Class
 
 	handleDonateClick: =>
 		@menu_donate.items = []
-		@menu_donate.items.push ["Help to keep this project alive", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}help_zeronet/donate/"]
+		@menu_donate.items.push ["Help to keep this project alive", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "help_zeronet/donate/"]
 
 		@menu_donate.toggle()
 		return false
@@ -149,7 +149,7 @@ class Dashboard extends Class
 
 	handleTorBrowserwarningClick: =>
 		@menu_torbrowserwarning.items = []
-		@menu_torbrowserwarning.items.push ["To protect your anonymity you should use ZeroNet in the Tor browser.", "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#how-to-use-zeronet-in-tor-browser"]
+		@menu_torbrowserwarning.items.push ["To protect your anonymity you should use ZeroNet in the Tor browser.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser"]
 		@menu_torbrowserwarning.toggle()
 		return false
 
@@ -201,7 +201,7 @@ class Dashboard extends Class
 
 				# No tor browser detected
 				if @isTorAlways() and (not navigator.userAgent.match(/(Firefox)/) or @hasWebGl() or navigator.serviceWorker?)
-					h("a.port.dashboard-item.torbrowserwarning", {href: "#{Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1")}faq/#how-to-use-zeronet-in-tor-browser", onmousedown: @handleTorBrowserwarningClick, onclick: Page.returnFalse}, [
+					h("a.port.dashboard-item.torbrowserwarning", {href: Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser", onmousedown: @handleTorBrowserwarningClick, onclick: Page.returnFalse}, [
 						h("span", "Your browser is not safe")
 					])
 				@menu_torbrowserwarning.render(".menu-browserwarning")
