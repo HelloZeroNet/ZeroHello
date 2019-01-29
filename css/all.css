@@ -52,7 +52,7 @@
   height: 100px;
   -webkit-transform: scale(0.4); -moz-transform: scale(0.4); -o-transform: scale(0.4); -ms-transform: scale(0.4); transform: scale(0.4) ;
   position: absolute;
-  right: -72px;
+  right: -73px;
   top: -30px;
 }
 .loader .arc {
@@ -116,6 +116,7 @@
             -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -o-transform: rotate(360deg); -ms-transform: rotate(360deg); transform: rotate(360deg) ;
   }
 }
+
 
 
 
@@ -619,10 +620,10 @@ body:after {
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; -webkit-border-radius: 30px ; -moz-border-radius: 30px ; -o-border-radius: 30px ; -ms-border-radius: 30px ; border-radius: 30px  }
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
-.search-clear { position: absolute; right: -37px; margin-top: -33px; text-decoration: none; color: #AAA; font-size: 14px; background-color: #F6F6F6; width: 25px; text-align: center; height: 25px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; -ms-border-radius: 20px; border-radius: 20px ; line-height: 25px; }
+.search-clear { position: absolute; right: -37px; margin-top: 9px; text-decoration: none; color: #AAA; font-size: 14px; background-color: #F6F6F6; width: 25px; text-align: center; height: 25px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; -ms-border-radius: 20px; border-radius: 20px ; line-height: 25px; }
 .search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 
-.search-info { right: -30px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; text-decoration: none; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
+.search-info { right: -30px; color: #AAA; position: absolute; font-size: 13px; margin-top: 14px; text-decoration: none; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 .loading .search-info { opacity: 0 }
 .searched .search-info { right: 0px; }
 .search-info-stats { padding-left: 30px; padding-top: 10px; }

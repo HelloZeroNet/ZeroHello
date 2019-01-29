@@ -1058,7 +1058,6 @@
 }).call(this);
 
 
-
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageFiles/PageFiles.coffee ---- */
 
 
@@ -2063,7 +2062,7 @@
       this.menu_trackers.items = [];
       for (tracker_url in stats) {
         stat = stats[tracker_url];
-        tracker_name = tracker_url.replace(/(.*:\/\/.*?)[:#].*/, "$1");
+        tracker_name = tracker_url.replace(/(.*:\/\/.*?)[\/#].*/, "$1");
         success_percent = parseInt((stat.num_success / stat.num_request) * 100);
         if (isNaN(success_percent)) {
           success_percent = "?";
@@ -2156,6 +2155,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -2756,14 +2756,7 @@
         }, h("div.icon-magnifier"), this.loading ? h("div.loader", {
           enterAnimation: Animation.show,
           exitAnimation: Animation.hide
-        }, h("div.arc")) : void 0, h("input", {
-          type: "text",
-          placeholder: "Search in connected sites",
-          value: this.searching,
-          onkeyup: this.handleSearchKeyup,
-          oninput: this.handleSearchInput,
-          afterCreate: this.storeNodeSearch
-        }), this.searched && !this.loading ? h("a.search-clear.nolink", {
+        }, h("div.arc")) : void 0, this.searched && !this.loading ? h("a.search-clear.nolink", {
           href: "#clear",
           onclick: this.handleSearchClear,
           enterAnimation: Animation.show,
@@ -2773,7 +2766,14 @@
           enterAnimation: Animation.show,
           exitAnimation: Animation.hide,
           onclick: this.handleSearchInfoClick
-        }, (this.searching ? this.res.num + " results " : "") + ("from " + this.res.sites + " sites in " + (this.res.taken.toFixed(2)) + "s")) : void 0, this.show_stats ? h("div.search-info-stats", {
+        }, (this.searching ? this.res.num + " results " : "") + ("from " + this.res.sites + " sites in " + (this.res.taken.toFixed(2)) + "s")) : void 0, h("input", {
+          type: "text",
+          placeholder: "Search in connected sites",
+          value: this.searching,
+          onkeyup: this.handleSearchKeyup,
+          oninput: this.handleSearchInput,
+          afterCreate: this.storeNodeSearch
+        }), this.show_stats ? h("div.search-info-stats", {
           enterAnimation: Animation.slideDown,
           exitAnimation: Animation.slideUp
         }, [h("table", [h("tr", h("th", "Site"), h("th", "Feed"), h("th.taken", "Taken")), this.res.stats.map(this.renderSearchStat)])]) : void 0, this.renderSearchHelp(), Page.server_info.rev < 1230 && this.searching ? h("div.search-noresult", {
