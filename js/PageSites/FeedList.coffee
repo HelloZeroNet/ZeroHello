@@ -433,7 +433,6 @@ class FeedList extends Class
 						h("div.icon-magnifier"),
 						if @loading
 							h("div.loader", {enterAnimation: Animation.show, exitAnimation: Animation.hide}, h("div.arc"))
-						h("input", {type: "text", placeholder: "Search in connected sites", value: @searching, onkeyup: @handleSearchKeyup, oninput: @handleSearchInput, afterCreate: @storeNodeSearch}),
 						if @searched and not @loading
 							h("a.search-clear.nolink", {href: "#clear", onclick: @handleSearchClear, enterAnimation: Animation.show, exitAnimation: Animation.hide}, "\u00D7")
 						if @res?.stats
@@ -441,6 +440,7 @@ class FeedList extends Class
 								{href: "#ShowStats", enterAnimation: Animation.show, exitAnimation: Animation.hide, onclick: @handleSearchInfoClick},
 								(if @searching then "#{@res.num} results " else "") + "from #{@res.sites} sites in #{@res.taken.toFixed(2)}s"
 							)
+						h("input", {type: "text", placeholder: "Search in connected sites", value: @searching, onkeyup: @handleSearchKeyup, oninput: @handleSearchInput, afterCreate: @storeNodeSearch}),
 						if @show_stats
 							h("div.search-info-stats", {enterAnimation: Animation.slideDown, exitAnimation: Animation.slideUp}, [
 								h("table", [
