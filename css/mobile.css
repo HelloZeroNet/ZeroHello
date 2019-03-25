@@ -41,25 +41,12 @@ border-bottom: 1px solid #2A333C;
 font-size: 90%;
 line-height: 180%;
 }
-#BodySites .left #Head {
-position: absolute;
-width: 100%;
-z-index: 10;
-}
 .left h2 {
 padding-left: 19px;
 }
 .left .site-filter {
 margin-left: 6px;
 width: 83%;
-}
-.left #SiteList {
-overflow-x: hidden;
-height: auto;
-position: absolute;
-top: 92px;
-bottom: 0px;
-padding-top: 40px;
 }
 .left #FilePage {
 height: auto;
@@ -150,9 +137,16 @@ left: 0px;
 width: 100%;
 margin-left: 0px;
 }
+#BodySites .left::-webkit-scrollbar {
+display: none;
+}
 #BodySites .left {
 left: -350px;
 z-index: 1;
+overflow-x: hidden;
+overflow-y: scroll;
+bottom: 0px;
+height: 100%;
 }
 #BodySites .left.trigger-on {
 left: 0px;
