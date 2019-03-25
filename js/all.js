@@ -2062,7 +2062,7 @@
       this.menu_trackers.items = [];
       for (tracker_url in stats) {
         stat = stats[tracker_url];
-        tracker_name = tracker_url.replace(/(.*:\/\/.*?)[\/#].*/, "$1");
+        tracker_name = tracker_url.replace(/(.*:\/\/.*?)[\/#].*/, "$1").replace(/:[0-9]+$/, "");
         success_percent = parseInt((stat.num_success / stat.num_request) * 100);
         if (isNaN(success_percent)) {
           success_percent = "?";
@@ -2155,7 +2155,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -3692,14 +3691,6 @@
       var demo_site_rows, i, len, results, site_row;
       demo_site_rows = [
         {
-          address: "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp",
-          demo: true,
-          content: {
-            title: "ZeroBoard",
-            domain: "Board.ZeroNetwork.bit"
-          },
-          settings: {}
-        }, {
           address: "1TaLkFrMwvbNsooF4ioKAY9EuxTBTjipT",
           demo: true,
           content: {
@@ -3925,6 +3916,7 @@
   window.SiteList = SiteList;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/Trigger.coffee ---- */
@@ -7056,7 +7048,7 @@
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
-      this.latest_version = "0.6.4";
+      this.latest_version = "0.6.5";
       this.latest_rev = 3616;
       this.mode = "Sites";
       this.change_timer = null;
