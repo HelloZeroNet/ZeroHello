@@ -170,7 +170,7 @@ class Dashboard extends Class
 			stats = Page.announcer_info
 		@menu_trackers.items = []
 		for tracker_url, stat of stats
-			tracker_name = tracker_url.replace(/(.*:\/\/.*?)[\/#].*/, "$1")
+			tracker_name = tracker_url.replace(/(.*:\/\/.*?)[\/#].*/, "$1").replace(/:[0-9]+$/, "")
 			success_percent = parseInt((stat.num_success/stat.num_request)*100)
 			if isNaN(success_percent)
 				success_percent = "?"
