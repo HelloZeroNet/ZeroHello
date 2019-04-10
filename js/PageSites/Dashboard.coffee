@@ -6,9 +6,7 @@ class Dashboard extends Class
 		@menu_trackers = new Menu()
 		@menu_multiuser = new Menu()
 		@menu_donate = new Menu()
-		@menu_browserwarning = new Menu()
-		@menu_torbrowserwarning = new Menu()
-		@menu_timecorrection = new Menu()
+		@menu_warnings = new Menu()
 
 		@port_checking = false
 		@has_web_gl = null
@@ -132,35 +130,12 @@ class Dashboard extends Class
 	handleNewversionClick: =>
 		@menu_newversion.items = []
 		@menu_newversion.items.push ["Update and restart ZeroNet", ( ->
-			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
-			Page.cmd "serverUpdate"
+			Page.updateZeronet()
 		)]
 		@menu_newversion.items.push ["Details of the update", Text.getSiteUrl("Blog.ZeroNetwork.bit") ]
 
 		@menu_newversion.toggle()
 		return false
-
-	handleBrowserwarningClick: =>
-		@menu_browserwarning.items = []
-		@menu_browserwarning.items.push ["Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox", "http://browsehappy.com/"]
-		@menu_browserwarning.toggle()
-		return false
-
-
-	handleTorBrowserwarningClick: =>
-		@menu_torbrowserwarning.items = []
-		@menu_torbrowserwarning.items.push ["To protect your anonymity you should use ZeroNet in the Tor browser.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser"]
-		@menu_torbrowserwarning.toggle()
-		return false
-
-	handleTimecorrectionClick: =>
-		@menu_timecorrection.items = []
-		@menu_timecorrection.items.push ["Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen.", "https://time.is"]
-		@menu_timecorrection.items.push ["---"]
-		@menu_timecorrection.items.push ["Restart ZeroNet client and re-check system time", => Page.cmd("serverShutdown", {restart: true})]
-		@menu_timecorrection.toggle()
-		return false
-
 
 	handleTrackersClick: =>
 		if Page.announcer_stats
@@ -187,24 +162,63 @@ class Dashboard extends Class
 		@menu_trackers.toggle()
 		return false
 
+	handleWarningsClick: =>
+		warnings = @getWarnings()
+		@menu_warnings.items = []
+		for warning in warnings
+			@menu_warnings.items.push [h("b.status-error", warning.title), warning.href]
+			if warning.descr
+				@menu_warnings.items.push [warning.descr, warning.href]
+			@menu_warnings.items.push ["---"]
+		@menu_warnings.items.push ["Restart ZeroNet client", => Page.cmd("serverShutdown", {restart: true})]
+		@menu_warnings.toggle()
+		return false
+
+	getWarnings: =>
+		warnings = []
+		# IE not supported
+		if navigator.userAgent.match /(\b(MS)?IE\s+|Trident\/7.0)/
+			warnings.push({
+				title: "Unsupported browser",
+				href: "http://browsehappy.com/",
+				descr: "Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox"
+			})
+
+		# No tor browser detected
+		if (@isTorAlways() and (not navigator.userAgent.match(/(Firefox)/) or @hasWebGl() or navigator.serviceWorker?))
+			warnings.push({
+				title: "Your browser is not safe",
+				href: Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser",
+				descr: "To protect your anonymity you should use ZeroNet in the Tor browser."
+			})
+
+		# Slow pure-python verify lib
+		if Page.server_info.lib_verify_best == "btctools"
+			warnings.push({
+				title: "Slow verification library",
+				href: "#"
+				descr: "To significantly reduce CPU usage install libsecp256k1 or OpenSSL"
+			})
+
+		if Math.abs(Page.server_info.timecorrection) > 30
+			warnings.push({
+				title: ["Time out of sync: ", (0 - Page.server_info.timecorrection.toFixed(2)), "s"]
+				href: "https://time.is",
+				descr: "Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen."
+			})
+
+		return warnings
+
 
 	render: =>
 		if Page.server_info
 			tor_title = @getTorTitle()
+			warnings = @getWarnings()
 			h("div#Dashboard",
-				# IE not supported
-				if navigator.userAgent.match /(\b(MS)?IE\s+|Trident\/7.0)/
-					h("a.port.dashboard-item.browserwarning", {href: "http://browsehappy.com/", onmousedown: @handleBrowserwarningClick, onclick: Page.returnFalse}, [
-						h("span", "Unsupported browser")
-					])
-				@menu_browserwarning.render(".menu-browserwarning")
-
-				# No tor browser detected
-				if @isTorAlways() and (not navigator.userAgent.match(/(Firefox)/) or @hasWebGl() or navigator.serviceWorker?)
-					h("a.port.dashboard-item.torbrowserwarning", {href: Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser", onmousedown: @handleTorBrowserwarningClick, onclick: Page.returnFalse}, [
-						h("span", "Your browser is not safe")
-					])
-				@menu_torbrowserwarning.render(".menu-browserwarning")
+				# Warnings
+				if warnings.length
+					h("a.warnings.dashboard-item", {href: "#Warnings", onmousedown: @handleWarningsClick, onclick: Page.returnFalse}, "Warnings: #{warnings.length}")
+				@menu_warnings.render(".menu-warnings")
 
 				# Update
 				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
@@ -213,13 +227,6 @@ class Dashboard extends Class
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important update: rev#{Page.latest_rev}")
 
 				@menu_newversion.render(".menu-newversion")
-
-				# Time out of sync
-				@menu_timecorrection.render(".menu-timecorrection.menu-left")
-				if Math.abs(Page.server_info.timecorrection) > 30
-					h("a.timecorrection.dashboard-item", {href: "#Time+correction", onmousedown: @handleTimecorrectionClick, onclick: Page.returnFalse},
-						["Time out of sync: ", h("span.status-warning", (0 - Page.server_info.timecorrection.toFixed(2)) + "s")]
-					)
 
 				# Donate
 				h("a.port.dashboard-item.donate", {"href": "#Donate", onmousedown: @handleDonateClick, onclick: Page.returnFalse}, [h("div.icon-heart")]),

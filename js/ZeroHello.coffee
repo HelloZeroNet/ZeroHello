@@ -15,7 +15,7 @@ class ZeroHello extends ZeroFrame
 		@on_loaded = new Promise()
 		@settings = null
 
-		@latest_version = "0.6.4"
+		@latest_version = "0.6.5"
 		@latest_rev = 3616
 		@mode = "Sites"
 		@change_timer = null
@@ -236,6 +236,14 @@ class ZeroHello extends ZeroFrame
 	# Simple return false to avoid link clicks
 	returnFalse: ->
 		return false
+
+	updateZeronet: ->
+		if @server_info.updatesite  # Python3 version: Go to site
+			window.top.location = Text.getSiteUrl(@server_info.updatesite)
+		else
+			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
+			Page.cmd "serverUpdate"
+
 
 window.Page = new ZeroHello()
 window.Page.createProjector()

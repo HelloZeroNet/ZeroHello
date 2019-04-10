@@ -128,10 +128,11 @@ class Head extends Class
 		Page.mute_list.show()
 
 	handleUpdateZeronetClick: =>
-		Page.cmd "wrapperConfirm", ["Update to latest development version?", "Update ZeroNet #{Page.latest_version}"], =>
-			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
-			Page.cmd "serverUpdate"
-			@log "Updating..."
+		if Page.server_info.updatesite
+			Page.updateZeronet()
+		else
+			Page.cmd "wrapperConfirm", ["Update to latest development version?", "Update ZeroNet #{Page.latest_version}"], =>
+				Page.updateZeronet()
 		return false
 
 
