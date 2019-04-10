@@ -12,6 +12,7 @@
 #Dashboard .status-ok { color: #2ecc71; }
 #Dashboard .status-warning { color: #E7A43C; }
 #Dashboard .status-bad { color: #e74c3c; }
+#Dashboard .status-error { color: #e91e63; }
 #Dashboard .status-disabled { color: #aaa; }
 #Dashboard .status { transition: all 0.3s }
 #Dashboard .dashboard-item.multiuser .status { text-transform: none }
@@ -22,9 +23,9 @@
 #Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
 #Dashboard .dashboard-item.donate:hover .icon-heart { transform: scale(1.2) }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
-#Dashboard .torbrowserwarning { color: #e91e63 }
+#Dashboard .warnings { color: #e91e63 }
+#Dashboard .menu-warnings { white-space: normal; max-width: 300px; }
 #Dashboard .tracker-status { text-align: right; width: 600px; display: inline-block; float: right; margin-top: -20px }
-#Dashboard .menu-timecorrection { white-space: normal; max-width: 300px; }
 #Dashboard .menu-port { white-space: normal; max-width: 500px; }
 
 #Dashboard .menu .status {
