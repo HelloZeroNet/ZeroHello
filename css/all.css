@@ -571,6 +571,7 @@ body:after {
 #Dashboard .status-ok { color: #2ecc71; }
 #Dashboard .status-warning { color: #E7A43C; }
 #Dashboard .status-bad { color: #e74c3c; }
+#Dashboard .status-error { color: #e91e63; }
 #Dashboard .status-disabled { color: #aaa; }
 #Dashboard .status { -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 #Dashboard .dashboard-item.multiuser .status { text-transform: none }
@@ -581,9 +582,9 @@ body:after {
 #Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
 #Dashboard .dashboard-item.donate:hover .icon-heart { -webkit-transform: scale(1.2) ; -moz-transform: scale(1.2) ; -o-transform: scale(1.2) ; -ms-transform: scale(1.2) ; transform: scale(1.2)  }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }
-#Dashboard .torbrowserwarning { color: #e91e63 }
+#Dashboard .warnings { color: #e91e63 }
+#Dashboard .menu-warnings { white-space: normal; max-width: 300px; }
 #Dashboard .tracker-status { text-align: right; width: 600px; display: inline-block; float: right; margin-top: -20px }
-#Dashboard .menu-timecorrection { white-space: normal; max-width: 300px; }
 #Dashboard .menu-port { white-space: normal; max-width: 500px; }
 
 #Dashboard .menu .status {
@@ -971,7 +972,6 @@ background-position-x: 6px !important;
 }
 #BodySites .left {
 background: #2A333C;
-position: fixed;
 -webkit-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -moz-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -o-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); -ms-transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1); transition: 0.2s all cubic-bezier(0.77, 0, 0.175, 1) ;
 border-bottom: 1px solid #2A333C;
 }
