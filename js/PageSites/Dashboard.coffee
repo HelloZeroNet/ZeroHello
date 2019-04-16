@@ -29,6 +29,9 @@ class Dashboard extends Class
 		return tor_title
 
 	tagTrackersTitle: ->
+		if Page.server_info.offline
+			return h("span.status.status-warning", "n/a")
+
 		num_ok = 0
 		num_total = 0
 		status_db = {announcing: [], error: [], announced: []}
@@ -79,7 +82,9 @@ class Dashboard extends Class
 
 	handlePortClick: =>
 		@menu_port.items = []
-		if Page.server_info.ip_external
+		if Page.server_info.offline
+			@menu_port.items.push ["Offline mode, network communication disabled.", "/Config"]
+		else if Page.server_info.ip_external
 			@menu_port.items.push ["Nice! Your port #{Page.server_info.fileserver_port} is opened.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#do-i-need-to-have-a-port-opened"]
 		else if @isTorAlways()
 			@menu_port.items.push ["Good, your port is always closed when using ZeroNet in Tor always mode.", Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#do-i-need-to-have-a-port-opened"]
@@ -253,7 +258,9 @@ class Dashboard extends Class
 				@menu_port.render(".menu-port.menu-left"),
 				h("a.dashboard-item.port", {href: "#Port", classes: {bounce: @port_checking}, onmousedown: @handlePortClick, onclick: Page.returnFalse}, [
 					h("span", "Port: "),
-					if @port_checking
+					if Page.server_info.offline
+						h("span.status.status-warning", "Offline mode")
+					else if @port_checking
 						h("span.status", "Checking")
 					else if Page.server_info.ip_external == null
 						h("span.status", "Checking")
