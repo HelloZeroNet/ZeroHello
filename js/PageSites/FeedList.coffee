@@ -370,11 +370,18 @@ class FeedList extends Class
 		if not site
 			return []
 
-		h("tr", {key: stat.site + "_" + stat.feed_name, classes: {"slow": stat.taken > total_taken * 0.1, "extra-slow": stat.taken > total_taken * 0.3}}, [
+		back = []
+		back.push(h("tr", {key: stat.site + "_" + stat.feed_name, classes: {"slow": stat.taken > total_taken * 0.1, "extra-slow": stat.taken > total_taken * 0.3}}, [
 			h("td.site", h("a.site", {href: site.getHref()}, [site.row.content.title])),
 			h("td.feed_name", stat.feed_name),
 			h("td.taken", (if stat.taken? then stat.taken + "s" else "n/a "))
-		])
+		]))
+		if stat.error
+			back.push(h("tr.error",
+				h("td", "Error:")
+				h("td", {colSpan: 2}, stat.error)
+			))
+		return back
 
 	handleNotificationHideClick: (e) =>
 		address = e.target.getAttribute("address")
