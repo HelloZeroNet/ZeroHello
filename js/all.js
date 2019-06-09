@@ -2092,7 +2092,7 @@
           descr: "Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox"
         });
       }
-      if (this.isTorAlways() && (!navigator.userAgent.match(/(Firefox)/) || this.hasWebGl() || (navigator.serviceWorker != null))) {
+      if (this.isTorAlways() && (!navigator.userAgent.match(/(Firefox)/) || (navigator.maxTouchPoints != null) || (navigator.serviceWorker != null))) {
         warnings.push({
           title: "Your browser is not safe",
           href: Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser",
@@ -2177,6 +2177,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/FeedList.coffee ---- */
@@ -2639,9 +2640,7 @@
           height: 150,
           onerror: "this.src='img/logo.png'; this.onerror=null;"
         }), h("h1", "Welcome to ZeroNet"), h("h2", "Let's build a decentralized Internet together!"), h("div.served", ["This site currently served by ", h("b.peers", Page.site_info["peers"] || "n/a"), " peers, without any central server."]), h("div.sites", [
-          h("h3", "Some sites we created:"), h("a.site.site-zeroboard", {
-            href: Text.getSiteUrl("Board.ZeroNetwork.bit")
-          }, [h("div.title", ["ZeroBoard"]), h("div.description", ["Simple messaging board"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zerotalk", {
+          h("h3", "Some sites we created:"), h("a.site.site-zerotalk", {
             href: Text.getSiteUrl("Talk.ZeroNetwork.bit")
           }, [h("div.title", ["ZeroTalk"]), h("div.description", ["Reddit-like, decentralized forum"]), h("div.visit", ["Activate \u2501"])]), h("a.site.site-zeroblog", {
             href: Text.getSiteUrl("Blog.ZeroNetwork.bit")
@@ -2837,7 +2836,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/js/PageSites/MuteList.coffee ---- */
