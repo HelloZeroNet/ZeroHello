@@ -6807,12 +6807,25 @@
     };
 
     Head.prototype.handleThemeClick = function(e) {
-      var theme;
+      var DARK, mqDark, theme;
       if (Page.server_info.rev < 3670) {
         return Page.cmd("wrapperNotification", ["info", "You need ZeroNet 0.6.4 to change the interface's theme"]);
       }
       theme = e.target.hash.replace("#", "");
+      if (theme === "system") {
+        if (Page.server_info.rev < 4085) {
+          return Page.cmd("wrapperNotification", ["info", "You need ZeroNet 0.7.0 to use system's theme"]);
+        }
+        DARK = "(prefers-color-scheme: dark)";
+        mqDark = window.matchMedia(DARK);
+      }
       Page.cmd("userGetGlobalSettings", [], function(user_settings) {
+        if (theme === "system") {
+          theme = mqDark.matches ? "dark" : "light";
+          user_settings.use_system_theme = true;
+        } else {
+          user_settings.use_system_theme = false;
+        }
         user_settings.theme = theme;
         Page.server_info.user_settings = user_settings;
         document.getElementById("style-live").innerHTML = "* { transition: all 0.5s ease-in-out }";
@@ -6830,10 +6843,14 @@
 
     Head.prototype.renderMenuTheme = function() {
       var ref, theme, theme_selected, themes;
-      themes = ["light", "dark"];
-      theme_selected = (ref = Page.server_info.user_settings) != null ? ref.theme : void 0;
-      if (!theme_selected) {
-        theme_selected = "light";
+      themes = ["system", "light", "dark"];
+      if (Page.server_info.user_settings.use_system_theme) {
+        theme_selected = "system";
+      } else {
+        theme_selected = (ref = Page.server_info.user_settings) != null ? ref.theme : void 0;
+        if (!theme_selected) {
+          theme_selected = "system";
+        }
       }
       return h("div.menu-radio.menu-themes", h("div", "Theme: "), (function() {
         var i, len, results;

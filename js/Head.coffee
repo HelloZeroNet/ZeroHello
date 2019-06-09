@@ -34,9 +34,25 @@ class Head extends Class
 	handleThemeClick: (e) =>
 		if Page.server_info.rev < 3670
 			return Page.cmd "wrapperNotification", ["info", "You need ZeroNet 0.6.4 to change the interface's theme"]
+
 		theme = e.target.hash.replace("#", "")
+
+		if theme == "system"
+			if Page.server_info.rev < 4085
+				return Page.cmd "wrapperNotification", ["info", "You need ZeroNet 0.7.0 to use system's theme"]
+
+			DARK = "(prefers-color-scheme: dark)"
+			mqDark = window.matchMedia(DARK)
+
 		Page.cmd "userGetGlobalSettings", [], (user_settings) ->
+			if theme == "system"
+				theme = if mqDark.matches then "dark" else "light"
+				user_settings.use_system_theme = true
+			else
+				user_settings.use_system_theme = false
+
 			user_settings.theme = theme
+
 			Page.server_info.user_settings = user_settings
 			document.getElementById("style-live").innerHTML = "* { transition: all 0.5s ease-in-out }"
 			Page.cmd "userSetGlobalSettings", [user_settings]
@@ -47,12 +63,17 @@ class Head extends Class
 					document.getElementById("style-live").innerHTML = ""
 				), 1000
 			), 300
+
 		return false
 
 	renderMenuTheme: =>
-		themes = ["light", "dark"]
-		theme_selected = Page.server_info.user_settings?.theme
-		if not theme_selected then theme_selected = "light"
+		themes = ["system", "light", "dark"]
+
+		if Page.server_info.user_settings.use_system_theme
+			theme_selected = "system"
+		else
+			theme_selected = Page.server_info.user_settings?.theme
+			if not theme_selected then theme_selected = "system"
 
 		h("div.menu-radio.menu-themes",
 			h("div", "Theme: "),
