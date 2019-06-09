@@ -131,6 +131,10 @@ font-size: 35px;
 }
 
 @media screen and (max-width: 799px) {
+.left {
+position: fixed;
+}
+
 .right {
 left: 0px;
 width: 100%;
