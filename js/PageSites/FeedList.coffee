@@ -327,11 +327,6 @@ class FeedList extends Class
 			h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])
 			h("div.sites", [
 				h("h3", "Some sites we created:"),
-				h("a.site.site-zeroboard", {href: Text.getSiteUrl("Board.ZeroNetwork.bit")}, [
-					h("div.title", ["ZeroBoard"])
-					h("div.description", ["Simple messaging board"])
-					h("div.visit", ["Activate \u2501"])
-				]),
 				h("a.site.site-zerotalk", {href: Text.getSiteUrl("Talk.ZeroNetwork.bit")}, [
 					h("div.title", ["ZeroTalk"])
 					h("div.description", ["Reddit-like, decentralized forum"])
