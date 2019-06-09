@@ -190,7 +190,7 @@ class Dashboard extends Class
 			})
 
 		# No tor browser detected
-		if (@isTorAlways() and (not navigator.userAgent.match(/(Firefox)/) or @hasWebGl() or navigator.serviceWorker?))
+		if (@isTorAlways() and (not navigator.userAgent.match(/(Firefox)/) or navigator.maxTouchPoints? or navigator.serviceWorker?))
 			warnings.push({
 				title: "Your browser is not safe",
 				href: Text.getSiteUrl("1DocsYf2tZVVMEMJFHiDsppmFicZCWkVv1") + "faq/#how-to-use-zeronet-in-tor-browser",
