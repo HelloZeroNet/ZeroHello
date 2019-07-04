@@ -32,7 +32,7 @@ class SiteList extends Class
 				return b.row.settings.modified - a.row.settings.modified
 		else if Page.settings.sites_orderby == "addtime"
 			rows.sort (a, b) ->
-				return (b.row.settings.added or 0) - (a.row.settings.added or 0)
+				return b.row.settings.added - a.row.settings.added
 		else if Page.settings.sites_orderby == "size"
 			rows.sort (a, b) ->
 				return b.row.settings.size - a.row.settings.size
