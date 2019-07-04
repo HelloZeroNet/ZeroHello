@@ -83,6 +83,8 @@
 #PageFiles .files .td.inner_path { padding-left: 15px; width: calc(100% - 600px); }
 #PageFiles .files.files-bigfiles .td.inner_path { padding-left: 15px; width: calc(100% - 810px); }
 #PageFiles .files .td.inner_path .title { color: inherit; text-decoration: none }
+#PageFiles .files .td.inner_path .link { display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: -4px; max-width: 100%; }
+#PageFiles .files .pinned .td.inner_path .link { max-width: calc(100% - 40px); }
 #PageFiles .files .thead .td.uploaded { text-align: left }
 #PageFiles .files .thead .td.uploaded .title { padding-left: 7px; }
 #PageFiles .files .peer .icon-profile { background: currentColor; color: #47d094; font-size: 10px; top: 1px; margin-right: 13px }
@@ -128,7 +130,7 @@
 #PageFiles .title .transfers { display: inline-block; font-size: 11px; font-weight: lighter; line-height: 13px; margin-left: 7px; letter-spacing: 0.5px; }
 #PageFiles .title .transfers .up { color: #8aff83; }
 #PageFiles .title .transfers .down { color: #fcff83; }
-#PageFiles .pinned { background-color: #eee; padding: 5px; margin-left: 10px; font-size: 10px; text-transform: uppercase; line-height: 14px; letter-spacing: 0.5px; }
+#PageFiles .inner_path .pinned { background-color: #eee; padding: 5px; margin-left: 10px; font-size: 10px; text-transform: uppercase; line-height: 14px; letter-spacing: 0.5px; }
 
 /* Bar */
 

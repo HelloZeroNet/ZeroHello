@@ -121,7 +121,7 @@ class SiteFiles extends Class
 
 						percent_title = "#{percent}% #{status}"
 
-					h("div.tr", {key: file.inner_path, inner_path: file.inner_path, exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown, classes: {selected: @selected[file.inner_path]}, onmouseenter: @handleRowMouseenter}, [
+					h("div.tr", {key: file.inner_path, inner_path: file.inner_path, exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown, classes: {selected: @selected[file.inner_path], pinned: file.is_pinned}, onmouseenter: @handleRowMouseenter}, [
 						h("div.td.pre",
 							h("a.checkbox", {
 								href: "#Select",
@@ -133,7 +133,7 @@ class SiteFiles extends Class
 						if @mode == "bigfiles"
 							h("div.td.site", h("a.link", {href: site.getHref()}, site.row.content.title))
 						h("div.td.inner_path",
-							h("a.title.link", {href: site.getHref(file), target: "_top"}, file.inner_path.replace(/.*\//, ""))
+							h("a.title.link", {href: site.getHref(file), target: "_top", title: file.inner_path.replace(/.*\//, "")}, file.inner_path.replace(/.*\//, ""))
 							if file.is_pinned
 								h("span.pinned", {exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown}, "Pinned")
 						),
