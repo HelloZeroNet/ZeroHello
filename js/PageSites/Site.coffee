@@ -17,6 +17,12 @@ class Site extends Class
 		@menu_helps = null
 
 	setRow: (row) ->
+		# Default values
+		row.settings.modified ?= 0
+		row.settings.size ?= 0
+		row.settings.added ?= 0
+		row.settings.peers ?= 0
+
 		# Message
 		if row.event?[0] == "updated" and row.content_updated != false
 			@setMessage "Updated!", "done"
