@@ -87,6 +87,8 @@
 .FeedList { margin-top: 50px; position: relative; max-width: 820px; overflow: hidden }
 .FeedList.loading { opacity: 0.5; transition: all 1s ease-out }
 .FeedList .feed { display: block; padding: 15px; margin-bottom: 40px; padding-left: 200px }
+.FeedList .feed .dot { display: none; font-size: 181%; line-height: 0px; vertical-align: -5px; margin-right: 5px; color: #74BBFE; }
+.FeedList .feed.new .dot { display: inline; }
 .FeedList .feed a { text-decoration: none }
 .FeedList .feed a:hover { text-decoration: underline }
 .FeedList .feed .type { color: #999; margin-right: 5px }

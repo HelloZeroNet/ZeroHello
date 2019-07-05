@@ -133,7 +133,7 @@ class SiteFiles extends Class
 						if @mode == "bigfiles"
 							h("div.td.site", h("a.link", {href: site.getHref()}, site.row.content.title))
 						h("div.td.inner_path",
-							h("a.title.link", {href: site.getHref(file), target: "_top", title: file.inner_path.replace(/.*\//, "")}, file.inner_path.replace(/.*\//, ""))
+							h("a.title.link", {href: site.getHref(file), target: "_blank", title: file.inner_path.replace(/.*\//, "")}, file.inner_path.replace(/.*\//, ""))
 							if file.is_pinned
 								h("span.pinned", {exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown}, "Pinned")
 						),

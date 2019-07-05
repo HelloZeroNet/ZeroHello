@@ -156,6 +156,8 @@ class ZeroHello extends ZeroFrame
 					@settings.sites_orderby ?= "peers"
 					@settings.favorite_sites ?= {}
 					@settings.siteblocks_ignore ?= {}
+					@settings.date_feed_visit ?= 1
+					@feed_list.date_feed_visit = @settings.date_feed_visit
 					@on_settings.resolve(@settings)
 
 	loadLocalStorage: ->

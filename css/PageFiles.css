@@ -151,3 +151,12 @@
 
 #PageFiles .dots { font-size: 27px; vertical-align: 0px; line-height: 11px; margin-left: 8px; color: rgb(236, 236, 236); display: inline-block; overflow: hidden; width: 45px; }
 #PageFiles .dots-fg { margin-left: -45px; color: #47d094;; width: 32px; }
+/* Filter */
+
+#PageFiles .filter { text-align: center; padding-top: 45px; }
+#PageFiles .filter .title { float: left; margin-left: 15px; position: absolute; margin-top: 14px; opacity: 0.5; }
+#PageFiles .filter input {
+	width: 97%; box-sizing: border-box; background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2);
+	padding: 15px 15px; color: white; font-size: 15px; padding-left: 58px;
+}
+#PageFiles .filter input:focus { border-color: #6c7884; outline: none }

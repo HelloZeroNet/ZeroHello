@@ -15,6 +15,8 @@ class FeedList extends Class
 		@query_day_limit = 3
 		@show_stats = false
 		@feed_keys = {}
+		@date_feed_visit = null
+		@date_save_feed_visit = 0
 		Page.on_settings.then =>
 			@need_update = true
 			document.body.onscroll = =>
@@ -300,8 +302,12 @@ class FeedList extends Class
 		try
 			site = Page.site_list.item_list.items_bykey[feed.site]
 			type_formatted = @formatType(feed.type, feed.title)
-			return h("div.feed."+feed.type, {key: feed.key, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, [
+			classes = {}
+			if @date_feed_visit and feed.date_added > @date_feed_visit
+				classes["new"] = true
+			return h("div.feed."+feed.type, {key: feed.key, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation, classes: classes}, [
 				h("div.details", [
+					h("span.dot", {title: "new"}, "\u2022"),
 					h("a.site", {href: site.getHref()}, [site.row.content.title]),
 					h("div.added", [Time.since(feed.date_added)])
 				]),
@@ -402,6 +408,11 @@ class FeedList extends Class
 		else
 			return "newsfeed.limit-#{@limit}"
 
+	saveFeedVisit: (date_feed_visit) =>
+		@log "Saving feed visit...", Page.settings.date_feed_visit, "->", date_feed_visit
+		Page.settings.date_feed_visit = date_feed_visit
+		Page.saveSettings()
+
 	renderSearchHelp: =>
 		h("div.search-help", [
 			"Tip: Search in specific site using ",
@@ -412,6 +423,9 @@ class FeedList extends Class
 		if @need_update
 			RateLimitCb(5000, @update)
 			@need_update = false
+
+		if @feeds and Page.settings.date_feed_visit < @feeds[0].date_added
+			@saveFeedVisit(@feeds[0].date_added)
 
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded" and not @updating
 			if document.body.scrollTop > 500  # Scrolled down wait until next render
