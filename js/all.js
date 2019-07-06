@@ -2750,12 +2750,12 @@
     };
 
     FeedList.prototype.render = function() {
-      var feed_type, ref;
+      var feed_type, ref, ref1;
       if (this.need_update) {
         RateLimitCb(5000, this.update);
         this.need_update = false;
       }
-      if (this.feeds && Page.settings.date_feed_visit < this.feeds[0].date_added) {
+      if (this.feeds && Page.settings.date_feed_visit < ((ref = this.feeds[0]) != null ? ref.date_added : void 0)) {
         this.saveFeedVisit(this.feeds[0].date_added);
       }
       if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded" && !this.updating) {
@@ -2808,7 +2808,7 @@
           onclick: this.handleSearchClear,
           enterAnimation: Animation.show,
           exitAnimation: Animation.hide
-        }, "\u00D7") : void 0, ((ref = this.res) != null ? ref.stats : void 0) ? h("a.search-info.nolink", {
+        }, "\u00D7") : void 0, ((ref1 = this.res) != null ? ref1.stats : void 0) ? h("a.search-info.nolink", {
           href: "#ShowStats",
           enterAnimation: Animation.show,
           exitAnimation: Animation.hide,

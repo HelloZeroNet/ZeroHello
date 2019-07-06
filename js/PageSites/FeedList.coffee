@@ -424,7 +424,7 @@ class FeedList extends Class
 			RateLimitCb(5000, @update)
 			@need_update = false
 
-		if @feeds and Page.settings.date_feed_visit < @feeds[0].date_added
+		if @feeds and Page.settings.date_feed_visit < @feeds[0]?.date_added
 			@saveFeedVisit(@feeds[0].date_added)
 
 		if @feeds and Page.site_list.loaded and document.body.className != "loaded" and not @updating
