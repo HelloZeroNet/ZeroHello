@@ -1075,6 +1075,9 @@
       this.render = bind(this.render, this);
       this.updateAllFiles = bind(this.updateAllFiles, this);
       this.updateOptionalStats = bind(this.updateOptionalStats, this);
+      this.renderFilter = bind(this.renderFilter, this);
+      this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
+      this.handleFilterInput = bind(this.handleFilterInput, this);
       this.renderSelectbar = bind(this.renderSelectbar, this);
       this.renderTotalbar = bind(this.renderTotalbar, this);
       this.handleLimitInput = bind(this.handleLimitInput, this);
@@ -1107,6 +1110,7 @@
       this.selected_files_pinned = 0;
       this.bigfiles = new Bigfiles();
       this.display_limit = 0;
+      this.filtering = "";
       this;
     }
 
@@ -1423,6 +1427,30 @@
       ]);
     };
 
+    PageFiles.prototype.handleFilterInput = function(e) {
+      return this.filtering = e.target.value;
+    };
+
+    PageFiles.prototype.handleFilterKeyup = function(e) {
+      if (e.keyCode === 27) {
+        e.target.value = "";
+        this.handleFilterInput(e);
+      }
+      return false;
+    };
+
+    PageFiles.prototype.renderFilter = function() {
+      return h("div.filter", [
+        h("span.title", "Filter:"), h("input.text", {
+          placeholder: "File name",
+          spellcheck: false,
+          oninput: this.handleFilterInput,
+          onkeyup: this.handleFilterKeyup,
+          value: this.filtering
+        })
+      ]);
+    };
+
     PageFiles.prototype.updateOptionalStats = function() {
       return Page.cmd("optionalLimitStats", [], (function(_this) {
         return function(res) {
@@ -1608,7 +1636,7 @@
 
     SiteFiles.prototype.handleSelectMousedown = function(e) {
       var inner_path;
-      inner_path = e.target.attributes.inner_path.value;
+      inner_path = e.currentTarget.attributes.inner_path.value;
       if (this.selected[inner_path]) {
         delete this.selected[inner_path];
         this.select_action = "deselect";
@@ -1691,7 +1719,7 @@
         }, [
           h("div.tr.thead", [h("div.td.pre", "."), this.mode === "bigfiles" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
             return function(file) {
-              var percent, percent_bg, percent_title, profile_color, site, status;
+              var classes, percent, percent_bg, percent_title, profile_color, site, status;
               site = file.site || _this.site;
               if (file.peer >= 10) {
                 profile_color = "#47d094";
@@ -1721,23 +1749,24 @@
                 }
                 percent_title = percent + "% " + status;
               }
+              classes = {
+                selected: _this.selected[file.inner_path],
+                pinned: file.is_pinned
+              };
               return h("div.tr", {
                 key: file.inner_path,
                 inner_path: file.inner_path,
                 exitAnimation: Animation.slideUpInout,
                 enterAnimation: Animation.slideDown,
-                classes: {
-                  selected: _this.selected[file.inner_path],
-                  pinned: file.is_pinned
-                },
+                classes: classes,
                 onmouseenter: _this.handleRowMouseenter
               }, [
-                h("div.td.pre", h("a.checkbox", {
+                h("div.td.pre", h("a.checkbox-outer", {
                   href: "#Select",
                   onmousedown: _this.handleSelectMousedown,
                   onclick: _this.handleSelectClick,
                   inner_path: file.inner_path
-                })), _this.mode === "bigfiles" ? h("div.td.site", h("a.link", {
+                }, h("span.checkbox"))), _this.mode === "bigfiles" ? h("div.td.site", h("a.link", {
                   href: site.getHref()
                 }, site.row.content.title)) : void 0, h("div.td.inner_path", h("a.title.link", {
                   href: site.getHref(file),
@@ -2523,7 +2552,7 @@
       body = body.replace(/[\n\r]+/, "\n");
       if (type === "comment" || type === "mention") {
         username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
-        if (username_match) {
+        if (username_match && type !== "mention") {
           if (username_match[2]) {
             username_formatted = username_match[2] + " › ";
           } else {
