@@ -18,7 +18,7 @@ class SiteFiles extends Class
 		@select_action = null
 
 	handleSelectMousedown: (e) =>
-		inner_path = e.target.attributes.inner_path.value
+		inner_path = e.currentTarget.attributes.inner_path.value
 		if @selected[inner_path]
 			delete @selected[inner_path]
 			@select_action = "deselect"
@@ -121,14 +121,16 @@ class SiteFiles extends Class
 
 						percent_title = "#{percent}% #{status}"
 
-					h("div.tr", {key: file.inner_path, inner_path: file.inner_path, exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown, classes: {selected: @selected[file.inner_path], pinned: file.is_pinned}, onmouseenter: @handleRowMouseenter}, [
+					classes = {selected: @selected[file.inner_path], pinned: file.is_pinned}
+
+					h("div.tr", {key: file.inner_path, inner_path: file.inner_path, exitAnimation: Animation.slideUpInout, enterAnimation: Animation.slideDown, classes: classes, onmouseenter: @handleRowMouseenter}, [
 						h("div.td.pre",
-							h("a.checkbox", {
+							h("a.checkbox-outer", {
 								href: "#Select",
 								onmousedown: @handleSelectMousedown,
 								onclick: @handleSelectClick,
 								inner_path: file.inner_path
-							})
+							}, h("span.checkbox"))
 						),
 						if @mode == "bigfiles"
 							h("div.td.site", h("a.link", {href: site.getHref()}, site.row.content.title))

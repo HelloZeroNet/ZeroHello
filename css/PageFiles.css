@@ -47,7 +47,7 @@
 #PageFiles .files .tr { white-space: nowrap }
 #PageFiles .files .td { display: inline-block; width: 60px }
 #PageFiles .files .tbody .td { line-height: 18px; vertical-align: bottom; }
-#PageFiles .files .td.inner_path { min-width: 300px; max-height: 18px; }
+#PageFiles .files .td.inner_path { min-width: 300px }
 #PageFiles .files .td.size { width: 90px; text-align: right; }
 #PageFiles .files .td.status { text-align: right; }
 #PageFiles .files .td.peer { width: 60px }
@@ -76,11 +76,11 @@
 	font-size: 12px; text-transform: uppercase; background-color: rgba(146, 119, 209, 0.13);
 }
 #PageFiles .files .td { padding: 15px 20px; background-color: rgb(255, 255, 255); border-top: 1px solid #EEE; font-size: 14px; white-space: nowrap; }
-#PageFiles .files .td.pre { width: 1px; padding: 15px; color: transparent; }
+#PageFiles .files .td.pre { width: 20px; color: transparent; padding-left: 0px; }
 #PageFiles .files .td.site { width: 70px }
 #PageFiles .files .td.site .link { color: inherit; text-decoration: none }
 #PageFiles .files .td.status .percent { transition: all 1s ease-in-out; display: inline-block; width: 80px; background-color: #EEE; font-size: 10px; height: 15px; line-height: 15px; text-align: center; margin-right: 20px; }
-#PageFiles .files .td.inner_path { padding-left: 25px; width: calc(100% - 600px); }
+#PageFiles .files .td.inner_path { padding-left: 10px; width: calc(100% - 600px); max-height: 18px; }
 #PageFiles .files.files-bigfiles .td.inner_path { padding-left: 15px; width: calc(100% - 810px); }
 #PageFiles .files .td.inner_path .title { color: inherit; text-decoration: none }
 #PageFiles .files .td.inner_path .link { display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: -4px; max-width: 100%; }
@@ -93,6 +93,7 @@
 #PageFiles .files .uploaded .uploaded-text { display: inline-block; text-align: right; }
 #PageFiles .files .uploaded .dots-container { display: inline-block; width: 0px; padding-right: 65px;; }
 
+#PageFiles .files .checkbox-outer { padding: 15px; padding-left: 20px; }
 #PageFiles .files .checkbox {
 	display: inline-block; width: 12px; height: 12px; border: 2px solid #EEE;
 	border-radius: 3px; vertical-align: -3px; margin-right: 10px;
@@ -154,9 +155,9 @@
 /* Filter */
 
 #PageFiles .filter { text-align: center; padding-top: 45px; }
-#PageFiles .filter .title { float: left; margin-left: 15px; position: absolute; margin-top: 14px; opacity: 0.5; }
+#PageFiles .filter .title { float: left; margin-left: 15px; position: absolute; margin-top: 15px; opacity: 0.5; }
 #PageFiles .filter input {
 	width: 97%; box-sizing: border-box; background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2);
-	padding: 15px 15px; color: white; font-size: 15px; padding-left: 58px;
+	padding: 15px 15px; color: white; font-size: 16px; padding-left: 58px;
 }
 #PageFiles .filter input:focus { border-color: #6c7884; outline: none }
