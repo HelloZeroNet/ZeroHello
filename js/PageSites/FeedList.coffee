@@ -237,7 +237,7 @@ class FeedList extends Class
 		if type == "comment" or type == "mention"
 			# Display Comment
 			username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/)
-			if username_match
+			if username_match and type != "mention"
 				if username_match[2]
 					username_formatted = username_match[2] + " › "
 				else
