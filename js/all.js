@@ -2552,7 +2552,7 @@
       body = body.replace(/[\n\r]+/, "\n");
       if (type === "comment" || type === "mention") {
         username_match = body.match(/^(([a-zA-Z0-9\.]+)@[a-zA-Z0-9\.]+|@(.*?)):/);
-        if (username_match && type !== "mention") {
+        if (username_match) {
           if (username_match[2]) {
             username_formatted = username_match[2] + " › ";
           } else {
