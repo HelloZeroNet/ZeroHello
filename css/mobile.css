@@ -128,6 +128,8 @@ z-index: inherit;
 .welcome .site {
 font-size: 35px;
 }
+
+.search-help { margin-left: 0px; }
 }
 
 @media screen and (max-width: 799px) {
