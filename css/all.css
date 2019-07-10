@@ -393,6 +393,7 @@ body:after {
 #PageFiles .files .td.status .percent { -webkit-transition: all 1s ease-in-out; -moz-transition: all 1s ease-in-out; -o-transition: all 1s ease-in-out; -ms-transition: all 1s ease-in-out; transition: all 1s ease-in-out ; display: inline-block; width: 80px; background-color: #EEE; font-size: 10px; height: 15px; line-height: 15px; text-align: center; margin-right: 20px; }
 #PageFiles .files .td.inner_path { padding-left: 10px; width: calc(100% - 600px); max-height: 18px; }
 #PageFiles .files.files-bigfiles .td.inner_path { padding-left: 15px; width: calc(100% - 810px); }
+#PageFiles .files.files-result .td.inner_path { padding-left: 15px; width: calc(100% - 715px); }
 #PageFiles .files .td.inner_path .title { color: inherit; text-decoration: none }
 #PageFiles .files .td.inner_path .link { display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: -4px; max-width: 100%; }
 #PageFiles .files .pinned .td.inner_path .link { max-width: calc(100% - 40px); }
@@ -469,7 +470,7 @@ body:after {
 #PageFiles .filter .title { float: left; margin-left: 15px; position: absolute; margin-top: 15px; opacity: 0.5; }
 #PageFiles .filter input {
 	width: 97%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2);
-	padding: 15px 15px; color: white; font-size: 16px; padding-left: 58px;
+	padding: 15px 15px; color: white; font-size: 16px;
 }
 #PageFiles .filter input:focus { border-color: #6c7884; outline: none }
 
@@ -747,7 +748,7 @@ body:after {
 /* ---- /1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D/css/ZeroHello.css ---- */
 
 
-body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', Arial, 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px; -webkit-font-smoothing: subpixel-antialiased; }
+body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', Arial, 'Helvetica Neue'; margin: 0px; padding: 0px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -o-backface-visibility: hidden; -ms-backface-visibility: hidden; backface-visibility: hidden ; height: 100%; position: absolute; width: 100%; overflow-x: hidden; height: 15000px; -webkit-font-smoothing: subpixel-antialiased; overscroll-behavior-y: none; }
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
@@ -829,6 +830,7 @@ body.changing .left { z-index: 1 !important; }
 .theme-dark .FeedList .feed.mention .type { background-color: #6c706d; outline: 3px solid #6c706d; color: #fffcdd; }
 .theme-dark .search-info-stats td, .theme-dark .search-info-stats th { border-bottom-color: #555f69; color: white; }
 .theme-dark .search-info-stats td a { color: #82d9f4 }
+.theme-dark .highlight { color: #444; }
 
 .theme-dark .menu { background-color: #383b40; outline: 1px solid #4a4a4a; }
 .theme-dark .menu-item { color: #eaf0f5; }
@@ -1081,6 +1083,8 @@ z-index: inherit;
 .welcome .site {
 font-size: 35px;
 }
+
+.search-help { margin-left: 0px; }
 }
 
 @media screen and (max-width: 799px) {
