@@ -13,6 +13,7 @@
 .theme-dark .FeedList .feed.mention .type { background-color: #6c706d; outline: 3px solid #6c706d; color: #fffcdd; }
 .theme-dark .search-info-stats td, .theme-dark .search-info-stats th { border-bottom-color: #555f69; color: white; }
 .theme-dark .search-info-stats td a { color: #82d9f4 }
+.theme-dark .highlight { color: #444; }
 
 .theme-dark .menu { background-color: #383b40; outline: 1px solid #4a4a4a; }
 .theme-dark .menu-item { color: #eaf0f5; }
