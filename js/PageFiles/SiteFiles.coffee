@@ -10,6 +10,18 @@ class SiteFiles extends Class
 		@orderby_desc = true
 		@has_more = false
 
+	getSites: =>
+		back = []
+		# Create separate fake site objects for bigfiles
+		sites = {}
+		for file in @items
+			sites[file.site.row.address] ?= {row: file.site.row, files: {items: [], selected: @selected, update: @update}}
+			sites[file.site.row.address].files.items.push(file)
+
+		for address, site of sites
+			back.push(site)
+		return back
+
 	handleSelectClick: (e) =>
 		return false
 
@@ -85,7 +97,7 @@ class SiteFiles extends Class
 			h("div.files.files-#{@mode}", exitAnimation: Animation.slideUpInout, [
 				h("div.tr.thead", [
 					h("div.td.pre", "."),
-					if @mode == "bigfiles"
+					if @mode == "bigfiles" or @mode == "result"
 						h("div.td.site", @renderOrder("Site", "address"))
 					h("div.td.inner_path", @renderOrder("Optional file", "is_pinned DESC, inner_path")),
 					if @mode == "bigfiles"
@@ -132,7 +144,7 @@ class SiteFiles extends Class
 								inner_path: file.inner_path
 							}, h("span.checkbox"))
 						),
-						if @mode == "bigfiles"
+						if @mode == "bigfiles" or @mode == "result"
 							h("div.td.site", h("a.link", {href: site.getHref()}, site.row.content.title))
 						h("div.td.inner_path",
 							h("a.title.link", {href: site.getHref(file), target: "_blank", title: file.inner_path.replace(/.*\//, "")}, file.inner_path.replace(/.*\//, ""))

@@ -12,24 +12,16 @@ class PageFiles extends Class
 		@selected_files_size = 0
 		@selected_files_pinned = 0
 		@bigfiles = new Bigfiles()
+		@result = new FilesResult()
 		@display_limit = 0
+		@filtering = ""
 		@
 
 	getSites: =>
+		if @result.filter_inner_path
+			return @result.files.getSites()
 		if @bigfiles.files.items.length > 0
-			back = []
-			# Create separate fake site objects for bigfiles
-			bigfile_sites = {}
-			for file in @bigfiles.files.items
-				bigfile_sites[file.site.row.address] ?= {row: file.site.row, files: {items: [], selected: @bigfiles.files.selected, update: @bigfiles.files.update}}
-				bigfile_sites[file.site.row.address].files.items.push(file)
-
-			for address, site of bigfile_sites
-				back.push(site)
-
-			# Add other sites
-			back = back.concat(Page.site_list.sites)
-			return back
+			return @bigfiles.files.getSites().concat(Page.site_list.sites)
 		else
 			return Page.site_list.sites
 
@@ -202,6 +194,31 @@ class PageFiles extends Class
 			h("a.cancel.link", {href: "#", onclick: @handleSelectbarCancel}, "Cancel")
 		])
 
+
+	handleFilterInput: (e) =>
+		if @input_timer
+			clearInterval @input_timer
+		@filtering = e.target.value
+		@input_timer = setTimeout ( =>
+			RateLimitCb 600, (cb_done) =>
+				@result.setFilter @filtering, =>
+					@checkSelectedFiles()
+					cb_done()
+		), 300
+
+
+	handleFilterKeyup: (e) =>
+		if e.keyCode == 27 # Esc
+			e.target.value = ""
+			@handleFilterInput(e)
+		return false
+
+	renderFilter: =>
+		h("div.filter", [
+			# h("span.title", "Filter:"),
+			h("input.text", {placeholder: "Filter: File name", spellcheck: false, oninput: @handleFilterInput, onkeyup: @handleFilterKeyup, value: @filtering})
+		])
+
 	updateOptionalStats: =>
 		Page.cmd "optionalLimitStats", [], (res) =>
 			@limit = res.limit
@@ -263,11 +280,15 @@ class PageFiles extends Class
 		h("div#PageFiles", [
 			@renderSelectbar()
 			@renderTotalbar()
-			@bigfiles.render()
-			sites_favorited[0..@display_limit].map (site) =>
-				site.renderOptionalStats()
-			sites_connected[0..@display_limit].map (site) =>
-				site.renderOptionalStats()
+			@renderFilter()
+			if @result.filter_inner_path
+				@result.render()
+			else
+				@bigfiles.render()
+				sites_favorited[0..@display_limit].map (site) =>
+					site.renderOptionalStats()
+				sites_connected[0..@display_limit].map (site) =>
+					site.renderOptionalStats()
 		])
 
 	onSiteInfo: (site_info) =>
