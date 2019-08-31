@@ -72,10 +72,15 @@ class SiteList extends Class
 			{address: "1MaiL5gfBM1cyb4a8e3iiL8L5gXmoAJu27", demo: true, content: {title: "ZeroMail", domain: "Mail.ZeroNetwork.bit"}, settings: {}}
 			{address: "1uPLoaDwKzP6MCGoVzw48r4pxawRBdmQc", demo: true, content: {title: "ZeroUp"}, settings: {}}
 			{address: "1Gif7PqWTzVWDQ42Mo7np3zXmGAo3DXc7h", demo: true, content: {title: "GIF Time"}, settings: {}}
-			{address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB", demo: true, content: {title: "More @ ZeroSites", domain: "Sites.ZeroNetwork.bit"}, settings: {}}
+			{address: "18Pfr2oswXvD352BbJvo59gZ3GbdbipSzh", demo: true, content: {title: "KopyKate", domain: "big.kopykate.bit"}, settings: {}}
+			{address: "138R53t3ZW7KDfSfxVpWUsMXgwUnsDNXLP", demo: true, content: {title: "ZeroWiki"}, settings: {}}
+			{address: "1ADQAHsqsie5PBeQhQgjcKmUu3qdPFg6aA", demo: true, content: {title: "Millchan"}, settings: {}}
 		]
 		if Page.server_info.rev >= 1400
 			demo_site_rows.push {address: "1MeFqFfFFGQfa1J3gJyYYUvb5Lksczq7nH", demo: true, content: {title: "ZeroMe", domain: "Me.ZeroNetwork.bit"}, settings: {}}
+			demo_site_rows.push {address: "1KiwiBCVBUcuypVm8FEmUW9YT6fJDXkN9r", demo: true, content: {title: "Kiwipedia"}, settings: {}}
+			demo_site_rows.push {address: "1MQveQ3RPpimXX2wjW2geAGkNJ1GdXkvJ3", demo: true, content: {title: "ZeroLSTN"}, domain: "ZeroLSTN.bit", settings: {}}
+		demo_site_rows.push {address: "1SiTEs2D3rCBxeMoLHXei2UYqFcxctdwB", demo: true, content: {title: "More @ ZeroSites", domain: "Sites.ZeroNetwork.bit"}, settings: {}}
 
 		@inactive_demo_sites = []
 		for site_row in demo_site_rows
