@@ -37,6 +37,7 @@ class ZeroFrame {
         if (cmd === CMD_RESPONSE) {
             if (this.waiting_cb[message.to] !== undefined) {
                 this.waiting_cb[message.to](message.result)
+                delete this.waiting_cb[message.to]
             }
             else {
                 this.log("Websocket callback not found:", message)

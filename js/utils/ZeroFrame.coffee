@@ -38,6 +38,7 @@ class ZeroFrame extends Class
 		if cmd == "response"
 			if @waiting_cb[message.to]?
 				@waiting_cb[message.to](message.result)
+				delete @waiting_cb[message.to]
 			else
 				@log "Websocket callback not found:", message
 		else if cmd == "wrapperReady" # Wrapper inited later
