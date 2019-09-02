@@ -120,7 +120,9 @@ class Site extends Class
 
 	handleDeleteClick: =>
 		if @row.settings.own
-			Page.cmd "wrapperNotification", ["error", "Sorry, you can't delete your own site.<br>Please remove the directory manually."]
+			Page.cmd "wrapperConfirm", ["You can delete your site using the site's sidebar.", ["Open site"]], (confirmed) =>
+				if (confirmed)
+					window.top.location = @getHref() + "#ZeroNet:OpenSidebar"
 		else
 			if not @row.content.title
 				Page.cmd "siteDelete", {"address": @row.address}
