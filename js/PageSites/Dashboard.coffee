@@ -134,7 +134,7 @@ class Dashboard extends Class
 
 	handleNewversionClick: =>
 		@menu_newversion.items = []
-		@menu_newversion.items.push ["Update and restart ZeroNet", ( ->
+		@menu_newversion.items.push ["Update ZeroNet", ( ->
 			Page.updateZeronet()
 		)]
 		@menu_newversion.items.push ["Details of the update", Text.getSiteUrl("Blog.ZeroNetwork.bit") ]
@@ -226,7 +226,7 @@ class Dashboard extends Class
 				@menu_warnings.render(".menu-warnings")
 
 				# Update
-				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
+				if parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0")) and parseFloat(Page.server_info.version.replace(/\./g, "0")) >= 700
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")
 				else if Page.server_info.rev < Page.latest_rev
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important update: rev#{Page.latest_rev}")
