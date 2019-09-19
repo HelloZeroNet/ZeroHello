@@ -116,12 +116,16 @@ class Head extends Class
 		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [[h("div.icon-mute", ""), "Manage blocked users and sites"], @handleManageBlocksClick]
-		if Page.server_info.rev >= 3520 then @menu_settings.items.push [[h("div.icon-gear.emoji", "\u2699\uFE0E"), "Configuration"], "/Config"]
-		if Page.server_info.rev >= 4163 then @menu_settings.items.push [[h("div.icon-gear.emoji", "\u2B21"), "Plugins"], "/Plugins"]
+		if Page.server_info.plugins.indexOf("UiConfig") >= 0
+			@menu_settings.items.push [[h("div.icon-gear.emoji", "\u2699\uFE0E"), "Configuration"], "/Config"]
+		if Page.server_info.plugins.indexOf("UiPluginManager") >= 0
+			@menu_settings.items.push [[h("div.icon-gear.emoji", "\u2B21"), "Plugins"], "/Plugins"]
 		@menu_settings.items.push ["---"]
-		@menu_settings.items.push ["Show data directory", @handleBackupClick]
+		if not Page.server_info.multiuser or Page.server_info.multiuser_admin
+			@menu_settings.items.push ["Show data directory", @handleBackupClick]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
-		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
+		if not Page.server_info.multiuser or Page.server_info.multiuser_admin
+			@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 
 		if @menu_settings.visible
 			@menu_settings.hide()
