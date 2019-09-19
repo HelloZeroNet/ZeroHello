@@ -228,6 +228,8 @@ class ZeroHello extends ZeroFrame
 
 	setServerInfo: (server_info) ->
 		@server_info = server_info
+		if parseFloat(Page.server_info.version.replace(/\./g, "0")) < 700
+			@latest_version = "0.6.5"
 		@projector.scheduleRender()
 		@on_server_info.resolve()
 

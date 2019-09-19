@@ -226,7 +226,7 @@ class Dashboard extends Class
 				@menu_warnings.render(".menu-warnings")
 
 				# Update
-				if parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0")) and parseFloat(Page.server_info.version.replace(/\./g, "0")) >= 700
+				if parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0"))
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")
 				else if Page.server_info.rev < Page.latest_rev
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New important update: rev#{Page.latest_rev}")
