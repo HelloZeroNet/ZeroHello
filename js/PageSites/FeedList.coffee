@@ -312,8 +312,10 @@ class FeedList extends Class
 					h("div.added", [Time.since(feed.date_added)])
 				]),
 				h("div.circle", {style: "border-color: #{Text.toColor(feed.type+site.row.address, 60, 60)}"}),
-				if type_formatted then h("span.type", type_formatted),
-				h("a.title", {href: site.getHref()+feed.url}, @formatTitle(feed.title)),
+				h("div.title-container", [
+					if type_formatted then h("span.type", type_formatted),
+					h("a.title", {href: site.getHref()+feed.url}, @formatTitle(feed.title))
+				])
 				h("div.body", {key: feed.body, enterAnimation: @enterAnimation, exitAnimation: @exitAnimation}, @formatBody(feed.body, feed.type))
 				if feed.body_more  # Display comments
 					feed.body_more.map (body_more) =>
