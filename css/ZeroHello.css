@@ -5,6 +5,7 @@ h1 { font-family: 'Text Me One', sans-serif }
 h3 a { color: white; text-decoration: none; }
 a { color: #9760F9 }
 a:hover { text-decoration: none }
+input::placeholder { color: rgba(255, 255, 255, 0.3) }
 
 .link { background-color: transparent; outline: 5px solid transparent; transition: all 0.3s }
 .link:active { background-color: #EFEFEF; outline: 5px solid #EFEFEF; transition: none }
