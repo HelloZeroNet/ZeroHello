@@ -1,6 +1,6 @@
 #PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px !important; position: relative;  }
 
-.intervals { margin-top: -69px; padding-right: 21px; float: right; }
+.intervals { margin-top: -69px; right: 44px; position: absolute; }
 .interval {
 	text-decoration: none; color: #ffffff7d; text-transform: uppercase; margin-left: 20px; display: inline-block; padding: 3px 0px ;
 	font-size: 14px; font-weight: lighter; border-bottom: 2px solid transparent; transition: all 0.3s
