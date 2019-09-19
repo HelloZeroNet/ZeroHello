@@ -51,7 +51,7 @@ class Menu
 		keep_menu = false
 		for item in @items
 			[title, cb, selected] = item
-			if title == e.target.textContent or e.target["data-title"] == title
+			if title == e.currentTarget.textContent or e.currentTarget["data-title"] == title
 				keep_menu = cb?(item)
 				break
 		if keep_menu != true and cb != null
@@ -62,16 +62,24 @@ class Menu
 		[title, cb, selected] = item
 		if typeof(selected) == "function"
 			selected = selected()
+
 		if title == "---"
-			h("div.menu-item-separator")
+			return h("div.menu-item-separator")
 		else
-			if typeof(cb) == "string"  # Url
+			if cb == null
+				href = undefined
+				onclick = @handleClick
+			else if typeof(cb) == "string"  # Url
 				href = cb
 				onclick = true
 			else  # Callback
 				href = "#"+title
 				onclick = @handleClick
-			h("a.menu-item", {href: href, onclick: onclick, "data-title": title, key: title, classes: {"selected": selected, "noaction": (cb == null)}}, title)
+			classes = {
+				"selected": selected,
+				"noaction": (cb == null)
+			}
+			return h("a.menu-item", {href: href, onclick: onclick, "data-title": title, key: title, classes: classes}, title)
 
 	getStyle: =>
 		if @visible
