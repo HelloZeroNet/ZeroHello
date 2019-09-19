@@ -2254,7 +2254,7 @@
           href: "#Warnings",
           onmousedown: this.handleWarningsClick,
           onclick: Page.returnFalse
-        }, "Warnings: " + warnings.length) : void 0, this.menu_warnings.render(".menu-warnings"), parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0")) && parseFloat(Page.server_info.version.replace(/\./g, "0")) >= 700 ? h("a.newversion.dashboard-item", {
+        }, "Warnings: " + warnings.length) : void 0, this.menu_warnings.render(".menu-warnings"), parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0")) ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
@@ -2306,7 +2306,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 /* ---- PageSites/FeedList.coffee ---- */
 
@@ -2744,9 +2743,11 @@
             }, [site.row.content.title]), h("div.added", [Time.since(feed.date_added)])
           ]), h("div.circle", {
             style: "border-color: " + (Text.toColor(feed.type + site.row.address, 60, 60))
-          }), type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
-            href: site.getHref() + feed.url
-          }, this.formatTitle(feed.title)), h("div.body", {
+          }), h("div.title-container", [
+            type_formatted ? h("span.type", type_formatted) : void 0, h("a.title", {
+              href: site.getHref() + feed.url
+            }, this.formatTitle(feed.title))
+          ]), h("div.body", {
             key: feed.body,
             enterAnimation: this.enterAnimation,
             exitAnimation: this.exitAnimation
@@ -2983,6 +2984,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 /* ---- PageSites/MuteList.coffee ---- */
 
@@ -6142,7 +6144,7 @@
       for (i = 0, len = ref.length; i < len; i++) {
         item = ref[i];
         title = item[0], cb = item[1], selected = item[2];
-        if (title === e.target.textContent || e.target["data-title"] === title) {
+        if (title === e.currentTarget.textContent || e.currentTarget["data-title"] === title) {
           keep_menu = typeof cb === "function" ? cb(item) : void 0;
           break;
         }
@@ -6154,7 +6156,7 @@
     };
 
     Menu.prototype.renderItem = function(item) {
-      var cb, href, onclick, selected, title;
+      var cb, classes, href, onclick, selected, title;
       title = item[0], cb = item[1], selected = item[2];
       if (typeof selected === "function") {
         selected = selected();
@@ -6162,22 +6164,26 @@
       if (title === "---") {
         return h("div.menu-item-separator");
       } else {
-        if (typeof cb === "string") {
+        if (cb === null) {
+          href = void 0;
+          onclick = this.handleClick;
+        } else if (typeof cb === "string") {
           href = cb;
           onclick = true;
         } else {
           href = "#" + title;
           onclick = this.handleClick;
         }
+        classes = {
+          "selected": selected,
+          "noaction": cb === null
+        };
         return h("a.menu-item", {
           href: href,
           onclick: onclick,
           "data-title": title,
           key: title,
-          classes: {
-            "selected": selected,
-            "noaction": cb === null
-          }
+          classes: classes
         }, title);
       }
     };
@@ -7074,16 +7080,20 @@
       this.menu_settings.items.push(["Create new, empty site", this.handleCreateSiteClick]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([[h("div.icon-mute", ""), "Manage blocked users and sites"], this.handleManageBlocksClick]);
-      if (Page.server_info.rev >= 3520) {
+      if (Page.server_info.plugins.indexOf("UiConfig") >= 0) {
         this.menu_settings.items.push([[h("div.icon-gear.emoji", "\u2699\uFE0E"), "Configuration"], "/Config"]);
       }
-      if (Page.server_info.rev >= 4163) {
+      if (Page.server_info.plugins.indexOf("UiPluginManager") >= 0) {
         this.menu_settings.items.push([[h("div.icon-gear.emoji", "\u2B21"), "Plugins"], "/Plugins"]);
       }
       this.menu_settings.items.push(["---"]);
-      this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
+      if (!Page.server_info.multiuser || Page.server_info.multiuser_admin) {
+        this.menu_settings.items.push(["Show data directory", this.handleBackupClick]);
+      }
       this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
-      this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
+      if (!Page.server_info.multiuser || Page.server_info.multiuser_admin) {
+        this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
+      }
       if (this.menu_settings.visible) {
         this.menu_settings.hide();
       } else {
@@ -7527,6 +7537,9 @@
 
     ZeroHello.prototype.setServerInfo = function(server_info) {
       this.server_info = server_info;
+      if (parseFloat(Page.server_info.version.replace(/\./g, "0")) < 700) {
+        this.latest_version = "0.6.5";
+      }
       this.projector.scheduleRender();
       return this.on_server_info.resolve();
     };

@@ -475,7 +475,7 @@ body:after {
 
 #PageStats { margin-top: 50px; max-width: 1400px; padding-left: 40px; padding-right: 30px !important; position: relative;  }
 
-.intervals { margin-top: -69px; padding-right: 21px; float: right; }
+.intervals { margin-top: -69px; right: 44px; position: absolute; }
 .interval {
 	text-decoration: none; color: #ffffff7d; text-transform: uppercase; margin-left: 20px; display: inline-block; padding: 3px 0px ;
 	font-size: 14px; font-weight: lighter; border-bottom: 2px solid transparent; transition: all 0.3s
@@ -667,6 +667,7 @@ body:after {
 	width: 9px; height: 9px; border: 2px solid #af3bff; position: absolute; pointer-events: none;
 	margin-left: -32px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -o-border-radius: 15px; -ms-border-radius: 15px; border-radius: 15px ; margin-top: 5px; background-color: white;
 }
+.FeedList .feed .title-container { -webkit-line-clamp: 2; -webkit-box-orient: vertical; display: -webkit-box; overflow: hidden; }
 .FeedList .feed .title { font-size: 110%; color: #222; }
 .FeedList .feed .added { font-size: 80%; color: #AAA; margin-top: 9px; }
 .FeedList .feed .site { font-weight: bold; color: #555 }
@@ -746,6 +747,7 @@ h1 { font-family: 'Text Me One', sans-serif }
 h3 a { color: white; text-decoration: none; }
 a { color: #9760F9 }
 a:hover { text-decoration: none }
+input::placeholder { color: rgba(255, 255, 255, 0.3) }
 
 .link { background-color: transparent; outline: 5px solid transparent; -webkit-transition: all 0.3s ; -moz-transition: all 0.3s ; -o-transition: all 0.3s ; -ms-transition: all 0.3s ; transition: all 0.3s  }
 .link:active { background-color: #EFEFEF; outline: 5px solid #EFEFEF; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
