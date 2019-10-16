@@ -55,7 +55,6 @@
 
 }).call(this);
 
-
 /* ---- lib/Promise.coffee ---- */
 
 
@@ -159,7 +158,6 @@
 
 }).call(this);
 
-
 /* ---- lib/Property.coffee ---- */
 
 
@@ -169,7 +167,6 @@
   };
 
 }).call(this);
-
 
 /* ---- lib/Prototypes.coffee ---- */
 
@@ -196,7 +193,6 @@
   };
 
 }).call(this);
-
 
 /* ---- lib/maquette.js ---- */
 
@@ -1054,7 +1050,6 @@
 
 }).call(this);
 
-
 /* ---- PageFiles/FilesResult.coffee ---- */
 
 
@@ -1141,7 +1136,6 @@
   window.FilesResult = FilesResult;
 
 }).call(this);
-
 
 /* ---- PageFiles/PageFiles.coffee ---- */
 
@@ -1668,7 +1662,6 @@
 
 }).call(this);
 
-
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
 
@@ -1936,7 +1929,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/Dashboard.coffee ---- */
 
 
@@ -2126,11 +2118,13 @@
           return Page.cmd("userShowMasterSeed");
         })
       ]);
-      this.menu_multiuser.items.push([
-        "Select user", (function() {
-          return Page.cmd("userSelectForm");
-        })
-      ]);
+      if (Page.server_info.multiuser_admin) {
+        this.menu_multiuser.items.push([
+          "Select user", (function() {
+            return Page.cmd("userSelectForm");
+          })
+        ]);
+      }
       this.menu_multiuser.items.push([
         "Logout", (function() {
           return Page.cmd("userLogout");
@@ -3008,7 +3002,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/MuteList.coffee ---- */
 
 
@@ -3303,7 +3296,6 @@
   window.MuteList = MuteList;
 
 }).call(this);
-
 
 /* ---- PageSites/Site.coffee ---- */
 
@@ -3794,7 +3786,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/SiteList.coffee ---- */
 
 
@@ -4134,7 +4125,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/Trigger.coffee ---- */
 
 
@@ -4184,7 +4174,6 @@
   window.Trigger = Trigger;
 
 }).call(this);
-
 
 /* ---- PageStats/Chart.coffee ---- */
 
@@ -4332,7 +4321,6 @@
   window.Chart = Chart;
 
 }).call(this);
-
 
 /* ---- PageStats/ChartBig.coffee ---- */
 
@@ -4801,7 +4789,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/ChartLegend.coffee ---- */
 
 
@@ -4878,7 +4865,6 @@
   window.ChartLegend = ChartLegend;
 
 }).call(this);
-
 
 /* ---- PageStats/ChartRadar.coffee ---- */
 
@@ -5194,7 +5180,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/ChartTimeline.coffee ---- */
 
 
@@ -5438,7 +5423,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/ChartWorld.coffee ---- */
 
 
@@ -5574,7 +5558,6 @@
   window.ChartWorld = ChartWorld;
 
 }).call(this);
-
 
 /* ---- PageStats/PageStats.coffee ---- */
 
@@ -5820,7 +5803,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/StatList.coffee ---- */
 
 
@@ -5859,7 +5841,6 @@
   window.StatList = StatList;
 
 }).call(this);
-
 
 /* ---- utils/Animation.coffee ---- */
 
@@ -6027,7 +6008,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Dollar.coffee ---- */
 
 
@@ -6039,7 +6019,6 @@
   };
 
 }).call(this);
-
 
 /* ---- utils/ItemList.coffee ---- */
 
@@ -6092,7 +6071,6 @@
   window.ItemList = ItemList;
 
 }).call(this);
-
 
 /* ---- utils/Menu.coffee ---- */
 
@@ -6280,7 +6258,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Prototypes.coffee ---- */
 
 
@@ -6315,7 +6292,6 @@
 
 }).call(this);
 
-
 /* ---- utils/RateLimit.coffee ---- */
 
 
@@ -6343,7 +6319,6 @@
   };
 
 }).call(this);
-
 
 /* ---- utils/RateLimitCb.coffee ---- */
 
@@ -6430,7 +6405,6 @@
    */
 
 }).call(this);
-
 
 /* ---- utils/Text.coffee ---- */
 
@@ -6677,7 +6651,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Time.coffee ---- */
 
 
@@ -6778,7 +6751,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Translate.coffee ---- */
 
 
@@ -6788,7 +6760,6 @@
   };
 
 }).call(this);
-
 
 /* ---- utils/ZeroFrame.coffee ---- */
 
@@ -6921,7 +6892,6 @@
   window.ZeroFrame = ZeroFrame;
 
 }).call(this);
-
 
 /* ---- Head.coffee ---- */
 
@@ -7259,7 +7229,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 /* ---- ZeroHello.coffee ---- */
 

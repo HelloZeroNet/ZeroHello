@@ -117,7 +117,8 @@ class Dashboard extends Class
 	handleMultiuserClick: =>
 		@menu_multiuser.items = []
 		@menu_multiuser.items.push ["Show your masterseed", ( -> Page.cmd "userShowMasterSeed" )]
-		@menu_multiuser.items.push ["Select user", ( -> Page.cmd "userSelectForm" )]
+		if Page.server_info.multiuser_admin
+			@menu_multiuser.items.push ["Select user", ( -> Page.cmd "userSelectForm" )]
 		@menu_multiuser.items.push ["Logout", ( -> Page.cmd "userLogout" )]
 
 		@menu_multiuser.toggle()
