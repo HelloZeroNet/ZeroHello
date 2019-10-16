@@ -55,6 +55,7 @@
 
 }).call(this);
 
+
 /* ---- lib/Promise.coffee ---- */
 
 
@@ -158,6 +159,7 @@
 
 }).call(this);
 
+
 /* ---- lib/Property.coffee ---- */
 
 
@@ -167,6 +169,7 @@
   };
 
 }).call(this);
+
 
 /* ---- lib/Prototypes.coffee ---- */
 
@@ -193,6 +196,7 @@
   };
 
 }).call(this);
+
 
 /* ---- lib/maquette.js ---- */
 
@@ -1050,6 +1054,7 @@
 
 }).call(this);
 
+
 /* ---- PageFiles/FilesResult.coffee ---- */
 
 
@@ -1136,6 +1141,7 @@
   window.FilesResult = FilesResult;
 
 }).call(this);
+
 
 /* ---- PageFiles/PageFiles.coffee ---- */
 
@@ -1662,6 +1668,7 @@
 
 }).call(this);
 
+
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
 
@@ -1929,6 +1936,7 @@
 
 }).call(this);
 
+
 /* ---- PageSites/Dashboard.coffee ---- */
 
 
@@ -2119,6 +2127,11 @@
         })
       ]);
       this.menu_multiuser.items.push([
+        "Select user", (function() {
+          return Page.cmd("userSelectForm");
+        })
+      ]);
+      this.menu_multiuser.items.push([
         "Logout", (function() {
           return Page.cmd("userLogout");
         })
@@ -2180,7 +2193,7 @@
             title: title_text
           }, status + " (" + success_percent + "% success)")
         ];
-        this.menu_trackers.items.push([title, "#"]);
+        this.menu_trackers.items.push([title, null]);
       }
       this.menu_trackers.toggle();
       return false;
@@ -2241,6 +2254,15 @@
           href: "https://time.is",
           descr: "Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen."
         });
+      }
+      if (Page.server_errors.length > 2) {
+        warnings = warnings.concat(Page.server_errors.slice(-2).reverse());
+        warnings.push({
+          title: (Page.server_errors.length - 2) + " more errors...",
+          href: "#ZeroNet:Console"
+        });
+      } else {
+        warnings = warnings.concat(Page.server_errors);
       }
       return warnings;
     };
@@ -2306,6 +2328,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 /* ---- PageSites/FeedList.coffee ---- */
 
@@ -3281,6 +3304,7 @@
 
 }).call(this);
 
+
 /* ---- PageSites/Site.coffee ---- */
 
 
@@ -3770,6 +3794,7 @@
 
 }).call(this);
 
+
 /* ---- PageSites/SiteList.coffee ---- */
 
 
@@ -4109,6 +4134,7 @@
 
 }).call(this);
 
+
 /* ---- PageSites/Trigger.coffee ---- */
 
 
@@ -4158,6 +4184,7 @@
   window.Trigger = Trigger;
 
 }).call(this);
+
 
 /* ---- PageStats/Chart.coffee ---- */
 
@@ -4305,6 +4332,7 @@
   window.Chart = Chart;
 
 }).call(this);
+
 
 /* ---- PageStats/ChartBig.coffee ---- */
 
@@ -4773,6 +4801,7 @@
 
 }).call(this);
 
+
 /* ---- PageStats/ChartLegend.coffee ---- */
 
 
@@ -4849,6 +4878,7 @@
   window.ChartLegend = ChartLegend;
 
 }).call(this);
+
 
 /* ---- PageStats/ChartRadar.coffee ---- */
 
@@ -5164,6 +5194,7 @@
 
 }).call(this);
 
+
 /* ---- PageStats/ChartTimeline.coffee ---- */
 
 
@@ -5407,6 +5438,7 @@
 
 }).call(this);
 
+
 /* ---- PageStats/ChartWorld.coffee ---- */
 
 
@@ -5542,6 +5574,7 @@
   window.ChartWorld = ChartWorld;
 
 }).call(this);
+
 
 /* ---- PageStats/PageStats.coffee ---- */
 
@@ -5787,6 +5820,7 @@
 
 }).call(this);
 
+
 /* ---- PageStats/StatList.coffee ---- */
 
 
@@ -5825,6 +5859,7 @@
   window.StatList = StatList;
 
 }).call(this);
+
 
 /* ---- utils/Animation.coffee ---- */
 
@@ -5992,6 +6027,7 @@
 
 }).call(this);
 
+
 /* ---- utils/Dollar.coffee ---- */
 
 
@@ -6003,6 +6039,7 @@
   };
 
 }).call(this);
+
 
 /* ---- utils/ItemList.coffee ---- */
 
@@ -6055,6 +6092,7 @@
   window.ItemList = ItemList;
 
 }).call(this);
+
 
 /* ---- utils/Menu.coffee ---- */
 
@@ -6162,7 +6200,9 @@
         selected = selected();
       }
       if (title === "---") {
-        return h("div.menu-item-separator");
+        return h("div.menu-item-separator", {
+          key: Time.timestamp()
+        });
       } else {
         if (cb === null) {
           href = void 0;
@@ -6240,6 +6280,7 @@
 
 }).call(this);
 
+
 /* ---- utils/Prototypes.coffee ---- */
 
 
@@ -6274,6 +6315,7 @@
 
 }).call(this);
 
+
 /* ---- utils/RateLimit.coffee ---- */
 
 
@@ -6301,6 +6343,7 @@
   };
 
 }).call(this);
+
 
 /* ---- utils/RateLimitCb.coffee ---- */
 
@@ -6387,6 +6430,7 @@
    */
 
 }).call(this);
+
 
 /* ---- utils/Text.coffee ---- */
 
@@ -6633,6 +6677,7 @@
 
 }).call(this);
 
+
 /* ---- utils/Time.coffee ---- */
 
 
@@ -6733,6 +6778,7 @@
 
 }).call(this);
 
+
 /* ---- utils/Translate.coffee ---- */
 
 
@@ -6742,6 +6788,7 @@
   };
 
 }).call(this);
+
 
 /* ---- utils/ZeroFrame.coffee ---- */
 
@@ -6874,6 +6921,7 @@
   window.ZeroFrame = ZeroFrame;
 
 }).call(this);
+
 
 /* ---- Head.coffee ---- */
 
@@ -7212,6 +7260,7 @@
 
 }).call(this);
 
+
 /* ---- ZeroHello.coffee ---- */
 
 
@@ -7229,6 +7278,7 @@
     function ZeroHello() {
       this.reloadAnnouncerStats = bind(this.reloadAnnouncerStats, this);
       this.reloadAnnouncerInfo = bind(this.reloadAnnouncerInfo, this);
+      this.reloadServerErrors = bind(this.reloadServerErrors, this);
       this.reloadServerInfo = bind(this.reloadServerInfo, this);
       this.reloadSiteInfo = bind(this.reloadSiteInfo, this);
       this.onOpenWebsocket = bind(this.onOpenWebsocket, this);
@@ -7248,6 +7298,7 @@
       this.on_settings = new Promise();
       this.on_loaded = new Promise();
       this.settings = null;
+      this.server_errors = [];
       this.latest_version = "0.7.1";
       this.latest_rev = 3616;
       this.mode = "Sites";
@@ -7467,6 +7518,7 @@
 
     ZeroHello.prototype.onOpenWebsocket = function(e) {
       this.reloadServerInfo();
+      this.reloadServerErrors();
       return this.reloadSiteInfo();
     };
 
@@ -7484,6 +7536,15 @@
         return function(server_info) {
           _this.setServerInfo(server_info);
           return typeof cb === "function" ? cb(server_info) : void 0;
+        };
+      })(this));
+    };
+
+    ZeroHello.prototype.reloadServerErrors = function(cb) {
+      return this.cmd("serverErrors", {}, (function(_this) {
+        return function(server_errors) {
+          _this.setServerErrors(server_errors);
+          return typeof cb === "function" ? cb(server_errors) : void 0;
         };
       })(this));
     };
@@ -7536,12 +7597,34 @@
     };
 
     ZeroHello.prototype.setServerInfo = function(server_info) {
+      var ref;
       this.server_info = server_info;
       if (parseFloat(Page.server_info.version.replace(/\./g, "0")) < 700) {
         this.latest_version = "0.6.5";
       }
       this.projector.scheduleRender();
+      if (((ref = server_info.event) != null ? ref[0] : void 0) === "log_event") {
+        RateLimit(1000, (function(_this) {
+          return function() {
+            return _this.reloadServerErrors();
+          };
+        })(this));
+      }
       return this.on_server_info.resolve();
+    };
+
+    ZeroHello.prototype.setServerErrors = function(server_errors) {
+      var date_added, i, len, level, message, ref;
+      this.server_errors = [];
+      for (i = 0, len = server_errors.length; i < len; i++) {
+        ref = server_errors[i], date_added = ref[0], level = ref[1], message = ref[2];
+        this.server_errors.push({
+          title: [Time.since(date_added), " - ", level],
+          descr: message,
+          href: null
+        });
+      }
+      return this.projector.scheduleRender();
     };
 
     ZeroHello.prototype.setAnnouncerInfo = function(announcer_info) {

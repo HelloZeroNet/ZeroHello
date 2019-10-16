@@ -9,8 +9,8 @@
    "size": 208221
   },
   "css/all.css": {
-   "sha512": "ec5a10ef801d926ed031a063df55f8260282c3703fe68d8b1346d1d2b8a97739",
-   "size": 233257
+   "sha512": "d5ae233bf85e908715eb301c2ed569fa1a0903cc08522d67d49ebda3e40ad4e6",
+   "size": 235714
   },
   "img/loading-circle.gif": {
    "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
@@ -33,12 +33,12 @@
    "size": 13735
   },
   "index.html": {
-   "sha512": "5a6ffcab6ed91126f905538eb5bfb86c42997d000797638ae840629c5ec19747",
-   "size": 1269
+   "sha512": "09a6f500faf2fc962e493505d627d5df9259cb1427c3afd4537cdf1ab9741d6a",
+   "size": 1330
   },
   "js/all.js": {
-   "sha512": "eb4add031ec4fbbb4862d830f02be2451c75ba328a3fa27a561cf1cf3d1b7879",
-   "size": 284689
+   "sha512": "62a8401380dc1095862622f6a39be910d330181e65ce3defb8c41d8a5613b37e",
+   "size": 294251
   },
   "languages/da.json": {
    "sha512": "a11d1da29b791c2de8a926d5c9177011dc00ab569a2b1fc8b435e5615658827f",
@@ -57,8 +57,8 @@
    "size": 4454
   },
   "languages/it.json": {
-   "sha512": "d60cd479712d4a18d9ddab7775a5592f6295610d697f8d1df2523f081a27ea61",
-   "size": 4667
+   "sha512": "a536f8757cc7787f2c5dfb94b18532ba1aee9adc851b97a4bfc372e40063aaba",
+   "size": 4665
   },
   "languages/jp.json": {
    "sha512": "ad621ae4090da223abbca967c87174d13f3819e9dabc193061e6b9fccd8575b6",
@@ -105,8 +105,8 @@
    "size": 6746
   },
   "languages/zh.json": {
-   "sha512": "5176f635bf49ac060e204c0b4f82b89d47b006aabf65cdc838624cf353c1b270",
-   "size": 8390
+   "sha512": "13885bc1b1c368788ee7d311f21b75e667329cd5e64142a12eb6c3eb4c8ffe83",
+   "size": 9117
   },
   "template-new/content.json-default": {
    "sha512": "7e6068f0105c5f6a0e1237baa1dfbbb353b40042c7ccedc306c6f88a446469aa",
@@ -117,21 +117,21 @@
    "size": 1114
   },
   "template-new/js/ZeroFrame.js": {
-   "sha512": "42125c7aa72496455e044e3fd940e0f05db86824c781381edb7a70f71a5f0882",
-   "size": 3370
+   "sha512": "ace368eb399ec01f0a1da6e16c8a8b4d1b2e0a432a6f01778c446a5134db0e9c",
+   "size": 3772
   }
  },
  "ignore": "(js|css)/(?!all.(js|css))",
  "inner_path": "content.json",
- "modified": 1539910449,
+ "modified": 1568919401,
  "postmessage_nonce_security": true,
  "signers_sign": "HLcq242ZHh4nTexhe6kvkBroycZ1JpF4pjlLGxbhjKAwDAfdCZ/gxUwM9aIN6OrD8K5YqAfvIVlbwkLMB1XSEDo=",
  "signs": {
-  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "G9AcQiHyvwL0i2Dl70LoSyDiBMRKS0Bq1IDVM1xm0PEGQeLt7P86IF1MMi2kkpDWoZR3m+LACeqAH6CZ/HkZUtw="
+  "1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D": "HFUeuP7s0xwrJHF5o9rDkttqBQPeIHwkq90W9xsUeS6wUzR0he9LBuoysQVO4Wr/jJrv+EX0RhFfTVfoQxQH2OE="
  },
  "signs_required": 1,
  "title": "ZeroHello",
  "translate": ["js/all.js"],
  "viewport": "width=device-width, initial-scale=0.8",
- "zeronet_version": "0.6.3"
+ "zeronet_version": "0.7.1"
 }

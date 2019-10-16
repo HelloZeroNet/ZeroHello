@@ -117,6 +117,7 @@ class Dashboard extends Class
 	handleMultiuserClick: =>
 		@menu_multiuser.items = []
 		@menu_multiuser.items.push ["Show your masterseed", ( -> Page.cmd "userShowMasterSeed" )]
+		@menu_multiuser.items.push ["Select user", ( -> Page.cmd "userSelectForm" )]
 		@menu_multiuser.items.push ["Logout", ( -> Page.cmd "userLogout" )]
 
 		@menu_multiuser.toggle()
@@ -163,7 +164,7 @@ class Dashboard extends Class
 			if stat.last_error
 				title_text += ", Last error: #{stat.last_error} (#{Time.since(stat.time_last_error)})"
 			title = [tracker_name, h("span.tracker-status", {title: title_text}, "#{status} (#{success_percent}% success)")]
-			@menu_trackers.items.push [title, "#"]
+			@menu_trackers.items.push [title, null]
 		@menu_trackers.toggle()
 		return false
 
@@ -211,6 +212,15 @@ class Dashboard extends Class
 				href: "https://time.is",
 				descr: "Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen."
 			})
+
+		if Page.server_errors.length > 2
+			warnings = warnings.concat(Page.server_errors[-2..].reverse())
+			warnings.push({
+				title: "#{Page.server_errors.length - 2} more errors...",
+				href: "#ZeroNet:Console"
+			})
+		else
+			warnings = warnings.concat(Page.server_errors)
 
 		return warnings
 

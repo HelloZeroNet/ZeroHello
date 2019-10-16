@@ -64,7 +64,7 @@ class Menu
 			selected = selected()
 
 		if title == "---"
-			return h("div.menu-item-separator")
+			return h("div.menu-item-separator", {key: Time.timestamp()})
 		else
 			if cb == null
 				href = undefined

@@ -15,6 +15,8 @@ class ZeroHello extends ZeroFrame
 		@on_loaded = new Promise()
 		@settings = null
 
+		@server_errors = []
+
 		@latest_version = "0.7.1"
 		@latest_rev = 3616
 		@mode = "Sites"
@@ -180,6 +182,7 @@ class ZeroHello extends ZeroFrame
 
 	onOpenWebsocket: (e) =>
 		@reloadServerInfo()
+		@reloadServerErrors()
 		@reloadSiteInfo()
 
 	reloadSiteInfo: =>
@@ -191,6 +194,11 @@ class ZeroHello extends ZeroFrame
 		@cmd "serverInfo", {}, (server_info) =>
 			@setServerInfo(server_info)
 			cb?(server_info)
+
+	reloadServerErrors: (cb) =>
+		@cmd "serverErrors", {}, (server_errors) =>
+			@setServerErrors(server_errors)
+			cb?(server_errors)
 
 	reloadAnnouncerInfo: (cb) =>
 		@cmd "announcerInfo", {}, (announcer_info) =>
@@ -231,7 +239,20 @@ class ZeroHello extends ZeroFrame
 		if parseFloat(Page.server_info.version.replace(/\./g, "0")) < 700
 			@latest_version = "0.6.5"
 		@projector.scheduleRender()
+		if server_info.event?[0] == "log_event"
+			RateLimit 1000, =>
+				@reloadServerErrors()
 		@on_server_info.resolve()
+
+	setServerErrors: (server_errors) ->
+		@server_errors = []
+		for [date_added, level, message] in server_errors
+			@server_errors.push({
+				title: [Time.since(date_added), " - ", level],
+				descr: message,
+				href: null
+			})
+		@projector.scheduleRender()
 
 	setAnnouncerInfo: (announcer_info) ->
 		@announcer_info = announcer_info.stats
