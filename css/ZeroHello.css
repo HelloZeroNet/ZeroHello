@@ -60,3 +60,6 @@ body.changing .left { z-index: 1 !important; }
 /* PageStats */
 #BodyStats .left { /*background-image: linear-gradient(60deg, #272a38 0px, #1E2527 1260px);*/ min-height: 1260px; background-image: linear-gradient(60deg, #442f40 0px, #12252b 1260px) }
 #BodyStats .left .logo { background-color: rgba(0,0,0,0) }
+
+/* External */
+.client-detection { background-color: #008000;}
