@@ -3,6 +3,7 @@
 	"Checking": "Checando",
 	"Opened": "Aberta",
 	"Closed": "Fechada",
+	"Unsupported": "Sem suporte",
 	"Always": "Sempre",
 	"Available": "Disponível",
 	"_(Disabled)": "Desativada",
@@ -182,5 +183,12 @@
 	" hours ago": "  horas atrás",
 	" days ago": " dias atrás",
 	"on ": "a",
-	"Just now": "Agora mesmo"
+	"Just now": "Agora mesmo",
+	
+	"Theme: ": "Tema: ",
+	"LIGHT": "CLARO",
+	"DARK": "ESCURO",
+	"(No data yet)": "(Ainda não existem dados)",
+	"Send": "Enviado",
+	"Received": "Recebido",
 }
