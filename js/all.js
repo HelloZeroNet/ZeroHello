@@ -2323,7 +2323,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/FeedList.coffee ---- */
 
 
@@ -7008,8 +7007,12 @@
     };
 
     Head.prototype.renderMenuTheme = function() {
-      var ref, theme, theme_selected, themes;
-      themes = ["system", "light", "dark"];
+      var ref, theme_id, theme_selected, theme_title, themes;
+      themes = {
+        "system": _("system"),
+        "light": _("light"),
+        "dark": _("dark")
+      };
       if (Page.server_info.user_settings.use_system_theme) {
         theme_selected = "system";
       } else {
@@ -7019,19 +7022,19 @@
         }
       }
       return h("div.menu-radio.menu-themes", h("div", "Theme: "), (function() {
-        var i, len, results;
+        var results;
         results = [];
-        for (i = 0, len = themes.length; i < len; i++) {
-          theme = themes[i];
+        for (theme_id in themes) {
+          theme_title = themes[theme_id];
           results.push([
             h("a", {
-              href: "#" + theme,
+              href: "#" + theme_id,
               onclick: this.handleThemeClick,
               classes: {
-                selected: theme_selected === theme,
+                selected: theme_selected === theme_id,
                 long: true
               }
-            }, theme), " "
+            }, theme_title), " "
           ]);
         }
         return results;
@@ -7229,6 +7232,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 /* ---- ZeroHello.coffee ---- */
 

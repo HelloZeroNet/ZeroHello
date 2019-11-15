@@ -67,7 +67,7 @@ class Head extends Class
 		return false
 
 	renderMenuTheme: =>
-		themes = ["system", "light", "dark"]
+		themes = {"system": _("system"), "light": _("light"), "dark": _("dark")}
 
 		if Page.server_info.user_settings.use_system_theme
 			theme_selected = "system"
@@ -77,9 +77,9 @@ class Head extends Class
 
 		h("div.menu-radio.menu-themes",
 			h("div", "Theme: "),
-			for theme in themes
+			for theme_id, theme_title of themes
 				[
-					h("a", {href: "#" + theme, onclick: @handleThemeClick, classes: {selected: theme_selected == theme, long: true}}, theme),
+					h("a", {href: "#" + theme_id, onclick: @handleThemeClick, classes: {selected: theme_selected == theme_id, long: true}}, theme_title),
 					" "
 				]
 		)
