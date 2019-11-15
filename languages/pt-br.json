@@ -186,9 +186,16 @@
 	"Just now": "Agora mesmo",
 
 	"Theme: ": "Tema: ",
-	"LIGHT": "CLARO",
-	"DARK": "ESCURO",
+	"_(light)": "escuro",
+	"_(dark)": "claro",
+	"_(system)": "sistema",
 	"(No data yet)": "(Ainda não existem dados)",
 	"Send": "Enviado",
-	"Received": "Recebido"
+	"Received": "Recebido",
+
+	"Connected sites:": "Sites conectados:",
+	"All": "Tudo",
+	"from \" + this.res.sites + \" sites in ": "De \" + this.res.sites + \" em ",
+	"Filter: File name": "Filtrar: Nome do arquivo",
+	"Runtime files": "Arquivos de tempo de execução"
 }
