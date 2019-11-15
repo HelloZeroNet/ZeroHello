@@ -135,7 +135,7 @@
 	"Optional": "Opcional",
 	"Help distribute all new files": "Ajudar a distribuir todos os novos arquivos",
 	"Upload/Download ratio": "Taxa de Download/Upload",
-	
+
 	"Bigfiles": "Arquivos big",
 	"Site": "Site",
 	"Optional file": "Arquivo opcional",
@@ -146,7 +146,7 @@
 	"Downloaded": "Baixado",
 	"Finished": "Terminado",
 	"Pinned": "Fixado",
-	
+
 	"Sunday": "Domingo",
 	"Monday": "Segunda",
 	"Tuesday": "Terça",
@@ -163,7 +163,7 @@
 	" requests": " solicitações",
 	"Transferred data (last 7 days)": "Dados transferidos (últimos 7 dias)",
 	"Site size": "Tamanho do site",
-	"Connections": "Conexões",	
+	"Connections": "Conexões",
 	" peers": " peers",
 	"Onion: ": "Onion: ",
 	" peers (": " peers (",
@@ -184,11 +184,11 @@
 	" days ago": " dias atrás",
 	"on ": "a",
 	"Just now": "Agora mesmo",
-	
+
 	"Theme: ": "Tema: ",
 	"LIGHT": "CLARO",
 	"DARK": "ESCURO",
 	"(No data yet)": "(Ainda não existem dados)",
 	"Send": "Enviado",
-	"Received": "Recebido",
+	"Received": "Recebido"
 }
