@@ -3,6 +3,7 @@
 // Version 1.2.0 (2017-08-02) - Added Ajax monkey patch to emulate XMLHttpRequest over ZeroFrame API
 // Version 1.3.0 (2018-12-05) - Added monkey patch for fetch API
 // Version 1.3.1 (2019-09-02) - Fix memory leak while handling responses
+// Version 1.4.0 (2019-12-11) - Awaitable monkeyPatchAjax function
 
 const CMD_INNER_READY = 'innerReady'
 const CMD_RESPONSE = 'response'
@@ -109,10 +110,9 @@ class ZeroFrame {
         this.log('Websocket close')
     }
 
-    monkeyPatchAjax() {
+    async monkeyPatchAjax() {
         var page = this
         XMLHttpRequest.prototype.realOpen = XMLHttpRequest.prototype.open
-        this.cmd("wrapperGetAjaxKey", [], (res) => { this.ajax_key = res })
         var newOpen = function (method, url, async) {
             url += "?ajax_key=" + page.ajax_key
             return this.realOpen(method, url, async)
@@ -125,5 +125,7 @@ class ZeroFrame {
             return window.realFetch(url)
         }
         window.fetch = newFetch
+
+        this.ajax_key = await page.cmdp("wrapperGetAjaxKey", [])
     }
 }
