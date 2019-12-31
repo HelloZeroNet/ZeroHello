@@ -10,7 +10,10 @@
 	transition: opacity 0.1s ease-out, transform 0.3s ease-out, max-height 0.3s cubic-bezier(0.86, 0, 0.07, 1);
 }
 
-.menu-item { display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s; border-bottom: none; font-weight: normal; }
+.menu-item {
+	display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s; border-bottom: none; font-weight: normal;
+    max-height: 113px; overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 6; -webkit-box-orient: vertical; display: -webkit-box;
+}
 .menu-item-separator { margin-top: 3px; margin-bottom: 3px; border-top: 1px solid #eee }
 
 .menu-item.noaction { cursor: default }

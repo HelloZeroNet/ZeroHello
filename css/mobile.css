@@ -19,6 +19,9 @@ margin-top: 15px
 }
 #Dashboard .menu-item {
 text-align: left;
+overflow: hidden;
+text-overflow: ellipsis;
+display: block;
 }
 .right {
 width: calc(100% - 350px);
