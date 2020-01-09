@@ -1050,6 +1050,7 @@
 
 }).call(this);
 
+
 /* ---- PageFiles/FilesResult.coffee ---- */
 
 
@@ -1625,15 +1626,17 @@
         })(this)), 1000);
       }
       return h("div#PageFiles", [
-        this.renderSelectbar(), this.renderTotalbar(), this.renderFilter(), this.result.filter_inner_path ? this.result.render() : (this.bigfiles.render(), sites_favorited.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
-          return function(site) {
-            return site.renderOptionalStats();
-          };
-        })(this)), sites_connected.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
-          return function(site) {
-            return site.renderOptionalStats();
-          };
-        })(this)))
+        this.renderSelectbar(), this.renderTotalbar(), this.renderFilter(), this.result.filter_inner_path ? this.result.render() : [
+          this.bigfiles.render(), sites_favorited.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
+            return function(site) {
+              return site.renderOptionalStats();
+            };
+          })(this)), sites_connected.slice(0, +this.display_limit + 1 || 9e9).map((function(_this) {
+            return function(site) {
+              return site.renderOptionalStats();
+            };
+          })(this))
+        ]
       ]);
     };
 
@@ -1661,6 +1664,7 @@
   window.PageFiles = PageFiles;
 
 }).call(this);
+
 
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
@@ -7232,7 +7236,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 /* ---- ZeroHello.coffee ---- */
 

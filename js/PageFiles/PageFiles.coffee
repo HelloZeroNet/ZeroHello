@@ -284,11 +284,13 @@ class PageFiles extends Class
 			if @result.filter_inner_path
 				@result.render()
 			else
-				@bigfiles.render()
-				sites_favorited[0..@display_limit].map (site) =>
-					site.renderOptionalStats()
-				sites_connected[0..@display_limit].map (site) =>
-					site.renderOptionalStats()
+				[
+					@bigfiles.render()
+					sites_favorited[0..@display_limit].map (site) =>
+						site.renderOptionalStats()
+					sites_connected[0..@display_limit].map (site) =>
+						site.renderOptionalStats()
+				]
 		])
 
 	onSiteInfo: (site_info) =>
