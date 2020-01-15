@@ -251,7 +251,7 @@ class ZeroHello extends ZeroFrame
 			@server_errors.push({
 				title: [Time.since(date_added), " - ", level],
 				descr: message,
-				href: null
+				href: "#ZeroNet:Console"
 			})
 		@projector.scheduleRender()
 
