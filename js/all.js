@@ -1050,7 +1050,6 @@
 
 }).call(this);
 
-
 /* ---- PageFiles/FilesResult.coffee ---- */
 
 
@@ -1664,7 +1663,6 @@
   window.PageFiles = PageFiles;
 
 }).call(this);
-
 
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
@@ -3804,6 +3802,8 @@
     function SiteList() {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
+      this.renderSection = bind(this.renderSection, this);
+      this.handleSectionClick = bind(this.handleSectionClick, this);
       this.handleSiteListMoreClick = bind(this.handleSiteListMoreClick, this);
       this.handleFilterClear = bind(this.handleFilterClear, this);
       this.handleFilterKeyup = bind(this.handleFilterKeyup, this);
@@ -3822,7 +3822,8 @@
       this.merged_db = {};
       this.filtering = "";
       setInterval(this.reorderTimer, 10000);
-      this.limit = 100;
+      this.limit = 5;
+      this.should_animate = false;
       Page.on_settings.then((function(_this) {
         return function() {
           return Page.on_server_info.then(function() {
@@ -3993,13 +3994,7 @@
       back = [];
       for (merged_type in merged_db) {
         merged_sites = merged_db[merged_type];
-        back.push([
-          h("h2.more", {
-            key: "Merged: " + merged_type
-          }, "Merged: " + merged_type), h("div.SiteList.merged.merged-" + merged_type, merged_sites.map(function(item) {
-            return item.render();
-          }))
-        ]);
+        back.push(this.renderSection(".merged.merged-" + merged_type, "Merged: " + merged_type, merged_sites));
       }
       return back;
     };
@@ -4026,6 +4021,61 @@
       this.limit += 1000;
       Page.projector.scheduleRender();
       return false;
+    };
+
+    SiteList.prototype.handleSectionClick = function(e) {
+      var class_name;
+      this.should_animate = true;
+      class_name = e.currentTarget.getAttribute("class_name");
+      if (Page.settings.sites_section_hide[class_name]) {
+        delete Page.settings.sites_section_hide[class_name];
+      } else {
+        Page.settings.sites_section_hide[class_name] = true;
+      }
+      Page.saveSettings();
+      Page.projector.scheduleRender();
+      return false;
+    };
+
+    SiteList.prototype.renderSection = function(class_name, title, items, limit) {
+      var classes, items_limited;
+      if (limit == null) {
+        limit = null;
+      }
+      if (items.length === 0) {
+        return null;
+      }
+      classes = {
+        "hidden": Page.settings.sites_section_hide[class_name]
+      };
+      if (limit && items.length > limit) {
+        items_limited = items.slice(0, +limit + 1 || 9e9);
+      } else {
+        items_limited = items;
+      }
+      return [
+        h("h2.SiteSection.section" + class_name, {
+          classes: classes
+        }, h("a.section-title", {
+          href: "#Show",
+          onclick: this.handleSectionClick,
+          class_name: class_name
+        }, [title, h("span.hide-title", "[Show " + items.length + " sites]")])), !classes.hidden ? h("div.SiteList" + class_name, {
+          classes: classes,
+          exitAnimation: Animation.slideUp,
+          enterAnimation: Animation.slideDown,
+          animate_disable: !this.should_animate
+        }, [
+          [
+            items_limited.map(function(item) {
+              return item.render();
+            })
+          ], limit && items.length > limit ? h("a.site-list-more", {
+            href: "#Show+more+connected+sites",
+            onclick: this.handleSiteListMoreClick
+          }, "Show more") : void 0
+        ]) : void 0
+      ];
     };
 
     SiteList.prototype.render = function() {
@@ -4084,30 +4134,7 @@
             href: "#clear",
             onclick: this.handleFilterClear
           }, "\u00D7")
-        ] : void 0, this.sites_recent.length > 0 ? h("h2.recent", "Recently downloaded:") : void 0, h("div.SiteList.recent", this.sites_recent.map(function(item) {
-          return item.render();
-        })), this.sites_needaction.length > 0 ? h("h2.needaction", "Running out of size limit:") : void 0, h("div.SiteList.needaction", this.sites_needaction.map(function(item) {
-          return item.render();
-        })), this.sites_favorited.length > 0 ? h("h2.favorited", "Favorited sites:") : void 0, h("div.SiteList.favorited", this.sites_favorited.map(function(item) {
-          return item.render();
-        })), this.sites_owned.length > 0 ? h("h2.owned", "Owned sites:") : void 0, h("div.SiteList.owned", this.sites_owned.map(function(item) {
-          return item.render();
-        })), this.sites_connecting.length > 0 ? h("h2.connecting", "Connecting sites:") : void 0, h("div.SiteList.connecting", this.sites_connecting.map(function(item) {
-          return item.render();
-        })), this.sites_connected.length > 0 ? h("h2.connected", "Connected sites:") : void 0, h("div.SiteList.connected", [
-          this.sites_connected.slice(0, +(this.limit - 1) + 1 || 9e9).map(function(item) {
-            return item.render();
-          }), this.sites_connected.length > this.limit ? h("a.site-list-more", {
-            href: "#Show+more+connected+sites",
-            onclick: this.handleSiteListMoreClick
-          }, "Show more") : void 0
-        ]), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? [
-          h("h2.more", {
-            key: "More"
-          }, "More sites:"), h("div.SiteList.more", this.inactive_demo_sites.map(function(item) {
-            return item.render();
-          }))
-        ] : void 0
+        ] : void 0, this.renderSection(".recent", "Recently downloaded:", this.sites_recent), this.renderSection(".needaction", "Running out of size limit:", this.sites_needaction), this.renderSection(".favorited", "Favorited sites:", this.sites_favorited), this.renderSection(".owned", "Owned sites:", this.sites_owned), this.renderSection(".connecting", "Connecting sites:", this.sites_connecting), this.renderSection(".connected", "Connected sites:", this.sites_connected, this.limit), this.renderMergedSites(), this.inactive_demo_sites !== null && this.inactive_demo_sites.length > 0 ? this.renderSection(".more", "More sites:", this.inactive_demo_sites) : void 0
       ]);
     };
 
@@ -5856,7 +5883,7 @@
 
     Animation.prototype.slideDown = function(elem, props) {
       var cstyle, h, margin_bottom, margin_top, padding_bottom, padding_top, transition;
-      if (elem.offsetTop > 1000) {
+      if ((elem.offsetTop > 1000 && elem.getBoundingClientRect().top > 1000) || props.animate_disable) {
         return;
       }
       h = elem.offsetHeight;
@@ -5896,7 +5923,7 @@
     };
 
     Animation.prototype.slideUp = function(elem, remove_func, props) {
-      if (elem.offsetTop > 1000) {
+      if (elem.offsetTop > 1000 && elem.getBoundingClientRect().top > 1000) {
         return remove_func();
       }
       elem.className += " animate-back";
@@ -6010,6 +6037,7 @@
   window.Animation = new Animation();
 
 }).call(this);
+
 
 /* ---- utils/Dollar.coffee ---- */
 
@@ -7425,7 +7453,7 @@
       return this.on_site_info.then((function(_this) {
         return function() {
           return _this.cmd("userGetSettings", [], function(res) {
-            var base1, base2, base3, base4;
+            var base1, base2, base3, base4, base5;
             if (!res || res.error) {
               return _this.loadLocalStorage();
             } else {
@@ -7433,14 +7461,17 @@
               if ((base1 = _this.settings).sites_orderby == null) {
                 base1.sites_orderby = "peers";
               }
-              if ((base2 = _this.settings).favorite_sites == null) {
-                base2.favorite_sites = {};
+              if ((base2 = _this.settings).sites_section_hide == null) {
+                base2.sites_section_hide = {};
               }
-              if ((base3 = _this.settings).siteblocks_ignore == null) {
-                base3.siteblocks_ignore = {};
+              if ((base3 = _this.settings).favorite_sites == null) {
+                base3.favorite_sites = {};
               }
-              if ((base4 = _this.settings).date_feed_visit == null) {
-                base4.date_feed_visit = 1;
+              if ((base4 = _this.settings).siteblocks_ignore == null) {
+                base4.siteblocks_ignore = {};
+              }
+              if ((base5 = _this.settings).date_feed_visit == null) {
+                base5.date_feed_visit = 1;
               }
               _this.feed_list.date_feed_visit = _this.settings.date_feed_visit;
               return _this.on_settings.resolve(_this.settings);
@@ -7597,7 +7628,7 @@
         this.server_errors.push({
           title: [Time.since(date_added), " - ", level],
           descr: message,
-          href: null
+          href: "#ZeroNet:Console"
         });
       }
       return this.projector.scheduleRender();
