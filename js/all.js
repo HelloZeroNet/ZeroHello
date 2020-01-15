@@ -3822,7 +3822,7 @@
       this.merged_db = {};
       this.filtering = "";
       setInterval(this.reorderTimer, 10000);
-      this.limit = 5;
+      this.limit = 100;
       this.should_animate = false;
       Page.on_settings.then((function(_this) {
         return function() {
@@ -4154,6 +4154,7 @@
   window.SiteList = SiteList;
 
 }).call(this);
+
 
 /* ---- PageSites/Trigger.coffee ---- */
 
@@ -6037,7 +6038,6 @@
   window.Animation = new Animation();
 
 }).call(this);
-
 
 /* ---- utils/Dollar.coffee ---- */
 

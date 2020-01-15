@@ -10,7 +10,7 @@ class SiteList extends Class
 		@merged_db = {}
 		@filtering = ""
 		setInterval(@reorderTimer, 10000)
-		@limit = 5
+		@limit = 100
 		@should_animate = false
 
 		Page.on_settings.then =>
