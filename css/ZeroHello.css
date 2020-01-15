@@ -2,7 +2,7 @@ body { background-color: #EDF2F5; font-family: Roboto, 'Segoe UI', Arial, 'Helve
 body.loaded { height: 100%; overflow: auto }
 h1, h2, h3, h4 { font-family: 'Roboto', Arial, sans-serif; font-weight: 200; font-size: 30px; margin: 0px; padding: 0px }
 h1 { font-family: 'Text Me One', sans-serif }
-h3 a { color: white; text-decoration: none; }
+h3 a, h2 a { color: white; text-decoration: none; }
 a { color: #9760F9 }
 a:hover { text-decoration: none }
 input::placeholder { color: rgba(255, 255, 255, 0.3) }

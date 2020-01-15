@@ -10,7 +10,8 @@ class SiteList extends Class
 		@merged_db = {}
 		@filtering = ""
 		setInterval(@reorderTimer, 10000)
-		@limit = 100
+		@limit = 5
+		@should_animate = false
 
 		Page.on_settings.then =>
 			Page.on_server_info.then =>
@@ -94,12 +95,7 @@ class SiteList extends Class
 
 		back = []
 		for merged_type, merged_sites of merged_db
-			back.push [
-				h("h2.more", {key: "Merged: #{merged_type}"}, "Merged: #{merged_type}"),
-				h("div.SiteList.merged.merged-#{merged_type}", merged_sites.map (item) ->
-					item.render()
-				)
-			]
+			back.push @renderSection(".merged.merged-#{merged_type}", "Merged: #{merged_type}", merged_sites),
 		return back
 
 	handleFilterInput: (e) =>
@@ -120,6 +116,45 @@ class SiteList extends Class
 		@limit += 1000
 		Page.projector.scheduleRender()
 		return false
+
+	handleSectionClick: (e) =>
+		@should_animate = true
+		class_name = e.currentTarget.getAttribute("class_name")
+		if Page.settings.sites_section_hide[class_name]
+			delete Page.settings.sites_section_hide[class_name]
+		else
+			Page.settings.sites_section_hide[class_name] = true
+		Page.saveSettings()
+		Page.projector.scheduleRender()
+		return false
+
+	renderSection: (class_name, title, items, limit=null) =>
+		if items.length == 0
+			return null
+
+		classes = {"hidden": Page.settings.sites_section_hide[class_name]}
+
+		if limit and items.length > limit
+			items_limited = items[0..limit]
+		else
+			items_limited = items
+
+		return [
+			h("h2.SiteSection.section#{class_name}", {classes: classes},
+				h("a.section-title", { href: "#Show", onclick: @handleSectionClick, class_name: class_name }, [
+					title,
+					h("span.hide-title", "[Show #{items.length} sites]")
+				])
+			),
+			if not classes.hidden
+				h("div.SiteList#{class_name}", {classes: classes, exitAnimation: Animation.slideUp, enterAnimation: Animation.slideDown, animate_disable: !@should_animate},
+					[
+						[ items_limited.map (item) -> item.render() ],
+						if limit and items.length > limit
+							h("a.site-list-more", {href: "#Show+more+connected+sites", onclick: @handleSiteListMoreClick}, "Show more")
+					]
+				)
+		]
 
 	render: =>
 		if not @loaded
@@ -165,41 +200,16 @@ class SiteList extends Class
 					h("span.filter-num", {updateAnimation: Animation.show, enterAnimation: Animation.show, exitAnimation: Animation.hide}, "(found #{num_found} of #{@sites.length} sites)")
 					h("a.filter-clear", {href: "#clear", onclick: @handleFilterClear}, "\u00D7")
 				]
-			if @sites_recent.length > 0 then h("h2.recent", "Recently downloaded:"),
-			h("div.SiteList.recent", @sites_recent.map (item) ->
-				item.render()
-			),
-			if @sites_needaction.length > 0 then h("h2.needaction", "Running out of size limit:"),
-			h("div.SiteList.needaction", @sites_needaction.map (item) ->
-				item.render()
-			),
-			if @sites_favorited.length > 0 then h("h2.favorited", "Favorited sites:"),
-			h("div.SiteList.favorited", @sites_favorited.map (item) ->
-				item.render()
-			),
-			if @sites_owned.length > 0 then h("h2.owned", "Owned sites:"),
-			h("div.SiteList.owned", @sites_owned.map (item) ->
-				item.render()
-			),
-			if @sites_connecting.length > 0 then h("h2.connecting", "Connecting sites:"),
-			h("div.SiteList.connecting", @sites_connecting.map (item) ->
-				item.render()
-			),
-			if @sites_connected.length > 0 then h("h2.connected", "Connected sites:"),
-			h("div.SiteList.connected", [
-				@sites_connected[0..@limit - 1].map (item) ->
-					item.render()
-				if @sites_connected.length > @limit
-					h("a.site-list-more", {href: "#Show+more+connected+sites", onclick: @handleSiteListMoreClick}, "Show more")
-			])
+			@renderSection(".recent", "Recently downloaded:", @sites_recent),
+			@renderSection(".needaction", "Running out of size limit:", @sites_needaction),
+			@renderSection(".favorited", "Favorited sites:", @sites_favorited),
+			@renderSection(".owned", "Owned sites:", @sites_owned),
+			@renderSection(".connecting", "Connecting sites:", @sites_connecting),
+			@renderSection(".connected", "Connected sites:", @sites_connected, @limit),
+
 			@renderMergedSites()
 			if @inactive_demo_sites != null and @inactive_demo_sites.length > 0
-				[
-					h("h2.more", {key: "More"}, "More sites:"),
-					h("div.SiteList.more", @inactive_demo_sites.map (item) ->
-						item.render()
-					)
-				]
+				@renderSection(".more", "More sites:", @inactive_demo_sites)
 		])
 
 

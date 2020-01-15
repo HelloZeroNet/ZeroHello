@@ -6,7 +6,7 @@ body:after {
 	width: 400px; position: fixed; height: 100%; background-color: #322641;
 	display: block; z-index: -1; left: 0px; top: 0px; content: "";
 }
-.left h2 { text-transform: uppercase; font-size: 13px; font-weight: 500; padding: 10px; padding-left: 45px; opacity: 0.4; letter-spacing: 1px; margin-top: 40px; }
+.left h2 { text-transform: uppercase; font-size: 13px; font-weight: 500; padding: 10px; padding-left: 45px; letter-spacing: 1px; }
 .left .logo { background-color: #1E2429; padding: 20px; margin-bottom: 30px; display: block; text-decoration: none; color: white; transition: all 0.3s }
 .left .logo span { vertical-align: 39%; font-size: 27px; font-family: 'Text Me One'; }
 .left .logo img { padding: 4px; padding-left: 13px; }
@@ -26,7 +26,7 @@ body:after {
 .left #Head .modes .mode.active { font-size: 90%; border-bottom: 1px solid #83EFFF; color: #83EFFF; opacity: 1 }
 
 .left .site-filter {
-	margin-top: 30px; margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b;
+	margin-top: 30px; margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b; margin-bottom: 30px;
 	padding: 13px; box-sizing: border-box; color: white; transition: all 0.3s; font-family: Roboto; font-size: 16px;
 }
 .left .site-filter:focus { border-color: #6c7884; outline: none }
@@ -37,7 +37,20 @@ body:after {
 .left .filter-clear { color: white; text-decoration: none; margin-left: -41px; opacity: 0.5; padding: 16px; }
 .left .filter-clear:hover { opacity: 1; }
 
+.SiteSection .section-title { display: inline-block; width: 100%; opacity: 0.4; }
+.SiteSection .section-title:active { opacity: 0.8; transition: none; }
+.SiteSection .section-title:focus { transition: all 0.3s; }
+.SiteSection .section-title:hover .hide-title { text-decoration: underline; }
+.SiteSection .section-title .hide-title {
+	font-size: 9px; float: right; line-height: 15px; margin-right: 20px;
+	opacity: 0; pointer-events: none; transition: all 0.5s; transform: TranslateY(5px);
+}
+.SiteSection.hidden .section-title .hide-title { opacity: 1; pointer-events: all; transform: TranslateY(0px);  }
+.SiteSection { transition: all 0.3s ease-in-out; }
+.SiteList.hidden { margin-bottom: 0px; }
+
 .SiteList { margin-bottom: 40px; }
+.SiteList.hidden { margin-bottom: 40px; }
 .SiteList .site { border-bottom: 1px solid #3D444B; position: relative; white-space: nowrap; }
 .SiteList .site.disabled:hover { background-color: rgba(173,136,183,0.04); }
 .SiteList .site.disabled .circle { opacity: 0.3 }

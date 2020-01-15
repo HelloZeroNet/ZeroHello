@@ -156,6 +156,7 @@ class ZeroHello extends ZeroFrame
 				else
 					@settings = res
 					@settings.sites_orderby ?= "peers"
+					@settings.sites_section_hide ?= {}
 					@settings.favorite_sites ?= {}
 					@settings.siteblocks_ignore ?= {}
 					@settings.date_feed_visit ?= 1

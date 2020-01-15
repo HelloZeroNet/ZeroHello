@@ -1,6 +1,6 @@
 class Animation
 	slideDown: (elem, props) ->
-		if elem.offsetTop > 1000
+		if (elem.offsetTop > 1000 and elem.getBoundingClientRect().top > 1000) or props.animate_disable
 			return
 
 		h = elem.offsetHeight
@@ -42,7 +42,7 @@ class Animation
 
 
 	slideUp: (elem, remove_func, props) ->
-		if elem.offsetTop > 1000
+		if elem.offsetTop > 1000 and elem.getBoundingClientRect().top > 1000
 			return remove_func()
 
 		elem.className += " animate-back"
