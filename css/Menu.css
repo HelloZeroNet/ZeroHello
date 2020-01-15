@@ -12,7 +12,7 @@
 
 .menu-item {
 	display: block; text-decoration: none; color: black; padding: 6px 24px; transition: all 0.2s; border-bottom: none; font-weight: normal;
-    max-height: 113px; overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 6; -webkit-box-orient: vertical; display: -webkit-box;
+    max-height: 150px; overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 6; -webkit-box-orient: vertical; display: -webkit-box;
 }
 .menu-item-separator { margin-top: 3px; margin-bottom: 3px; border-top: 1px solid #eee }
 
@@ -30,4 +30,4 @@
 	text-decoration: none; font-size: 13px; transition: all 0.3s; text-transform: uppercase; display: inline-block;
 }
 .menu-radio a:hover, .menu-radio a.selected { transition: none; background-color: #AF3BFF !important; color: white !important }
-.menu-radio a.long { font-size: 11px }
+.menu-radio a.long { font-size: 10px; vertical-align: -1px; }
