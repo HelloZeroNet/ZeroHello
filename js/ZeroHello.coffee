@@ -197,9 +197,12 @@ class ZeroHello extends ZeroFrame
 			cb?(server_info)
 
 	reloadServerErrors: (cb) =>
-		@cmd "serverErrors", {}, (server_errors) =>
-			@setServerErrors(server_errors)
-			cb?(server_errors)
+		@on_server_info.then =>
+			if @server_info.multiuser and not @server_info.multiuser_admin
+				return cb?(false)
+			@cmd "serverErrors", {}, (server_errors) =>
+				@setServerErrors(server_errors)
+				cb?(server_errors)
 
 	reloadAnnouncerInfo: (cb) =>
 		@cmd "announcerInfo", {}, (announcer_info) =>
