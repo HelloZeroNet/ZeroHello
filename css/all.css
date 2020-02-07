@@ -149,7 +149,7 @@ body:after {
 .left #Head .modes .mode.active { font-size: 90%; border-bottom: 1px solid #83EFFF; color: #83EFFF; opacity: 1 }
 
 .left .site-filter {
-	margin-top: 30px; margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b; margin-bottom: 30px;
+	margin-left: 33px; width: 85%; background-color: #1e2429; border: 1px solid #3d444b; margin-bottom: 30px;
 	padding: 13px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box ; color: white; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; font-family: Roboto; font-size: 16px;
 }
 .left .site-filter:focus { border-color: #6c7884; outline: none }
@@ -787,7 +787,7 @@ input::placeholder { color: rgba(255, 255, 255, 0.3) }
 
 /* Pages */
 
-#SiteList { -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; height: 100%; float: left; padding-bottom: 230px; }
+#SiteList { -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; height: 100%; float: left; padding-bottom: 230px; margin-top: 30px; }
 #SiteList .SiteList { width: 400px }
 #SiteList .details { -webkit-transition: all 0.6s ; -moz-transition: all 0.6s ; -o-transition: all 0.6s ; -ms-transition: all 0.6s ; transition: all 0.6s  }
 #FeedList { -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s ; height: 100%; }
