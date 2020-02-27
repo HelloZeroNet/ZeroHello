@@ -170,7 +170,7 @@ class ChartRadar extends Class
 		h("div.radar-label", {key: stat.address + i, style: "left: #{left}%; top: #{top}%", enterAnimation: Animation.show, exitAnimation: Animation.hide, delay: i*0.05},
 			h("a.title", {href: stat.site.getHref()}, stat.site.row.content.title)
 			" "
-			h("span.value", " (#{Text.formatSize(stat[@order_by]) or 'No data yet'})")
+			h("span.value", " (#{Text.formatSize(stat[@order_by]) or "No data yet"})")
 		)
 
 	render: =>
