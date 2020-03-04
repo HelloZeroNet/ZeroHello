@@ -222,7 +222,7 @@ class ChartBig extends Class
 					},
 					{
 						type: 'line',
-						label: 'Sent',
+						label: "Sent",
 						borderColor: gradient_stroke_bgline_up,
 						backgroundColor: "rgba(255,255,255,0.0)",
 						pointRadius: 0,
@@ -238,7 +238,7 @@ class ChartBig extends Class
 					},
 					{
 						type: 'line',
-						label: 'Received',
+						label: "Received",
 						borderColor: gradient_stroke_bgline_down,
 						backgroundColor: "rgba(255,255,255,0.0)",
 						pointRadius: 0,
