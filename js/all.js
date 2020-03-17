@@ -3661,9 +3661,26 @@
     };
 
     Site.prototype.getHref = function(row) {
-      var has_plugin, href, ref, ref1;
-      has_plugin = (((ref = Page.server_info) != null ? ref.plugins : void 0) != null) && (indexOf.call(Page.server_info.plugins, "Zeroname") >= 0 || indexOf.call(Page.server_info.plugins, "Dnschain") >= 0 || indexOf.call(Page.server_info.plugins, "Zeroname-local") >= 0);
-      if (has_plugin && ((ref1 = this.row.content) != null ? ref1.domain : void 0)) {
+      var ext, has_plugin, href, ref, ref1, ref2, ref3, supported_plugins;
+      if ((ref = this.row.content) != null ? ref.domain : void 0) {
+        ext = (ref1 = this.row.content) != null ? ref1.domain.split(".").pop() : void 0;
+        supported_plugins = {
+          bit: ["Zeroname", "Dnschain", "Zeroname-local"],
+          yo: ["NameYo"],
+          yu: ["NameYo"],
+          of: ["NameYo"],
+          inf: ["NameYo"],
+          zn: ["NameYo"],
+          list: ["NameYo"]
+        }[ext] || [];
+        has_plugin = (((ref2 = Page.server_info) != null ? ref2.plugins : void 0) != null) && supported_plugins.some(function(plugin) {
+          var ref3;
+          return indexOf.call((ref3 = Page.server_info) != null ? ref3.plugins : void 0, plugin) >= 0;
+        });
+      } else {
+        has_plugin = false;
+      }
+      if (has_plugin && ((ref3 = this.row.content) != null ? ref3.domain : void 0)) {
         href = Text.getSiteUrl(this.row.content.domain);
       } else {
         href = Text.getSiteUrl(this.row.address);
