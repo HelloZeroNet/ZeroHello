@@ -212,7 +212,20 @@ class Site extends Class
 		return true
 
 	getHref: (row) ->
-		has_plugin = Page.server_info?.plugins? and ("Zeroname" in Page.server_info.plugins or "Dnschain" in Page.server_info.plugins or "Zeroname-local" in Page.server_info.plugins)
+		if @row.content?.domain
+			ext = @row.content?.domain.split(".").pop()
+			supported_plugins = {
+				bit: ["Zeroname", "Dnschain", "Zeroname-local"],
+				yo: ["NameYo"],
+				yu: ["NameYo"],
+				of: ["NameYo"],
+				inf: ["NameYo"],
+				zn: ["NameYo"],
+				list: ["NameYo"]
+			}[ext] or []
+			has_plugin = Page.server_info?.plugins? and supported_plugins.some((plugin) -> plugin in Page.server_info?.plugins)
+		else
+			has_plugin = false
 		if has_plugin and @row.content?.domain # Domain
 			href = Text.getSiteUrl(@row.content.domain)
 		else # Address
