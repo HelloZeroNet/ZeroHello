@@ -18,12 +18,16 @@
 .mute .date_added { font-size: 13px; display: inline; color: #99a3a7; font-weight: lighter; }
 
 #MuteList .action {
-	display: inline-block; font-size: 24px; vertical-align: 10px; color: #999; font-weight: lighter; text-decoration: none;
-	transition: all 0.6s; padding: 0px 20px; padding-bottom: 5px; backface-visibility: hidden; transform: rotateZ(0deg)
+	display: inline-block; color: #999; font-weight: lighter; text-decoration: none;
+	padding: 0px 20px; padding-bottom: 5px;
 }
-#MuteList .removed .action { transform: rotateZ(45deg); }
+#MuteList .action .closer {
+	backface-visibility: hidden; transform: rotateZ(0deg); transition: all 0.6s; font-size: 24px; display: inline-block;
+    padding-bottom: 5px; padding-right: 3px; vertical-align: -2px;
+}
+#MuteList .removed .action .closer { transform: rotateZ(45deg); }
 #MuteList .action:hover { color: red; transition: none }
-#MuteList .action:focus { transition: all 0.6s }
+#MuteList .action:focus .closer { transition: all 0.6s }
 
 .mute-hide { color: #797e85; text-transform: uppercase; padding: 30px 26px; display: inline-block; text-decoration: none; letter-spacing: 2px; transition: all 0.3s }
 .mute-hide:hover { color: #000 }

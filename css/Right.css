@@ -45,12 +45,13 @@
 .FeedContainer .notifications.empty { margin-bottom: 0px; }
 .FeedContainer .notification { padding: 25px; background-color: #e7eff5; font-weight: lighter; background: linear-gradient(75deg, #ede7f0,#e9eef5); }
 .FeedContainer .notification .site { color: #4c4c4c; font-weight: bold; margin-right: 15px; }
-.FeedContainer .notification .reason { display:inline-block; background-color: #ffffff; padding: 5px 15px; }
+.FeedContainer .notification .reason { display:inline-block; background-color: #ffffff; padding: 5px 15px; max-width: calc(100% - 55px); }
+.FeedContainer .notification .reason .title { font-weight: bold; color: black; }
 .FeedContainer .notification .reason:before {
 	content: ""; display: inline-block; margin-left: -33px; position: absolute;
 	border: 12px solid transparent; border-right: white 12px solid;
 }
-.FeedContainer .notification .hide { padding: 5px; text-decoration: none; color: #333; float: right; }
+.FeedContainer .notification .hide { padding: 5px; text-decoration: none; color: #333; float: right; margin-top: -6px;  }
 .FeedContainer .notification .hide:hover { color: #9760F9; }
 
 .feeds-filters { margin-top: -25px; margin-left: 25px; max-width: 100% }
