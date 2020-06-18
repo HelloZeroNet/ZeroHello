@@ -31,9 +31,10 @@ class MuteList extends Class
 		@updateFilterIncludes()
 
 	updateFilterIncludes: =>
-		Page.cmd "FilterIncludeList", {all_sites: true, filters: true}, (res) =>
+		Page.cmd "filterIncludeList", {all_sites: true, filters: true}, (res) =>
 			@siteblocks_serving = []
 			@includes = []
+			@siteblocks = {}
 			for include in res
 				include.site = Page.site_list.sites_byaddress[include.address]
 
@@ -48,17 +49,26 @@ class MuteList extends Class
 				if include.siteblocks?
 					for address, siteblock of include.siteblocks
 						siteblock.address = address
+						siteblock.include = include
 						siteblocks.push(siteblock)
-
-						if Page.site_list.sites_byaddress[address] and not Page.settings.siteblocks_ignore[address]
-							siteblock.site = Page.site_list.sites_byaddress[address]
-							@siteblocks_serving.push(siteblock)
+						@siteblocks[address] = siteblock
 				include.siteblocks = siteblocks
 
 				@includes.push(include)
 
 			@includes.sort (a, b) ->
 				return b.date_added - a.date_added
+
+			for site in Page.site_list.sites
+				address = site.row.address
+				if @siteblocks[address] and not Page.settings.siteblocks_ignore[address]
+					@siteblocks[address].site = site
+					@siteblocks_serving.push(@siteblocks[address])
+
+				address_hash = "0x" + site.row.address_hash
+				if @siteblocks[address_hash] and not Page.settings.siteblocks_ignore[address_hash]
+					@siteblocks[address_hash].site = site
+					@siteblocks_serving.push(@siteblocks[address_hash])
 
 			@updated = true
 			Page.projector.scheduleRender()
