@@ -92,7 +92,7 @@ class MuteList extends Class
 		return false
 
 	handleIncludeRemoveClick: (e) =>
-		include = e.target.include
+		include = e.currentTarget.include
 		if include.removed
 			# Re-add
 			Page.cmd("filterIncludeAdd", [include.inner_path, include.description, include.address])
@@ -158,7 +158,9 @@ class MuteList extends Class
 			@includes.map (include) =>
 				h("div.include", {key: include.address + include.inner_path, classes: {removed: include.removed}}, [
 					h("h2", h("a.site", {href: include.site.getHref()}, include.site.row.content.title), " \u203A ", h("a.inner_path", {href: "#"}, include.inner_path))
-					h("a.action", {href: "#Remove+include", onclick: @handleIncludeRemoveClick, include: include}, "×")
+					h("a.action", {href: "#Remove+include", onclick: @handleIncludeRemoveClick, include: include},
+						[h("span.closer", "×"), "deactivate this blocklist"]
+					)
 					if include.mutes.length
 						@renderMutes(include.mutes, "includes")
 					if include.siteblocks.length
