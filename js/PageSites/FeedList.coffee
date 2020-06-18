@@ -397,10 +397,10 @@ class FeedList extends Class
 		h("div.notifications", {classes: {empty: Page.mute_list.siteblocks_serving.length == 0}}, [
 			Page.mute_list.siteblocks_serving.map (siteblock) =>
 				h("div.notification", {key: siteblock.address, enterAnimation: Animation.show, exitAnimation: Animation.slideUpInout}, [
+					h("a.hide", {href: "#Hide", onclick: @handleNotificationHideClick, address: siteblock.address}, "\u00D7"),
 					"You are serving a blocked site: ",
-					h("a.site", {href: siteblock.site.getHref()}, siteblock.site.row.content.title),
-					h("span.reason", [h("b", "Reason: "), siteblock.reason]),
-					h("a.hide", {href: "#Hide", onclick: @handleNotificationHideClick, address: siteblock.address}, "\u00D7")
+					h("a.site", {href: siteblock.site.getHref()}, siteblock.site.row.content.title or siteblock.site.row.address_short),
+					h("span.reason", [h("a.title", {href: siteblock.include.site.getHref()}, "Reason"), ": ", siteblock.reason])
 				])
 		])
 
