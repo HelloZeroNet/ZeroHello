@@ -55,7 +55,6 @@
 
 }).call(this);
 
-
 /* ---- lib/Promise.coffee ---- */
 
 
@@ -159,7 +158,6 @@
 
 }).call(this);
 
-
 /* ---- lib/Property.coffee ---- */
 
 
@@ -169,7 +167,6 @@
   };
 
 }).call(this);
-
 
 /* ---- lib/Prototypes.coffee ---- */
 
@@ -196,7 +193,6 @@
   };
 
 }).call(this);
-
 
 /* ---- lib/maquette.js ---- */
 
@@ -1054,7 +1050,6 @@
 
 }).call(this);
 
-
 /* ---- PageFiles/FilesResult.coffee ---- */
 
 
@@ -1141,7 +1136,6 @@
   window.FilesResult = FilesResult;
 
 }).call(this);
-
 
 /* ---- PageFiles/PageFiles.coffee ---- */
 
@@ -1670,7 +1664,6 @@
 
 }).call(this);
 
-
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
 
@@ -1937,7 +1930,6 @@
   window.SiteFiles = SiteFiles;
 
 }).call(this);
-
 
 /* ---- PageSites/Dashboard.coffee ---- */
 
@@ -2332,7 +2324,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 /* ---- PageSites/FeedList.coffee ---- */
 
@@ -2873,13 +2864,17 @@
               enterAnimation: Animation.show,
               exitAnimation: Animation.slideUpInout
             }, [
-              "You are serving a blocked site: ", h("a.site", {
-                href: siteblock.site.getHref()
-              }, siteblock.site.row.content.title), h("span.reason", [h("b", "Reason: "), siteblock.reason]), h("a.hide", {
+              h("a.hide", {
                 href: "#Hide",
                 onclick: _this.handleNotificationHideClick,
                 address: siteblock.address
-              }, "\u00D7")
+              }, "\u00D7"), "You are serving a blocked site: ", h("a.site", {
+                href: siteblock.site.getHref()
+              }, siteblock.site.row.content.title || siteblock.site.row.address_short), h("span.reason", [
+                h("a.title", {
+                  href: siteblock.include.site.getHref()
+                }, "Reason"), ": ", siteblock.reason
+              ])
             ]);
           };
         })(this))
@@ -3012,7 +3007,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/MuteList.coffee ---- */
 
 
@@ -3078,14 +3072,15 @@
     };
 
     MuteList.prototype.updateFilterIncludes = function() {
-      return Page.cmd("FilterIncludeList", {
+      return Page.cmd("filterIncludeList", {
         all_sites: true,
         filters: true
       }, (function(_this) {
         return function(res) {
-          var address, auth_address, i, include, len, mute, mutes, ref, ref1, siteblock, siteblocks;
+          var address, address_hash, auth_address, i, include, j, len, len1, mute, mutes, ref, ref1, ref2, site, siteblock, siteblocks;
           _this.siteblocks_serving = [];
           _this.includes = [];
+          _this.siteblocks = {};
           for (i = 0, len = res.length; i < len; i++) {
             include = res[i];
             include.site = Page.site_list.sites_byaddress[include.address];
@@ -3105,11 +3100,9 @@
               for (address in ref1) {
                 siteblock = ref1[address];
                 siteblock.address = address;
+                siteblock.include = include;
                 siteblocks.push(siteblock);
-                if (Page.site_list.sites_byaddress[address] && !Page.settings.siteblocks_ignore[address]) {
-                  siteblock.site = Page.site_list.sites_byaddress[address];
-                  _this.siteblocks_serving.push(siteblock);
-                }
+                _this.siteblocks[address] = siteblock;
               }
             }
             include.siteblocks = siteblocks;
@@ -3118,6 +3111,20 @@
           _this.includes.sort(function(a, b) {
             return b.date_added - a.date_added;
           });
+          ref2 = Page.site_list.sites;
+          for (j = 0, len1 = ref2.length; j < len1; j++) {
+            site = ref2[j];
+            address = site.row.address;
+            if (_this.siteblocks[address] && !Page.settings.siteblocks_ignore[address]) {
+              _this.siteblocks[address].site = site;
+              _this.siteblocks_serving.push(_this.siteblocks[address]);
+            }
+            address_hash = "0x" + site.row.address_hash;
+            if (_this.siteblocks[address_hash] && !Page.settings.siteblocks_ignore[address_hash]) {
+              _this.siteblocks[address_hash].site = site;
+              _this.siteblocks_serving.push(_this.siteblocks[address_hash]);
+            }
+          }
           _this.updated = true;
           return Page.projector.scheduleRender();
         };
@@ -3148,7 +3155,7 @@
 
     MuteList.prototype.handleIncludeRemoveClick = function(e) {
       var include;
-      include = e.target.include;
+      include = e.currentTarget.include;
       if (include.removed) {
         Page.cmd("filterIncludeAdd", [include.inner_path, include.description, include.address]);
       } else {
@@ -3252,7 +3259,7 @@
                 href: "#Remove+include",
                 onclick: _this.handleIncludeRemoveClick,
                 include: include
-              }, "×"), include.mutes.length ? _this.renderMutes(include.mutes, "includes") : void 0, include.siteblocks.length ? _this.renderSiteblocks(include.siteblocks) : void 0
+              }, [h("span.closer", "×"), "deactivate this blocklist"]), include.mutes.length ? _this.renderMutes(include.mutes, "includes") : void 0, include.siteblocks.length ? _this.renderSiteblocks(include.siteblocks) : void 0
             ]);
           };
         })(this))
@@ -3815,7 +3822,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/SiteList.coffee ---- */
 
 
@@ -4184,7 +4190,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/Trigger.coffee ---- */
 
 
@@ -4234,7 +4239,6 @@
   window.Trigger = Trigger;
 
 }).call(this);
-
 
 /* ---- PageStats/Chart.coffee ---- */
 
@@ -4382,7 +4386,6 @@
   window.Chart = Chart;
 
 }).call(this);
-
 
 /* ---- PageStats/ChartBig.coffee ---- */
 
@@ -4660,7 +4663,7 @@
               data: []
             }, {
               type: 'line',
-              label: 'Sent',
+              label: "Sent",
               borderColor: gradient_stroke_bgline_up,
               backgroundColor: "rgba(255,255,255,0.0)",
               pointRadius: 0,
@@ -4675,7 +4678,7 @@
               data: []
             }, {
               type: 'line',
-              label: 'Received',
+              label: "Received",
               borderColor: gradient_stroke_bgline_down,
               backgroundColor: "rgba(255,255,255,0.0)",
               pointRadius: 0,
@@ -4851,7 +4854,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/ChartLegend.coffee ---- */
 
 
@@ -4928,7 +4930,6 @@
   window.ChartLegend = ChartLegend;
 
 }).call(this);
-
 
 /* ---- PageStats/ChartRadar.coffee ---- */
 
@@ -5193,7 +5194,7 @@
         delay: i * 0.05
       }, h("a.title", {
         href: stat.site.getHref()
-      }, stat.site.row.content.title), " ", h("span.value", " (" + (Text.formatSize(stat[this.order_by]) || 'No data yet') + ")"));
+      }, stat.site.row.content.title), " ", h("span.value", " (" + (Text.formatSize(stat[this.order_by]) || "No data yet") + ")"));
     };
 
     ChartRadar.prototype.render = function() {
@@ -5243,7 +5244,6 @@
   window.ChartRadar = ChartRadar;
 
 }).call(this);
-
 
 /* ---- PageStats/ChartTimeline.coffee ---- */
 
@@ -5488,7 +5488,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/ChartWorld.coffee ---- */
 
 
@@ -5624,7 +5623,6 @@
   window.ChartWorld = ChartWorld;
 
 }).call(this);
-
 
 /* ---- PageStats/PageStats.coffee ---- */
 
@@ -5870,7 +5868,6 @@
 
 }).call(this);
 
-
 /* ---- PageStats/StatList.coffee ---- */
 
 
@@ -5909,7 +5906,6 @@
   window.StatList = StatList;
 
 }).call(this);
-
 
 /* ---- utils/Animation.coffee ---- */
 
@@ -6077,7 +6073,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Dollar.coffee ---- */
 
 
@@ -6089,7 +6084,6 @@
   };
 
 }).call(this);
-
 
 /* ---- utils/ItemList.coffee ---- */
 
@@ -6142,7 +6136,6 @@
   window.ItemList = ItemList;
 
 }).call(this);
-
 
 /* ---- utils/Menu.coffee ---- */
 
@@ -6330,7 +6323,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Prototypes.coffee ---- */
 
 
@@ -6365,7 +6357,6 @@
 
 }).call(this);
 
-
 /* ---- utils/RateLimit.coffee ---- */
 
 
@@ -6393,7 +6384,6 @@
   };
 
 }).call(this);
-
 
 /* ---- utils/RateLimitCb.coffee ---- */
 
@@ -6480,7 +6470,6 @@
    */
 
 }).call(this);
-
 
 /* ---- utils/Text.coffee ---- */
 
@@ -6727,7 +6716,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Time.coffee ---- */
 
 
@@ -6828,7 +6816,6 @@
 
 }).call(this);
 
-
 /* ---- utils/Translate.coffee ---- */
 
 
@@ -6838,7 +6825,6 @@
   };
 
 }).call(this);
-
 
 /* ---- utils/ZeroFrame.coffee ---- */
 
@@ -6971,7 +6957,6 @@
   window.ZeroFrame = ZeroFrame;
 
 }).call(this);
-
 
 /* ---- Head.coffee ---- */
 
@@ -7313,7 +7298,6 @@
   window.Head = Head;
 
 }).call(this);
-
 
 /* ---- ZeroHello.coffee ---- */
 
