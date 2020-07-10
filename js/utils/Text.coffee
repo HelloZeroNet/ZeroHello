@@ -135,7 +135,7 @@ class Text
 		return back
 
 	formatSize: (size) ->
-		if not parseInt(size)
+		if isNaN(parseInt(size))
 			return ""
 		size_mb = size/1024/1024
 		if size_mb >= 1000
@@ -145,7 +145,7 @@ class Text
 		else if size/1024 >= 1000
 			return size_mb.toFixed(2)+" MB"
 		else
-			return (size/1024).toFixed(2)+" KB"
+			return (parseInt(size)/1024).toFixed(2)+" KB"
 
 window.marked_renderer = new MarkedRenderer()
 window.is_proxy = (document.location.host == "zero" or window.location.pathname == "/")

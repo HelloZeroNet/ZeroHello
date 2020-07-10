@@ -17,6 +17,7 @@ class ChartTimeline extends Class
 
 	updateChart: =>
 		@chart_ctx.clearRect(0, 0, @chart_canvas.width, @chart_canvas.height)
+
 		@chart_ctx.lineWidth = 0
 		@chart_ctx.fillStyle = '#EDC54B'
 
@@ -26,6 +27,10 @@ class ChartTimeline extends Class
 		data_max = Math.max.apply(null, @line_data)
 		data_last_i = (i for val, i in @line_data when val > 0).pop()
 		line_width = 1400 / @line_data.length
+
+		if not data_last_i?
+			return  # No data yet
+
 		for data, i in @line_data
 			line_x = i * line_width
 			line_y = parseInt(101 - (data / data_max) * 100)
@@ -83,7 +88,8 @@ class ChartTimeline extends Class
 		data = {}
 		day_total = {}
 		Page.cmd "chartDbQuery", [query, {type_id: type_id, date_added_from: date_added_from, date_added_to: date_added_to}], (res) =>
-			@logStart "Parse result"
+			@logStart "Parse result", res.length
+
 			@line_data = []
 			for row in res
 				data[Math.ceil(row.date_added / step) * step] = row.sum

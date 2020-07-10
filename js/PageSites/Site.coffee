@@ -304,6 +304,7 @@ class Site extends Class
 
 	renderOptionalStats: =>
 		row = @row
+		row.settings.bytes_sent ?= 0
 		ratio = (row.settings.bytes_sent/row.settings.bytes_recv).toFixed(1)
 		if ratio >= 100
 			ratio = "\u221E"
