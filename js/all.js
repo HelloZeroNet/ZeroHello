@@ -1680,8 +1680,11 @@
       this.site = site1;
       this.update = bind(this.update, this);
       this.render = bind(this.render, this);
+      this.isSelectedAll = bind(this.isSelectedAll, this);
       this.renderOrderRight = bind(this.renderOrderRight, this);
       this.renderOrder = bind(this.renderOrder, this);
+      this.handleSelectAllClick = bind(this.handleSelectAllClick, this);
+      this.selectAll = bind(this.selectAll, this);
       this.handleMoreClick = bind(this.handleMoreClick, this);
       this.handleOrderbyClick = bind(this.handleOrderbyClick, this);
       this.handleRowMouseenter = bind(this.handleRowMouseenter, this);
@@ -1775,13 +1778,42 @@
       }
       this.orderby = orderby;
       this.update();
-      Page.projector.scheduleRender();
       return false;
     };
 
     SiteFiles.prototype.handleMoreClick = function() {
       this.limit += 15;
       this.update();
+      return false;
+    };
+
+    SiteFiles.prototype.selectAll = function() {
+      var i, is_selected_all, item, len, ref;
+      is_selected_all = this.isSelectedAll();
+      ref = this.items;
+      for (i = 0, len = ref.length; i < len; i++) {
+        item = ref[i];
+        if (is_selected_all) {
+          delete this.selected[item.inner_path];
+        } else {
+          this.selected[item.inner_path] = true;
+        }
+      }
+      Page.projector.scheduleRender();
+      return Page.page_files.checkSelectedFiles();
+    };
+
+    SiteFiles.prototype.handleSelectAllClick = function() {
+      if (this.has_more) {
+        this.limit = 1000;
+        this.update((function(_this) {
+          return function() {
+            return _this.selectAll();
+          };
+        })(this));
+      } else {
+        this.selectAll();
+      }
       return false;
     };
 
@@ -1809,6 +1841,10 @@
       }, [h("div.icon.icon-arrow-down"), title]);
     };
 
+    SiteFiles.prototype.isSelectedAll = function() {
+      return !this.has_more && Object.keys(this.selected).length === this.items.length;
+    };
+
     SiteFiles.prototype.render = function() {
       var ref;
       if (!((ref = this.items) != null ? ref.length : void 0)) {
@@ -1818,7 +1854,15 @@
         h("div.files.files-" + this.mode, {
           exitAnimation: Animation.slideUpInout
         }, [
-          h("div.tr.thead", [h("div.td.pre", "."), this.mode === "bigfiles" || this.mode === "result" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))]), h("div.tbody", this.items.map((function(_this) {
+          h("div.tr.thead", [
+            h("div.td.pre", h("a.checkbox-outer", {
+              href: "#Select+all",
+              onclick: this.handleSelectAllClick,
+              classes: {
+                selected: this.isSelectedAll()
+              }
+            }, h("span.checkbox"))), this.mode === "bigfiles" || this.mode === "result" ? h("div.td.site", this.renderOrder("Site", "address")) : void 0, h("div.td.inner_path", this.renderOrder("Optional file", "is_pinned DESC, inner_path")), this.mode === "bigfiles" ? h("div.td.status", "Status") : void 0, h("div.td.size", this.renderOrderRight("Size", "size")), h("div.td.peer", this.renderOrder("Peers", "peer")), h("div.td.uploaded", this.renderOrder("Uploaded", "uploaded")), h("div.td.added", this.renderOrder("Finished", "time_downloaded"))
+          ]), h("div.tbody", this.items.map((function(_this) {
             return function(file) {
               var classes, percent, percent_bg, percent_title, profile_color, site, status;
               site = file.site || _this.site;
@@ -3007,6 +3051,7 @@
 
 }).call(this);
 
+
 /* ---- PageSites/MuteList.coffee ---- */
 
 
@@ -3314,7 +3359,6 @@
   window.MuteList = MuteList;
 
 }).call(this);
-
 
 /* ---- PageSites/Site.coffee ---- */
 
@@ -3767,8 +3811,11 @@
     };
 
     Site.prototype.renderOptionalStats = function() {
-      var ratio, ratio_hue, row;
+      var base, ratio, ratio_hue, row;
       row = this.row;
+      if ((base = row.settings).bytes_sent == null) {
+        base.bytes_sent = 0;
+      }
       ratio = (row.settings.bytes_sent / row.settings.bytes_recv).toFixed(1);
       if (ratio >= 100) {
         ratio = "\u221E";
@@ -4990,7 +5037,7 @@
       ], (function(_this) {
         return function(res) {
           var address, data, i, j, k, len, len1, max_site_bw, max_site_size, ref, row, site, stat;
-          _this.logStart("Parse result");
+          _this.logStart("Parse result", res.length);
           data = {};
           for (j = 0, len = res.length; j < len; j++) {
             row = res[j];
@@ -5308,6 +5355,9 @@
         return results;
       }).call(this)).pop();
       line_width = 1400 / this.line_data.length;
+      if (data_last_i == null) {
+        return;
+      }
       ref = this.line_data;
       for (i = j = 0, len = ref.length; j < len; i = ++j) {
         data = ref[i];
@@ -5368,7 +5418,7 @@
       ], (function(_this) {
         return function(res) {
           var data_date_added, data_from, data_to, day_data, day_from, day_name, day_string, day_to, group_step_data, i, j, k, l, len, m, n, ref, row, x;
-          _this.logStart("Parse result");
+          _this.logStart("Parse result", res.length);
           _this.line_data = [];
           for (j = 0, len = res.length; j < len; j++) {
             row = res[j];
@@ -6689,7 +6739,7 @@
 
     Text.prototype.formatSize = function(size) {
       var size_mb;
-      if (!parseInt(size)) {
+      if (isNaN(parseInt(size))) {
         return "";
       }
       size_mb = size / 1024 / 1024;
@@ -6700,7 +6750,7 @@
       } else if (size / 1024 >= 1000) {
         return size_mb.toFixed(2) + " MB";
       } else {
-        return (size / 1024).toFixed(2) + " KB";
+        return (parseInt(size) / 1024).toFixed(2) + " KB";
       }
     };
 

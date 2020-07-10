@@ -403,6 +403,7 @@ body:after {
 }
 #PageFiles .files .td { padding: 15px 20px; background-color: rgb(255, 255, 255); border-top: 1px solid #EEE; font-size: 14px; white-space: nowrap; }
 #PageFiles .files .td.pre { width: 20px; color: transparent; padding-left: 0px; }
+#PageFiles .files .td.pre .checkbox-outer { opacity: 0.3; }
 #PageFiles .files .td.site { width: 70px }
 #PageFiles .files .td.site .link { color: inherit; text-decoration: none }
 #PageFiles .files .td.status .percent { -webkit-transition: all 1s ease-in-out; -moz-transition: all 1s ease-in-out; -o-transition: all 1s ease-in-out; -ms-transition: all 1s ease-in-out; transition: all 1s ease-in-out ; display: inline-block; width: 80px; background-color: #EEE; font-size: 10px; height: 15px; line-height: 15px; text-align: center; margin-right: 20px; }
