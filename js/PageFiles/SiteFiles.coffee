@@ -60,12 +60,30 @@ class SiteFiles extends Class
 			@orderby_desc = not @orderby_desc
 		@orderby = orderby
 		@update()
-		Page.projector.scheduleRender()
 		return false
 
 	handleMoreClick: =>
 		@limit += 15
 		@update()
+		return false
+
+	selectAll: =>
+		is_selected_all = @isSelectedAll()
+		for item in @items
+			if is_selected_all
+				delete @selected[item.inner_path]
+			else
+				@selected[item.inner_path] = true
+		Page.projector.scheduleRender()
+		Page.page_files.checkSelectedFiles()
+
+	handleSelectAllClick: =>
+		if @has_more
+			@limit = 1000
+			@update =>
+				@selectAll()
+		else
+			@selectAll()
 		return false
 
 	renderOrder: (title, orderby) =>
@@ -90,13 +108,20 @@ class SiteFiles extends Class
 			title
 		])
 
+	isSelectedAll: =>
+		return not @has_more and Object.keys(@selected).length == @items.length
+
 	render: =>
 		if not @items?.length
 			return []
 		[
 			h("div.files.files-#{@mode}", exitAnimation: Animation.slideUpInout, [
 				h("div.tr.thead", [
-					h("div.td.pre", "."),
+					h("div.td.pre",
+						h("a.checkbox-outer", {
+							href: "#Select+all", onclick: @handleSelectAllClick, classes: {selected: @isSelectedAll()}
+						}, h("span.checkbox"))
+					),
 					if @mode == "bigfiles" or @mode == "result"
 						h("div.td.site", @renderOrder("Site", "address"))
 					h("div.td.inner_path", @renderOrder("Optional file", "is_pinned DESC, inner_path")),
