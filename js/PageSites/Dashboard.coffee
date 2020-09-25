@@ -181,7 +181,7 @@ class Dashboard extends Class
 		@menu_warnings.toggle()
 		return false
 
-	getWarnings: =>
+	getWarnings: (add_server_errors=true) =>
 		warnings = []
 		# IE not supported
 		if navigator.userAgent.match /(\b(MS)?IE\s+|Trident\/7.0)/
@@ -214,26 +214,26 @@ class Dashboard extends Class
 				descr: "Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen."
 			})
 
-		if Page.server_errors.length > 2
-			warnings = warnings.concat(Page.server_errors[-2..].reverse())
-			warnings.push({
-				title: "#{Page.server_errors.length - 2} more errors...",
-				href: "#ZeroNet:Console"
-			})
-		else
-			warnings = warnings.concat(Page.server_errors)
+		if add_server_errors
+			if Page.server_errors.length > 2
+				warnings = warnings.concat(Page.server_errors[-2..].reverse())
+				warnings.push({
+					title: "#{Page.server_errors.length - 2} more errors...",
+					href: "#ZeroNet:Console:Error"
+				})
+			else
+				warnings = warnings.concat(Page.server_errors)
 
 		return warnings
-
 
 	render: =>
 		if Page.server_info
 			tor_title = @getTorTitle()
-			warnings = @getWarnings()
+			num_warnings = @getWarnings(false) + Page.server_errors.length
 			h("div#Dashboard",
 				# Warnings
-				if warnings.length
-					h("a.warnings.dashboard-item", {href: "#Warnings", onmousedown: @handleWarningsClick, onclick: Page.returnFalse}, "Warnings: #{warnings.length}")
+				if num_warnings > 0
+					h("a.warnings.dashboard-item", {href: "#Warnings", onmousedown: @handleWarningsClick, onclick: Page.returnFalse}, "Warnings: #{num_warnings}")
 				@menu_warnings.render(".menu-warnings")
 
 				# Update
