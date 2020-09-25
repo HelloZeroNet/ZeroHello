@@ -2264,8 +2264,11 @@
       return false;
     };
 
-    Dashboard.prototype.getWarnings = function() {
+    Dashboard.prototype.getWarnings = function(add_server_errors) {
       var warnings;
+      if (add_server_errors == null) {
+        add_server_errors = true;
+      }
       warnings = [];
       if (navigator.userAgent.match(/(\b(MS)?IE\s+|Trident\/7.0)/)) {
         warnings.push({
@@ -2295,28 +2298,30 @@
           descr: "Looks like your system time is out of sync. Other users may not see your posted content and other problems could happen."
         });
       }
-      if (Page.server_errors.length > 2) {
-        warnings = warnings.concat(Page.server_errors.slice(-2).reverse());
-        warnings.push({
-          title: (Page.server_errors.length - 2) + " more errors...",
-          href: "#ZeroNet:Console"
-        });
-      } else {
-        warnings = warnings.concat(Page.server_errors);
+      if (add_server_errors) {
+        if (Page.server_errors.length > 2) {
+          warnings = warnings.concat(Page.server_errors.slice(-2).reverse());
+          warnings.push({
+            title: (Page.server_errors.length - 2) + " more errors...",
+            href: "#ZeroNet:Console:Error"
+          });
+        } else {
+          warnings = warnings.concat(Page.server_errors);
+        }
       }
       return warnings;
     };
 
     Dashboard.prototype.render = function() {
-      var tor_title, warnings;
+      var num_warnings, tor_title;
       if (Page.server_info) {
         tor_title = this.getTorTitle();
-        warnings = this.getWarnings();
-        return h("div#Dashboard", warnings.length ? h("a.warnings.dashboard-item", {
+        num_warnings = this.getWarnings(false) + Page.server_errors.length;
+        return h("div#Dashboard", num_warnings > 0 ? h("a.warnings.dashboard-item", {
           href: "#Warnings",
           onmousedown: this.handleWarningsClick,
           onclick: Page.returnFalse
-        }, "Warnings: " + warnings.length) : void 0, this.menu_warnings.render(".menu-warnings"), parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0")) ? h("a.newversion.dashboard-item", {
+        }, "Warnings: " + num_warnings) : void 0, this.menu_warnings.render(".menu-warnings"), parseFloat(Page.server_info.version.replace(/\./g, "0")) < parseFloat(Page.latest_version.replace(/\./g, "0")) ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
@@ -2368,6 +2373,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 /* ---- PageSites/FeedList.coffee ---- */
 
@@ -3051,7 +3057,6 @@
 
 }).call(this);
 
-
 /* ---- PageSites/MuteList.coffee ---- */
 
 
@@ -3559,7 +3564,7 @@
     };
 
     Site.prototype.handleDeleteClick = function() {
-      if (this.row.settings.own) {
+      if (this.row.settings.own || this.row.privatekey) {
         Page.cmd("wrapperConfirm", ["You can delete your site using the site's sidebar.", ["Open site"]], (function(_this) {
           return function(confirmed) {
             if (confirmed) {
@@ -7717,7 +7722,7 @@
         this.server_errors.push({
           title: [Time.since(date_added), " - ", level],
           descr: message,
-          href: "#ZeroNet:Console"
+          href: "#ZeroNet:Console:Error"
         });
       }
       return this.projector.scheduleRender();
