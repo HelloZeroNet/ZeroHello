@@ -119,7 +119,7 @@ class Site extends Class
 		return false
 
 	handleDeleteClick: =>
-		if @row.settings.own
+		if @row.settings.own or @row.privatekey
 			Page.cmd "wrapperConfirm", ["You can delete your site using the site's sidebar.", ["Open site"]], (confirmed) =>
 				if (confirmed)
 					window.top.location = @getHref() + "#ZeroNet:OpenSidebar"
