@@ -1144,7 +1144,8 @@
   var PageFiles,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   PageFiles = (function(superClass) {
     extend(PageFiles, superClass);
@@ -1310,28 +1311,42 @@
     };
 
     PageFiles.prototype.handleSelectbarDelete = function() {
-      var i, inner_path, inner_paths, j, len, len1, ref, site, site_file;
+      var bigfiles_modified_sites, i, j, k, len, len1, len2, ref, ref1, ref2, selected_site_file, selected_site_files, site, site_file;
+      bigfiles_modified_sites = [];
       ref = this.getSites();
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
-        inner_paths = (function() {
+        selected_site_files = (function() {
           var j, len1, ref1, results;
           ref1 = site.files.items;
           results = [];
           for (j = 0, len1 = ref1.length; j < len1; j++) {
             site_file = ref1[j];
             if (site.files.selected[site_file.inner_path]) {
-              results.push(site_file.inner_path);
+              results.push(site_file);
             }
           }
           return results;
         })();
-        if (inner_paths.length > 0) {
-          for (j = 0, len1 = inner_paths.length; j < len1; j++) {
-            inner_path = inner_paths[j];
-            Page.cmd("optionalFileDelete", [inner_path, site.row.address]);
+        if (selected_site_files.length > 0) {
+          for (j = 0, len1 = selected_site_files.length; j < len1; j++) {
+            selected_site_file = selected_site_files[j];
+            Page.cmd("optionalFileDelete", [selected_site_file.inner_path, site.row.address]);
+            if (site.files.mode === "bigfiles") {
+              Page.cmd("optionalFileDelete", [selected_site_file.inner_path + ".piecemap.msgpack", site.row.address]);
+              bigfiles_modified_sites.push(site.row.address);
+            }
           }
           site.files.update();
+        }
+      }
+      if (bigfiles_modified_sites) {
+        ref1 = Page.site_list.sites;
+        for (k = 0, len2 = ref1.length; k < len2; k++) {
+          site = ref1[k];
+          if (ref2 = site.row.address, indexOf.call(bigfiles_modified_sites, ref2) >= 0) {
+            site.files.update();
+          }
         }
       }
       Page.site_list.update();
@@ -1664,6 +1679,7 @@
 
 }).call(this);
 
+
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
 
@@ -1714,6 +1730,7 @@
           sites[name] = {
             row: file.site.row,
             files: {
+              mode: this.mode,
               items: [],
               selected: this.selected,
               update: this.update
@@ -2373,7 +2390,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 /* ---- PageSites/FeedList.coffee ---- */
 

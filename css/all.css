@@ -423,7 +423,7 @@ body:after {
 
 #PageFiles .files .checkbox-outer { padding: 15px; padding-left: 20px; }
 #PageFiles .files .checkbox {
-	display: inline-block; width: 12px; height: 12px; border: 2px solid #EEE;
+	display: inline-block; width: 12px; height: 12px; border: 2px solid #BBB;
 	-webkit-border-radius: 3px; -moz-border-radius: 3px; -o-border-radius: 3px; -ms-border-radius: 3px; border-radius: 3px ; vertical-align: -3px; margin-right: 10px;
 }
 #PageFiles .files .selected .checkbox { border-color: #dedede }
