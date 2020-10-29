@@ -67,12 +67,17 @@ class PageFiles extends Class
 		@handleSelectbarCancel()
 
 	handleSelectbarDelete: =>
+		bigfiles_modified_sites = []
 		for site in @getSites()
-			inner_paths = (site_file.inner_path for site_file in site.files.items when site.files.selected[site_file.inner_path])
+			selected_site_files = (site_file for site_file in site.files.items when site.files.selected[site_file.inner_path])
 
-			if inner_paths.length > 0
-				for inner_path in inner_paths
-					Page.cmd "optionalFileDelete", [inner_path, site.row.address]
+			if selected_site_files.length > 0
+				for selected_site_file in selected_site_files
+					Page.cmd "optionalFileDelete", [selected_site_file.inner_path, site.row.address]
+					if site.files.mode == "bigfiles"
+						# Try delete piecemap if selected from Bigfile section
+						Page.cmd "optionalFileDelete", [selected_site_file.inner_path + ".piecemap.msgpack", site.row.address]
+						bigfiles_modified_sites.push(site.row.address)
 				site.files.update()
 		Page.site_list.update()
 		@handleSelectbarCancel()

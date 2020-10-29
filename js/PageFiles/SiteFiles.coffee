@@ -15,7 +15,7 @@ class SiteFiles extends Class
 		# Create separate fake site objects for bigfiles
 		sites = {}
 		for file in @items
-			sites[file.site.row.address] ?= {row: file.site.row, files: {items: [], selected: @selected, update: @update}}
+			sites[file.site.row.address] ?= {row: file.site.row, files: {mode: @mode, items: [], selected: @selected, update: @update}}
 			sites[file.site.row.address].files.items.push(file)
 
 		for address, site of sites
