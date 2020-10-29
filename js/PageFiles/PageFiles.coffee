@@ -79,6 +79,13 @@ class PageFiles extends Class
 						Page.cmd "optionalFileDelete", [selected_site_file.inner_path + ".piecemap.msgpack", site.row.address]
 						bigfiles_modified_sites.push(site.row.address)
 				site.files.update()
+
+		# Also update site section if deleted from Bigfiles section
+		if bigfiles_modified_sites
+			for site in Page.site_list.sites
+				if site.row.address in bigfiles_modified_sites
+					site.files.update()
+
 		Page.site_list.update()
 		@handleSelectbarCancel()
 
