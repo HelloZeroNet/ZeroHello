@@ -1679,7 +1679,6 @@
 
 }).call(this);
 
-
 /* ---- PageFiles/SiteFiles.coffee ---- */
 
 
@@ -2239,7 +2238,7 @@
         status = stat.status.capitalize();
         if (status === "Announced" && stat.time_request && stat.time_status) {
           request_taken = stat.time_status - stat.time_request;
-          status += " in " + (request_taken.toFixed(2)) + "s";
+          status = (request_taken.toFixed(2)) + "s";
         }
         title_text = "Requests: " + stat.num_request;
         if (stat.last_error) {
@@ -2390,6 +2389,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 /* ---- PageSites/FeedList.coffee ---- */
 

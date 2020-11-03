@@ -160,7 +160,7 @@ class Dashboard extends Class
 			status = stat.status.capitalize()
 			if status == "Announced" and stat.time_request and stat.time_status
 				request_taken = stat.time_status - stat.time_request
-				status += " in #{request_taken.toFixed(2)}s"
+				status = "#{request_taken.toFixed(2)}s"
 			title_text = "Requests: #{stat.num_request}"
 			if stat.last_error
 				title_text += ", Last error: #{stat.last_error} (#{Time.since(stat.time_last_error)})"
