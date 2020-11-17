@@ -7084,7 +7084,7 @@
 
     Head.prototype.renderMenuLanguage = function() {
       var lang, langs, ref;
-      langs = ["da", "de", "en", "es", "fa", "fr", "hu", "it", "nl", "pl", "pt", "pt-br", "ru", "sk", "tr", "uk", "zh", "zh-tw"];
+      langs = ["da", "de", "en", "es", "fa", "fr", "hu", "it", "jp", "nl", "pl", "pt", "pt-br", "ru", "sk", "tr", "uk", "zh", "zh-tw"];
       if (Page.server_info.language && (ref = Page.server_info.language, indexOf.call(langs, ref) < 0)) {
         langs.push(Page.server_info.language);
       }
